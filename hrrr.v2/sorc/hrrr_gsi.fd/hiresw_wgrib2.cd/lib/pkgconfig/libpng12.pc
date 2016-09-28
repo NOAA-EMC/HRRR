@@ -1,0 +1,11 @@
+prefix=/gpfs/td1/emc/meso/save/Geoffrey.Manikin/nwprod/hrrr.v2.0.0/sorc/hiresw_wgrib2.cd
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/libpng12
+
+Name: libpng
+Description: Loads and saves PNG files
+Version: 1.2.50
+Libs: -L${libdir} -lpng12
+Libs.private: -lz -lm 
+Cflags: -I${includedir} 

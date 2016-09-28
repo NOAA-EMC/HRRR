@@ -1,0 +1,125 @@
+set -x
+module purge
+
+module load /nwpara2/modulefiles/HRRR/v2.0.0
+
+module list
+
+sleep 1
+
+BASE=`pwd`
+
+##############################
+
+cd ${BASE}/hrrr_wrf.fd/WRFV3.6
+./clean -aa
+./clean -a
+./clean
+cp configure.wrf.optim configure.wrf"
+./compile em_real
+
+##############################
+
+cd ${BASE}/hrrr_wrf.fd/WRFV3.6_serialnetcdf_noomp
+./clean -aa
+./clean -a
+./clean
+./compile em_real
+
+##############################
+
+cd ${BASE}/hrrr_update_bc.fd
+make
+
+##############################
+
+cd ${BASE}/hrrr_wrf.fd/WPSV3.6
+./clean -aa
+./clean -a
+./clean
+cp configure.wps.optim configure.wps
+./compile
+make
+
+##############################
+
+cd ${BASE}/hrrr_wrfpost.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_gsi.fd
+make clean
+cd ${BASE}/hrrr_gsi.fd/gsdcloud
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_process_enkf
+make clean
+make
+ 
+##############################
+
+cd ${BASE}/hrrr_full_cycle_surface.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_process_cloud
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_process_imssnow
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_process_mosaic
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_process_sst
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_process_ref2tten
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_sndp.fd
+make clean
+make 
+
+##############################
+
+cd ${BASE}/hrrr_wrfbufr.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_stnmlist.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hiresw_wgrib2.cd
+make
+
+cp ./wgrib2/wgrib2 ${BASE}/../exec/hrrr_wgrib2
+
+##############################

@@ -1,0 +1,67 @@
+#!/bin/ksh --login
+set -x
+################################################################################
+####  UNIX Script Documentation Block
+#                      .                                             .
+# Script name:         exhrrr_prep_cloud.sh.ecf
+# Script description:  This script processes the Cloud input data for the HRRR
+#
+# Author:  Curtis Alexander / Geoffrey.Manikin   Org: EMC     Date: 2011-08-24
+#
+# Script history log:
+# 2011-08-24  M Hu / G Manikin / J Zhu - RAP
+# 2014-08-01  C Alexander / G Manikin - HRRRv1
+# 2016-02-01  C Alexander / G Manikin - HRRRv2
+#
+
+DATE=/bin/date
+AWK="/bin/gawk --posix"
+
+cd ${DATA}
+
+# Set endian conversion options for use with Intel compilers
+export F_UFMTENDIAN="big;little:10,15,66"
+export GMPIENVVAR=F_UFMTENDIAN
+export MV2_ON_DEMAND_THRESHOLD=256
+export START_TIME=${PDY}${cyc}
+echo $START_TIME
+
+# Make sure START_TIME is defined and in the correct format
+if [ `echo "${START_TIME}" | ${AWK} '/^[[:digit:]]{10}$/'` ]; then
+    START_TIME=`echo "${START_TIME}" | sed 's/\([[:digit:]]\{2\}\)$/ \1/'`
+  elif [ ! "`echo "${START_TIME}" | ${AWK} '/^[[:digit:]]{8}[[:blank:]]{1}[[:digit:]]{2}$/'`" ]; then
+    echo "ERROR: start time, '${START_TIME}', is not in 'yyyymmddhh' or 'yyyymmdd hh' format"
+    exit 1
+fi
+  START_TIME=`${DATE} -d "${START_TIME}"`
+
+# Compute date & time components for the analysis time
+YYYYMMDDHH=`${DATE} +"%Y%m%d%H" -d "${START_TIME}"`
+YYYYMMDD=`${DATE} +"%Y%m%d" -d "${START_TIME}"`
+YYYYJJJ=`${DATE} +"%Y%j" -d "${START_TIME}"`
+HH=`${DATE} +"%H" -d "${START_TIME}"`
+
+echo $YYYYMMDDHH
+cp ${PARMhrrr}/hrrr_prepobs_prep.bufrtable ./prepobs_prep.bufrtable
+ln -s ${FIXhrrr}/hrrr_geo_em.d01.nc geo_em.d01.nc 
+
+# Link to the prepbufr data
+if [ -r "${COMNASALARC}/${RAP_RUN}.t${HH}z.lgycld.tm00.bufr_d" ]; then
+  cp ${COMNASALARC}/${RAP_RUN}.t${HH}z.lgycld.tm00.bufr_d . 
+  ln -s ${RAP_RUN}.t${HH}z.lgycld.tm00.bufr_d NASA_LaRC_cloud.bufr
+else
+  echo "WARNING: ${COMNASALARC}/${RAP_RUN}.t${HH}z.lgycld.tm00.bufr_d does not exist!"
+  echo "cloud processing will run with the NASALaRC data missing"
+fi
+
+echo ${YYYYMMDDHH} > nasaLaRC_cycle_date
+
+#  Run obs pre-processor
+mpirun.lsf ${EXEChrrr}/hrrr_process_cloud >> $DATA/$pgmout 2>errfile 
+export err=$?; err_chk
+
+# Copy the output data to /com
+cp NASALaRCCloudInGSI.bufr $COMOUT/hrrr.t${cyc}z.NASALaRCCloudInGSI.bufr
+
+echo "End of Cloud Processing"
+exit 0

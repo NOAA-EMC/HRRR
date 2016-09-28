@@ -1,0 +1,4 @@
+gfsp2wrfg.o : gfsp2wrfg.f90 read_gfs_for_regional.o initial.o wrf_netcdf_interface4ens.o
+initial.o: initial.f90
+get_gefs_for_regional_enspro.o: get_gefs_for_regional_enspro.f90
+wrf_netcdf_interface4ens.o: wrf_netcdf_interface4ens.F90

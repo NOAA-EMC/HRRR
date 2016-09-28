@@ -1,0 +1,13 @@
+prefix=/gpfs/td1/emc/meso/save/Geoffrey.Manikin/nwprod/hrrr.v2.0.0/sorc/hiresw_wgrib2.cd
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+sharedlibdir=${libdir}
+includedir=${prefix}/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.8
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}

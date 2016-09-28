@@ -1,0 +1,142 @@
+#!/bin/ksh --login
+set -x
+############################################################################
+####  UNIX Script Documentation Block
+#                      .                                             .
+# Script name:         exhrrr_prep_radar.sh.ecf
+# Script description:  This script processes the Radar Data for 16,30,46 and 60 minutes
+#                      past the hour
+#
+#                      Variable "subhtime" has to be set in the ecflow script
+# Author:  Curtis Alexander / Geoffrey.Manikin   Org: EMC     Date: 2014-08-01
+#
+# Script history log:
+# 2014-08-01  C Alexander - HRRRv1
+# 2016-02-05  C Alexander - HRRRv2
+
+DATE=/bin/date
+
+export MV2_ON_DEMAND_THRESHOLD=256
+export MOSAICTILENUM=4
+AWK="/bin/gawk --posix"
+
+echo $START_TIME
+numtiles=${MOSAICTILENUM}
+
+if [ $cyc  -eq 00 ]; then
+START_TIME=${PDYm1}' '${cycm1}
+else
+START_TIME=${PDY}' '${cycm1}
+fi
+
+echo "${START_TIME}"
+echo `echo "${START_TIME}" | ${AWK} '/^[[:digit:]]{10}$/'`
+ if [ `echo "${START_TIME}" | ${AWK} '/^[[:digit:]]{10}$/'` ]; then
+   START_TIME=`echo "${START_TIME}" | sed 's/\([[:digit:]]\{2\}\)$/ \1/'`
+ elif [ ! "`echo "${START_TIME}" | ${AWK} '/^[[:digit:]]{8}[[:blank:]]{1}[[:digit:]]{2}$/'`" ]; then
+   echo "ERROR: start time, '${START_TIME}', is not in 'yyyymmddhh' or 'yyyymmdd hh' format"
+   err_exit 1
+ fi
+ START_TIME=`${DATE} -d "${START_TIME} ${subhtime} minutes"`
+echo $START_TIME
+# Compute date & time components for the analysis time
+YYYYJJJHH00=`${DATE} +"%Y%j%H00" -d "${START_TIME}"`
+YYYYMMDDHH=`${DATE} +"%Y%m%d%H" -d "${START_TIME}"`
+YYYY=`${DATE} +"%Y" -d "${START_TIME}"`
+MM=`${DATE} +"%m" -d "${START_TIME}"`
+DD=`${DATE} +"%d" -d "${START_TIME}"`
+HH=`${DATE} +"%H" -d "${START_TIME}"`
+mm=`${DATE} +"%M" -d "${START_TIME}"`
+
+echo $YYYY $MM $DD $HH $mm
+cp ${PARMhrrr}/hrrr_prepobs_prep.bufrtable  ./prepobs_prep.bufrtable
+ln -s ${FIXhrrr}/hrrr_geo_em.d01.nc geo_em.d01.nc 
+
+# find NSSL grib2 mosaic files
+COM_MOSAIC_GRIB2=${COM_MOSAIC}/conus/MergedReflectivityQC
+mmm1=$((mm - 1))
+mmm2=$((mm - 2))
+numgrib2_00=`ls ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mm}??.grib2.gz | wc -l`
+numgrib2_01=`ls ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mmm1}??.grib2.gz | wc -l`
+numgrib2_02=`ls ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mmm2}??.grib2.gz | wc -l`
+if [ ${numgrib2_00} -eq 33 ]; then
+   cp ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mm}??.grib2.gz .
+   ls MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}????.grib2.gz > filelist_mrms
+else
+   if [ ${numgrib2_01} -eq 33 ]; then
+      cp ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mmm1}??.grib2.gz .
+      ls MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}????.grib2.gz > filelist_mrms
+   else
+      if [ ${numgrib2_02} -eq 33 ]; then
+         cp ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mmm2}??.grib2.gz .
+         ls MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}????.grib2.gz > filelist_mrms
+      else
+         echo "WARNING: No NSSL gribs data available, use NCEP 8 tiles binary"
+         if [ -s filelist_mrms ]; then
+            rm -f filelist_mrms
+         fi
+      fi
+   fi
+fi
+
+if [ -s filelist_mrms ]; then
+   numgrib2=`more filelist_mrms | wc -l`
+   echo "NSSL grib2 file level number = $numgrib2"
+else
+   numgrib2=0
+fi
+
+# Link to the radar data
+if [ $numgrib2 -eq 36 ]; then
+   gzip -d *.gz
+   numtiles=1
+   rm -f filelist_mrms
+   ls MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}????.grib2 > filelist_mrms
+else
+   if [ -s ${COM_MOSAIC}/tile1/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ] && \
+      [ -s ${COM_MOSAIC}/tile2/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ] && \
+      [ -s ${COM_MOSAIC}/tile3/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ] && \
+      [ -s ${COM_MOSAIC}/tile4/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ]; then
+      numtiles=4
+      cp ${COM_MOSAIC}/tile1/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ./mosaic_t1.gz
+      cp ${COM_MOSAIC}/tile2/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ./mosaic_t2.gz
+      cp ${COM_MOSAIC}/tile3/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ./mosaic_t3.gz
+      cp ${COM_MOSAIC}/tile4/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ./mosaic_t4.gz
+      gzip -d *.gz
+   else
+      numtiles=81
+      export MOSAICdir=$COMRAD/radar.${ymdh}
+      ln -s ${MOSAICdir}/tile1/${ymd}_${hh}${mm}.mosaic ./mosaic_t1
+      ln -s ${MOSAICdir}/tile2/${ymd}_${hh}${mm}.mosaic ./mosaic_t2
+      ln -s ${MOSAICdir}/tile3/${ymd}_${hh}${mm}.mosaic ./mosaic_t3
+      ln -s ${MOSAICdir}/tile4/${ymd}_${hh}${mm}.mosaic ./mosaic_t4
+      ln -s ${MOSAICdir}/tile5/${ymd}_${hh}${mm}.mosaic ./mosaic_t5
+      ln -s ${MOSAICdir}/tile6/${ymd}_${hh}${mm}.mosaic ./mosaic_t6
+      ln -s ${MOSAICdir}/tile7/${ymd}_${hh}${mm}.mosaic ./mosaic_t7
+      ln -s ${MOSAICdir}/tile8/${ymd}_${hh}${mm}.mosaic ./mosaic_t8
+   fi
+fi
+
+echo ${ymdh} > ./mosaic_cycle_date
+
+cat << EOF > mosaic.namelist
+ &setup
+  tversion=${numtiles},
+  analysis_time = ${YYYYMMDDHH},
+  dataPath = './',
+ /
+
+EOF
+
+# Run Process_mosaic
+mpirun.lsf ${EXEChrrr}/hrrr_process_mosaic >> $DATA/$pgmout 2>errfile 
+export err=$?; err_chk
+
+echo 'ending mosaic processing'
+
+if [ $subhtime -eq 60 ]
+then
+  cp ${DATA}/${subhtime}/NSSLRefInGSI.bufr ${COMOUT}/hrrr.t${cyc}z.NSSLRefInGSI.bufr
+fi
+
+exit 0

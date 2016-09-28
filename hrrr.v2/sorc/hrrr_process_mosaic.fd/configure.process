@@ -1,0 +1,17 @@
+
+WRFDIR=/scratch1/portfolios/BMC/wrfruc/mhu/code/WRF_release/WRFV3.4_ARW
+UPPLIBDIR=/scratch1/portfolios/BMC/wrfruc/alexander/code/rap/devel1/RR-svn/trunk/unipost/libs
+FC   =  mpif90 -free
+CC  = cc
+FLAGS= -fp-model precise -assume byterecl -g -traceback $(LDFLAGS) -DLINUX ## -convert big_endian
+#FLAGS= -O3 -fp-model precise -assume byterecl -fpe0 -g -traceback $(LDFLAGS) -DLINUX ## -convert big_endian
+CPPFLAGS =  -D_UNDERSCORE -DLINUX -Dfunder -DFortranByte=char -DFortranInt=int -DFortranLlong='long long'
+GSILIBS =../../../lib -lw3emc_i4r8 -lw3nco_i4r8 -lbacio -lbufr_i4r8
+
+## WRFDIR=/meso/save/wx23mh/rapid_refresh/trunk_r314/WRFV3.2
+## FC  = mpxlf95_r  -qfree=f90
+## CC  = xlc_r
+## FLAGS= -qarch=auto -O3 -qmaxmem=-1 -qfullpath -qdbg -qstrict -q64 -qsmp=noauto
+## CPPFLAGS =  -DFortranByte=char -DFortranInt=int -DFortranLlong='long long' -DIBM4 -DVERBOSE -q64 -C -qfullpath
+## GSILIBS =/nwprod/lib -lw3_4 -lbacio_4
+

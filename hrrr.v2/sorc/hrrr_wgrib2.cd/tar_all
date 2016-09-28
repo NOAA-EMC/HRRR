@@ -1,0 +1,47 @@
+#/bin/sh
+
+# make a tar image of wgrib2
+cd $HOME
+
+g=g2clib-1.4.0
+j=jasper_1.900.1-10ubuntu1.debian.tgz
+j=jasper-fedora19.tgz
+png=libpng-1.2.50
+zlib=zlib-1.2.8
+ip=iplib.2012
+n=netcdf-3.6.3
+proj4=proj-4.8.0.tar.gz
+
+tar -cvzf /tmp/wgrib2.tgz grib2/wgrib2/*.h grib2/wgrib2/*.c grib2/wgrib2/README* \
+    grib2/*.doc  grib2/wgrib2/LIC* grib2/wgrib2/*dat \
+    grib2/wgrib2/API grib2/wgrib2/*.sh grib2/wgrib2/Changes* \
+    grib2/wgrib2/NEW_types grib2/makefile grib2/makefile_hwrf \
+    grib2/wgrib2/make* grib2/wgrib2/gribtab grib2/wgrib2/*txt \
+    grib2/$g/*.c grib2/$g/*.h grib2/$g/make*  grib2/$j grib2/tar_all grib2/*.doc  \
+    grib2/$ip/*.f grib2/$ip/makefile grib2/$ip/readme* grib2/iplib_hwrf \
+    grib2/READ* grib2/INSTALLING \
+    grib2/aux_progs/*.c grib2/aux_progs/*.h grib2/aux_progs/*.make grib2/aux_progs/README  \
+    grib2/gctpc20a.tgz grib2/makefile.gctpc grib2/proj.h \
+    grib2/$png.tar.gz grib2/$zlib.tar.gz \
+    grib2/$n.tar.gz \
+    grib2/$proj4 
+
+echo "*** now to make wgrib2_small.tgz ***"
+
+tar -cvzf /tmp/wgrib2_small.tgz grib2/wgrib2/*.h grib2/wgrib2/*.c grib2/wgrib2/README* \
+    grib2/*.doc  grib2/wgrib2/LIC* grib2/wgrib2/*dat \
+    grib2/wgrib2/API grib2/wgrib2/*.sh grib2/wgrib2/Changes* \
+    grib2/wgrib2/NEW_types grib2/makefile grib2/makefile_hwrf \
+    grib2/wgrib2/make* grib2/wgrib2/gribtab grib2/wgrib2/*txt \
+    grib2/$g/*.c grib2/$g/*.h grib2/$g/make*  grib2/$j grib2/tar_all grib2/*.doc  \
+    grib2/$ip/*.f grib2/$ip/makefile grib2/$ip/readme* \
+    grib2/READ* grib2/INSTALLING \
+    grib2/aux_progs/*.c grib2/aux_progs/*.h grib2/aux_progs/*.make grib2/aux_progs/README
+
+[ "$1" = 'test' ] && exit
+
+scp /tmp/wgrib2.tgz wd51we@cpcrzdm:
+scp /tmp/wgrib2_small.tgz wd51we@cpcrzdm:wgrib2_nolib.tgz
+scp grib2/wgrib2/Changes wd51we@cpcrzdm:ftp/wgrib2/
+scp grib2/README* wd51we@cpcrzdm:ftp/wgrib2/
+scp grib2/INSTALLING wd51we@cpcrzdm:ftp/wgrib2/

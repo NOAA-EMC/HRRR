@@ -1,0 +1,8 @@
+Compiling with clang (C language frontend for LLVM)
+
+tested with a Ubuntu 12.04 system
+
+export CC=clang
+export FC=gfortran -fplugin=dragonegg
+
+note: at time of testing, clang did not have OpenMP support
