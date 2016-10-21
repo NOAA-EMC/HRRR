@@ -61,7 +61,7 @@
               sigt4, rlwtoa, rswinc, aswin, aswout, alwin, alwout, alwtoa, aswtoa,&
               tg, soiltb, twbs, qwbs,grnflx, sfcshx, sfclhx, subshx, snopcx,&
               sfcuvx, potevp, ncfrcv, ncfrst, sno, si, pctsno, snonc, tsnow,&
-              ivgtyp, isltyp, islope, pblh, f, &
+              ivgtyp, isltyp, islope, pblh, pblhgust, f, &
               QVl1,REFC_10CM,REF1KM_10CM,REF4KM_10CM, &
               SWRADmean,U10mean,V10mean,SPDUV10mean,SWNORMmean,SNFDEN,SNDEPAC, &
               hbotd,hbots
@@ -2364,7 +2364,6 @@ endif  ! 1==2
 
 ! PBL depth
       VarName='PBLH'
-!      IF(MODELNAME .NE. 'RAPR')THEN
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,     &
        IM,1,JM,1,IM,JS,JE,1)
        do j = jsta_2l, jend_2u
@@ -2372,34 +2371,34 @@ endif  ! 1==2
             PBLH ( i, j ) = dummy ( i, j )
         end do
        end do
-!       ELSE
+      IF(MODELNAME .EQ. 'RAPR')THEN
 ! PBL depth from GSD
-!       do j = jsta_2l, jend_2u
-!        do i = 1, im
+       do j = jsta_2l, jend_2u
+        do i = 1, im
 !!   Is there any mixed layer at all?
-!          if (thv(i,j,lm-1) .lt. thv(i,j,lm)) then
-!            ZSF=ZINT(I,J,NINT(LMH(I,J))+1)
+          if (thv(i,j,lm-1) .lt. thv(i,j,lm)) then
+            ZSF=ZINT(I,J,NINT(LMH(I,J))+1)
 !!   Calculate k1 level as first above PBL top
-!            do 34 k=3,LM
-!              k1 = k
+            do 34 k=3,LM
+              k1 = k
 !! - give theta-v at the sfc a 0.5K boost in
 !!         the PBL height definition
-!              if (thv(i,j,lm-k+1).gt.thv(i,j,lm)                        &
-!                     +0.5) go to 341
-! 34         continue
-! 341        continue
-!           zpbltop = zmid(i,j,lm-k1+1) +                                &
-!                   (thv(i,j,lm)+0.5-thv(i,j,lm-k1+1))                   &
-!                 * (zmid(i,j,lm-k1+2)-zmid(i,j,lm-k1+1))                &
-!                 / (thv(i,j,lm-k1+2) - thv(i,j,lm-k1+1))
-!
-!            PBLH ( i, j ) = zpbltop - zsf
-!          else
-!            PBLH ( i, j ) = 0.
-!          endif
-!        end do
-!       end do
-!       ENDIF
+              if (thv(i,j,lm-k+1).gt.thv(i,j,lm)                        &
+                     +0.5) go to 341
+ 34         continue
+ 341        continue
+              zpbltop = zmid(i,j,lm-k1+1) +                             &
+                   (thv(i,j,lm)+0.5-thv(i,j,lm-k1+1))                   &
+                 * (zmid(i,j,lm-k1+2)-zmid(i,j,lm-k1+1))                &
+                 / (thv(i,j,lm-k1+2) - thv(i,j,lm-k1+1))
+
+            PBLHGUST ( i, j ) = zpbltop - zsf
+          else
+            PBLHGUST ( i, j ) = 0.
+          endif
+        end do
+       end do
+      ENDIF
 
       VarName='XLAT'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,        &

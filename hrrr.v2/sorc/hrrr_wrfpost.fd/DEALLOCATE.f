@@ -237,6 +237,7 @@
       deallocate(z0)
       deallocate(ustar)
       deallocate(pblh)
+      deallocate(pblhgust)
       deallocate(twbs)
       deallocate(qwbs)
       deallocate(sfcexc)
