@@ -71,18 +71,16 @@ fi
 time_updateSST='01'
 if [ ${HH} -eq ${time_updateSST} ]; then
   echo "update SST "
-  NCEPSST=$COMINsst/sst.${YYYYMMDD}
-  NCEPSST2=$COMINsst/sst.${PDYm1}
   cp ${FIXhrrr}/hrrr_RTG_SST_landmask.dat ./RTG_SST_landmask.dat
   cp ${FIXhrrr}/hrrr_geo_em.d01.nc  ./geo_em.d01.nc
-  if [ -r "${NCEPSST}/rtgssthr_grb_0.083" ]; then
-    cp ${NCEPSST}/rtgssthr_grb_0.083 SSTRTG
-    cp ${NCEPSST}/sst2dvar.t12z.nam_grid SST14km
+  if [ -r "${COMINsstp2}/sst.${YYYYMMDD}/rtgssthr_grb_0.083" ]; then
+    cp ${COMINsstp2}/sst.${YYYYMMDD}/rtgssthr_grb_0.083 SSTRTG
+    cp ${COMINsstp1}/sst.${YYYYMMDD}/sst2dvar.t12z.nam_grid SST14km
     mpirun.lsf ${EXEChrrr}/hrrr_process_sst >> $DATA/$pgmout 2>errfile 
    export err=$?; err_chk
- elif [ -r "${NCEPSST2}/rtgssthr_grb_0.083" ]; then
-    cp ${NCEPSST2}/rtgssthr_grb_0.083 SSTRTG
-    cp ${NCEPSST2}/sst2dvar.t12z.nam_grid SST14km
+ elif [ -r "${COMINsstp2}/sst.${YMDm1}/rtgssthr_grb_0.083" ]; then
+    cp ${COMINsstp2}/sst.${YMDm1}/rtgssthr_grb_0.083 SSTRTG
+    cp ${COMINsstp1}/sst.${YMDm1}/sst2dvar.t12z.nam_grid SST14km
     mpirun.lsf ${EXEChrrr}/hrrr_process_sst >> $DATA/$pgmout 2>errfile 
     export err=$?; err_chk
   else

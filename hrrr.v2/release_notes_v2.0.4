@@ -1,10 +1,8 @@
 
 Release Notes:  HRRR v2.0.4
 
-v2.0.4 - released October  21, 2016
-  - new hrrr_wrf.nl (parm) file to correct problems with 5 and 15-minute averaged parameters at f03
-  - updated sorc/hrrr_smartconus.fd/GETGRIB.f subroutine to correct issue with ceiling values that should be "missing" coming out as 0's
-  - revised post code to revert to old wind gust computation
+v2.0.4 - released October  20, 2016
+   new SST paths in analysis script and job script
 
 compute resource information
    no changes
@@ -15,6 +13,3 @@ disk space changes
 new or revised executables
    none 
    
-
-pre-implementation testing requirements
-   Based on recent attempt to change the hrrr_wrf.nl file that resulted in a few crashes, EMC recommends testing the new version in parallel for at least 5 days
