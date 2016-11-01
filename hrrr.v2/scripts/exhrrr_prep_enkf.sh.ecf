@@ -109,8 +109,8 @@ startmsg
 mpirun.lsf ${EXEChrrr}/hrrr_process_enkf >> $DATA/$pgmout 2>errfile 
 
 cp enspreproc_arw_mem* ${HRRRGES_ENKF}
-tar -cvf hrrr_enspreproc_${EYYYYMMDD}.tar enspreproc*
-cp hrrr_enspreproc_${EYYYYMMDD}.tar $COMOUT/.
+tar -cvf hrrr_enspreproc_${availtime}.tar enspreproc*
+cp hrrr_enspreproc_${availtime}.tar $COMOUT/.
 
 msg="JOB $job HAS COMPLETED NORMALLY."
 postmsg "$jlogfile" "$msg"

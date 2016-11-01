@@ -90,7 +90,6 @@ cd $DATA_IN
 if [ ${KEEPDATA} = NO ] ; then
   rm -rf $DATA_IN/hrrr_prep_radar_${envir}_${cyc}
   rm -rf $DATA_IN/hrrr_fcst_${envir}_${cyc}
-  rm -rf /tmpnwprd2/hrrr_fcst_${envir}_${cyc} #XXW
   rm -rf $DATA_IN/hrrr_postmgr_subh_${envir}_${cyc}
   fhr=00
   while [ $fhr -le $endfhr ]

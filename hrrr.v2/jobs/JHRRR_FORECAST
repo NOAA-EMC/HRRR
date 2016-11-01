@@ -92,6 +92,7 @@ setpdy.sh
 ##############################################
 # Define COM directories
 ##############################################
+export COM_IN=${COMROOT}/${NET}/prod #XXW
 export COM_IN=${COM_IN:-${COMROOT}/${NET}/${envir}}
 export COM_OUT=${COM_OUT:-${COMROOT}/${NET}/${envir}}
 
