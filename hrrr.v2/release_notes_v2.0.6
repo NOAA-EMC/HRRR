@@ -1,8 +1,9 @@
 
 Release Notes:  HRRR v2.0.6
 
-v2.0.6 - released Novemberber 1, 2016
-  - revised hrrr_profdat fix file to add new bufr stations 
+v2.0.6 - released November 23, 2016
+  - revised hrrr_process_imssnow.fd to remove print/write statements which are slowing
+      down the analysis job run time now that snow season has kicked in
 
 compute resource information
    no changes
@@ -15,6 +16,4 @@ new or revised executables
    
 
 pre-implementation testing requirements
-    Please test as part of a production parallel test.   If that can't be accomplished, only a single HRRR cycle needs to be run, and only the forecast, post, wrfbufr, and sndp jobs need to be run.
-
-    This implementation will occur simultaneously with station list implementations for the NAM, RAP, SREF, and HI-RES WINDOWS.
+     Please rerun a 00z HRRR analysis job, and compare the timing to ops.

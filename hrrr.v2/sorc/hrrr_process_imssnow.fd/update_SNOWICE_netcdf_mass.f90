@@ -704,7 +704,7 @@ endif
 !      if(precip(i,j) < 1.0e-12 .and. surftemp(i,j) > 280.0 ) then   ! make sure 
 !      if(precip(i,j) < 1.0e-12 .and. surftemp(i,j) > 276.0 ) then   ! make sure 
       if(precip(i,j) < 1.0e-12) then   ! make sure 
-        write(6,*) 'trim snow',i,j,snow(i,j),precip(i,j),surftemp(i,j),snowiceRR(i,j) 
+        !write(6,*) 'trim snow',i,j,snow(i,j),precip(i,j),surftemp(i,j),snowiceRR(i,j) 
        numtrimsnow=numtrimsnow+1
         itr=i
         jtr=j
@@ -724,7 +724,7 @@ endif
 !tgs snow building
       if(snowiceRR(i,j) > 1.0e-12 .and. snow(i,j) == 0.0 ) then   !  underforecasted snow
       if(surftemp(i,j) < 278.0 ) then   
-         write(6,*) 'build snow at i,j',i,j,'precip,surftemp,snowiceRR',precip(i,j),surftemp(i,j),snowiceRR(i,j)
+         !write(6,*) 'build snow at i,j',i,j,'precip,surftemp,snowiceRR',precip(i,j),surftemp(i,j),snowiceRR(i,j)
 
              snowsum = 0.
              snowhsum = 0.
@@ -777,9 +777,9 @@ endif
           soilt2av=soilt2sum/numnb
           soilt3av=soilt3sum/numnb
           surftempav=surftempsum/numnb
-    print *,'snow neighbors found, numnb =',numnb, &
-            'snowsum,snowav,snowhav,snowcav,tskinav,tsnowav,soilt1av,soilt2av,soilt3av,surftempav', &
-             snowsum,snowav,snowhav,snowcav,tskinav,tsnowav,soilt1av,soilt2av,soilt3av,surftempav
+    !print *,'snow neighbors found, numnb =',numnb, &
+    !        'snowsum,snowav,snowhav,snowcav,tskinav,tsnowav,soilt1av,soilt2av,soilt3av,surftempav', &
+    !         snowsum,snowav,snowhav,snowcav,tskinav,tsnowav,soilt1av,soilt2av,soilt3av,surftempav
          endif
 
   222   continue
@@ -787,9 +787,9 @@ endif
        numbuildsnow=numbuildsnow+1
            if(numnb == 100) then ! use point with trimmed snow
        numusetrim=numusetrim+1
-         print *,'trimmed snow at itr,jtr',itr,jtr,'is used to build snow at point i,j',i,j
-         print *,'snowtr, snowhtr, snowctr, tskin(itr,jtr), tsnow(itr,jtr)', &
-                  snowtr, snowhtr, snowctr,tskin(itr,jtr),tsnow(itr,jtr)
+         !print *,'trimmed snow at itr,jtr',itr,jtr,'is used to build snow at point i,j',i,j
+         !print *,'snowtr, snowhtr, snowctr, tskin(itr,jtr), tsnow(itr,jtr)', &
+         !         snowtr, snowhtr, snowctr,tskin(itr,jtr),tsnow(itr,jtr)
               if(snowhtr > 1.e-12) then
                 rhosn=snowtr/snowhtr
                 snow(i,j) = max(1.,snowtr) ! not less than 1 mm SWE
@@ -803,8 +803,8 @@ endif
               else
 !tgs 22apr15 - this warning is OK if the GFS background snow is getting trimmed (cold-start).
 ! This warning in the cycled RAP and HRRR indicates a problem.
-                print *,'WARNING in snow build from the neighbor-point trimmed snow '
-                print *,'Set snow to min value,j,snowhtr',i,j,snowhtr
+                !print *,'WARNING in snow build from the neighbor-point trimmed snow '
+                !print *,'Set snow to min value,j,snowhtr',i,j,snowhtr
                 snow(i,j) = 1.0
                 snowh(i,j) = 1.0/250. ! rhosn=250.,snowh[m]=snow[mm]/rhosn
                 snowc(i,j) = min(1.,snow(i,j)/32.) ! snowc=1 if snow=32mm 
@@ -818,7 +818,7 @@ endif
 
              if(numnb.ge.1) then
                 if(snowhav > 1.e-12 .and. snowav > 1.e-12) then
-                  print *,'build snow based on neighbor points ',numnb
+                  !print *,'build snow based on neighbor points ',numnb
                   rhosn=snowav/snowhav
                   snow(i,j) = max(1.,snowav)
                   snowh(i,j) = snow(i,j)/rhosn
@@ -831,8 +831,8 @@ endif
                 else
 !tgs 22apr15 - this warning is OK if the GFS background snow is getting trimmed (cold-start).
 ! This warning in the cycled RAP and HRRR indicates a problem.
-               print *,' WARNING in snow build from the neighbors average '
-               print *,'Set snow to min value - i,j,snowhav,rhosn',i,j,snowhav,rhosn
+               !print *,' WARNING in snow build from the neighbors average '
+               !print *,'Set snow to min value - i,j,snowhav,rhosn',i,j,snowhav,rhosn
                 snow(i,j) = 1.0
                 snowh(i,j) = 1.0/250. ! rhosn=250.,snowh[m]=snow[mm]/rhosn
                 snowc(i,j) = min(1.,snow(i,j)/32.) ! snowc=1 if snow=32mm 
@@ -843,7 +843,7 @@ endif
                 soiltemp(i,j,3) = min(soiltemp(i,j,3),273.)
                 endif
              else
-               print *,'set snow to min value'
+               !print *,'set snow to min value'
               numbuildmin=numbuildmin+1
                 snow(i,j) = 1.0  
                 snowh(i,j) = 1.0/250. ! rhosn=250.,snowh[m]=snow[mm]/rhosn
@@ -856,8 +856,8 @@ endif
              endif
            endif
          snowbuiltsum=snowbuiltsum+snow(i,j)
-         print *,'BUILD - snow,snowh,snowc,tskin,tsnow,soiltemp1,soiltemp2,soiltemp3', &
-         i,j,snow(i,j),snowh(i,j),snowc(i,j),tskin(i,j),tsnow(i,j),soiltemp(i,j,1),soiltemp(i,j,2),soiltemp(i,j,3)       
+         !print *,'BUILD - snow,snowh,snowc,tskin,tsnow,soiltemp1,soiltemp2,soiltemp3', &
+         !i,j,snow(i,j),snowh(i,j),snowc(i,j),tskin(i,j),tsnow(i,j),soiltemp(i,j,1),soiltemp(i,j,2),soiltemp(i,j,3)       
       endif
       endif
     endif
@@ -871,7 +871,7 @@ endif
             snowh(i,j)=0.
             snow(i,j) = 0.
      elseif(snowh(i,j) > 50. .or. snow(i,j)  > 20000.) then
-          print *,'Huge snow value i,j,snowh(i,j),snow(i,j)',i,j,snowh(i,j),snow(i,j)
+          !print *,'Huge snow value i,j,snowh(i,j),snow(i,j)',i,j,snowh(i,j),snow(i,j)
 !            snowh(i,j)=min(50.,snowh(i,j))
 !            snow(i,j) = min(20000.,snow(i,j))
              newvalue=0.0
@@ -898,18 +898,18 @@ endif
                   snowh(i,j)=snowh(i-1,j-1)
              endif
 
-          print *,'Corrected snow value i,j,snowh(i,j),snow(i,j)',i,j,snowh(i,j),snow(i,j)
+          !print *,'Corrected snow value i,j,snowh(i,j),snow(i,j)',i,j,snowh(i,j),snow(i,j)
      else
-          print *,'===>Error<===: strange point i,j,snowh(i,j),snow(i,j)',i,j,snowh(i,j),snow(i,j)
+          !print *,'===>Error<===: strange point i,j,snowh(i,j),snow(i,j)',i,j,snowh(i,j),snow(i,j)
           snowh(i,j)=0.0
           snow(i,j) = 0.0
      endif
 ! check consistency of snow variables after snow trim
      if((snow(i,j) <= 0..and.snowh(i,j) > 0.) .or. (snowh(i,j) <=0..and.snow(i,j) > 0.)) then
-        print *,'Inconsistency of snow and snowh AFTER snow trim at i,j,snow,snowh', i,j,snow(i,j),snowh(i,j)
+        !print *,'Inconsistency of snow and snowh AFTER snow trim at i,j,snow,snowh', i,j,snow(i,j),snowh(i,j)
         snow(i,j)  = 0.
         snowh(i,j) = 0.
-   print *,'Corrected snow and snowh at i,j,snow,snowh',i,j,snow(i,j),snowh(i,j)
+   !print *,'Corrected snow and snowh at i,j,snow,snowh',i,j,snow(i,j),snowh(i,j)
      endif 
   ENDDO
   ENDDO
@@ -989,11 +989,11 @@ if(1==1) then  ! turn off , use GFS sea ice
 !switch to MODIS for land
 !             ivgtyp(i,j)=luse(i,j)
 !             lu_index(i,j)=luse(i,j)
-        if(i.eq.350.and.j.eq.250)print *,'land',i,j,landmask(i,j),xland_rr(i,j)
+        !if(i.eq.350.and.j.eq.250)print *,'land',i,j,landmask(i,j),xland_rr(i,j)
 ! make sure landmask and xland are consistent for land
              landmask(i,j)=1.
              xland_rr(i,j)=1.
-        if(i.eq.350.and.j.eq.250)print *,'land after check',i,j,landmask(i,j),xland_rr(i,j)
+        !if(i.eq.350.and.j.eq.250)print *,'land after check',i,j,landmask(i,j),xland_rr(i,j)
     endif
   ENDDO
   ENDDO
