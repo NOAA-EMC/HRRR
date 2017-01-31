@@ -8,7 +8,6 @@
 # 2014-08-01  C Alexander / M Hu / G Manikin / J Yang 
 # 2016-02-05  C Alexander/ G Manikin   HRRRRv2
 
-#XXW . /usrx/local/Modules/3.2.9/init/ksh
 . /usrx/local/Modules/default/init/ksh
 
 # Load modules
@@ -16,8 +15,6 @@ module load NetCDF/3.6.3
 
 ulimit -s 512000
 set -x
-
-. /usrx/local/Modules/3.2.9/init/ksh
 
 # Set paths to unix commands
 DATE=/bin/date
@@ -48,6 +45,10 @@ YYYY=`${DATE} +"%Y" -d "${START_TIME}"`
 MM=`${DATE} +"%m" -d "${START_TIME}"`
 DD=`${DATE} +"%d" -d "${START_TIME}"`
 HH=`${DATE} +"%H" -d "${START_TIME}"`
+
+# Compute date & time components for the analysis time minus 1 day
+DDm1=`$NDATE -24 $YYYYMMDDHH`
+YMDm1=`echo ${DDm1} | cut -c1-8`
 
 # Bring over background field (it's modified by GSI so we can't link to it)
 time_str=`${DATE} "+%Y-%m-%d_%H_%M_%S" -d "${START_TIME}"`

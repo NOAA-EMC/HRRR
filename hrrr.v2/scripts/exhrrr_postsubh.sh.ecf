@@ -238,6 +238,9 @@ $GRBINDEX hrrr.${cycle}.ndfdsubhf${fhr}.grib2 hrrr.${cycle}.ndfdsubhf${fhr}.grib
   $TOCGRIB2 <$PARMutil/grib2_awips_hrrr_subhf${fhr}.184  parm='KWBY' >> $pgmout 2> errfile 
 
   cp xtrn_subh.${cycle}.hrrr${fhr} ${PCOM}/grib2.${cycle}.awphrrr_subh_184_f${fhr}_${cyc}
+  if [ $SENDDBN = YES ]; then
+    $DBNROOT/bin/dbn_alert NTC_LOW $NET $job ${PCOM}/grib2.${cycle}.awphrrr_subh_184_f${fhr}_${cyc}
+  fi
 fi
 fi # end AWIPS processing
 echo "post subh completed at `${DATE}`"

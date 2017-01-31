@@ -27,7 +27,7 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
 !
 !$$$ end documentation block
 
-  use gridmod, only: idsl5,regional
+  use gridmod, only: idsl5,regional,use_gfs_nemsio
   use gridmod, only: region_lat,region_lon  
   use gridmod, only: nlon,nlat,lat2,lon2,nsig,rotate_wind_ll2xy
   use hybrid_ensemble_isotropic, only: region_lat_ens,region_lon_ens
@@ -40,7 +40,9 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
   use gsi_bundlemod, only: gsi_bundle
   use gsi_bundlemod, only: gsi_bundlegetpointer
   use gsi_bundlemod, only: gsi_bundledestroy
-  use constants,only: zero,half,fv,rd_over_cp,one,h300
+  use gsi_bundlemod, only: gsi_grid
+  use gsi_bundlemod, only: gsi_gridcreate
+  use constants,only: zero,half,fv,rd_over_cp,one,h300,i_missing,r60,r3600
   use constants, only: rd,grav
   use mpimod, only: mpi_comm_world,ierror,mype,mpi_rtype,mpi_min,mpi_max
   use mpimod, only: mpi_rtype,mpi_info_null,mpi_offset_kind,mpi_mode_create,mpi_mode_wronly
@@ -60,6 +62,10 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
   use gsi_bundlemod, only: GSI_BundleGetPointer
   use gsi_metguess_mod, only: GSI_MetGuess_Bundle
   use mpeu_util, only: die
+
+  use nemsio_module, only:  nemsio_init,nemsio_open,nemsio_close
+  use nemsio_module, only:  nemsio_gfile,nemsio_getfilehead
+
   implicit none
 
   logical, intent(in) :: enpert4arw,wrt_pert_sub,wrt_pert_mem
@@ -68,6 +74,8 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
   type(spec_vars) sp_gfs
   real(r_kind),allocatable,dimension(:,:,:) :: pri,vor,div,u,v,tv,q,cwmr,oz,prsl,prsl1000
   real(r_kind),allocatable,dimension(:,:)   :: z,ps
+  real(r_kind),pointer,dimension(:,:,:) :: tmp3d =>null()
+  real(r_kind),pointer,dimension(:,:)   :: tmp2d =>null()
   real(r_kind),allocatable,dimension(:) :: ak5,bk5,ck5,tref5
   real(r_kind),allocatable :: work_sub(:,:,:,:),work(:,:,:,:),work_reg(:,:,:,:)
   real(r_kind),allocatable :: tmp_ens(:,:,:,:),tmp_anl(:,:,:,:),tmp_ens2(:,:,:,:)
@@ -100,6 +108,7 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
   real(r_kind),parameter::  zero_001=0.001_r_kind
   real(r_kind),allocatable,dimension(:) :: xspli,yspli,xsplo,ysplo
   integer(i_kind) iyr,ihourg
+  integer(i_kind),dimension(7):: idate
   integer(i_kind),dimension(4):: idate4
   integer(i_kind),dimension(8) :: ida,jda 
   integer(i_kind),dimension(5) :: iadate_gfs
@@ -108,7 +117,7 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
   integer(i_kind) istatus
   real(r_kind) rdog,h,dz
   real(r_kind),allocatable::height(:),zbarl(:,:,:)
-  logical add_bias_perturbation
+  logical add_bias_perturbation,inithead
   integer(i_kind) n_ens_temp
   real(r_kind),allocatable::psfc_out(:,:)
   integer(i_kind) ilook,jlook,ier
@@ -119,6 +128,22 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
   real(r_kind) ratio_x,ratio_y
   character(len=3)   :: charfhr
   character(len=7) charmem        
+
+  integer(i_kind) :: nfhour, nfminute, nfsecondn, nfsecondd
+  integer(i_kind) :: idvc,idsl,lonb,latb,levs,jcap,nvcoord
+  character(8) filetype, mdlname
+  real(r_single),allocatable,dimension(:,:,:) :: vcoord
+  integer(i_kind) iret2
+
+  type(gsi_bundle) :: atm_bundle
+  type(gsi_grid)   :: atm_grid
+  integer(i_kind),parameter :: n2d=2
+  integer(i_kind),parameter :: n3d=8
+  character(len=4), parameter :: vars2d(n2d) = (/ 'z   ', 'ps  ' /)
+  character(len=4), parameter :: vars3d(n3d) = (/ 'u   ', 'v   ', &
+                                                  'vor ', 'div ', &
+                                                  'tv  ', 'q   ', &
+                                                  'cw  ', 'oz  '  /)
 
 !  real(r_kind) :: ges_ps(lat2,lon2  )
 !  real(r_kind) :: ges_z (lat2,lon2  )
@@ -134,6 +159,8 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
   integer(i_kind) :: iunit,lunit,count
   integer(mpi_offset_kind) :: disp
   character(len=500) :: filenameout
+
+  type(nemsio_gfile) :: gfile_atm
 
   add_bias_perturbation=.false.  !  not fully activated yet--testing new adjustment of ps perturbions 1st
 
@@ -168,28 +195,114 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
 
   rewind (10) 
   read(10,'(a)',err=20,end=20)filename 
-  open(lunges,file=trim(filename),form='unformatted')
-  call sigio_srhead(lunges,sighead,iret)
-  close(lunges)
-  if(mype == 0) then
-     write(6,*) ' sighead%fhour,sighead%idate=',sighead%fhour,sighead%idate
-     write(6,*) ' iadate(y,m,d,hr,min)=',iadate
-     write(6,*) ' sighead%jcap,sighead%levs=',sighead%jcap,sighead%levs
-     write(6,*) ' sighead%latf,sighead%lonf=',sighead%latf,sighead%lonf
-     write(6,*) ' sighead%idvc,sighead%nvcoord=',sighead%idvc,sighead%nvcoord
-     write(6,*) ' sighead%idsl=',sighead%idsl
-     do k=1,sighead%levs+1
-        write(6,*)' k,vcoord=',k,sighead%vcoord(k,:)
-     end do
-  end if
+!===========
+  write(*,*) 'here==',use_gfs_nemsio
+  if ( .not. use_gfs_nemsio ) then
+     open(lunges,file=trim(filename),form='unformatted')
+     call sigio_srhead(lunges,sighead,iret)
+     close(lunges)
+
+     hourg=sighead%fhour
+     idate4=sighead%idate
+     nvcoord=sighead%nvcoord
+
+     if(mype == 0) then
+        write(6,*) ' sighead%fhour,sighead%idate=',sighead%fhour,sighead%idate
+        write(6,*) ' iadate(y,m,d,hr,min)=',iadate
+        write(6,*) ' sighead%jcap,sighead%levs=',sighead%jcap,sighead%levs
+        write(6,*) ' sighead%latf,sighead%lonf=',sighead%latf,sighead%lonf
+        write(6,*) ' sighead%idvc,sighead%nvcoord=',sighead%idvc,sighead%nvcoord
+        write(6,*) ' sighead%idsl=',sighead%idsl
+        do k=1,sighead%levs+1
+           write(6,*)' k,vcoord=',k,sighead%vcoord(k,:)
+        end do
+     end if
+
+     idsl=sighead%idsl
+     idvc=sighead%idvc
+     nlat_gfs=sighead%latf+2
+     nlon_gfs=sighead%lonf
+     nsig_gfs=sighead%levs
+     jcap_gfs=sighead%jcap
+     if (allocated(vcoord))     deallocate(vcoord)
+     allocate(vcoord(nsig_gfs+1,3,2))
+     vcoord(1:nsig_gfs+1,1:sighead%nvcoord,1)=sighead%vcoord(1:nsig_gfs+1,1:sighead%nvcoord)
 
 ! Extract header information
-  hourg    = sighead%fhour
-  idate4(1)= sighead%idate(1)
-  idate4(2)= sighead%idate(2)
-  idate4(3)= sighead%idate(3)
-  idate4(4)= sighead%idate(4)
+!     hourg    = sighead%fhour
+!     idate4(1)= sighead%idate(1)
+!     idate4(2)= sighead%idate(2)
+!     idate4(3)= sighead%idate(3)
+!     idate4(4)= sighead%idate(4)
+  else !NEMSIO 
 
+     call nemsio_init(iret=iret)
+     call nemsio_open(gfile_atm,filename,'READ',iret=iret)
+     idate         = i_missing
+     nfhour        = i_missing; nfminute      = i_missing
+     nfsecondn     = i_missing; nfsecondd     = i_missing
+     idsl  = i_missing
+     call nemsio_getfilehead(gfile_atm, idate=idate, gtype=filetype,  &
+           modelname=mdlname, nfhour=nfhour, nfminute=nfminute,       &
+           nfsecondn=nfsecondn, nfsecondd=nfsecondd,                  &
+           dimx=lonb, dimy=latb,   dimz=levs, &
+           jcap=jcap, idvc=idvc, &
+           idsl=idsl,    iret=iret2)
+     if ( nfhour == i_missing .or. nfminute == i_missing .or. &
+          nfsecondn == i_missing .or. nfsecondd == i_missing ) then
+          write(6,*)'READ_FILES: ***ERROR*** some forecast hour info ', &
+                 'are not defined in ', trim(filename)
+          write(6,*)'READ_FILES: nfhour = ', &
+                 hourg
+          call stop2(80)
+     endif
+
+     hourg = float(nfhour) + float(nfminute)/r60 +  &
+             float(nfsecondn)/float(nfsecondd)/r3600
+     idate4(1) = idate(4)  !hour
+     idate4(2) = idate(2)  !month
+     idate4(3) = idate(3)  !day
+     idate4(4) = idate(1)  !year
+     nlat_gfs=latb+2
+     nlon_gfs=lonb
+     nsig_gfs=levs
+     jcap_gfs=jcap
+
+     if (allocated(vcoord))     deallocate(vcoord)
+     allocate(vcoord(nsig_gfs+1,3,2))
+     call nemsio_getfilehead(gfile_atm,iret=iret2,vcoord=vcoord)
+     if ( iret2 /= 0 ) then
+        write(6,*)' GESINFO:  ***ERROR*** problem reading header ', &
+              'vcoord, Status = ',iret2
+        call stop2(99)
+     endif
+
+     call nemsio_close(gfile_atm,iret=iret)
+!       Determine the type of vertical coordinate used by model because that
+!       nvcoord is no longer part of NEMSIO header output.
+     nvcoord=3
+     if(maxval(vcoord(:,3,1))==zero .and. &
+        minval(vcoord(:,3,1))==zero ) then
+           nvcoord=2
+           if(maxval(vcoord(:,2,1))==zero .and. &
+              minval(vcoord(:,2,1))==zero ) then
+              nvcoord=1
+           end if
+     end if
+     if(mype == 0) then
+         write(6,*) 'fhour,idate=',hourg,idate4
+         write(6,*) ' iadate(y,m,d,hr,min)=',iadate
+         write(6,*) ' jcap,levs=',jcap,levs
+         write(6,*) ' latf,lonf=',latb,lonb
+         write(6,*) ' idvc,nvcoord=',idvc,nvcoord
+         write(6,*) ' idsl=',idsl
+         do k=1,levs+1
+            write(6,*)' k,vcoord=',k,vcoord(k,:,1)
+         end do
+     end if
+
+  endif ! use_gfs_nemsio
+!===========
 ! Compute valid time from ensemble date and forecast length and compare to iadate, the analysis time
   iyr=idate4(4)
   ihourg=hourg
@@ -226,44 +339,44 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
 
 !         set up ak5,bk5,ck5 for use in computing 3d pressure field (needed for vertical interp to regional)
 !                            following is code segment from gesinfo.F90
-  allocate(ak5(sighead%levs+1))
-  allocate(bk5(sighead%levs+1))
-  allocate(ck5(sighead%levs+1))
-  allocate(tref5(sighead%levs))
-  do k=1,sighead%levs+1
+  allocate(ak5(nsig_gfs+1))
+  allocate(bk5(nsig_gfs+1))
+  allocate(ck5(nsig_gfs+1))
+  allocate(tref5(nsig_gfs))
+  do k=1,nsig_gfs+1
      ak5(k)=zero
      bk5(k)=zero
      ck5(k)=zero
   end do
-  if (sighead%nvcoord == 1) then
-     do k=1,sighead%levs+1
-        bk5(k) = sighead%vcoord(k,1)
+  if (nvcoord == 1) then
+     do k=1,nsig_gfs+1
+        bk5(k) = vcoord(k,1,1)
      end do
-  elseif (sighead%nvcoord == 2) then
-     do k = 1,sighead%levs+1
-        ak5(k) = sighead%vcoord(k,1)*zero_001
-        bk5(k) = sighead%vcoord(k,2)
+  elseif (nvcoord == 2) then
+     do k = 1,nsig_gfs+1
+        ak5(k) = vcoord(k,1,1)*zero_001
+        bk5(k) = vcoord(k,2,1)
      end do
-  elseif (sighead%nvcoord == 3) then
-     do k = 1,sighead%levs+1
-        ak5(k) = sighead%vcoord(k,1)*zero_001
-        bk5(k) = sighead%vcoord(k,2)
-        ck5(k) = sighead%vcoord(k,3)*zero_001
+  elseif (nvcoord == 3) then
+     do k = 1,nsig_gfs+1
+        ak5(k) = vcoord(k,1,1)*zero_001
+        bk5(k) = vcoord(k,2,1)
+        ck5(k) = vcoord(k,3,1)*zero_001
      end do
   else
      write(6,*)'READ_GFS_OZONE_FOR_REGIONAL:  ***ERROR*** INVALID value for nvcoord=',sighead%nvcoord
      call stop2(85)
   endif
 ! Load reference temperature array (used by general coordinate)
-  do k=1,sighead%levs
+  do k=1,nsig_gfs
      tref5(k)=h300
   end do
 
 
   inner_vars=1
-  nlat_gfs=sighead%latf+2
-  nlon_gfs=sighead%lonf
-  nsig_gfs=sighead%levs
+!  nlat_gfs=sighead%latf+2
+!  nlon_gfs=sighead%lonf
+!!  nsig_gfs=sighead%levs
   num_fields=6*nsig_gfs+2      !  want to transfer u,v,t,q,oz,cw,ps,z from gfs subdomain to slab
                             !  later go through this code, adapting gsibundlemod, since currently 
                             !   hardwired.
@@ -272,7 +385,7 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
   vector(1:2*nsig_gfs)=uv_hyb_ens
   call general_sub2grid_create_info(grd_gfs,inner_vars,nlat_gfs,nlon_gfs,nsig_gfs,num_fields, &
                                   .not.regional,vector)
-  jcap_gfs=sighead%jcap
+!  jcap_gfs=sighead%jcap
   jcap_gfs_test=jcap_gfs
   call general_init_spec_vars(sp_gfs,jcap_gfs,jcap_gfs_test,grd_gfs%nlat,grd_gfs%nlon)
 
@@ -304,6 +417,7 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
 !                begin loop over ensemble members
 
   rewind(10)
+  inithead=.true.
   do n=1,n_ens
      read(10,'(a)',err=20,end=20)filename 
      filename=trim(filename)
@@ -324,8 +438,56 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
      allocate(   z(grd_gfs%lat2,grd_gfs%lon2))
      allocate(  ps(grd_gfs%lat2,grd_gfs%lon2))
      vor=zero ; div=zero ; u=zero ; v=zero ; tv=zero ; q=zero ; cwmr=zero ; oz=zero ; z=zero ; ps=zero
-     call general_read_gfsatm(grd_gfs,sp_gfs,sp_gfs,filename,mype,uv_hyb_ens,.false.,.true., &
+     if (use_gfs_nemsio ) then
+
+!    allocate necessary space on global grid
+        call gsi_gridcreate(atm_grid,grd_gfs%lat2,grd_gfs%lon2,grd_gfs%nsig)
+        call gsi_bundlecreate(atm_bundle,atm_grid,'aux-atm-read',istatus,names2d=vars2d,names3d=vars3d)
+        if(istatus/=0) then
+          write(6,*)myname,': trouble creating atm_bundle'
+          call stop2(999)
+        endif
+
+!        call general_read_gfsatm_nems(grd_gfs,sp_gfs,sp_gfs,filename,mype,uv_hyb_ens,.false.,.true., &
+!            z,ps,vor,div,u,v,tv,q,cwmr,oz,iret)
+        call general_read_gfsatm_nems(grd_gfs,sp_gfs,filename,mype,uv_hyb_ens,.false.,.true., &
+               atm_bundle,inithead,iret)
+        inithead = .false.
+        ier = 0
+        call gsi_bundlegetpointer(atm_bundle,'vor' ,tmp3d ,istatus) ; ier = ier + istatus 
+        vor=tmp3d
+        call gsi_bundlegetpointer(atm_bundle,'div' ,tmp3d ,istatus) ; ier = ier + istatus 
+        div=tmp3d
+        call gsi_bundlegetpointer(atm_bundle,'u'   ,tmp3d ,istatus) ; ier = ier + istatus
+        u=tmp3d
+        call gsi_bundlegetpointer(atm_bundle,'v'   ,tmp3d ,istatus) ; ier = ier + istatus
+        v=tmp3d
+        call gsi_bundlegetpointer(atm_bundle,'tv'  ,tmp3d ,istatus) ; ier = ier + istatus 
+        tv=tmp3d
+        call gsi_bundlegetpointer(atm_bundle,'q'   ,tmp3d ,istatus) ; ier = ier + istatus
+        q=tmp3d
+        call gsi_bundlegetpointer(atm_bundle,'oz'  ,tmp3d ,istatus) ; ier = ier + istatus 
+        oz=tmp3d
+        call gsi_bundlegetpointer(atm_bundle,'cw'  ,tmp3d ,istatus) ; ier = ier + istatus
+        cwmr=tmp3d
+        call gsi_bundlegetpointer(atm_bundle,'z'   ,tmp2d ,istatus) ; ier = ier + istatus  
+        z=tmp2d
+        call gsi_bundlegetpointer(atm_bundle,'ps'  ,tmp2d ,istatus) ; ier = ier + istatus
+        ps=tmp2d
+        if ( ier /= 0 ) call die(myname,': missing atm_bundle vars, aborting ...',ier)
+
+        call gsi_bundledestroy(atm_bundle,istatus)
+     else
+        call general_read_gfsatm(grd_gfs,sp_gfs,sp_gfs,filename,mype,uv_hyb_ens,.false.,.true., &
             z,ps,vor,div,u,v,tv,q,cwmr,oz,iret)
+     endif
+!     write(1000+mype,*) n,maxval(ps(:,:)),minval(ps(:,:)),&
+!                          maxval(z(:,:)),minval(z(:,:))
+!     do k=1,grd_gfs%nsig
+!        write(1000+mype,'(I5,10f10.3)') k,maxval(tv(:,:,k)),minval(tv(:,:,k)), &
+!                maxval(u(:,:,k)),minval(u(:,:,k)),maxval(v(:,:,k)),minval(v(:,:,k)),&
+!                maxval(q(:,:,k))*1000.0,minval(q(:,:,k))*1000.0
+!     enddo
      deallocate(vor,div)
      allocate(work_sub(grd_gfs%inner_vars,grd_gfs%lat2,grd_gfs%lon2,num_fields))
      do k=1,grd_gfs%nsig
@@ -381,7 +543,7 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
            pri(i,j,k2)=zero
         end do
      end do
-     if (sighead%idvc /= 3) then
+     if (idvc /= 3) then
         do k=2,grd_mix%nsig
            do j=1,grd_mix%lon2
               do i=1,grd_mix%lat2
@@ -730,7 +892,7 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
         pri(i,j,k2)=zero
      end do
   end do
-  if (sighead%idvc /= 3) then
+  if (idvc /= 3) then
      do k=2,grd_mix%nsig
         do j=1,grd_mix%lon2
            do i=1,grd_mix%lat2
@@ -751,7 +913,7 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
 
 ! Get 3d pressure field now at layer midpoints
   allocate(prsl(grd_mix%lat2,grd_mix%lon2,grd_mix%nsig))
-  if (sighead%idsl/=2) then
+  if (idsl/=2) then
      do j=1,grd_mix%lon2
         do i=1,grd_mix%lat2
            do k=1,grd_mix%nsig
@@ -1151,7 +1313,7 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
 !
         write(iunit) n
         write(iunit) ps_bar(:,:,1)
-!        if(mype==0) write(*,*) n,maxval(ps_bar(:,:,1)),minval(ps_bar(:,:,1))
+!        write(mype+1000,*) n,maxval(ps_bar(:,:,1)),minval(ps_bar(:,:,1))
 !
         do ic3=1,nc3d
 
@@ -1160,10 +1322,10 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
            enddo
            write(iunit) cvars3d(ic3)
            write(iunit) w3
-!           if(mype==0) write(*,*) ic3,cvars3d(ic3)
-           do k=1,nsig
-           if(mype==0) write(*,*) cvars3d(ic3),k,maxval(w3(:,:,k)),minval(w3(:,:,k))
-           enddo
+!           write(mype+1000,*) ic3,cvars3d(ic3)
+!           do k=1,nsig
+!            write(mype+1000,*) cvars3d(ic3),k,maxval(w3(:,:,k)),minval(w3(:,:,k))
+!           enddo
 
         end do
         do ic2=1,nc2d
@@ -1171,8 +1333,8 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
            w2(:,:)=en_perts(n,:,:,nc3d*grd_ens%nsig+ic2)
            write(iunit) cvars2d(ic2)
            write(iunit) w2
-!           if(mype==0) write(*,*) ic2,cvars3d(ic2)
-!           if(mype==0) write(*,*) maxval(w2(:,:)),minval(w2(:,:))
+!           write(mype+1000,*) ic2,cvars3d(ic2)
+!           write(mype+1000,*) maxval(w2(:,:)),minval(w2(:,:))
         end do
 
      end do

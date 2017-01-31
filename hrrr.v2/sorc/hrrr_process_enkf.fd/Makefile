@@ -190,6 +190,7 @@ clean:
         initial.f90 \
  	wrf_netcdf_interface4ens.F90 \
  	read_wrf_mass_guess4ens.F90 \
+        general_read_gfsatm_nems.f90 \
         get_gefs_for_regional_enspro.f90 \
         guess_grids_enspro.f90 \
         gfsp2wrfg.f90 

@@ -19,7 +19,7 @@ PROGRAM gfsp2wrfg
   use mpeu_util, only: die
   use initial, only: miterrr
   use initial, only: init_namelist
-  use gridmod, only: wrf_mass_regional,diagnostic_reg,regional
+  use gridmod, only: wrf_mass_regional,diagnostic_reg,regional,use_gfs_nemsio
   use gridmod, only: init_grid,init_reg_glob_ll,init_grid_vars,final_grid_vars
   use gridmod, only: grid_ratio_wrfmass
   use constants, only: init_constants,init_constants_derived
@@ -29,7 +29,7 @@ PROGRAM gfsp2wrfg
   use control_vectors, only: cvars3d,cvars2d,nrf_var
   use control_vectors, only: init_anacv,final_anacv
   use guess_grids, only: load_prsges,ges_prsl
-  use guess_grids_enspro, only: load_prsges_enspro,ges_prsl
+  use guess_grids_enspro, only: load_prsges_enspro
   use gsi_metguess_mod, only: gsi_metguess_init,gsi_metguess_final
   use state_vectors, only: init_anasv,final_anasv
   use guess_grids, only: create_metguess_grids, destroy_metguess_grids
@@ -48,7 +48,8 @@ PROGRAM gfsp2wrfg
   namelist/setup/ regional,wrf_mass_regional,diagnostic_reg, &
                   switch_on_derivatives,tendsflag,nfldsig,   &
                   grid_ratio_ens,n_ens,grid_ratio_ens,grid_ratio_wrfmass,&
-                  enpert4arw,wrt_pert_sub,wrt_pert_mem
+                  enpert4arw,wrt_pert_sub,wrt_pert_mem, &
+                  use_gfs_nemsio
 !
 !
 !

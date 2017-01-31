@@ -2,12 +2,11 @@
 ################################################################################
 ####  UNIX Script Documentation Block
 #                      .                                             .
-# Script name:       exhrrr_analysis_sh.sms
+# Script name:       exhrrr_prep_enkf.sh.ecf
 # Script description:  runs the GSI and boundary update for the RAP cycle
 # Author:   Ming Hu / Geoff Manikin / Julia Zhu  Org: EMC          Date: 2011-10-01
 # 2011-10-01  M Hu / G Manikin / J Zhu
 
-#XXW . /usrx/local/Modules/3.2.9/init/ksh
 . /usrx/local/Modules/default/init/ksh
 
 # Load modules
@@ -80,10 +79,12 @@ CYCSTART_TIME=${PDY}' '${cychrrr}
 
 stampcycle=`date -d "${CYCSTART_TIME}" +%s`
 minHourDiff=100
-loops="09"
+loops="009"
 for loop in $loops; do
-  for timelist in `ls ${ENKF_FCST}/enkf.*/*/sfg_*_fhr${loop}s_mem080`; do
-    availtime=`basename ${timelist} | cut -d'_' -f2`
+  for timelist in `ls ${ENKF_FCST}/enkf.*/*/gdas*.atmf${loop}s.mem080.nemsio`; do
+    availtimeyyyymmdd=`echo ${timelist} | cut -d'/' -f9 | cut -c 6-13`
+    availtimehh=`echo ${timelist} | cut -d'/' -f10`
+    availtime=${availtimeyyyymmdd}${availtimehh}
     AVAIL_TIME=`echo "${availtime}" | sed 's/\([[:digit:]]\{2\}\)$/ \1/'`
     AVAIL_TIME=`date -d "${AVAIL_TIME}"`
 
@@ -96,13 +97,13 @@ for loop in $loops; do
 
     if [[ ${hourDiff} -lt ${minHourDiff} ]]; then
        minHourDiff=${hourDiff}
-       enkfcstname=sfg_${availtime}_fhr${loop}s
        EYYYYMMDD=$(echo ${availtime} | cut -c1-8)
        EHH=$(echo ${availtime} | cut -c9-10)
+       enkfcstname=gdas.t${EHH}z.atmf${loop}s
     fi
   done
 done
-ls ${ENKF_FCST}/enkf.${EYYYYMMDD}/${EHH}/${enkfcstname}_mem??? > filelist
+ls ${ENKF_FCST}/enkf.${EYYYYMMDD}/${EHH}/${enkfcstname}.mem???.nemsio > filelist
 
 export pgm=hrrr_process_enkf
 startmsg

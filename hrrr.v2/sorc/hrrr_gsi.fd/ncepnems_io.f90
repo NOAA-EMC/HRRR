@@ -117,6 +117,7 @@ module ncepnems_io
   public write_nemssfc
   public read_nemsnst
   public write_nemssfc_nst
+  public error_msg
 
   interface read_nems
      module procedure read_
