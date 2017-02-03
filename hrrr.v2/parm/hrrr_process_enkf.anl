@@ -12,5 +12,6 @@
   enpert4arw=.false.,
   wrt_pert_sub=.false.,
   wrt_pert_mem=.true.,
+  use_gfs_nemsio=.true.,
  /
 
