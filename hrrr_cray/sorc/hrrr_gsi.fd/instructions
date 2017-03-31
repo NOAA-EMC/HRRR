@@ -1,0 +1,152 @@
+===========================================
+WRF
+hrrr_wrfarw
+hrrr_real
+
+(1) Load compiler and NetCDF using modules:
+   Type ". /usrx/local/Modules/default/init/bash" (there is a space between the dot and the path and depending on your shell you may need to select a different shell option)
+   Type  "module load EnvVars" and "module load ics/15.0.3" and "module load ibmpe" and "module load lsf" and "module load NetCDF/3.6.3" and module load "PNetCDF" "module load nco" and "module load jasper"
+   Type "module list" to show all modules now loaded and confirm they match what follows
+   Currently Loaded Modulefiles:
+      1) EnvVars/1.0.0     2) ics/15.0.3        3) ibmpe/1.3.0.10    4) lsf/9.1           5) NetCDF/3.6.3      6) PNetCDF/1.2.0     7) nco/4.2.4         8) jasper/v1.900.1
+(2) Make sure your build environment has the following variables defined:
+   export WRFIO_NCD_LARGE_FILE_SUPPORT=1
+   export WRF_DFI_RADAR=1
+(3) Clean out any previous builds and set configure file:
+   Go into hrrr_wrf.fd/WRFV3.6
+   Type "./clean -aa"
+   Type "./clean -a"
+   Type "./clean"
+   Type "cp configure.wrf.optim configure.wrf"
+(4) Compile the code to build WRF (will take 15-45 min):
+   Type "./compile em_real >& compile.log.YYYYMMDDHH"
+(5) Rename old executables and copy in new ones located in WRFV3.6/main/real.exe and WRFV3.6/main/wrf.exe
+   Type "mv /nwprod/hrrr.v2.0.0/exec/hrrr_real /nwprod/hrrr.v2.0.0/exec/hrrr_real.YYYYMMDDHH" and "mv /nwprod/hrrr.v2.0.0/exec/hrrr_wrfarw /nwprod/hrrr.v2.0.0/exec/hrrr_wrfarw.YYYYMMDDHH"
+   Type "cp main/real.exe /nwprod/hrrr.v2.0.0/exec/hrrr_real" and "cp main/wrf.exe /nwprod/hrrr.v2.0.0/exec/hrrr_wrfarw"
+
+=====================
+WRF for linking
+(6) Unload PNetCDF module
+  Type "module unload PNetCDF"
+  Type "module list" to show all modules now loaded and confirm they match what follows:
+  Currently Loaded Modulefiles:
+  1) EnvVars/1.0.0     2) ics/15.0.3        3) ibmpe/1.3.0.10    4) lsf/9.1           5) NetCDF/3.6.3      6) nco/4.2.4         7) jasper/v1.900.1
+(7) Build large-file supported serial NetCDF and no-OMP version of WRF for linking for cleaning out previous builds
+  Go into hrrr_wrf.fd/WRFV3.6_serialnetcdf_noomp
+  Type "./clean -aa"
+  Type "./clean -a" 
+  Type "./clean"
+  Type "cp configure.wrf.optim configure.wrf"
+(8) Compile the code to build WRF (will take 15-45 min):
+  Type "./compile em_real >& compile.log.YYYYMMDDHH"
+
+====================
+WRF-VAR
+hrrr_updatebc
+
+(9) Clean out any previous builds
+  Go into hrrr_update_bc.fd
+  Type "./make clean"
+(10) Set the path for the WRF libraries that were built in step (8)
+  Change the makefile line to point to the proper WRF location
+  WRFPATH = /correct/path/here/nwprod/hrrr.v2.0.0/sorc/hrrr_wrf.fd/WRFV3.6_serialnetcdf_noomp 
+(11) Compile code
+  Type "./make >& compileupdatebc.log.YYYYMMDDHH"
+(12) Rename old executable and copy in new one
+  Type "mv /nwprod/hrrr.v2.0.0/exec/hrrr_update_bc /nwprod/hrrr.v2.0.0/exec/hrrr_update_bc.YYYYMMDDHH"
+  Type "cp hrrr_update_bc /nwprod/hrrr.v2.0.0/exec/hrrr_update_bc"
+
+=====================
+WPS
+hrrr_ungrib
+hrrr_metgrid
+
+(13) Clean out any previous builds and set configure file:
+   Go into hrrr_wrf.fd/WPSV3.6
+   Type "./clean -aa"
+   Type "./clean -a" 
+   Type "./clean"
+   Type "cp configure.wps.optim configure.wps"
+(14) Set the path for the WRF libraries that were built in step (8)
+   Change the configure.wps line to point to the proper WRF directory
+   WRF_DIR = /correct/path/here/nwprod/hrrr.v2.0.0/sorc/hrrr_wrf.fd/WRFV3.6_serialnetcdf_noomp 
+(15) Compile the code to build WPS (will take 5-10 min):
+   Type "./compile >& compile.log.YYYYMMDDHH"
+(16) Rename old executables and copy in new ones located in WPSV3.6/ungrib.exe and WPSV3.6/metgrid.exe
+   Type "mv /nwprod/hrrr.v2.0.0/exec/hrrr_ungrib /nwprod/hrrr.v2.0.0/exec/hrrr_ungrib.YYYYMMDDHH" and "mv /nwprod/hrrr.v2.0.0/exec/hrrr_metgrid /nwprod/hrrr.v2.0.0/exec/hrrr_metgrid.YYYYMMDDHH"
+   Type "cp ungrib.exe /nwprod/hrrr.v2.0.0/exec/hrrr_ungrib" and "cp metgrid.exe /nwprod/hrrr.v2.0.0/exec/hrrr_metgrid"
+
+=====================
+Post-processor
+hrrr_wrfpost
+
+Repeat process below for each data processor above
+(17) Clean out any previous builds:
+  Go into hrrr_wrfpost.fd
+  Type "./make clean" 
+(18) Compile code
+  Type "./make >& compile.log.YYYYMMDDHH"
+(19) Rename old executable and copy in new one 
+  Type "mv /nwprod/hrrr.v2.0.0/exec/hrrr_wrfpost /nwprod/hrrr.v2.0.0/exec/hrrr_wrfpost.YYYYMMDDHH"
+  Type "cp hrrr_wrfpost /nwprod/hrrr.v2.0.0/exec/hrrr_wrfpost"
+
+
+===========================================
+GSI
+hrrr_gsi
+
+(1) Load compiler and NetCDF using modules:
+   Type ". /usrx/local/Modules/default/init/bash" (there is a space between the dot and the path and depending on your shell you may need to select a different shell option)
+   Type  "module load EnvVars" and "module load ics/12.1" and "module load ibmpe" and "module load lsf" and "module load NetCDF/3.6.3" and "module load nco" and "module load jasper"
+   Type "module list" to show all modules now loaded and confirm they match what follows
+   Currently Loaded Modulefiles:
+      1) EnvVars/1.0.0     2) ics/12.1       3) ibmpe/1.3.0.10    4) lsf/9.1           5) NetCDF/3.6.3      6) PNetCDF/1.2.0     7) nco/4.2.4         8) jasper/v1.900.1
+(2) Clean out any previous builds:
+   Go into hrrr_gsi.fd
+   Type "./make clean"
+   Go into hrrr_gsi.fd/gsdcloud
+   Type "./make clean"
+(3) Compile the GSD cloud analysis library
+   Type "./make >& compile.log.YYYYMMDDHH"
+(4) Compile the code to build GSI (will take 10-15 min):
+   Go into hrrr_gsi.fd
+   Type "./make >& compile.log.YYYYMMDDHH"
+(5) Rename old executables and copy in new one located in hrrr_gsi.fd/hrrr_gsi
+   Type "mv /nwprod/hrrr.v2.0.0/exec/hrrr_gsi /nwprod/hrrr.v2.0.0/exec/hrrr_gsi.YYYYMMDDHH"
+   Type "cp hrrr_gsi /nwprod/hrrr.v2.0.0/exec/hrrr_gsi"
+
+=====================
+GSI Observation/Data Processing
+hrrr_process_enkf
+
+(6) Build GSI library
+   Go into hrrr_gsi.fd
+   Type "./make library >& compile.log.YYYYMMDDHH"
+(7) Clean out any previous builds:
+  Go into hrrr_process_enkf.fd
+  Type "./make clean"
+(8) Set the path for the GSI library that was built in step (6)
+  Change the Makefile.conf line to point to the hrrr_gsi.fd directory
+  GSIDIR = /correct/path/here/nwprod/hrrr.v2.0.0/sorc/hrrr_gsi.fd  
+(9) Compile code
+  Type "./make >& compile.log.YYYYMMDDHH"
+(10) Rename old executable and copy in new one
+  Type "mv /nwprod/hrrr.v2.0.0/exec/hrrr_process_enkf /nwprod/hrrr.v2.0.0/exec/hrrr_process_enkf.YYYYMMDDHH"
+  Type "cp hrrr_process_enkf /nwprod/hrrr.v2.0.0/exec/hrrr_process_enkf"
+
+
+hrrr_full_cycle_surface
+hrrr_process_cloud
+hrrr_process_imssnow
+hrrr_process_mosaic
+hrrr_process_sst
+
+Repeat process below for each data processor above
+(11) Clean out any previous builds:
+  Go into hrrr_XXX.fd
+  Type "./make clean" 
+(13) Compile code
+  Type "./make >& compile.log.YYYYMMDDHH"
+(13) Rename old executable and copy in new one 
+  Type "mv /nwprod/hrrr.v2.0.0/exec/hrrr_XXX /nwprod/hrrr.v2.0.0/exec/hrrr_XXX.YYYYMMDDHH"
+  Type "cp hrrr_XXX /nwprod/hrrr.v2.0.0/exec/hrrr_XXX"

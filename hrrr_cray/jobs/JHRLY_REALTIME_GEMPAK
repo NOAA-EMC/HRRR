@@ -1,0 +1,369 @@
+#! /bin/sh
+
+#### UNIX Script Documentation Block #################################
+#
+# Script Name: JHRLY_REALTIME_GEMPAK
+# RFC Contact: Kelly Kempisty
+# Abstract:  This is the top level J-Job script that drives the
+#    population of the Real Time Data Monitoring (RTDM) web page for
+#    the Hourly and Rapid Refresh (RAP) data sets.
+#
+# Script History Log:
+#    09/2004    Kumar		Script developed and implemented.
+#    06/2006    Kumar		Modified to add several new data types.
+#    07/2008    Kumar           Modified to automate plotting data
+#                               types timeseries
+#    05/2010    Kumar/Malone    Modified to extend time series out to
+#                    (Kempisty) 3 days.
+#    11/2011    Kempisty        Modified to replace RUC with RAP
+#    08/2012    Kempisty        Commented out temp/data directory for
+#                               error troubleshooting purposes.
+#    12/2012    Kempisty        Modified to run on WCOSS - Tide/Gyre
+#
+# Usage: J-job run by way of ECFlow
+#  Script Parameters:
+#  Modules and Files referenced:
+#    scripts:     /nwprod/util/ush/exhrly_realtime_asci2gempak.sh
+#                 /nwprod/scripts/exhrly_realtime_gempak.sh.ecf
+#		  /nwprod/util/ush/exhrly_realtime_mainpage.sh
+#                 /nwprod/scripts/exhrly_realtime_color.sh
+#    fix:         /nwprod/fix/sffdsf.pdf
+#                 /nwprod/fix/sffdsf.prm
+#                 /nwprod/fix/sffdsf.err
+#                 /nwprod/fix/gem.realtime.data.2.pack
+#    executables: /nwprod/exec/sffdsf
+#
+# Attributes:
+#    Language:  RedHat Linux
+#    Machine:   NCEP WCOSS
+#
+######################################################################
+
+set -x
+
+export PS4='$SECONDS +'
+date
+
+export pgmout="OUTPUT.$$"
+
+export DATA=${DATA:-$DATAROOT/${jobid}}
+export DATAO=${DATA}
+mkdir -p ${DATA}
+cd ${DATA}
+
+export cycle=t${cyc}z
+
+export RUN=realtime
+export NETH=hrly
+
+####################################
+# Setup jlogfile
+####################################
+if [ ${envir} = "prod" ]
+then
+   export ALERTL=/com/logs/alertlog    # used by child script bufr_datacount.sh
+else
+   export ALERTL=/com/logs/${envir}/alertlog    # used by child script bufr_datacount.sh
+   export HOMErealtime=${HOMErealtime:-/nwprod}
+   export SENDDBN=NO
+fi
+
+####################################
+# SENDECF  - Flag Events on ecFlow
+# SENDCOM  - Copy files to TMPDIR to $COMOUT
+# SENDDBN  - Issue DBNet Client Calls
+# SENDSDM  - Send files to SDM printer (used by child script bufr_datacount.sh)
+# SENDWEB  - Send files to RZDM web server
+####################################
+export SENDECF=${SENDECF:-YES}
+export SENDCOM=${SENDCOM:-YES}
+export SENDDBN=${SENDDBN:-YES}
+export SENDSDM=${SENDSDM:-NO}
+export SENDWEB=${SENDWEB:-YES}
+
+####################################
+# Specify Execution Areas
+####################################
+export HOMErealtime=${HOMErealtime:-/nw${envir}}
+export SCRIPTSrealtime=${SCRIPTSrealtime:-${HOMErealtime}/scripts}
+export EXECrealtime=${EXECrealtime:-${HOMErealtime}/exec}
+export USHrealtime=${USHrealtime:-${HOMErealtime}/ush}
+export UTILrealtime=${UTILrealtime:-${HOMErealtime}/util/ush}
+export FIXrealtime=${FIXrealtime:-${HOMErealtime}/fix}
+export WEBrealtime=${WEBrealtime:-${HOMErealtime}/gempak/web}
+export PARMrealtime=${PARMrealtime:-${HOMErealtime}/parm}
+
+export utilscript=/nwprod/util/ush
+export utilexec=/nwprod/util/exec
+export gempakfix=/nwprod/gempak/fix
+
+####################################
+# Run setup to initialize working directory and utility scripts
+####################################
+${utilscript}/setup.sh
+
+####################################
+# Run setpdy and initialize PDY variables
+####################################
+${utilscript}/setpdy.sh
+. ./PDY
+
+####################################
+# set COMIN, COMOUT, etc. directories
+####################################
+export COMIN=${COMIN:-/com/${RUN}/${envir}/${NET}.${PDY}}
+export COMINm1=${COMINm1:-/com/${RUN}/${envir}/${NET}.${PDYm1}}
+export COMINm2=${COMINm2:-/com/${RUN}/${envir}/${NET}.${PDYm2}}
+export COMINm3=${COMINm3:-/com/${RUN}/${envir}/${NET}.${PDYm3}}
+export wcdir=${wcdir:-/com/web/${envir}/realtime/${RUN}/${NET}}
+export COM1OUT=${COM1OUT:-/com/web/${envir}/realtime/${RUN}}
+export COM1IN=${COM1IN:-/com/web/${envir}/realtime/${RUN}}
+
+export gifdir=${wcdir}/${cycle}
+mkdir -p ${gifdir} ${COM1OUT}
+
+####################################
+# Set up GEMPAK/NTRANS environment
+####################################
+. /nwprod/gempak/.gempak
+
+####################################
+# execute the utility script to convert the asci data to a gempak surface file
+${UTILrealtime}/exhrly_realtime_asci2gempak.sh
+####################################
+
+####################################
+# Set up GEMPAK/NTRANS environment for plotting and poe set up
+####################################
+ps -ef
+set -x
+
+msg='HOURLY TIME SERIES PLOTS HAVE BEGUN'
+postmsg "${jlogfile}" "${msg}"
+
+export yymm=`echo ${PDY} | cut -c3-6`
+export hhmm=${cyc}'00'
+
+export lsfiles=`ls *alldatatype*file*z`
+export bhour=`echo ${lsfiles} | cut -c35-36`
+export bdate=`echo ${lsfiles} | cut -c20-25`
+
+export lrfiles=`ls -r *alldatatype*file*z`
+export ehour=`echo ${lrfiles} | cut -c35-36`
+export edate=`echo ${lrfiles} | cut -c20-25`
+
+####################################
+#  Specify data types for single-panel plots
+#  by reading it from ${NET}_dataplotlist_t${cyc}z
+#  saved in /com/realtime/prod/${NET}.${PDY}
+####################################
+if [ ${NET} = "hourly" ]; then
+   cp ${COMIN}/hly_dataplotlist_${cycle} datatypes_plotnumbs 
+   tr '[a-z]' '[A-Z]' < datatypes_plotnumbs > hly_dataplotlist_${cycle}  
+   plot_file=hly_dataplotlist_${cycle}
+else
+   cp ${COMIN}/${NET}_dataplotlist_${cycle} datatypes_plotnumbs 
+   tr '[a-z]' '[A-Z]' < datatypes_plotnumbs > ${NET}_dataplotlist_${cycle}  
+   plot_file=${NET}_dataplotlist_${cycle}
+fi
+
+cat ${plot_file} | awk '{ print $1,$2 }' > datatypes_list
+wc -l datatypes_list > nlines_temp_file
+total_dtypes=`awk '{ print $1 }' nlines_temp_file`
+
+listperproc=`expr ${total_dtypes} / 16`
+echo "List per processor = ${listperproc}"
+
+msg="Total number of data types is ${total_dtypes} - each parallel task will process\
+ ${listperproc} data types"
+
+####################################
+
+cal_total_dtypes=`expr ${listperproc} \* 16`
+ndtypes=0
+while [ "${ndtypes}" -lt "${total_dtypes}" ]
+do
+   ndtypes=`expr ${ndtypes} + 1`
+   if [ ${ndtypes} -lt ${cal_total_dtypes} ]; then
+      procn=`expr \( ${ndtypes} - 1 \) / ${listperproc} + 1`
+   else
+      procn=`expr ${ndtypes} - ${cal_total_dtypes} + 1`
+   fi
+   read x
+   echo ${x} >> list_${procn}
+   echo ndtypes= ${ndtypes}
+done < datatypes_list
+
+####################################
+
+tlist=`ls list*`
+
+nlists=0
+for tl in ${tlist}
+do
+   nlists=`expr ${nlists} + 1`
+   echo `cat ${tl} | awk '{ print $1}'` > file.dtype_${nlists}
+   echo `cat ${tl} | awk '{ print $2}'` > plot.dtype_${nlists}
+done
+
+####################################
+# delete if number_of_processors file is present already
+####################################
+rm -rf number_of_processors
+
+####################################
+# Create a dummy process if the number of processors actually required is
+# less than the alloted number of processors
+####################################
+numlist=`ls list* | wc -l`
+
+while [ "${numlist}" -lt "16" ]
+do
+   numlist=`expr ${numlist} + 1`
+   touch list_${numlist}
+done
+
+mlists=0
+for im in `ls list_*`
+do
+   mlists=`expr ${mlists} + 1`
+   echo ${mlists} >> number_of_processors
+done
+
+export n_proc=`cat number_of_processors`
+echo ${n_proc}
+
+####################################
+# MPI debugging variables.  Don't always need.
+####################################
+
+#mpirun.lsf
+export MP_PGMMODEL=mpmd
+export MP_PROCS=16
+export MP_NODES=1
+
+####################################
+# Create individual poe scripts
+####################################
+export nproc=${n_proc}
+
+for proc in ${nproc}
+do
+   cat <<EOF > poescript${proc}
+
+   echo ${DISPLAY}
+   hostname
+   DATA_TMP=${DATA}
+   export DATA=\${DATA_TMP}/TASK${proc}
+   mkdir \${DATA}
+   cd \${DATA}
+   cp ${DATAO}/file.dtype_${proc} .
+   cp ${DATAO}/plot.dtype_${proc} .
+   cp ${DATAO}/*.sfc .
+   cp ${DATAO}/*.pack .
+   cp ${gempakfix}/coltbl.xwp.wbg coltbl.xwp
+   ${SCRIPTSrealtime}/exhrly_realtime_gempak.sh.ecf ${proc}
+
+EOF
+
+done
+
+####################################
+# Create master poescript
+####################################
+for proc in ${nproc}
+do
+   chmod 775 ./poescript${proc}
+   if [ ${proc} -eq 1 ]; then
+      echo "./poescript${proc}" > poescript
+   else
+      echo "./poescript${proc}" >> poescript
+   fi
+done
+
+chmod 775 poescript
+export MP_CMDFILE=poescript
+
+####################################
+# Execute the script.
+####################################
+msg="Begin poe"
+postmsg "${jlogfile}" "${msg}"
+
+pgm=poe
+
+mpirun.lsf
+
+echo "Ending Poe  : `date`"
+
+export err=$?; err_chk
+
+####################################
+# Copy the final time series sfc file and gif files 
+# to /com/.. directory
+####################################
+if test "${SENDCOM}" = 'YES'
+then
+   for proc in ${nproc}
+   do
+      cp ${DATA}/TASK${proc}/*.gif ${gifdir}/.
+   done
+fi
+
+####################################
+# Prepare the main web page (tables), data summary html and  
+# data table html files by running exhrly_realtime_mainpage.sh
+# script with three arguments
+####################################
+if [ ${NET} = "hourly" ] ; then
+   NETW=hly
+else
+   NETW=rap
+fi
+${UTILrealtime}/exhrly_realtime_mainpage.sh ${COM1OUT} ${COM1IN} ${NETW}_sumtable
+
+# Generates three outputs (i) realtime_mainpage.html (ii) ${NETW}_summary_table.html 
+# (iii) ${NETW}_table.html files in $COM1OUT. The index files (i) index.mainpage.shtml  
+# (ii) index.summary.shtml (iii) index.table.shtml files need to be copied to $COM1OUT 
+# (i) and $gifdir (ii) & (iii)
+
+if test "${SENDCOM}" = 'YES'
+then
+   cp ${WEBrealtime}/index.mainpage.shtml ${COM1OUT}/index.shtml
+   cp ${WEBrealtime}/index.summary.shtml ${gifdir}/. 
+   cp ${WEBrealtime}/index.table.shtml ${gifdir}/index.shtml
+   cp ${COM1OUT}/${NETW}_summary_table.html ${gifdir}/summary.html
+   cp ${COM1OUT}/${NETW}_table.html ${gifdir}/table.html
+   chmod og+r ${COM1OUT}/*html
+   chmod og+r ${gifdir}/*html
+fi  
+
+####################################
+# Run color code script.
+${UTILrealtime}/exhrly_realtime_color.sh ${COM1IN} ${COM1OUT}
+####################################
+
+####################################
+# rsync the directory structure from $COMOUT to ncorzdm web server
+####################################
+if test "${SENDWEB}" = 'YES'
+then
+   /usr/bin/ssh nwprod@ncorzdm.ncep.noaa.gov "pwd"
+   if [ $? -eq 0 ]; then
+      /usr/bin/rsync  -v --recursive --links --perms --rsh=/usr/bin/ssh --stats --delete --whole-file --update  /com/web/${envir}/realtime/realtime nwprod@ncorzdm.ncep.noaa.gov:/home/www/nco/htdocs/pmb/nw${envir}/
+      if [ $? -gt 0 ]; then
+         echo "Error doing rsync"
+         exit 30
+      fi
+      echo "HRLY/RAP Realtime webpages were sent"
+   else
+      echo "Cannot connect"
+      exit 40
+   fi
+fi
+
+cat ${pgmout}
+
+date
+cd /tmpnwprd1
+rm -rf $DATA

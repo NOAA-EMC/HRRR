@@ -1,0 +1,28 @@
+                      Changes for wgrib2 v0.1.9.8
+
+Wgrib2 v0.1.9.8 changes the default decoders from g2clib to an emulation
+of g2clib using the internal decoders.  The g2clib decoders are now an 
+optional package.
+
+(1) The change was precipitated by bug reports of segmentation faults.  The
+problem was finally traced back to a repository of precompiled programs.
+They were compiling wgrib2 with the official version of g2clib rather than 
+the patched version of g2clib that is included with the wgrib2 source code. 
+Since this problem was occuring with multiple distributions and I had no way
+of testing the precompiled programs, This was a critcal situation.
+
+(2) Wgrib2 only used g2clib to decode the grid point data.  Wgrib2 interprets
+all the other templates.  However, if the g2clib decoders find a template that 
+it doesn't understand, it complains and doesn't decode the grid point data.  
+At that point, the user has to change to the internal decoders.  The change
+removes this problem.
+
+(3) Some of the internal decoders have been parallelized.  Performance can
+be much faster for certain packings.  Want to make the faster routines
+the default.
+
+
+                      Changes for wgrib2 v0.1.9.9
+
+The default configuration is not to include the g2clib decoders in the build.
+

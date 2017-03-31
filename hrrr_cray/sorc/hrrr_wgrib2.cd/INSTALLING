@@ -1,0 +1,172 @@
+1/2013                            General Installation 
+
+                       Quick Directions for the  Default Configuration
+                       "Any color that you like as long as it's black"
+
+Download source code from
+
+       ftp://ftp.cpc.ncep.noaa.gov/wd51we/wgrib2/wgrib2.tgz
+       http://www.ftp.cpc.ncep.noaa.gov/wd51we/wgrib2/wgrib2.tgz
+
+Untar the compressed tarball
+
+       gunzip wgrib2.tgz
+       tar -xvf wgrib2.tar
+       
+       or if you have gnu tar:  tar -xzvf wgrib2.tgz
+
+Go to the main directory (grib2)
+
+       cd grib2
+
+Define the C compiler that you will be using.  Note icc and pgc have been
+found to be incompatible with the Jasper library and are not allowed.
+
+       sh/bash:    export CC=gcc
+       csh/tcsh:   setenv CC gcc
+
+Compile the wgrib2 using gnu make
+
+       linux:      make
+       MacOS:      gmake
+       Unix:       ???    ask system administrators
+
+Try executing wgrib2
+
+      wgrib2/wgrib2 -config
+
+Copy wgrib2 to SOMEPLACE
+
+      cygwin/linux/unis: cp wgrib2/wgrib2 SOMEPLACE
+
+
+                            Not So Quick Directions
+                            So you want some options
+
+
+Edit the file "makefile" and select the desired options:
+
+# netcdf3: write netcdf files with netcdf-3 library
+# netcdf4: write netcdf files with netcdf-4 library
+#  only one netcdf library can be installed. do not choose netcdf3 and ncdf4
+# regex: regular expression package used by (match,not), POSIX-2
+# tigge: enable -tigge option for tigge names
+# mysql: write to mysql files
+# ipolates: fortran interpolation library
+# udf: user defined functions
+# openmp: use OpemMP to thread the code
+# g2clib: install g2clib decoders (allow -g2clib 2)
+#
+# the flags are stored in wgrib2/config.h
+#
+
+Default options
+
+USE_NETCDF3=1
+USE_NETCDF4=0
+USE_REGEX=1
+USE_TIGGE=1
+USE_MYSQL=0
+USE_IPOLATES=0
+USE_UDF=0
+USE_OPENMP=0
+USE_G2CLIB=0
+
+In the default configuration, all the code is compiled
+using the C compiler.  
+
+
+On some machines, you will have to define the C compiler
+and C preprocessor.  On the NCEP's AIX, I have to define
+them by
+
+	export CC=/usr/vacpp/bin/xlc_r
+	export CPP=/usr/bin/cpp
+
+Then you have to run gnu make.  (gmake on some machines, make on others)
+
+	make		- on linux
+	gmake		- on AIX
+	
+
+
+                          Comments on Netcdf
+
+The makefile is set up to use either netcdf v3 or netcdf v4.  Netcdf-4
+makes wgrib2 much bigger, so don't install it unless you really have to.
+The source code for netcdf-4 (and necessary hdf5) is also very big
+and will have to be downloaded separately.
+
+The netcdf-3 library is included with this distribution.  The library is
+compiled in enable-C-only mode which is not be that useful for
+fortran code.  Don't use try to link other codes to this library.
+
+The netcdf-4 library has to be downloaded with the HDF5 library and
+the shell variable FC has to be set to the default fortran compiler.
+
+
+                  IPOLATES, interpolation library
+
+IPOLATES is the interpolation library used by the -new_grid options.
+In order to use this library, you must have a f90/f95/f2003 fortran compiler.
+In order to enable the -new_grid options, the makefile has to have USE_IPOLATES 
+enabled and the shell variable, FC, must have the name of the fortran compiler. 
+You will have to change the source code if you are not using g95, gfortran, 
+openf95 or xlf.
+
+                              MYSQL
+
+Install MySQL requires the appropriate headers and libraries to be installed.
+The makefile may have to be modified to reflect the locations of the headers
+and libraries.
+
+
+
+                     INSTALLING on windows XP
+
+The code including the IPOLATES option compiles in the cygwin development 
+system.  You'll have to install extra packages such as the C, gfortran 
+compilers and various scripting utilities. 
+
+    Before you compile, you set the default compilers.
+
+    export CC=gcc
+    export FC=gfortran
+    make
+
+                        INSTALLING on FreeBSD
+
+Set appropriate CC and FC environment variables and try make. wgrib2 v1.9.8
+was compiled with clang and gfortran.
+
+
+                        INSTALLING on Apple OS-X
+
+Has been done. No details.
+
+
+                        INSTALLING on NCEP's AIX
+
+Define default C, C preprocessor and fortran
+
+   export CC=/usr/vacpp/bin/xlc_r
+   export CPP=/usr/bin/cpp
+   export FC=xlf_r
+   gmake
+
+
+			Static vs Dynamic Libraries
+
+The various libraries can be created in both dynamic and static versions.  
+I've tried to make the add-on libraries static.  
+
+                           Testing Package
+
+Have a testing script that tests an known-good version with a test
+version. For new machines, I use the gcc compiled version as the 
+"known-good" version.  Not ideal.
+
+                             Problems
+
+Some optional packages require changes to makefile
+

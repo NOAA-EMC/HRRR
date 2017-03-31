@@ -1,0 +1,13 @@
+mpfort -g -traceback  -I/usrx/local/NetCDF/3.6.3/include -I/nwprod/sorc/wrf_shared.fd/frame -c kinds.f90
+mpfort -g -traceback  -I/usrx/local/NetCDF/3.6.3/include -I/nwprod/sorc/wrf_shared.fd/frame -c constants.f90
+mpfort -g -traceback  -I/usrx/local/NetCDF/3.6.3/include -I/nwprod/sorc/wrf_shared.fd/frame -c module_debug.F90
+mpfort -g -traceback  -I/usrx/local/NetCDF/3.6.3/include -I/nwprod/sorc/wrf_shared.fd/frame -c gridmod_gsi_map_utils.f90
+mpfort -g -traceback  -I/usrx/local/NetCDF/3.6.3/include -I/nwprod/sorc/wrf_shared.fd/frame -c misc_definitions_module.f90
+mpfort -g -traceback  -I/usrx/local/NetCDF/3.6.3/include -I/nwprod/sorc/wrf_shared.fd/frame -c constants_module.f90
+mpfort -g -traceback  -I/usrx/local/NetCDF/3.6.3/include -I/nwprod/sorc/wrf_shared.fd/frame -c module_map_utils.f90
+mpfort -g -traceback  -I/usrx/local/NetCDF/3.6.3/include -I/nwprod/sorc/wrf_shared.fd/frame -c write_bufr_NASALaRC.f90
+mpfort -g -traceback  -I/usrx/local/NetCDF/3.6.3/include -I/nwprod/sorc/wrf_shared.fd/frame -c process_NASALaRC_cloud.f90
+mpfort -g -traceback  -I/usrx/local/NetCDF/3.6.3/include -I/nwprod/sorc/wrf_shared.fd/frame -c netCDFsub.f90
+mpfort -g -traceback  -I/usrx/local/NetCDF/3.6.3/include -I/nwprod/sorc/wrf_shared.fd/frame -c netCDFsub_geo.f90
+cc -DLINUX -Dfunder -DFortranByte=char -DFortranInt=int -DFortranLlong='long long' -D_UNDERSCORE -c cio.c
+mpfort -g -traceback -o hrrr_process_cloud  kinds.o constants.o module_debug.o gridmod_gsi_map_utils.o misc_definitions_module.o constants_module.o module_map_utils.o write_bufr_NASALaRC.o process_NASALaRC_cloud.o netCDFsub.o netCDFsub_geo.o cio.o -L/nwprod/lib -lbufr_d_64 /nwprod/sorc/wrf_shared.fd/external/io_netcdf/libwrfio_nf.a /nwprod/sorc/wrf_shared.fd/frame/pack_utils.o -L/usrx/local/NetCDF/3.6.3/lib -lnetcdf 

@@ -1,0 +1,53 @@
+#BSUB -J %E%hrrr_process_enkf_%CYC%
+#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_process_enkf_%CYC%.o%J
+#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_process_enkf_%CYC%.o%J
+#BSUB -cwd /tmpnwprd
+#BSUB -L /bin/sh
+#BSUB -W 00:20
+#BSUB -q %QUEUE%
+#BSUB -x
+#BSUB -P %PROJ%
+#BSUB -n 96
+#BSUB -R "span[ptile=24]"
+#BSUB -R affinity[core]
+#BSUB -a poe
+
+%include <head.h>
+%include <envir-p2.h>
+
+# EXPORT list here
+
+export cyc=%CYC%
+
+# versions file for Rapid Refresh model $mod_ver
+VERSION_FILE=$NWROOT/versions/hrrr.ver
+if [ -f $VERSION_FILE ]; then
+  . $VERSION_FILE
+else
+  ecflow_client --abort
+  exit
+fi
+
+# CALL executable job script here
+$NWROOT/hrrr.${hrrr_ver}/jobs/JHRRR_PROCESS_ENKF
+
+if [ $? -ne 0 ]; then
+  ecflow_client --abort
+  exit
+fi
+
+%include <tail.h>
+%manual
+##########################################################################
+# Purpose: to updatebcare the boundary conditions for the Rapid Refresh Model
+##########################################################################
+
+
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+
+# include manual page below
+%end

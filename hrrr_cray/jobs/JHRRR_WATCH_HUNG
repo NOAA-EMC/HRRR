@@ -1,0 +1,33 @@
+set -x
+
+export PS4='$SECONDS + '
+export DATA=$DATAROOT/${jobid}
+mkdir -m 775 $DATA
+cd $DATA
+
+export FCSTDIR=$DATAROOT/hrrr_fcst_${envir}_${cyc}
+#export FCSTDIR=/tmpnwprd2/hrrr_fcst_${envir}_${cyc} #XXW
+
+sleep 600
+export cycle=t${cyc}z
+setpdy.sh
+. PDY
+
+if [ -s $FCSTDIR/fcstdone0100.$cyc ]; then
+  echo "forecast job run normally at beginning."
+else
+  echo "forecast job looks like hung at begining. Will kill the job and restart!"
+  whoami
+  job_to_kill=`bjobs -u nwprod -w |grep phrrr_forecast_${cyc} |awk '{print $1}'`
+  bkill ${job_to_kill}
+  sleep 20
+  if [ -d ${FCSTDIR}_hung ]; then
+    rm -rf ${FCSTDIR}_hung
+  fi
+  mv $FCSTDIR ${FCSTDIR}_hung_${PDY}
+  ecflow_client --run ${ECF_NAME%/*}/jhrrr_forecast
+  mail -s "Para hrrr_forecast_${cyc} hung at beginning." Xiaoxue.Wang@noaa.gov
+fi
+
+cd $DATAROOT
+rm -rf $DATA

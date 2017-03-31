@@ -1,0 +1,68 @@
+
+Release Notes:  HRRR v2.0.0
+
+v2.0.0 - released February 9, 2016
+  now uses WRF Version 3.6
+  uses updated version of GSI, and hybrid assimilation is introduced
+  uses updated version of post processor code
+  major scientific changes to address warm, dry bias present in HRRR version 1
+  forecasts extended to 18 hours
+  upgrade being made concurrently with RAPv3
+  added capability to restart stalled forecast job
+  output changes
+  large number of new parameters in all output files
+  sub-hourly output now sent to AWIPS
+  all output now available to f18
+
+
+compute resource information
+   still runs every hour, but now to f18
+   forecast job changes from 47 nodes (24 tasks/node)  to 93 nodes (24 tasks/node)
+   makebc job changes from 4 nodes (24 tasks/node) to 7 nodes (24 tasks/node)
+   makeguess job changes from 4 nodes (24 tasks/node) to 6 nodes (24 tasks/node)
+   history file format changed from netcdf to parallel netcdf
+   single cycle runtime seems to increase by a couple of minutes but WCOSS timings have been very inconsistent
+
+
+disk space used per day increases approximately 30%
+     o    Data retention for files in /com and /nwges under 
+                     prod/para/test environments
+     o    asking to maintain current retention of data in /com2 and  
+                  /nwges in prod and recommend same retention for parallel.    
+     o   asking to retain one extra day of /com2/nawips/prod/rap*
+
+
+new executables
+     o    hrrr_full_surface_cycle
+     o    hrrr_process_enkf
+     o    hrrr_process_imssnow
+     o    hrrr_process_sst
+  
+   
+new jobs
+     o   JHRRR_PROCESS_ENKF (run for 00,06,12,18 EnKF cycles);  run as a separate job (just 
+                 like makebc);  the jobs should be run at +7:15 after the cycle time - i.e.  the 12z EnKF 
+                 processing  job should be run at 1915z;   a new directory /nwges/prod/rap/rapges_enkf must 
+                 be created;  runs with 96 tasks at 24 tasks/node
+
+     o   JHRRR_FORECAST_RESTART (run as needed to revive a stalled forecast - see 
+                    instructions_restart in the hrrr_v2.0.0 directory)
+
+
+pre-implementation testing requirements
+  need to test RTMA/URMA upgrade concurrently
+  need to test obsproc upgrade concurrently
+  need to test verification code changes
+  need to run parallel RAP simultaneously - HRRRv2 cannot run without RAPv3 running
+  30-day evaluation will be required
+  suggested evaluators - AWC,SPC,WPC, all NWS Regions, FAA
+
+Dissemination info
+  output should be placed into /com2/hrrr/para, /pcom2/para, and /com/nawips/para
+  output should be placed on ftp server
+  request that all gempak output be transferred to DEVWCOSS as well as all wrfsfc files
+  code is proprietary, and restricted data is used but is not disseminated
+
+Archive to HPSS
+  no changes recommended for HRRR data on hpss      
+

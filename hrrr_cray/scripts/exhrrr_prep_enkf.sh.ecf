@@ -1,0 +1,119 @@
+#!/bin/ksh -l
+################################################################################
+####  UNIX Script Documentation Block
+#                      .                                             .
+# Script name:       exhrrr_prep_enkf.sh.ecf
+# Script description:  runs the GSI and boundary update for the RAP cycle
+# Author:   Ming Hu / Geoff Manikin / Julia Zhu  Org: EMC          Date: 2011-10-01
+# 2011-10-01  M Hu / G Manikin / J Zhu
+
+. /usrx/local/Modules/default/init/ksh
+
+# Load modules
+module load NetCDF/3.6.3
+
+ulimit -s 512000
+set -x
+
+# Set paths to unix commands
+DATE=/bin/date
+AWK="/bin/awk --posix"
+
+# Create the working directory and cd into it
+cd $DATA
+
+# Set up some constants
+export HRRRGES_SFC=${HRRRGES_SFC:-$gespath/hrrr/hrrrges_sfc}
+
+# Make sure START_TIME is in the correct format
+START_TIME=${PDY}' '${cychrrr}
+echo $START_TIME
+echo $cychrrr
+START_TIME=`echo "${START_TIME}" | sed 's/\([[:digit:]]\{2\}\)$/ \1/'`
+START_TIME=`${DATE} -d "${START_TIME}"`
+
+# START GSI
+
+# Compute date & time components for the analysis time
+YYYYJJJHH00=`${DATE} +"%Y%j%H00" -d "${START_TIME}"`
+YYYYMMDDHH=`${DATE} +"%Y%m%d%H" -d "${START_TIME}"`
+YYYYMMDD=`${DATE} +"%Y%m%d" -d "${START_TIME}"`
+YYYY=`${DATE} +"%Y" -d "${START_TIME}"`
+MM=`${DATE} +"%m" -d "${START_TIME}"`
+DD=`${DATE} +"%d" -d "${START_TIME}"`
+HH=`${DATE} +"%H" -d "${START_TIME}"`
+
+# Bring over background field (it's modified by GSI so we can't link to it)
+time_str=`${DATE} "+%Y-%m-%d_%H_%M_%S" -d "${START_TIME}"`
+echo " time_str = ${time_str}"
+
+# Look for background from pre-forecast background
+if [ -r ${COMIN}/hrrr.t${cychrrr}z.wrfguess ]; then
+  echo "EnKF processing using ${COMIN}/hrrr.t${cychrrr}z.wrfguess"
+  cp ${COMIN}/hrrr.t${cychrrr}z.wrfguess ./wrf_inout
+# No background available so abort
+elif  [ -r ${HRRRGES_SFC}/wrfout_sfc_${cychrrr} ]; then
+  cp ${HRRRGES_SFC}/wrfout_sfc_${cychrrr} ./wrf_inout 
+else
+  echo "${COMIN}/hrrr.t${cychrrr}z.wrfguess does not exist!!"
+  echo "${HRRRGES_SFC}/wrfout_sfc_${cychrrr} also does not exist!!"
+  errmsg="ERROR: No background file for EnKF processing at ${time_run}!!!!"
+  echo $errmsg
+  echo " Cycle ${YYYYMMDDHH}: Process EnKF failed because of no background" 
+  err_exit $errmsg
+fi
+
+# Set fixed files
+anavinfo=${FIXhrrr}/hrrr_anavinfo_arw_netcdf
+processanl=${PARMhrrr}/hrrr_process_enkf.anl
+
+# Fixed fields
+cp $anavinfo anavinfo
+cp $processanl namelist.input
+# 
+
+# Find closest GFS EnKF forecast to analysis time
+#
+ENKF_FCST=${COMGFS}
+CYCSTART_TIME=${PDY}' '${cychrrr}
+
+stampcycle=`date -d "${CYCSTART_TIME}" +%s`
+minHourDiff=100
+loops="009"
+for loop in $loops; do
+  for timelist in `ls ${ENKF_FCST}/enkf.*/*/gdas*.atmf${loop}s.mem080.nemsio`; do
+    availtimeyyyymmdd=`echo ${timelist} | cut -d'/' -f9 | cut -c 6-13`
+    availtimehh=`echo ${timelist} | cut -d'/' -f10`
+    availtime=${availtimeyyyymmdd}${availtimehh}
+    AVAIL_TIME=`echo "${availtime}" | sed 's/\([[:digit:]]\{2\}\)$/ \1/'`
+    AVAIL_TIME=`date -d "${AVAIL_TIME}"`
+
+    stamp_avail=`date -d "${AVAIL_TIME} ${loop} hours" +%s`
+
+    hourDiff=`echo "($stampcycle - $stamp_avail) / (60 * 60 )" | bc`;
+    if [[ ${stampcycle} -lt ${stamp_avail} ]]; then
+       hourDiff=`echo "($stamp_avail - $stampcycle) / (60 * 60 )" | bc`;
+    fi
+
+    if [[ ${hourDiff} -lt ${minHourDiff} ]]; then
+       minHourDiff=${hourDiff}
+       EYYYYMMDD=$(echo ${availtime} | cut -c1-8)
+       EHH=$(echo ${availtime} | cut -c9-10)
+       enkfcstname=gdas.t${EHH}z.atmf${loop}s
+    fi
+  done
+done
+ls ${ENKF_FCST}/enkf.${EYYYYMMDD}/${EHH}/${enkfcstname}.mem???.nemsio > filelist
+
+export pgm=hrrr_process_enkf
+startmsg
+mpirun.lsf ${EXEChrrr}/hrrr_process_enkf >> $DATA/$pgmout 2>errfile 
+
+cp enspreproc_arw_mem* ${HRRRGES_ENKF}
+tar -cvf hrrr_enspreproc_${availtime}.tar enspreproc*
+cp hrrr_enspreproc_${availtime}.tar $COMOUT/.
+
+msg="JOB $job HAS COMPLETED NORMALLY."
+postmsg "$jlogfile" "$msg"
+
+exit 0

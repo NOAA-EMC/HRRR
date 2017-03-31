@@ -1,0 +1,85 @@
+#!/bin/ksh --login
+set -x
+############################################################################
+####  UNIX Script Documentation Block
+#                      .                                             .
+# Script name:         exhrrr_makebc.sh.sms
+# Script description:  generates temperature tendencies for the HRRR
+#
+# Author:  Curtis Alexander / Geoffrey.Manikin   Org: EMC     Date: 2011-08-24
+#
+# Script history log:
+# 2011-08-24  M Hu / G Manikin / J Zhu - RAP version
+# 2013-02-27  C Alexander
+# 2015-08-01  C Alexander / G Manikin - HRRRv1
+# 2016-02-05  C Alexander / G Manikin - HRRRv2
+#
+
+# perform tten section
+
+export MPI_VERBOSE=1
+export MPI_DISPLAY_SETTINGS=1
+export MPI_BUFS_PER_PROC=128
+export MPI_BUFS_PER_HOST=128
+export MPI_IB_RAILS=2
+export MPI_GROUP_MAX=128
+export WRFIO_NCD_LARGE_FILE_SUPPORT=1
+
+export HRRRGES_SFC=${HRRRGES_SFC:-$gespath/hrrr/hrrrges_sfc}
+
+rm $DATA/*
+cd $DATA
+
+START_TIME=$PDY$cyc
+YYYY=`echo $START_TIME | cut -c1-4`
+MM=`echo $START_TIME | cut -c5-6`
+DD=`echo $START_TIME | cut -c7-8`
+HH=`echo $START_TIME | cut -c9-10`
+YYYYMMDDHH=$YYYY$MM$DD$HH
+
+# Bring over background field (it's modified so we can't link to it)
+if [ -r ${COMIN}/"hrrr.t${cyc}z.wrfguess_rap" ]; then
+  cp ${COMIN}/hrrr.t${cyc}z.wrfguess_rap ./wrf_inout
+  echo " Cycle ${YYYYMMDDHH}: TTEN background=${COMIN}/hrrr.t${cyc}z.wrfguess_rap"
+
+# No background available so abort
+else
+  echo "${COMIN}/hrrr.t${cyc}z.wrfguess_rap does not exist"
+  echo "ERROR: No background file for analaysis at ${YYYYMMDDHH}!!!!"
+  echo " Cycle ${YYYYMMDDHH}: TTEN failed because of no background"
+  err_exit 1
+fi
+
+# Insert land surface variables into the wrf_inout file
+if [ -r "${HRRRGES_SFC}/wrfout_sfc_${cycm1}" ]; then
+  echo "cycle Surface fields based on ${HRRRGES_SFC}/wrfout_sfc_${cycm1}"
+  cp ${HRRRGES_SFC}/wrfout_sfc_${cycm1} ./wrfout_d01_save
+  mpirun.lsf ${EXEChrrr}/hrrr_full_cycle_surface >> full_cycle_surface.out
+  export err=$?; err_chk
+# No time matched HRRR land surface file available
+else
+  echo "${HRRRGES_SFC}/wrfout_sfc_${cycm1} does not exist!!"
+  echo "WARNING: No land surface data cycled for background at ${YYYYMMDDHH}!!!!"
+#  exit 1
+fi
+
+# Link to the radar binary data
+subhtimes="16 30 46 60"
+count=1
+for subhtime in ${subhtimes}; do
+  if [ -r "${DATA_RADAR}/${subhtime}/RefInGSI.dat" ]; then
+    ln -s ${DATA_RADAR}/${subhtime}/RefInGSI3D.dat ./RefInGSI3D.dat_0${count}
+#    ln -s ${DATA_RADAR}/${subhtime}/RefInGSI.dat ./RefInGSI3D.dat_0${count}
+  else
+    echo "WARNIGNG: ${DATA_RADAR}/${subhtime}/RefInGSI3D.dat does not exist!"
+    echo "HRRR will run without update guess file."
+  fi
+  count=$((count + 1))
+done
+
+# Run radar to tten
+mpirun.lsf ${EXEChrrr}/hrrr_ref2tten > stdout_rad2tten
+export err=$?; err_chk
+
+cp wrf_inout ${COMOUT}/hrrr.t${cyc}z.wrfguess_pre
+exit 0
