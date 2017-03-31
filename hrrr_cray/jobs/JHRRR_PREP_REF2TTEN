@@ -22,7 +22,7 @@ then
   PARA_CONFIG=${hrrr_para_config:-/meso/save/${LOGNAME}/hrrr.${hrrr_ver}/user/hrrr_para_config}
   if [ -s $PARA_CONFIG ] ; then . $PARA_CONFIG ; fi
   export userid=$LOGNAME
-  export DATA_IN=${DATA_IN:-/ptmpp1/$userid}
+  export DATA_IN=${DATA_IN:-/gpfs/hps/ptmp/$userid}
 fi
 
 ###################################
@@ -81,6 +81,7 @@ setpdy.sh
 export COM_RAD=${COM_RAD:-${COMROOTp1}/hourly/prod}
 
 # Define cycm1 since we need land-sfc fields for previous hour
+export cycle=t${cyc}z
 export cycm1=`expr $cyc - 1`
 if [ "$cyc" = 00 ]; then
 cycm1=23
@@ -108,7 +109,8 @@ export HRRRBC=$gespath/${RUN}/hrrrbc
 mkdir -m 775 -p $HRRRBC
 env
 
-export DATA_RADAR=${DATA_RADAR:-$DATA_IN/hrrr_prep_radar_${envir}_${cyc}}
+export DATA_RADAR=${DATA_RADAR:-${DATA_IN}/hrrr_prep_radar_${envir}_${cyc}}
+
 ########################################################
 # Execute the script.
 ${HRRR_PREPREF2TTENSSH:-$HOMEhrrr/scripts/exhrrr_prep_ref2tten.sh.ecf}

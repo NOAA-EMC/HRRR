@@ -2,7 +2,7 @@
 set -xa
 
 ########################################
-# HRRR 3 km Analysis 
+# HRRR 3 km Analysis
 ########################################
 
 ######################################################
@@ -12,7 +12,7 @@ set -xa
 # for the NCO running enviroment
 #######################################################
 export RUN_ENVIR=${RUN_ENVIR:-nco}
-export SENDECF=${SENDECF:-YES}
+export SENDSMS=${SENDECF:-YES}
 
 ###################################
 # Specify NET and RUN Name and model
@@ -38,7 +38,7 @@ then
   package_name=${package_name:-hrrr}
   . /${group_name}/save/${LOGNAME}/${package_name}${NWROOTprod}/parm/${package_name}_para_config
   export userid=${userid:-$LOGNAME}
-  export DATA_IN=${DATA_IN:-/ptmpd1/$userid}
+  export DATA_IN=${DATA_IN:-/gpfs/hps/ptmp/$userid}
 fi
 
 export PS4='$SECONDS + '
@@ -91,8 +91,8 @@ export COM=${COM:-COM_IN}
 export COMIN=${COMIN:-${COM_IN}/${RUN}.${PDY}}
 export COMOUT=${COMOUT:-${COM_OUT}/${RUN}.${PDY}}
 export COMINsst=${COMINsst:-${COMROOTp1}/gfs/prod}
-export COMINsstp1=${COMINsstp1:-$COMROOTp1/gfs/prod}
-export COMINsstp2=${COMINsstp2:-$COMROOT/gfs/prod}
+export COMINsstp1=${COMINsstp1:-${COMROOTp1}/gfs/prod}
+export COMINsstp2=${COMINsstp2:-${COMROOT}/gfs/prod}
 export PREPDIR=${PREPDIR:-${COMROOT}/rap/${envir}/rap.${PDY}}
 export COMRAP=${COMRAP:-${COMROOT}/rap/${envir}}
 export COMRAP_E=${COMRAP_E:-${COMROOT}/rap/${envir}}
@@ -120,4 +120,3 @@ cd $DATA_IN
 if [ ${KEEPDATA} = NO ] ; then rm -rf $DATA ; fi
 
 date
-

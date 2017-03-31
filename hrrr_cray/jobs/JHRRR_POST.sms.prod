@@ -9,12 +9,12 @@ export MP_IO_BUFFER_SIZE=8M
 
 ######################################################
 # The following two variables could be defined in the
-# loadleveler submission script (the ecf script), if
+# loadleveler submission script (the sms script), if
 # not they will take the default values which is set
 # for the NCO running enviroment
 #######################################################
-export RUN_ENVIR=${RUN_ENVIR:-nco}
-export SENDECF=${SENDECF:-YES}
+export RUN_ENVIR=${RUN_ENVIR:-prod}
+export SENDSMS=${SENDSMS:-YES}
 
 ###################################
 # Specify NET and RUN Name and model
@@ -28,24 +28,38 @@ export model=${model:-hrrr}
 ####################################
 module load grib_util/1.0.3
 
+###############################################################
+# This block can be modified for different Production test
+# environment. This is used for operational testings
+###############################################################
+if [ "$RUN_ENVIR" = prod -a $envir != prod ]; then
+  export DBNROOT=/nwprod/spa_util/fakedbn
+  export jlogfile=${jlogfile:-/com/logs/${envir}/jlogfile}
+fi
+
 #####################################################################################
 # This block is for Developer's test run:
 # Run config file to get input parameters
 # This config file should define the following variables
-# DATA_IN: Location of working directory, default to ${DATAROOT}
-# SENDECF: If the job is to be running using ECF, default to YES
+# DATA_IN: Location of working directory, default to /tmpnwprd
+# SENDSMS: If the job is to be running using SMS, default to YES
 # SENDDBN: Set to NO for developers, default to YES
-# COM_IN:  Directory for input files, default to ${COMROOT}/$NET/${envir}
-# COM_OUT: Directory for output file, default to ${COMROOT}/$NET/${envir}
-# gespath: Directory for the guess or restart files, default to ${GESROOT}/${envir}
+# COM_IN:  Directory for input files, default to /com/$NET/${envir}
+# COM_OUT: Directory for output file, default to /com/$NET/${envir}
+# gespath: Directory for the guess or restart files, default to /nwges/${envir}
 #####################################################################################
-if [ "$RUN_ENVIR" != nco ]      ### For Developers, "group_name" is passed from the ECF script
+if [ "$RUN_ENVIR" != prod ]      ### For Developers, "group_name" is passed from the SMS script
 then
   group_name=${group_name:-meso}
   package_name=${package_name:-hrrr}
-#  . /${group_name}/save/${LOGNAME}/${package_name}${NWROOTprod}/parm/${package_name}_para_config
+#  . /${group_name}/save/${LOGNAME}/${package_name}/nwprod/parm/${package_name}_para_config
   export userid=${userid:-$LOGNAME}
   export DATA_IN=${DATA_IN:-/gpfs/hps/ptmp/$userid}
+fi
+
+if [ $SENDSMS = YES ]
+then
+  $SMSBIN/smsinit $LOADL_STEP_ID
 fi
 
 export PS4='$SECONDS + '
@@ -54,28 +68,38 @@ date
 ####################################
 # obtain unique process id (pid) and make temp directory
 ####################################
-export DATA_IN=${DATA_IN:-${DATAROOT}}
-export DATA=$DATA_IN/${jobid}
+export pid=$$
+export DATA_IN=${DATA_IN:-/gpfs/hps/ptmp/Benjamin.Blake}
+export DATA=$DATA_IN/hrrr_post_${envir}_${cyc}_f${fhr}
 mkdir -p $DATA
 cd $DATA
 
 export cycle=t${cyc}z
 
-export pgmout="OUTPUT.$$"
+####################################
+# Determine Job Output Name on System
+####################################
+export outid="LL$job"
+export jobid="${outid}.o${pid}"
+export pgmout="OUTPUT.${pid}"
 
 ####################################
-# SENDECF  - Flag Events on ECF
+# File To Log Msgs
+####################################
+export jlogfile=${jlogfile:-/com/logs/jlogfile}
+
+####################################
+# SENDSMS  - Flag Events on SMS
 # SENDCOM  - Copy files to /com directory
 ####################################
-export SENDECF=${SENDECF:-YES}
+export SENDSMS=${SENDSMS:-NO}
 export SENDCOM=${SENDCOM:-YES}
-export SENDDBN=${SENDDBN:-YES}
-export ALERT_EXT=${ALERT_EXT:-}
+export SENDDBN=${SENDDBN:-NO}
 
 ####################################
 # Specify Execution Areas
 ####################################
-export HOMEhrrr=${HOMEhrrr:-${NWROOT}/${NET}.${hrrr_ver}}
+export HOMEhrrr=${HOMEhrrr:-/gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nw${envir}/${NET}.${model_ver}}
 export EXEChrrr=${EXEChrrr:-${HOMEhrrr}/exec}
 export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm}
@@ -83,26 +107,37 @@ export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush}
 export PARMutil=${PARMutil:-${HOMEhrrr}/util/parm}
 
 export WGRIB2=${EXEChrrr}/hrrr_wgrib2
+export CNVGRIB=${CNVGRIB:-/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.3/exec/cnvgrib}
+export GRB2INDEX=${GRB2INDEX:-/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.3/exec/grb2index}
+export GRBINDEX=${GRBINDEX:-/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.3/exec/grbindex}
+export TOCGRIB2=${TOCGRIB2:-/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.3/exec/tocgrib2}
 export CRTM=${CRTM:-/gpfs/hps/nco/ops/nwprod/lib/crtm/v2.0.6/src/fix}
+
+###################################
+# Set up the UTILITIES
+###################################
+export utilscript=${utilscript:-/gpfs/hps/nco/ops/nwprod/prod_util.v1.0.4/ush}
+export utilexec=${utilexec:-/gpfs/hps/nco/ops/nwprod/prod_util.v1.0.4/exec}
 
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
-setpdy.sh
+sh $utilscript/setpdy.sh
 . PDY
+#. /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/hrrr.v2.0.10/RETRODATE
 
 ##############################################
 # Define COM directories
 ##############################################
-export COM_IN=${COM_IN:-${COMROOT}/${NET}/${envir}}
-export COM_OUT=${COM_OUT:-${COMROOT}/${NET}/${envir}}
+export COM_IN=${COM_IN:-/gpfs/hps/ptmp/Benjamin.Blake/com2/${NET}/${envir}}
+export COM_OUT=${COM_OUT:-/gpfs/hps/ptmp/Benjamin.Blake/com2/${NET}/${envir}}
 
 export COM=${COM:-${COM_IN}}
 export COMIN=${COMIN:-${COM_IN}/${RUN}.${PDY}}
 export COMOUT=${COMOUT:-${COM_OUT}/${RUN}.${PDY}}
-export PCOM=${PCOM:-${PCOMROOT}/${NET}}
-export gespath=${gespath:-$GESROOT/${envir}}
-export HRRRGES_SFC=${HRRRGES_SFC:-$gespath/${RUN}/hrrrges_sfc}
+export PCOM=${PCOM:-/gpfs/hps/ptmp/Benjamin.Blake/pcom2/${NET}}
+export gespath=${gespath:-/gpfs/hps/ptmp/Benjamin.Blake/nwges/${envir}/${RUN}}
+export HRRRGES_SFC=${HRRRGES_SFC:-$gespath/hrrrges_sfc}
 mkdir -m 775 -p $COMOUT $PCOM
 
 env
@@ -110,7 +145,7 @@ env
 ########################################################
 # Execute the script.
 export FCSTDIR=$DATA_IN/hrrr_fcst_${envir}_${cyc}
-${HRRR_POSTSH:-$HOMEhrrr/scripts/exhrrr_post.sh.ecf}
+${HRRR_POSTSH:-$HOMEhrrr/scripts/exhrrr_post.sh.sms}
 ########################################################
 
 cat $pgmout

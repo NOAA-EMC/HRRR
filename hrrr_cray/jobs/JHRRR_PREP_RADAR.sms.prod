@@ -6,22 +6,21 @@ export MP_IO_BUFFER_SIZE=8M
 #
 # Specify whether the run is production or development
 #
-export RUN_ENVIR=${RUN_ENVIR:-nco}
+export RUN_ENVIR=${RUN_ENVIR:-prod}
 
 #####################################################################################
 # Run config file to get input parameters
 # This config file should define the following variables
-# DATA_IN: Location of working directory, default to ${DATAROOT}
+# DATA_IN: Location of working directory, default to /tmpnwprd
 # DEV_ECF: If the job is to be running using ECF, default to YES
 # SENDDBN: Set to NO for developers, default to YES
-# COM_IN:  Directory for input files, default to ${COMROOT}/$NET/${envir}
-# COM_OUT: Directory for output file, default to ${COMROOT}/$NET/${envir}
-# gespath: Directory for the guess or restart files, default to ${GESROOT}/${envir}
+# COM_IN:  Directory for input files, default to /com/$NET/${envir}
+# COM_OUT: Directory for output file, default to /com/$NET/${envir}
+# gespath: Directory for the guess or restart files, default to /nwges/${envir}
 #####################################################################################
-if [ "$RUN_ENVIR" != nco ]      ### For Developers
+if [ "$RUN_ENVIR" != prod ]      ### For Developers
 then
-  hrrr_ver=${hrrr_ver:-v2.0.0}
-  PARA_CONFIG=${hrrr_para_config:-/meso/save/${LOGNAME}/hrrr.${hrrr_ver}/user/hrrr_para_config}
+  PARA_CONFIG=${hrrr_para_config:-/meso/save/${LOGNAME}/hrrr.${model_ver}/user/hrrr_para_config}
   if [ -s $PARA_CONFIG ] ; then . $PARA_CONFIG ; fi
   export userid=$LOGNAME
   export DATA_IN=${DATA_IN:-/gpfs/hps/ptmp/$userid}
@@ -37,10 +36,22 @@ export model=${model:-hrrr}
 export PS4='$SECONDS + '
 date
 
+##########################################################################
+# This block can be modified for different test environment for NCO's run
+##########################################################################
+if [ $RUN_ENVIR = prod -a $envir != prod ]; then
+  export SENDDBN=${SENDDBN:-NO}
+  export jlogfile=${jlogfile:-/com/logs/${envir}/jlogfile}
+  export DATA_IN=${DATA_IN:-/gpfs/hps/ptmp/Benjamin.Blake}
+  export DBNROOT=/nwprod/spa_util/fakedbn
+  export alert_type=HRRR_PREP_PARA
+fi
+
 ########################################################
 # obtain unique process id (pid) and make temp directory
 ########################################################
-export DATA_IN=${DATA_IN:-${DATAROOT}}
+export pid=${pid:-$$}
+export DATA_IN=${DATA_IN:-/gpfs/hps/ptmp/Benjamin.Blake}
 export DATA=$DATA_IN/hrrr_prep_radar_${envir}_${cyc}
 if [ ! -d $DATA ]; then
   mkdir -p $DATA
@@ -60,7 +71,14 @@ else
 cycm1=$(printf "%02d" $cycm1)
 fi
 
-export pgmout="OUTPUT.$$"
+
+####################################
+# Determine Job Output Name on System
+####################################
+export outid="LL$job"
+[ $envir != prod ]  && export outid="LL${job}_${envir}"
+export jobid="${outid}.o${pid}"
+export pgmout="OUTPUT.${pid}"
 
 ####################################
 # SENDECF  - Flag Events on ECF
@@ -75,49 +93,55 @@ export SENDDBN=${SENDDBN:-YES}
 ####################################
 # Specify Execution Areas
 ####################################
-export HOMEhrrr=${HOMEhrrr:-${NWROOT}/${NET}.${hrrr_ver}}
+export HOMEhrrr=${HOMEhrrr:-/gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nw${envir}/${NET}.${model_ver}}
 export SCRIPTShrrr=${SCRIPTShrrr:-$HOMEhrrr/scripts}
 export FIXhrrr=${FIXhrrr:-$HOMEhrrr/fix}
 export PARMhrrr=${PARMhrrr:-$HOMEhrrr/parm}
 export EXEChrrr=${EXEChrrr:-$HOMEhrrr/exec}
 export USHhrrr=${USHhrrr:-$HOMEhrrr/ush}
 
+#############################
+# Set up the UTILITIES
+##############################
+export utilscript=${utilscript:-/gpfs/hps/nco/ops/nwprod/prod_util.v1.0.4/ush}
+export utilities=${utilities:-/gpfs/hps/nco/ops/nwprod/prod_util.v1.0.4/ush}
+
 ##############################
 # Run setpdy and initialize PDY variables
 ##############################
-setpdy.sh
+sh $utilscript/setpdy.sh
 . PDY
+#. /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/hrrr.v2.0.10/RETRODATE
 
 ########################################
 # Define Input Data Directories
 ########################################
 # Hourly Radar Data
-export COM_RAD=${COM_RAD:-${COMROOTp1}/hourly/prod}
+export COM_RAD=${COM_RAD:-/gpfs/gp1/nco/ops/com/hourly/prod}
 
 # NASA LARC Data
-export COM_NASALARC=${COM_NASALARC:-${COMROOT}/rap/${envir}}
+export COM_NASALARC=${COM_NASALARC:-/gpfs/gp2/nco/ops/com/rap/${envir}}
 export COMNASALARC=$COM_NASALARC/rap.$PDY
 
 # NSSL MOSAIC Data
-export COM_MOSAIC=${COM_MOSAIC:-${DCOMROOT}/us007003/ldmdata/obs/upperair/mrms}
+export COM_MOSAIC=${COM_MOSAIC:-/gpfs/gp1/nco/ops/dcom/us007003/ldmdata/obs/upperair/mrms}
 
 ##############################################
 # Define COM directories
 ##############################################
-export COM_IN=${COM_IN:-${COMROOT}/${NET}/${envir}}
-export COM_OUT=${COM_OUT:-${COMROOT}/${NET}/${envir}}
+export COM_IN=${COM_IN:-/gpfs/hps/ptmp/Benjamin.Blake/com2/${NET}/${envir}}
+export COM_OUT=${COM_OUT:-/gpfs/hps/ptmp/Benjamin.Blake/com2/${NET}/${envir}}
 
 export COMIN=$COM_IN/hrrr.${PDY}
 export COMOUT=$COM_OUT/hrrr.${PDY}
 
 mkdir -m 775 -p $COMOUT 
-
 env
 
 ##############################################
 # Define GES directories
 ##############################################
-export gespath=${gespath:-${GESROOT}/${envir}}
+export gespath=${gespath:-/gpfs/hps/ptmp/Benjamin.Blake/nwges/${envir}}
 export HRRRBC=$gespath/${RUN}/hrrrbc
 
 mkdir -m 775 -p $HRRRBC
@@ -125,7 +149,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_PREPSSH:-$HOMEhrrr/scripts/exhrrr_prep_radar.sh.ecf}
+${HRRR_PREPSSH:-$HOMEhrrr/scripts/exhrrr_prep_radar.sh.sms}
 ########################################################
 cat $pgmout
 

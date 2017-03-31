@@ -24,7 +24,7 @@ then
   PARA_CONFIG=${hrrr_para_config:-/meso/save/${LOGNAME}/hrrr.${hrrr_ver}/user/hrrr_para_config}
   if [ -s $PARA_CONFIG ] ; then . $PARA_CONFIG ; fi
   export userid=$LOGNAME
-  export DATA_IN=${DATA_IN:-/ptmpp1/$userid}
+  export DATA_IN=${DATA_IN:-/gpfs/hps/ptmp/$userid}
 fi
 
 ###################################
@@ -81,7 +81,7 @@ setpdy.sh
 # Hourly Radar Data
 export COM_RAD=${COM_RAD:-${COMROOTp1}/hourly/prod}
 
-export COM_NASALARC=${COM_NADALARC:-${COMROOT}/rap/${envir}}
+export COM_NASALARC=${COM_NASALARC:-${COMROOT}/rap/${envir}}
 # NASA LARC Data
 if [ $cyc = 00 -o $cyc = 12 ]; then
   export RAP_RUN=rap_e
