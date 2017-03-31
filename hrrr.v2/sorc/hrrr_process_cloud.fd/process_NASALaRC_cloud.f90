@@ -491,6 +491,11 @@ subroutine read_NASALaRC_cloud_bufr(satfile,atime,east_time, west_time, &
        obs_time=int((hdr(1)-2000.0)*100000000+hdr(2)*1000000+hdr(3)*10000+hdr(4)*100+hdr(5))
        call ufbint(unit_in,obs,7,1,iret,obstr)
        if(obs_time == east_time .or. obs_time == west_time ) then
+       if(abs(obs(3,1) -4.0) < 1.e-4) then
+         obs(7,1)=99999. ! clear
+         obs(6,1)=99999. ! clear
+         obs(5,1)=101300.0  ! clear (hpa)
+       endif
        if(obs(5,1) < 1.e7 .and. obs(5,1) > 100.0 ) then
        if(obs(6,1) < 1.e7 .and. obs(6,1) > 10.0) then
          ntb = ntb+1
