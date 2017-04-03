@@ -3,13 +3,13 @@
 
 # Define the fortran compiler and options
 
-WRFDIR=/nwprod/sorc/wrf_shared.v1.1.0
-FC   = mpfort -g
+WRFDIR=/gpfs/hps/nco/ops/nwprod/wrf_shared.v1.1.0-intel
+FC   = ftn
 CC  = 
 FLAGS= -assume byterecl
 CPPFLAGS = -DLINUX -Dfunder -DFortranByte=char -DFortranInt=int -DFortranLlong='long long' -DNOUNDERSCORE
 
-INCLD= -I${NETCDF_INCLUDE}  -I${WRFDIR}/inc -I${WRFDIR}/frame # -I${GSIDIR}/include
+INCLD= -I${NETCDF}/include  -I${WRFDIR}/inc -I${WRFDIR}/frame # -I${GSIDIR}/include
 LIBS = -L${NWPLIBS} \
         $(WRFDIR)/external/io_int/libwrfio_int.a \
         $(WRFDIR)/external/io_netcdf/libwrfio_nf.a \
