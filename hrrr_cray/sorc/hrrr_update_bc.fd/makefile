@@ -3,7 +3,7 @@
 
 # Define the fortran compiler and options
 
-FC       = ifort
+FC       = ftn
 CPP      = /lib/cpp -P
 ARCH     =
 CPPFLAGS =  -DLINUX -Dfunder -DFortranByte=char -DFortranInt=int -DFortranLlong='long long' -D_UNDERSCORE
