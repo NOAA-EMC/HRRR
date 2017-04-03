@@ -26,7 +26,7 @@
  INPUTOUT_INTERVAL                   = 60,
  input_outname                       = "wrfinput_out_d<domain>_<date>"
  io_form_history                     = 11
- io_form_restart                     = 11
+ io_form_restart                     = 2
  io_form_input                       = 11
  io_form_boundary                    = 2
  debug_level                         = 0
@@ -195,6 +195,6 @@
  /
 
  &namelist_quilt
- nio_tasks_per_group = 16,
+ nio_tasks_per_group = 0,
  nio_groups = 1,
  /

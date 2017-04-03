@@ -26,7 +26,7 @@
  INPUTOUT_INTERVAL                   = 60,
  input_outname                       = "wrfinput_out_d<domain>_<date>"
  io_form_history                     = 11
- io_form_restart                     = 11
+ io_form_restart                     = 2
  io_form_input                       = 11
  io_form_boundary                    = 2
  debug_level                         = 0
@@ -95,7 +95,9 @@
  starting_time_step                  = 20 
  max_time_step                       = 20
  min_time_step                       = 20
- numtiles                            = 8
+ nproc_x                             = 31
+ nproc_y                             = 36
+ numtiles                            = 1
  /
 
  &physics
@@ -195,6 +197,6 @@
  /
 
  &namelist_quilt
- nio_tasks_per_group = 24,
- nio_groups = 4,
+ nio_tasks_per_group = 0,
+ nio_groups = 1,
  /
