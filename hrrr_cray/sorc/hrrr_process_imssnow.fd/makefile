@@ -3,8 +3,8 @@
 
 # Define the fortran compiler and options
 
-WRFPATH=/nwprod/sorc/wrf_shared.v1.1.0
-FC       = mpfort -g -traceback
+WRFPATH  = /gpfs/hps/nco/ops/nwprod/wrf_shared.v1.1.0-intel
+FC       = ftn
 CPP      = /lib/cpp -P
 ARCH     =
 CPPFLAGS =  -DLINUX -Dfunder -DFortranByte=char -DFortranInt=int -DFortranLlong='long long' -D_UNDERSCORE
