@@ -39,7 +39,7 @@ TARGET = ../../exec/hrrr_wrfbufr
 
 NETCDF_LIB = ${NETCDF}/lib/libnetcdf.a
 
-FC       = mpfort 
+FC       = ftn 
 CPP      = /lib/cpp -P
 ARCH     =
 CPPFLAGS =
