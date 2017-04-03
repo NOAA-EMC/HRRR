@@ -3,17 +3,17 @@
 
 # Define the fortran compiler and options
 
-FC       = mpfort -g -traceback
+FC       = ftn
 CPP      = /lib/cpp -P
 ARCH     =
 CPPFLAGS =  -DLINUX -Dfunder -DFortranByte=char -DFortranInt=int -DFortranLlong='long long' -D_UNDERSCORE
 NWPLIBS = ${W3EMC_LIB4} ${W3NCO_LIB4} ${BACIO_LIB4}
 
-WRFPATH    = /nwprod/sorc/wrf_shared.v1.1.0
-INCLD= ${NETCDF_INCLUDE} -I$(WRFPATH)/frame
+WRFPATH  = /gpfs/hps/nco/ops/nwprod/wrf_shared.v1.1.0-intel
+INCLD= -I${NETCDF}/include -I$(WRFPATH)/frame
 LIBS =  -L${NWPLIBS} \
         $(WRFPATH)/external/io_netcdf/libwrfio_nf.a ${WRFPATH}/frame/pack_utils.o \
-        ${NETCDF_LDFLAGS_F}
+        -L${NETCDF}/lib -lnetcdf
 
 OBJS = kinds.o process_SST.o sst14k.o sstGlobal2RR.o netCDFsub_geo.o update_SST_netcdf_mass.o
 
