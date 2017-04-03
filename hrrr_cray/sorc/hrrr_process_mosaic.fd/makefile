@@ -3,13 +3,13 @@
 
 # Define the fortran compiler and options
 
-WRFPATH    = /nwprod/sorc/wrf_shared.v1.1.0
-FC       = mpfort -g 
+WRFPATH  = /gpfs/hps/nco/ops/nwprod/wrf_shared.v1.1.0-intel
+FC       = ftn
 CPP      = /lib/cpp -P
 ARCH     =
 FLAGS    = -O3 -fp-model precise -assume byterecl -fpe0 -DLINUX
 CPPFLAGS =  -DLINUX -Dfunder -DFortranByte=char -DFortranInt=int -DFortranLlong='long long' -D_UNDERSCORE
-NWPLIBS = ${BUFR_LIBd} ${G2TMPL_LIB} ${G2_LIB4} ${JASPER_LIB} ${PNG_LIB} ${Z_LIB} ${BACIO_LIB4} ${W3EMC_LIB4}
+NWPLIBS = ${BUFR_LIBd} ${G2TMPL_LIB} ${G2_LIB4} ${JASPER_LIB} ${PNG_LIB} ${Z_LIB} ${BACIO_LIB4} ${W3EMC_LIB4} ${BUFR_LIB4}
 
 INCLD=  ${NETCDF_INCLUDE} -I$(WRFPATH)/frame -I${G2_INC4} -I${G2TMPL_INC}
 LIBS =  ${NWPLIBS} \
