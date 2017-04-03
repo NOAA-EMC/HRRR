@@ -38,7 +38,7 @@ OBJS=   GETGRIB.o MAIN.o NDFDgrid.o BOUND.o GRIBIT.o GET_BITS.o w3fi71.o
 # CMD		Name of the executable
 # PROFLIB	Library needed for profiling
 #
-FC       = ifort -openmp -convert big_endian 
+FC       = ftn -openmp -convert big_endian 
 CPP      = /lib/cpp -P
 
 FFLAGS   = $(OPTS) $(LIST) $(TRAPS) $(PROFILE) $(DEBUG) $(WRFFLAGS)
