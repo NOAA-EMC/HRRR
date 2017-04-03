@@ -143,11 +143,11 @@ DMPARALLEL      =        1
 OMPCPP          =        -D_OPENMP
 OMP             =        -openmp -fpp -auto
 OMPCC           =        -openmp -fpp -auto
-SFC             =       ifort
-SCC             =       icc
-CCOMP           =       icc
-DM_FC           =       mpiifort -f90=$(SFC)
-DM_CC           =       mpiicc -cc=$(SCC) -DMPI2_SUPPORT -DMPI2_THREAD_SUPPORT
+SFC             =       ftn
+SCC             =       cc
+CCOMP           =       cc
+DM_FC           =       ftn
+DM_CC           =       cc -DMPI2_SUPPORT -DMPI2_THREAD_SUPPORT
 FC              =        $(DM_FC)
 CC              =       $(DM_CC) -DFSEEKO64_OK 
 LD              =       $(FC)
@@ -155,21 +155,24 @@ RWORDSIZE       =       $(NATIVE_RWORDSIZE)
 PROMOTION       =       -i4
 ARCH_LOCAL      =       -DNONSTANDARD_SYSTEM_FUNC 
 #CFLAGS_LOCAL    =       -w -O3 -ip #-xHost -fp-model fast=2 -no-prec-div -no-prec-sqrt -ftz -no-multibyte-chars
-CFLAGS_LOCAL    =       -vec-threshold0 -override_limits -w -O3 -ip -xHost -g -traceback #-fp-model fast=2 -no-prec-div -no-prec-sqrt -ftz -no-multibyte-chars
+#CFLAGS_LOCAL    =       -vec-threshold0 -override_limits -w -O3 -ip -xHost -g -traceback #-fp-model fast=2 -no-prec-div -no-prec-sqrt -ftz -no-multibyte-chars
+CFLAGS_LOCAL	=	-w -O3 -ip
 #LDFLAGS_LOCAL   =       -ip #-xHost -fp-model fast=2 -no-prec-div -no-prec-sqrt -ftz -align all -fno-alias -fno-common
-LDFLAGS_LOCAL   =       -vec-threshold0 -override_limits -ip -xHost #-fp-model fast=2 -no-prec-div -no-prec-sqrt -ftz -align all -fno-alias -fno-common
+#LDFLAGS_LOCAL   =       -vec-threshold0 -override_limits -ip -xHost #-fp-model fast=2 -no-prec-div -no-prec-sqrt -ftz -align all -fno-alias -fno-common
+LDFLAGS_LOCAL	=	-assume buffered_stdout -ip
 CPLUSPLUSLIB    =       
 ESMF_LDFLAG     =       $(CPLUSPLUSLIB)
-FCOPTIM         =       -O3 -g -traceback -xHost
+FCOPTIM         =       -O3
 FCREDUCEDOPT	=       $(FCOPTIM)
-FCNOOPT		=       -O0 -fno-inline -fno-ip
+FCNOOPT		=       -O1 -fno-inline -fno-ip
 FCDEBUG         =       # -g $(FCNOOPT) -traceback # -fpe0 -check all -ftrapuv -unroll0 -u
 FORMAT_FIXED    =       -FI
 FORMAT_FREE     =       -FR
 FCSUFFIX        =
 BYTESWAPIO      =       -convert big_endian
 #FCBASEOPTS_NO_G =       -ip -fp-model precise -w -ftz -align all -fno-alias $(FORMAT_FREE) $(BYTESWAPIO) #-xHost -fp-model fast=2 -no-heap-arrays -no-prec-div -no-prec-sqrt -fno-common
-FCBASEOPTS_NO_G =       -vec-threshold0 -override_limits -qno-opt-dynamic-align -ip -w -ftz -align all -fno-alias $(FORMAT_FREE) $(BYTESWAPIO) -xHost #-fp-model fast=2 -no-heap-arrays -no-prec-div -no-prec-sqrt -fno-common
+#FCBASEOPTS_NO_G =       -vec-threshold0 -override_limits -qno-opt-dynamic-align -ip -w -ftz -align all -fno-alias $(FORMAT_FREE) $(BYTESWAPIO) -xHost #-fp-model fast=2 -no-heap-arrays -no-prec-div -no-prec-sqrt -fno-common
+FCBASEOPTS_NO_G	=	-assume buffered_stdout -ip -w -ftz -align all -fno-alias $(FORMAT_FREE) $(BYTESWAPIO)
 FCBASEOPTS      =       $(FCBASEOPTS_NO_G) $(FCDEBUG)
 MODULE_SRCH_FLAG =     
 TRADFLAG        =      -traditional
@@ -178,7 +181,8 @@ AR              =      ar
 ARFLAGS         =      ru
 M4              =      m4
 RANLIB          =      ranlib
-CC_TOOLS        =      $(SCC) 
+#CC_TOOLS        =      $(SCC) 
+CC_TOOLS	=      gcc
 
 ###########################################################
 ######################

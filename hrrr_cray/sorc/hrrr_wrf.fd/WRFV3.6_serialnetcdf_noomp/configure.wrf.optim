@@ -143,11 +143,11 @@ DMPARALLEL      =        1
 OMPCPP          =       # -D_OPENMP
 OMP             =       # -openmp -fpp -auto
 OMPCC           =       # -openmp -fpp -auto
-SFC             =       ifort
-SCC             =       icc
-CCOMP           =       icc
-DM_FC           =       mpif90 -f90=$(SFC)
-DM_CC           =       mpicc -cc=$(SCC) -DMPI2_SUPPORT
+SFC             =       ftn
+SCC             =       cc
+CCOMP           =       cc
+DM_FC           =       ftn
+DM_CC           =       cc -DMPI2_SUPPORT
 FC              =        $(DM_FC)
 CC              =       $(DM_CC) -DFSEEKO64_OK 
 LD              =       $(FC)
@@ -245,14 +245,14 @@ CC_TOOLS_CFLAGS = -DNMM_CORE=$(WRF_NMM_CORE)
                       $(WRF_SRC_ROOT_DIR)/frame/pack_utils.o 
 
  LIB_EXTERNAL    = \
-                      $(WRF_SRC_ROOT_DIR)/external/io_netcdf/libwrfio_nf.a -L/usrx/local/NetCDF/3.6.3/lib -lnetcdf
+                      $(WRF_SRC_ROOT_DIR)/external/io_netcdf/libwrfio_nf.a -L/gpfs/hps/usrx/local/prod/NetCDF/3.6.3/intel/sandybridge/lib -lnetcdf
 
 LIB             =    $(LIB_BUNDLED) $(LIB_EXTERNAL) $(LIB_LOCAL) $(LIB_WRF_HYDRO)
 LDFLAGS         =    $(OMP) $(FCFLAGS) $(LDFLAGS_LOCAL) 
 ENVCOMPDEFS     =     -DWRF_DFI_RADAR=1
 WRF_CHEM	=	0 
 CPPFLAGS        =    $(ARCHFLAGS) $(ENVCOMPDEFS) -I$(LIBINCLUDE) $(TRADFLAG) 
-NETCDFPATH      =    /usrx/local/NetCDF/3.6.3
+NETCDFPATH      =    /gpfs/hps/usrx/local/prod/NetCDF/3.6.3/intel/sandybridge
 PNETCDFPATH     =    
 
 bundled:  io_only 

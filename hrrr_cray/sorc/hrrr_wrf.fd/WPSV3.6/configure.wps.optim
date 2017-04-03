@@ -56,13 +56,13 @@ COMPRESSION_INC		=  # intentionally left blank, fill in COMPRESSION_INC below
 #   Settings for Linux x86_64, Intel compiler    (dmpar) 
 #
 #
-COMPRESSION_LIBS    = -L/nwprod2/lib/jasper/v1.900.1/libjasper_v1.900.1.a -ljasper -lpng -lz
-COMPRESSION_INC     = -I/nwprod2/lib/jasper/v1.900.1/include
+COMPRESSION_LIBS    = ${JASPER_LIB} ${PNG_LIB} ${Z_LIB}
+COMPRESSION_INC     = -I/gpfs/hps/usrx/local/prod/jasper/1.900.1/intel/sandybridge/include
 FDEFS               = -DUSE_JPEG2000 -DUSE_PNG
-SFC                 = ifort
-SCC                 = icc
-DM_FC           =       mpiifort -f90=$(SFC)
-DM_CC           =       mpiicc -cc=$(SCC) -DMPI2_SUPPORT -DMPI2_THREAD_SUPPORT
+SFC                 = ftn
+SCC                 = cc
+DM_FC               = ftn
+DM_CC               = cc
 FC                  = $(DM_FC)
 CC                  = $(DM_CC)
 LD                  = $(FC)
