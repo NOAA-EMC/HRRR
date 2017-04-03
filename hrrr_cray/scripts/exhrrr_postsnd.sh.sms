@@ -49,7 +49,7 @@ ln -sf hrrr_bufr.tbl fort.32
 ln -sf profilm.c1.${tmmark} fort.66
 ln -sf class1.bufr fort.78
 ${EXEChrrr}/hrrr_sndp < hrrr_modtop.parm  > sndp.out
-export err=$?; err_chk
+#export err=$?; err_chk
 
 #need to manipulate the file to get it to be compatible
 #  with gempak on wcoss
@@ -78,9 +78,9 @@ EOF
    export DIRD=${DATA}/bufr.${cycle}/bufr
 
   pgm=nam_stnmlist
-  startmsg
+#  startmsg
   ${EXEChrrr}/hrrr_stnmlist < stnmlist_input >> $pgmout 2> errfile
-  err=$?;export err ;err_chk
+#  err=$?;export err ;err_chk
 
 # Tar and gzip the individual bufr files and send them to /com
 cd ${DATA}/bufr.${cycle}

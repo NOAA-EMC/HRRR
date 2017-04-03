@@ -1,9 +1,13 @@
 #! /bin/ksh -l
+#################################################
+#  UNIX Script Documentation Block
 #
-# Script name:         exhrrr_pmgr.sh.ecf
+# Script name:         exhrrr_postmgr.sh.sms
+# Script description:  post manager for hourly output
 #
-#  This script monitors the progress of the hrrr_fcst job
-#
+# 2014-08-01  G Manikin - new script
+# 2016-02-01  G Manikin - HRRRv2
+#################################################
 
 set -x
 
@@ -44,8 +48,10 @@ do
   for fhr in $postjobs
   do
     if [ -s $FCSTDIR/fcstdone${fhr}00.${shh} ]
-    then
-      ecflow_client --event release_post${fhr}
+    then 
+#      ecflow_client --event release_post${fhr}
+      bsub < /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/hrrr.v2.0.10/sms/post/post/jhrrr_post_f${fhr}_${cyc}.bsub
+      bsub < /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/hrrr.v2.0.10/sms/post/wrfbufr/jhrrr_wrfbufr_f${fhr}_${cyc}.bsub
       # Remove current fhr from list
       postjobs=`echo $postjobs | sed s/${fhr}//g`
     fi
@@ -72,6 +78,10 @@ do
   fi
 
 done
+
+#cp /com/date/t${cyc}z /meso/save/Geoffrey.Manikin/gempak.hrrr/GEMDATE
+#bsub < /meso/save/Geoffrey.Manikin/nwprod/hrrr.v2.0.0/scripts/run_nagrib_hrrr
+#bsub < /meso/save/Geoffrey.Manikin/nwprod/hrrr.v2.0.0/scripts/run_ftp_hrrr_grib2
 
 echo Exiting $0
 

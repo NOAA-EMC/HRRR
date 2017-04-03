@@ -57,7 +57,9 @@ fi
 echo ${YYYYMMDDHH} > nasaLaRC_cycle_date
 
 #  Run obs pre-processor
-mpirun.lsf ${EXEChrrr}/hrrr_process_cloud >> $DATA/$pgmout 2>errfile 
+cp ${EXEChrrr}/hrrr_process_cloud .
+runline="aprun -n 4 -N 4 ./hrrr_process_cloud"
+$runline
 export err=$?; err_chk
 
 # Copy the output data to /com

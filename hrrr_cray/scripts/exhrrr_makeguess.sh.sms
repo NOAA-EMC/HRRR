@@ -13,17 +13,14 @@
 # 2016-02-05  C Alexander / G Manikin - HRRRv2
 #
 
-. /usrx/local/Modules/default/init/ksh
 module purge
-module load EnvVars/1.0.0
-module load ics/15.0.3
-module load lsf/9.1
-module load NetCDF/3.6.3
-module load PNetCDF/1.5.0
-module load nco/4.2.4
-module load jasper/v1.900.1
-module load prod_util
-module load ibmpe
+module load PrgEnv-intel
+module load ip-intel/2.0.0
+module load cray-mpich
+module load NetCDF-intel-sandybridge/3.6.3
+module load PNetCDF-intel-sandybridge/1.5.0
+module load nco-gnu-sandybridge/4.4.4
+module load jasper-gnu-sandybridge/v1.900.1
 module list
 
 ulimit -s 512000
@@ -32,8 +29,6 @@ set -x
 # Set up paths to shell commands
 AWK="/bin/gawk --posix"
 DATE=/bin/date
-
-ulimit -s 512000
 
 cd $DATA
 if [ $cycm1 -eq 23 ]; then
@@ -553,7 +548,9 @@ done
 ls -l
 # Run metgrid
 startmsg
-mpirun.lsf ${EXEChrrr}/hrrr_metgrid  >> $DATA/$pgmout 2>errfile
+cp ${EXEChrrr}/hrrr_metgrid .
+runline="aprun -n 144 -N 24 ./hrrr_metgrid"
+$runline
 export err=$?; err_chk
 
 # Check to see if the output is there:
@@ -784,7 +781,9 @@ now=`${DATE} +%Y%m%d%H%M%S`
 
 # Run real
 startmsg
-mpirun.lsf ${EXEChrrr}/hrrr_real >> $DATA/$pgmout 2>errfile 
+cp ${EXEChrrr}/hrrr_real .
+runline="aprun -n 144 -N 24 ./hrrr_real"
+$runline
 export err=$?; err_chk
 
 cp wrfinput_d01 $COMOUT/hrrr.t${cyc}z.wrfguess_rap

@@ -1,18 +1,13 @@
 #! /bin/ksh -l
-#
-# Script name:         exhrrr_postmgr_subh.sh.ecf
-#
-#  This script monitors the progress of the hrrr_fcst job
-# and launches sub-hourly post jobs every 15 min of run time
 ###################################################
-#  UNIX Script Documentation Block                 
-#                      .                                             .
-# Script name:         exhrrr_postmgr_subh.sh.ecf                          
-# Script description:  post manager for sub-hourly output 
-#                                                                     
-# 2014-08-01  G Manikin - new script        
+#  UNIX Script Documentation Block 
+#
+# Script name:         exhrrr_postmgr_subh.sh.sms
+# Script description:  post manager for sub-hourly output
+#
+# 2014-08-01  G Manikin - new script
 # 2016-02-01  G Manikin - HRRRv2
-####################################################         
+####################################################
 
 set -x
 
@@ -31,9 +26,9 @@ if [ -e posthours ]; then
    rm -f posthours
 fi
 
-while [ $hour -lt $TCP ];
+while [ $hour -lt $TCP ]; 
 do
-  for min in $minutes; do
+  for min in $minutes; do 
     echo $hour$min >>posthours
   done
      let "hour=hour+1"
@@ -57,9 +52,9 @@ do
   for ftime in $postjobs
   do
     if [ -s $FCSTDIR/fcstdone${ftime}.${shh} ]
-    then
-      ecflow_client --event release_post${ftime}
-      # Remove current ftime from list
+    then 
+      bsub < /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/hrrr.v2.0.10/sms/post/post_subh/jhrrr_post_f${ftime}_${cyc}.bsub
+      # Remove current fhr from list
       postjobs=`echo $postjobs | sed s/${ftime}//g`
     fi
   done

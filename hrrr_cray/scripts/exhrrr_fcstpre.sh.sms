@@ -4,40 +4,24 @@
 ####  UNIX Script Documentation Block
 #                      .                                             .
 #                      .                                             .
-# Script name:         exhrrr_fcst.sh.ecf
-# Script description:  runs the free forecast job for the HRRR 
+# Script name:         exhrrr_fcstpre.sh.ecf
+# Script description:  runs the 1-hr forecast job for the HRRR spinup
 #
 # Author:    Curtis Alexander / Geoff Manikin    Org: EMC     Date: 2014-05-02
 #
 # Script history log:
 # 2014-05-02  C Alexander / G Manikin 
 # 2016-02-05  C Alexander - HRRRv2
-#
 
-. /usrx/local/Modules/default/init/ksh
-module purge
-module load prod_util/v1.0.1
-module load EnvVars/1.0.0
-module load ics/15.0.3
-module load ibmpe/1.3.0.10
-module load lsf/9.1
-module load ics/15.0.3
-module load NetCDF/3.6.3
-module load PNetCDF/1.2.0
-module load nco/4.2.4
-#module load jasper/v1.900.1
+module load PrgEnv-intel
+module load ip-intel/2.0.0
+module load cray-mpich
+module load NetCDF-intel-sandybridge/3.6.3
+module load PNetCDF-intel-sandybridge/1.5.0
+module load nco-gnu-sandybridge/4.4.4
+module load jasper-gnu-sandybridge/v1.900.1
 module list
 
-export I_MPI_HYDRA_BOOTSTRAP=lsf
-export I_MPI_HYDRA_BRANCH_COUNT=`echo $LSB_MCPU_HOSTS | sed 's/ [0-9]*\( \|$\)/\1/g' | wc -w`
-export I_MPI_LSF_USE_COLLECTIVE_LAUNCH=1
-export I_MPI_FABRICS=shm:ofa
-export MP_EUIDEVELOP=min
-export MP_SINGLE_THREAD=no
-export MP_USE_BULK_XFER=yes
-export OMP_NUM_THREADS=1
-export MP_USE_TOKEN_FLOW_CONTROL=yes
-export MP_INSTANCES=2
 ulimit -c 0
 
 set -x
@@ -45,7 +29,7 @@ set -x
 AWK="/bin/gawk --posix"
 DATE=/bin/date
 export FCST_INTERVAL=3
-export FCST_LENGTH=18
+export FCST_LENGTH=1
 
 # Set up some constants
 export WRF_NAMELIST=namelist.input
@@ -97,15 +81,20 @@ set -A WRF_DAT_FILES ${PARMhrrr}/hrrr_run_LANDUSE.TBL          \
                      ${PARMhrrr}/hrrr_run_qr_acr_qg.dat          \
                      ${PARMhrrr}/hrrr_run_qr_acr_qs.dat
 
+
 # Check to make sure WRF DAT files exist
 for file in ${WRF_DAT_FILES[@]}; do
   if [ ! -s ${file} ]; then
     echo "ERROR: ${file} either does not exist or is empty"
-    err_exit 
+    exit 1
   fi
 done
 
-START_TIME=${PDY}' '${cyc}
+if [ $cyc  -eq 00 ]; then
+START_TIME=${PDYm1}' '${cycm1}
+else
+START_TIME=${PDY}' '${cycm1}
+fi
 START_TIME=`echo "${START_TIME}" | sed 's/\([[:digit:]]\{2\}\)$/ \1/'`
 START_TIME=`${DATE} -d "${START_TIME}"`
 
@@ -114,7 +103,7 @@ END_TIME=`${DATE} -d "${START_TIME}  ${FCST_LENGTH} hours"`
 
 # Print run parameters
 echo
-echo "hrrr forecast started at `${DATE}`"
+echo "hrrr_fcstpre started at `${DATE}`"
 echo
 echo "FCST LENGTH   = ${FCST_LENGTH}"
 echo "FCST INTERVAL = ${FCST_INTERVAL}"
@@ -127,32 +116,38 @@ echo
 cd ${DATA}
 
 # Bring in initial condition file 
-if [ -s ${COMIN}/hrrr.t${cyc}z.wrf_inout ]; then
-   echo " Initial condition ${COMIN}/hrrr.t${cyc}z.wrf_inout "
-   ln -s ${COMIN}/hrrr.t${cyc}z.wrf_inout wrfinput_d01
-   ln -s ${COMIN}/hrrr.t${cyc}z.wrf_inout wrfvar_output
-elif [ -s $COMOUT/hrrr.t${cyc}z.wrfguess ]; then
-   echo " Could not find wrf_inout file"
-   echo " Initial condition ${COMIN}/hrrr.t${cyc}z.wrfguess "
-   ln -s ${COMIN}/hrrr.t${cyc}z.wrfguess wrfinput_d01
-   ln -s ${COMIN}/hrrr.t${cyc}z.wrfguess wrfvar_output
+   if [ -s ${COMIN}/hrrr.t${cyc}z.wrfguess_pre ]; then
+     echo " Initial condition ${COMIN}/hrrr.t${cyc}z.wrfguess_pre "
+     ln -s ${COMIN}/hrrr.t${cyc}z.wrfguess_pre wrfinput_d01
+     ln -s ${COMIN}/hrrr.t${cyc}z.wrfguess_pre wrfvar_output
+     cp ${PARMhrrr}/hrrr_wrfpre.nl ${WRF_NAMELIST}
+   elif [ -s ${COMIN}/hrrr.t${cyc}z.wrfguess_rap ]; then
+     echo "WARNING: No ${COMIN}/hrrr.t${cyc}z.wrfguess_pre available, Using initial condition ${COMIN}/hrrr.t${cyc}z.wrfguess_rap"
+     ln -s ${COMIN}/hrrr.t${cyc}z.wrfguess_rap wrfinput_d01
+     ln -s ${COMIN}/hrrr.t${cyc}z.wrfguess_rap wrfvar_output
+     cp ${PARMhrrr}/hrrr_wrfpre_norad.nl ${WRF_NAMELIST}
+   else
+     echo "FATAL ERROR: No initial condition available for Pre-Forecast"
+     export err=9; err_chk
+   fi
+
+# Bring in boundary file with data for previous hour
+# 
+if [ $cyc  -eq 00 ]; then
+cp ${COMINm1}/hrrr.t${cycm1}z.wrfbdy wrfbdy_d01
 else
-   errmsg="ERROR: No initial condition available for forecast - exit"
-   echo $errmsg
-   err_exit $errmsg
+cp ${COMIN}/hrrr.t${cycm1}z.wrfbdy wrfbdy_d01
 fi
 
-# Bring in boundary file and namelist
-if [ -r ${COMIN}/hrrr.t${cyc}z.wrfbdy wrfbdy_d01 ]; then
- cp ${COMIN}/hrrr.t${cyc}z.wrfbdy wrfbdy_d01
-else
- errmsg="ERROR: cannot find boundary conditions - must exit !!!"
- echo $errmsg
- err_exit $errmsg
+if [ ! -r wrfbdy_d01 ]; then
+ if [ -r ${COMIN4}/hrrr.t${cycm4}z.wrfbdy ];then
+   cp ${COMIN4}/hrrr.t${cycm4}z.wrfbdy wrfbdy_d01
+ else
+   echo "FATAL ERROR - no boundary condition available for Pre-Forecast"
+   err=9; err_chk
+ fi
 fi
-
-cp ${PARMhrrr}/hrrr_wrf.nl ${WRF_NAMELIST}
-
+ 
 # Make links to the WRF DAT files
 for file in ${WRF_DAT_FILES[@]}; do
   tempfile=`basename ${file}`
@@ -238,12 +233,21 @@ export err=$?; err_chk
 now=`${DATE} +%Y%m%d%H%M%S`
 
 # Run wrf
-startmsg
-mpiexec.hydra ${EXEChrrr}/hrrr_wrfarw >> $DATA/$pgmout 2>errfile
-export err=$?; err_chk
+#startmsg
+cp ${EXEChrrr}/hrrr_wrfarw .
+cp /gpfs/hps/ptmp/Benjamin.Blake/MPICH_RANK_ORDER .
+runline="aprun -n 600 -N 12 -d 2 -cc depth ./hrrr_wrfarw"
+$runline
+#export err=$?; err_chk
 
+YYYY=`${DATE} +"%Y" -d "${END_TIME}"`
+MM=`${DATE} +"%m" -d "${END_TIME}"`
+DD=`${DATE} +"%d" -d "${END_TIME}"`
+cp wrfout_d01_${YYYY}-${MM}-${DD}_${cyc}_00_00 $COMOUT/hrrr.t${cyc}z.wrfguess
 err_chk
-cp rsl.out.0000 ${COMOUT}/hrrr.t${cyc}z.rslout
-msg="JOB $job FOR HRRR_FORECAST HAS COMPLETED NORMALLY"
+
+cp rsl.out.0000 ${COMOUT}/hrrr.t${cyc}z.rslpreout
+msg="JOB $job FOR RAP_PRE-FORECAST HAS COMPLETED NORMALLY"
 postmsg "$jlogfile" "$msg"
+
 exit 0

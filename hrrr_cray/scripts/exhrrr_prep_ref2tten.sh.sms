@@ -3,13 +3,13 @@ set -x
 ############################################################################
 ####  UNIX Script Documentation Block
 #                      .                                             .
-# Script name:         exhrrr_makebc.sh.sms
-# Script description:  generates temperature tendencies for the HRRR
+# Script name:         exhrrr_prep_ref2tten.sh.sms
+# Script description:  runs the boundary generation job for the HRRR
 #
 # Author:  Curtis Alexander / Geoffrey.Manikin   Org: EMC     Date: 2011-08-24
 #
 # Script history log:
-# 2011-08-24  M Hu / G Manikin / J Zhu - RAP version
+# 2011-08-24  M Hu / G Manikin / J Zhu
 # 2013-02-27  C Alexander
 # 2015-08-01  C Alexander / G Manikin - HRRRv1
 # 2016-02-05  C Alexander / G Manikin - HRRRv2
@@ -31,16 +31,16 @@ rm $DATA/*
 cd $DATA
 
 START_TIME=$PDY$cyc
-YYYY=`echo $START_TIME | cut -c1-4`
-MM=`echo $START_TIME | cut -c5-6`
-DD=`echo $START_TIME | cut -c7-8`
-HH=`echo $START_TIME | cut -c9-10`
+YYYY=`echo $START_TIME | cut c1-4`
+MM=`echo $START_TIME | cut c5-6`
+DD=`echo $START_TIME | cut c7-8`
+HH=`echo $START_TIME | cut c9-10`
 YYYYMMDDHH=$YYYY$MM$DD$HH
 
 # Bring over background field (it's modified so we can't link to it)
 if [ -r ${COMIN}/"hrrr.t${cyc}z.wrfguess_rap" ]; then
   cp ${COMIN}/hrrr.t${cyc}z.wrfguess_rap ./wrf_inout
-  echo " Cycle ${YYYYMMDDHH}: TTEN background=${COMIN}/hrrr.t${cyc}z.wrfguess_rap"
+  echo " Cycle ${YYYYMMDDHH}: TTEN background=${COMIN}/hrrr.t${cyc}z.wrfguess_pre"
 
 # No background available so abort
 else
@@ -54,12 +54,12 @@ fi
 if [ -r "${HRRRGES_SFC}/wrfout_sfc_${cycm1}" ]; then
   echo "cycle Surface fields based on ${HRRRGES_SFC}/wrfout_sfc_${cycm1}"
   cp ${HRRRGES_SFC}/wrfout_sfc_${cycm1} ./wrfout_d01_save
-  mpirun.lsf ${EXEChrrr}/hrrr_full_cycle_surface >> full_cycle_surface.out
+  ${EXEChrrr}/hrrr_full_cycle_surface >> full_cycle_surface.out
   export err=$?; err_chk
 # No time matched HRRR land surface file available
 else
-  echo "${HRRRGES_SFC}/wrfout_sfc_${cycm1} does not exist!!"
-  echo "WARNING: No land surface data cycled for background at ${YYYYMMDDHH}!!!!"
+  ${ECHO} "${HRRRGES_SFC}/wrfout_sfc_${cycm1} does not exist!!"
+  ${ECHO} "WARNING: No land surface data cycled for background at ${YYYYMMDDHH}!!!!"
 #  exit 1
 fi
 
@@ -71,14 +71,16 @@ for subhtime in ${subhtimes}; do
     ln -s ${DATA_RADAR}/${subhtime}/RefInGSI3D.dat ./RefInGSI3D.dat_0${count}
 #    ln -s ${DATA_RADAR}/${subhtime}/RefInGSI.dat ./RefInGSI3D.dat_0${count}
   else
-    echo "WARNIGNG: ${DATA_RADAR}/${subhtime}/RefInGSI3D.dat does not exist!"
-    echo "HRRR will run without update guess file."
+    echo "ERROR ${DATA_RADAR}/${subhtime}/RefInGSI3D.dat does not exist!"
+    err_exit 1
   fi
   count=$((count + 1))
 done
 
 # Run radar to tten
-mpirun.lsf ${EXEChrrr}/hrrr_ref2tten > stdout_rad2tten
+cp ${EXEChrrr}/hrrr_ref2tten .
+runline="aprun -n 4 -N 4 ./hrrr_ref2tten"
+$runline
 export err=$?; err_chk
 
 cp wrf_inout ${COMOUT}/hrrr.t${cyc}z.wrfguess_pre

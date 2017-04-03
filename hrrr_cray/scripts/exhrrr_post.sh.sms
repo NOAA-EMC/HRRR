@@ -3,7 +3,7 @@ set -x
 ################################################################################
 ####  UNIX Script Documentation Block
 #                      .                                             .
-# Script name:         exhrrr_post.sh.ecf
+# Script name:         exhrrr_post.sh.sms
 # Script description:  This script processes the Cloud input data for the HRRR
 #
 # Author:  Curtis Alexander / Geoffrey.Manikin   Org: EMC     Date: 2011-08-24
@@ -13,11 +13,11 @@ set -x
 # 2016-02-01  G Manikin / C Alexander - HRRRv2
 #
 
-#XXW . /usrx/local/Modules/3.2.9/init/ksh
-. /usrx/local/Modules/default/init/ksh
-
 # Load modules
-module load NetCDF/3.6.3
+module load PrgEnv-intel
+module load ip-intel/2.0.0
+module load cray-mpich
+module load NetCDF-intel-sandybridge/3.6.3
 
 # Set up paths to shell commands
 AWK="/bin/gawk --posix"
@@ -38,11 +38,10 @@ echo "   START TIME = "`${DATE} +%Y%m%d%H -d "${START_TIME}"`
 echo "    fhr = ${fhr}"
 
 # Set up some constants
+export NDATE=${NDATE:-/gpfs/hps/nco/ops/nwprod/prod_util.v1.0.4/exec/ndate}
 export XLFRTEOPTS="unit_vars=yes"
 export tmmark=tm00
-export MP_SHARED_MEMORY=yes
 export RSTFNL=${DATA}/
-# export COMSP=${DATA}/
 export CORE=RAPR
 export SPLNUM=47
 export SPL=2.,5.,7.,10.,20.,30.\
@@ -107,34 +106,36 @@ ln -s ${CRTM}/SpcCoeff/Big_Endian/seviri_m10.SpcCoeff.bin seviri_m10.SpcCoeff.bi
 ln -s ${CRTM}/SpcCoeff/Big_Endian/v.seviri_m10.SpcCoeff.bin v.seviri_m10.SpcCoeff.bin
 ln -s ${FIXhrrr}/hrrr_imgr_insat3d.SpcCoeff.bin imgr_insat3d.SpcCoeff.bin
 
-ln -s ${CRTM}/TauCoeff/Big_Endian/imgr_g11.TauCoeff.bin imgr_g11.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/imgr_g12.TauCoeff.bin imgr_g12.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/imgr_g13.TauCoeff.bin imgr_g13.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/imgr_g15.TauCoeff.bin imgr_g15.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/imgr_mt1r.TauCoeff.bin imgr_mt1r.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/imgr_mt2.TauCoeff.bin imgr_mt2.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/amsre_aqua.TauCoeff.bin amsre_aqua.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/tmi_trmm.TauCoeff.bin tmi_trmm.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/ssmi_f13.TauCoeff.bin ssmi_f13.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/ssmi_f14.TauCoeff.bin ssmi_f14.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/ssmi_f15.TauCoeff.bin ssmi_f15.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/ssmis_f16.TauCoeff.bin ssmis_f16.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/ssmis_f17.TauCoeff.bin ssmis_f17.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/ssmis_f18.TauCoeff.bin ssmis_f18.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/ssmis_f19.TauCoeff.bin ssmis_f19.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/ssmis_f20.TauCoeff.bin ssmis_f20.TauCoeff.bin
-ln -s ${CRTM}/TauCoeff/Big_Endian/seviri_m10.TauCoeff.bin seviri_m10.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/imgr_g11.TauCoeff.bin imgr_g11.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/imgr_g12.TauCoeff.bin imgr_g12.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/imgr_g13.TauCoeff.bin imgr_g13.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/imgr_g15.TauCoeff.bin imgr_g15.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/imgr_mt1r.TauCoeff.bin imgr_mt1r.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/imgr_mt2.TauCoeff.bin imgr_mt2.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/amsre_aqua.TauCoeff.bin amsre_aqua.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/tmi_trmm.TauCoeff.bin tmi_trmm.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/ssmi_f13.TauCoeff.bin ssmi_f13.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/ssmi_f14.TauCoeff.bin ssmi_f14.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/ssmi_f15.TauCoeff.bin ssmi_f15.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/ssmis_f16.TauCoeff.bin ssmis_f16.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/ssmis_f17.TauCoeff.bin ssmis_f17.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/ssmis_f18.TauCoeff.bin ssmis_f18.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/ssmis_f19.TauCoeff.bin ssmis_f19.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/ssmis_f20.TauCoeff.bin ssmis_f20.TauCoeff.bin
+ln -s ${CRTM}/TauCoeff/ODPS/Big_Endian/seviri_m10.TauCoeff.bin seviri_m10.TauCoeff.bin
 ln -s ${CRTM}/TauCoeff/ODAS/Big_Endian/v.seviri_m10.TauCoeff.bin v.seviri_m10.TauCoeff.bin
 ln -s ${FIXhrrr}/hrrr_imgr_insat3d.TauCoeff.bin imgr_insat3d.TauCoeff.bin
 
 ln -s ${CRTM}/CloudCoeff/Big_Endian/CloudCoeff.bin CloudCoeff.bin
 ln -s ${CRTM}/AerosolCoeff/Big_Endian/AerosolCoeff.bin AerosolCoeff.bin
-ln -s ${CRTM}/EmisCoeff/Big_Endian/EmisCoeff.bin EmisCoeff.bin
+ln -s ${CRTM}/EmisCoeff/Big_Endian/Nalli.EK-PDF.W_W-RefInd.EmisCoeff.bin EmisCoeff.bin
 
 # Run unipost
-  startmsg
-  mpirun.lsf ${EXEChrrr}/hrrr_wrfpost >> $pgmout 2> errfile
-  err=$?;export err ;err_chk
+#startmsg
+cp ${EXEChrrr}/hrrr_wrfpost .
+runline="aprun -n 48 -N 24 ./hrrr_wrfpost"
+$runline
+#err=$?;export err ;err_chk
 
 # create alternate version of sfc file to avoid duplicate parameters
 #   when tacking it on to end of pressure file;  it also keeps the

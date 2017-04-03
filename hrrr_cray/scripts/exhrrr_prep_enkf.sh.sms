@@ -2,15 +2,13 @@
 ################################################################################
 ####  UNIX Script Documentation Block
 #                      .                                             .
-# Script name:       exhrrr_prep_enkf.sh.ecf
+# Script name:       exhrrr_prep_enkf.sh.sms
 # Script description:  runs the GSI and boundary update for the RAP cycle
 # Author:   Ming Hu / Geoff Manikin / Julia Zhu  Org: EMC          Date: 2011-10-01
 # 2011-10-01  M Hu / G Manikin / J Zhu
 
-. /usrx/local/Modules/default/init/ksh
-
 # Load modules
-module load NetCDF/3.6.3
+module load NetCDF-intel-sandybridge/3.6.3
 
 ulimit -s 512000
 set -x
@@ -107,7 +105,9 @@ ls ${ENKF_FCST}/enkf.${EYYYYMMDD}/${EHH}/${enkfcstname}.mem???.nemsio > filelist
 
 export pgm=hrrr_process_enkf
 startmsg
-mpirun.lsf ${EXEChrrr}/hrrr_process_enkf >> $DATA/$pgmout 2>errfile 
+cp ${EXEChrrr}/hrrr_process_enkf .
+runline="aprun -n 96 -N 24 ./hrrr_process_enkf"
+$runline
 
 cp enspreproc_arw_mem* ${HRRRGES_ENKF}
 tar -cvf hrrr_enspreproc_${availtime}.tar enspreproc*

@@ -5,19 +5,17 @@
 # Script name:       exhrrr_analysis_sh.sms
 # Script description:  runs the GSI and boundary update for the RAP cycle
 # Author:   Ming Hu / Geoff Manikin / Julia Zhu  Org: EMC          Date: 2011-10-01
-# 2014-08-01  C Alexander / M Hu / G Manikin / J Yang 
-# 2016-02-05  C Alexander/ G Manikin   HRRRRv2
-
-#XXW . /usrx/local/Modules/3.2.9/init/ksh
-. /usrx/local/Modules/default/init/ksh
+# 2014-08-01  C Alexander / M Hu / G Manikin / J Yang
+# 2016-02-05  C Alexander / G Manikin   HRRRv2 
 
 # Load modules
-module load NetCDF/3.6.3
+module load PrgEnv-intel
+module load ip-intel/2.0.0
+module load cray-mpich
+module load NetCDF-intel-sandybridge/3.6.3
 
 ulimit -s 512000
 set -x
-
-. /usrx/local/Modules/3.2.9/init/ksh
 
 # Set paths to unix commands
 DATE=/bin/date
@@ -49,6 +47,10 @@ MM=`${DATE} +"%m" -d "${START_TIME}"`
 DD=`${DATE} +"%d" -d "${START_TIME}"`
 HH=`${DATE} +"%H" -d "${START_TIME}"`
 
+# Compute date & time components for the analysis time minus 1 day
+DDm1=`$NDATE -24 $YYYYMMDDHH`
+YMDm1=`echo ${DDm1} | cut -c1-8`
+
 # Bring over background field (it's modified by GSI so we can't link to it)
 time_str=`${DATE} "+%Y-%m-%d_%H_%M_%S" -d "${START_TIME}"`
 echo " time_str = ${time_str}"
@@ -71,20 +73,22 @@ fi
 time_updateSST='01'
 if [ ${HH} -eq ${time_updateSST} ]; then
   echo "update SST "
-  NCEPSST=$COMINsst/sst.${YYYYMMDD}
-  NCEPSST2=$COMINsst/sst.${PDYm1}
   cp ${FIXhrrr}/hrrr_RTG_SST_landmask.dat ./RTG_SST_landmask.dat
   cp ${FIXhrrr}/hrrr_geo_em.d01.nc  ./geo_em.d01.nc
-  if [ -r "${NCEPSST}/rtgssthr_grb_0.083" ]; then
-    cp ${NCEPSST}/rtgssthr_grb_0.083 SSTRTG
-    cp ${NCEPSST}/sst2dvar.t12z.nam_grid SST14km
-    mpirun.lsf ${EXEChrrr}/hrrr_process_sst >> $DATA/$pgmout 2>errfile 
-   export err=$?; err_chk
- elif [ -r "${NCEPSST2}/rtgssthr_grb_0.083" ]; then
-    cp ${NCEPSST2}/rtgssthr_grb_0.083 SSTRTG
-    cp ${NCEPSST2}/sst2dvar.t12z.nam_grid SST14km
-    mpirun.lsf ${EXEChrrr}/hrrr_process_sst >> $DATA/$pgmout 2>errfile 
-    export err=$?; err_chk
+  if [ -r "${COMINsst}/sst.${YYYYMMDD}/rtgssthr_grb_0.083" ]; then
+    cp ${COMINsst}/sst.${YYYYMMDD}/rtgssthr_grb_0.083 SSTRTG
+    cp ${COMINsst}/sst.${YYYYMMDD}/sst2dvar.t12z.nam_grid SST14km
+    cp ${EXEChrrr}/hrrr_process_sst .
+    runline="aprun -n 240 -N 24 ./hrrr_process_sst"
+    $runline
+#    export err=$?; err_chk
+ elif [ -r "${COMINsst}/sst.${YMDm1}/rtgssthr_grb_0.083" ]; then
+    cp ${COMINsst}/sst.${YMDm1}/rtgssthr_grb_0.083 SSTRTG
+    cp ${COMINsst}/sst.${YMDm1}/sst2dvar.t12z.nam_grid SST14km
+    cp ${EXEChrrr}/hrrr_process_sst .
+    runline="aprun -n 240 -N 24 ./hrrr_process_sst"
+    $runline
+#    export err=$?; err_chk
   else
     echo "NOTE: no SST data available for ${HH}z cycle!"
   fi
@@ -106,12 +110,14 @@ fi
 ## trim snow
 trim_snow='00'
 if [ ${HH} -eq ${trim_snow} ]; then
-  if [ -r "${PREPBUFR}/rap.t${HH}z.imssnow" ]; then
+  if [ -r "${PREPBUFR}/rap_e.t${HH}z.imssnow" ]; then
      echo "trim snow based on imssnow "
      cp  ${PREPBUFR}/rap_e.t${HH}z.imssnow ./imssnow
      cp  ${FIXhrrr}/hrrr_geo_em.d01.nc ./geo_em.d01.nc
-     mpirun.lsf ${EXEChrrr}/hrrr_process_imssnow >> $DATA/$pgmout 2>errfile 
-     export err=$?; err_chk
+     cp ${EXEChrrr}/hrrr_process_imssnow .
+     runline="aprun -n 240 -N 24 ./hrrr_process_imssnow"
+     $runline
+#     export err=$?; err_chk
   else
     echo "${PREPBUFR}/rap_e.t${HH}z.imssnow does not exist!!"
     echo "NOTE: no snow file available at for ${HH}z cycle!!!!"
@@ -126,7 +132,7 @@ if [ -r "${PREPBUFR}/${prepsuffix}.t${HH}z.prepbufr.tm00" ]; then
  mv ${prepsuffix}.t${HH}z.prepbufr.tm00 newgblav.${YYYYMMDD}.rap.t${HH}z.prepbufr
  ln -s newgblav.${YYYYMMDD}.rap.t${HH}z.prepbufr ./prepbufr
 else
- echo "WARNING: ${PREPBUFR}/${prepsuffix}.t${HH}z.prepbufr.tm00 does not exist!"
+ echo "Warning: ${PREPBUFR}/${prepsuffix}.t${HH}z.prepbufr.tm00 does not exist!"
 fi
 
 ls -lrt 
@@ -135,18 +141,18 @@ if [ -r "${PREPDIR2}/hrrr.t${HH}z.NSSLRefInGSI.bufr" ]; then
   # JY ln -s ${PREPDIR2}/hrrr.t${HHz}.RefInGSI3D.dat ./refInGSI
   ln -s ${PREPDIR2}/hrrr.t${HH}z.NSSLRefInGSI.bufr ./refInGSI
 else
-  echo "WARNING: ${PREPDIR2}/hrrr.t${HH}z.RefInGSI3D.dat does not exist!"
+  echo "Warning: ${PREPDIR2}/hrrr.t${HH}z.RefInGSI3D.dat does not exist!"
 fi
 
 if [ -r "${PREPDIR2}/hrrr.t${HH}z.NASALaRCCloudInGSI.bufr" ]; then
   ln -s ${PREPDIR2}/hrrr.t${HH}z.NASALaRCCloudInGSI.bufr ./larcInGSI
 else
-  echo "WARNING: ${PREPDIR2}/NASALaRCCloudInGSI.bufr does not exist!"
+  echo "Warning: ${PREPDIR2}/NASALaRCCloudInGSI.bufr does not exist!"
 fi
 
 #add SATWND data
 if [ -r "${PREPBUFR}/${prepsuffix}.t${HH}z.satwnd.tm00.bufr_d" ]; then
-  ln -s ${PREPBUFR}/${prepbsuffix}.t${HH}z.satwnd.tm00.bufr_d ./satwndbufr
+  ln -s ${PREPBUFR}/${prepsuffix}.t${HH}z.satwnd.tm00.bufr_d ./satwndbufr
 else
   echo "Warning: ${PREPBUFR}/${prepsuffix}.t${HH}z.satwnd.tm00.bufr_d is not available"
 fi
@@ -255,7 +261,7 @@ if [[ ${nummem} -eq 80 ]]; then
   echo "Do hybrid with ${memname}"
   beta1_inv=0.25
   ifhyb=.true.
-  echo" Cycle ${YYYYMMDDHH}: GSI hybrid uses ${memname} with n_ens=${nummem}"
+  echo " Cycle ${YYYYMMDDHH}: GSI hybrid uses ${memname} with n_ens=${nummem}"
 fi
 
 # Set some parameters for use by the GSI executable and to build the namelist
@@ -277,9 +283,9 @@ export pgm=hrrr_gsi
 #. prep_step
 
 #startmsg
-mpirun.lsf ${EXEChrrr}/hrrr_gsi < gsiparm.anl >> $DATA/$pgmout 2>errfile 
-#export MP_LABELIO=yes
-#mpirun.lsf /nwprod/hrrr.v1.0.8/exec/hrrr_gsi < gsiparm.anl >> $DATA/$pgmout 2>errfile
+cp ${EXEChrrr}/hrrr_gsi .
+runline="aprun -n 240 -N 24 ./hrrr_gsi"
+$runline
 
 # Loop over first and last outer loops to generate innovation
 # diagnostic files for indicated observation types (groups)
@@ -345,9 +351,10 @@ $gsi_namelist
 EOF
 
 export pgm=hrrr_gsi
-startmsg
-mpirun.lsf ${EXEChrrr}/hrrr_gsi < gsiparm.anl >> $DATA/$pgmout 2>errfile
-export err=$?; err_chk
+#startmsg
+cp ${EXEChrrr}/hrrr_gsi .
+runline="aprun -n 240 -N 24 ./hrrr_gsi"
+$runline
 
 cp gsiparm.anl gsiparm.anl_cloud
 cp wrf_inout ${COMOUT}/hrrr.t${cyc}z.wrf_inout

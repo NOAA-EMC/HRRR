@@ -25,19 +25,14 @@ postmsg $jlogfile "$msg"
 fhr=$fhr
 
 # Set up some constants
-export HOMEhrrr=${HOMEhrrr:-/meso/save/Geoffrey.Manikin/nwprod/hrrr.v1.0.0}
-export PARMhrrr=${PARMhrrr:-$HOMEhrrr/parm}
-export FIXhrrr=${FIXhrrr:-$HOMEhrrr/fix}
-export EXEChrrr=${EXEChrrr:-$HOMEhrrr/exec}
 export XLFRTEOPTS="unit_vars=yes"
+export CORE=RAPR
+export OUTTYP=binarympiio
 DATE=/bin/date
+NDATE=${NDATE:-/gpfs/hps/nco/ops/nwprod/prod_util.v1.0.4/exec/ndate}
 
 START_TIME=$PDY$cyc
 echo $START_TIME
-
-# Set up some constants
-export CORE=RAPR
-export OUTTYP=binarympiio
 
 cp ${FIXhrrr}/hrrr_profdat .
 OUTTYP=netcdf
@@ -109,9 +104,11 @@ ln -s $DATA/profilm.c1.tm00 fort.79
 datestr=`date`
 echo about to run program at $datestr
 
-startmsg
-mpirun.lsf ${EXEChrrr}/hrrr_wrfbufr >> $DATA/$pgmout 2>errfile
-export err=$?; err_chk
+#startmsg
+cp ${EXEChrrr}/hrrr_wrfbufr .
+runline="aprun -n 1 -N 1 ./hrrr_wrfbufr"
+$runline
+#export err=$?; err_chk
 
 mv profilm.c1.tm00 profilm.c1.f${fhr}
 

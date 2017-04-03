@@ -8,7 +8,7 @@ set -x
 #                      past the hour
 #
 #                      Variable "subhtime" has to be set in the ecflow script
-# Author:  Curtis Alexander / Geoffrey.Manikin   Org: EMC     Date: 2014-08-01
+# Author:  Curtis Alexander / Geoffrey.Manikin   Org: EMC     Date: 2011-08-24
 #
 # Script history log:
 # 2014-08-01  C Alexander - HRRRv1
@@ -71,7 +71,7 @@ else
          cp ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mmm2}??.grib2.gz .
          ls MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}????.grib2.gz > filelist_mrms
       else
-         echo "WARNING: No NSSL gribs data available, use NCEP 8 tiles binary"
+         echo " No NSSL gribs data available, use NCEP 8 tiles binary"
          if [ -s filelist_mrms ]; then
             rm -f filelist_mrms
          fi
@@ -129,7 +129,9 @@ cat << EOF > mosaic.namelist
 EOF
 
 # Run Process_mosaic
-mpirun.lsf ${EXEChrrr}/hrrr_process_mosaic >> $DATA/$pgmout 2>errfile 
+cp ${EXEChrrr}/hrrr_process_mosaic .
+runline="aprun -n 36 -N 24 ./hrrr_process_mosaic"
+$runline
 export err=$?; err_chk
 
 echo 'ending mosaic processing'
