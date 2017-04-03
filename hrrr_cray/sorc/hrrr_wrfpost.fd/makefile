@@ -6,7 +6,7 @@ TARGET   = ../../exec/hrrr_wrfpost
 #
 # CPP, Compiler, and Linker Options
 #
-FC       = mpfort -compiler ifort
+FC       = ftn
 CPP      = /lib/cpp -P
 CPPFLAGS = -DLINUX 
 OPTS     = -O -fp-model strict
@@ -18,7 +18,7 @@ CFLAGS =  -DLINUX -Dfunder -DFortranByte=char -DFortranInt=int -DFortranLlong='l
 #
 
 WRF_VER=v1.1.0
-WRFPATH    = /nwprod/sorc/wrf_shared.$(WRF_VER)
+WRFPATH    = /gpfs/hps/nco/ops/nwprod/wrf_shared.$(WRF_VER)-intel
 WRF_INC    = $(WRFPATH)/external/io_quilt -I$(WRFPATH)/frame
 WRF_LIB    = $(WRFPATH)/main/libwrflib.a  \
              $(WRFPATH)/frame/pack_utils.o  \
