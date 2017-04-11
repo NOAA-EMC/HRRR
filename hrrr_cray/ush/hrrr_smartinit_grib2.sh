@@ -8,7 +8,7 @@
 #
 # Script history log:
 # 2014-04-15  G Manikin  -- new script
-#
+# 2017-04-11  B Blake    -- grib 2 version of script
 
 set -xa
 
@@ -24,11 +24,11 @@ WGRIB2=$EXEChrrr/hrrr_wgrib2
 cp ${COMIN}/hrrr.t${cyc}z.wrfnatf${fhr}.grib2 WRFNAT${fhr}.tm00
 ${GRB2INDEX} WRFNAT${fhr}.tm00 WRFNAT${fhr}i.tm00
 
-cp ${FIXhrrr}/hrrr_terrain_consensus.grb TOPONDFDCS
-cp ${FIXhrrr}/hrrr_smartmask_consensus.grb LANDNDFDCS
+cp ${FIXhrrr}/conus_terrain_hrrr.gb2 TOPONDFDCS
+cp ${FIXhrrr}/conus_mask_hrrr.gb2 LANDNDFDCS
 
-$GRBINDEX TOPONDFDCS TOPONDFDCSI
-$GRBINDEX LANDNDFDCS LANDNDFDCSI
+${GRB2INDEX} TOPONDFDCS TOPONDFDCSI
+${GRB2INDEX} LANDNDFDCS LANDNDFDCSI
 
 # strip out records not needed for awips
 cp ${PARMhrrr}/hrrr_smartnatparams .
