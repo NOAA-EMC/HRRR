@@ -423,7 +423,7 @@
 !          ENDIF
 !        ENDDO
 !        ENDDO 
-       DEC=3.0
+       DEC=-3.0
        GFLD%ibmap=0
        GFLD%bmap=BITMAP
 

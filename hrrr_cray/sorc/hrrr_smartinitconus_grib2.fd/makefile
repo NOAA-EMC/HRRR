@@ -1,8 +1,8 @@
 SHELL=/bin/sh
 #
 
-OBJS1= grddef.o rdgrib.o GETGRIB.o MAIN.o
-OBJS2= BOUND.o GET_BITS.o NDFDgrid.o 
+OBJS1= grddef.o rdgrib.o GETGRIB.o MAIN.o NDFDgrid.o
+OBJS2= BOUND.o GET_BITS.o
 OBJS3= w3fi71.o 
 
 FC =   ftn -openmp -convert big_endian 
@@ -17,7 +17,7 @@ NCEP_LIB_DIR =
 FFLAGS = -O2   ## -debug all  ## -fp-model strict -list
 LDFLAGS =-FR -assume byterecl # -check bounds -g # -check all -debug all -warn nounused  
 
-CMD =  hrrr_smartinit_conus
+CMD =  ../../exec/hrrr_smartinit_conus
 
 PROFLIB =	-lprof
 

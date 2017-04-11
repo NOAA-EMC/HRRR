@@ -335,7 +335,7 @@ contains
         JGDT=-9999
 
         write(0,*) 'to GETGB2S call: '
-        call GETGB2S(CBUF,NLEN,NNUM,J,JDISC,JIDS,JPDTN,JPDT,JGDTN, &
+        call GETGB2S(CBUF,NLEN,NNUM,JR,JDISC,JIDS,JPDTN,JPDT,JGDTN, &
                         JGDT,K,GFLD,LPOS,IRGS)
         IF(IRGS .NE. 0) THEN
           WRITE(6,*)' PROBLEMS ON 1ST READ OF GRIB FILE SO ABORT'
