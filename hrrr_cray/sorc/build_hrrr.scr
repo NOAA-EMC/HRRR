@@ -71,22 +71,25 @@ make
 
 module purge
 module load ncep
-module load craype-sandybridge
+module load craype-haswell
 module use -a /opt/cray/modulefiles
 module load /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/hrrr.v2.0.10/modulefiles/HRRR/v2.0.10.da
 module list
 
-cd ${BASE}/hrrr_gsi.fd
-make clean
-cd ${BASE}/hrrr_gsi.fd/gsdcloud
-make clean
-make
-cd ${BASE}/hrrr_gsi.fd
-make
-make install
-make library
+#cd ${BASE}/hrrr_gsi.fd
+#make clean
+#cd ${BASE}/hrrr_gsi.fd/gsdcloud
+#make clean
+#make
+#cd ${BASE}/hrrr_gsi.fd
+#make
+#make install
+#make library
 
 ##############################
+
+module unload craype-haswell
+module load craype-sandybridge
 
 cd ${BASE}/hrrr_process_enkf.fd
 make clean
