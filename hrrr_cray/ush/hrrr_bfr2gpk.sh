@@ -14,7 +14,7 @@ set -x
 
 # Set GEMPAK paths.
 
-. ${NWROOTp1}/gempak/.gempak
+. ${HOMEhrrr}/gempak/.gempak
 
 #  Go to a working directory.
 
@@ -30,7 +30,7 @@ export INFILE
 
 #  Set output directory:
 
-OUTDIR=${COMAWP:-${COMROOT}/nawips/${envir}/hrrr.${PDY}}
+OUTDIR=${COMAWP:-/gpfs/hps/ptmp/Benjamin.Blake/com2/nawips/${envir}/hrrr.${PDY}}
 
 outfilbase=hrrr_${PDY}${cyc}
 
