@@ -22,8 +22,9 @@ module load util_shared/1.0.3
 module list
 
 export KMP_AFFINITY=disabled
-export OMP_NUM_THREADS=1
+export OMP_NUM_THREADS=2
 unset MPICH_RANK_REORDER_METHOD
+export FORT_BUFFERED=true
 
 export envir=prod
 export RUN_ENVIR=prod
