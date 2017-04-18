@@ -284,7 +284,7 @@ export pgm=hrrr_gsi
 
 #startmsg
 cp ${EXEChrrr}/hrrr_gsi .
-runline="time aprun -j1 -cc depth -n 120 -N 12 -d 2 ./hrrr_gsi"
+runline="time aprun -cc depth -n 120 -N 12 -d 2 ./hrrr_gsi"
 $runline
 
 # Loop over first and last outer loops to generate innovation
@@ -353,7 +353,7 @@ EOF
 export pgm=hrrr_gsi
 #startmsg
 cp ${EXEChrrr}/hrrr_gsi .
-runline="time aprun -j1 -cc depth -n 120 -N 12 -d 2 ./hrrr_gsi"
+runline="time aprun -cc depth -n 120 -N 12 -d 2 ./hrrr_gsi"
 $runline
 
 cp gsiparm.anl gsiparm.anl_cloud
