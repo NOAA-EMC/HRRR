@@ -1,0 +1,23 @@
+Release Notes:  HRRR v2.0.10
+
+v2.0.10 - released April 21, 2017
+  - updated terrain and land/sea mask files for smartinit
+  - updated smartinit source code to fix precision issue with cloud base and cloud ceiling 
+
+compute resource information
+   no changes
+
+disk space changes
+   none 
+
+new or revised executables
+   hrrr_smartinit_conus
+
+new or revised fix, parm, scripts, sorc files
+   /fix/hrrr_terrain_consensus.grb
+   /fix/hrrr_smartmask_consensus.grb
+   /sorc/hrrr_smartinit_conus.fd/MAIN.f
+
+pre-implementation testing requirements
+     This should be implemented with the v2.6 RTMA/URMA upgrade.
+
