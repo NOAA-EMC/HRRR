@@ -161,13 +161,13 @@ c  CALL THE DOWNSCALING CODE
        ID(1:25) = 0
        ID(8)=7
        ID(9)=2
-       DEC=3.0
+       DEC=-3.0
        CALL GRIBIT(ID,RITEHD,BASEZ,DATE,FHR,DEC)
 
        ID(1:25) = 0
        ID(8)=7
        ID(9)=215
-       DEC=3.0
+       DEC=-3.0
        CALL GRIBIT(ID,RITEHD,CEIL,DATE,FHR,DEC)
  
        print *, 'completed main'
