@@ -2,7 +2,7 @@ Release Notes:  HRRR v2.0.10
 
 v2.0.10 - released April 21, 2017
   - updated terrain and land/sea mask files for smartinit
-  - updated smartinit source code to fix precision issue with cloud base and cloud ceiling 
+  - updated smartinit source code to fix precision issue with cloud base and cloud ceiling (change to internal files only) 
 
 compute resource information
    no changes
