@@ -558,10 +558,10 @@ aux_progs/smallest_4:	aux_progs/smallest_4.c
 	cd aux_progs && ${MAKE} -f smallest_4.make
 
 clean:
-	[ -d "${lib}" ] && rm -r ${lib}
-	[ -d "${cwd}/bin" ] && rm -r ${cwd}/bin
-	[ -d "${cwd}/include" ] && rm -r ${cwd}/include
-	[ -d "${cwd}/man" ] && rm -r ${cwd}/man
+	[ -d "${lib}" ] && rm -rf ${lib}
+	[ -d "${cwd}/bin" ] && rm -rf ${cwd}/bin
+	[ -d "${cwd}/include" ] && rm -rf ${cwd}/include
+	[ -d "${cwd}/man" ] && rm -rf ${cwd}/man
 	cd $w && ${MAKE} clean
 	cd $g && touch junk.a junk.o && rm *.o *.a
 	[ -d "$j" ] && rm -rf $j
