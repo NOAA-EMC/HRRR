@@ -54,7 +54,7 @@
          topo(im,jm),wgust(im,jm),slp(im,jm))
       allocate (topo_ndfd(im,jm),rough(im,jm),veg(im,jm),downt(im,jm), &
          downdew(im,jm),downu(im,jm),downv(im,jm),downq(im,jm), &
-         downp(im,jm),land(im,jm))
+         downp(im,jm),land(im,jm),gridwx(im,jm),gfield(itot))
 
       READ (5,*) FHR
       READ (5,*) CYC
