@@ -1157,13 +1157,16 @@ SUBROUTINE wrf_ioclose ( DataHandle, Status )
 !</DESCRIPTION>
   USE module_state_description
   IMPLICIT NONE
+#include "wrf_io_flags.h"
   INTEGER ,       INTENT(IN)  :: DataHandle
   INTEGER ,       INTENT(OUT) :: Status
 #include "wrf_status_codes.h"
   INTEGER, EXTERNAL           :: use_package
   LOGICAL, EXTERNAL           :: wrf_dm_on_monitor, multi_files, use_output_servers
-  INTEGER io_form , Hndl
+  INTEGER io_form , Hndl, fstat
   LOGICAL                     :: for_out
+  CHARACTER (LEN=80)          :: fname
+  CHARACTER (len=256)         :: DateStr
 
   CALL wrf_debug( DEBUG_LVL, 'module_io.F: in wrf_ioclose' )
 
@@ -1175,8 +1178,22 @@ SUBROUTINE wrf_ioclose ( DataHandle, Status )
       SELECT CASE ( use_package(io_form) )
 #ifdef NETCDF
         CASE ( IO_NETCDF   )
-          IF ( multi_files(io_form) .OR.  wrf_dm_on_monitor() ) CALL ext_ncd_ioclose( Hndl, Status )
-          CALL wrf_dm_bcast_bytes( Status, IWORDSIZE )
+          CALL ext_ncd_inquire_filename( Hndl, fname, fstat, Status )
+          IF ( fstat .EQ. WRF_FILE_OPENED_FOR_WRITE .OR. fstat .EQ. WRF_FILE_OPENED_NOT_COMMITTED ) THEN
+            write(0,*)' in i/o, have fname: ', FNAME
+              IF ( multi_files(io_form) .OR.  wrf_dm_on_monitor() ) CALL ext_ncd_ioclose( Hndl, Status )
+              CALL wrf_dm_bcast_bytes( Status, IWORDSIZE )
+            DateStr(1:19)=fname(12:30)
+            write(0,*)' closed NetCDF output history file DateStr=',DateStr,'status=', Status 
+          
+            if(fname(1:10)=='wrfout_d01')then
+              write(0,*)' write_fcstdone'
+              if(status==0)call write_fcstdone(DateStr)
+            endif
+            if(fname(1:6)=='wrfrst')then
+              if(status==0)call write_restartdone(DateStr)
+            endif
+          ENDIF
 #endif
 #ifdef PHDF5
         CASE ( IO_PHDF5  )
@@ -1184,7 +1201,21 @@ SUBROUTINE wrf_ioclose ( DataHandle, Status )
 #endif
 #ifdef PNETCDF
         CASE ( IO_PNETCDF  )
-          CALL ext_pnc_ioclose( Hndl, Status )
+          CALL ext_pnc_inquire_filename( Hndl, fname, fstat, Status )
+          IF ( fstat .EQ. WRF_FILE_OPENED_FOR_WRITE .OR. fstat .EQ. WRF_FILE_OPENED_NOT_COMMITTED ) THEN
+            write(0,*)' in i/o, have fname: ', FNAME
+              CALL ext_pnc_ioclose( Hndl, Status )
+            DateStr(1:19)=fname(12:30)
+            write(0,*)' closed parallel NetCDF output history file DateStr=',DateStr,'status=', Status
+           
+            if(fname(1:10)=='wrfout_d01')then
+              write(0,*)' write_fcstdone'
+              if(Status==0)call write_fcstdone(DateStr)
+            endif
+            if(fname(1:6)=='wrfrst')then
+              if(Status==0)call write_restartdone(DateStr)
+            endif
+          ENDIF 
 #endif
 #ifdef XXX
         CASE ( IO_XXX   )
