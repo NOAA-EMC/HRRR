@@ -9,10 +9,10 @@
 # 2016-02-05  C Alexander / G Manikin   HRRRv2 
 
 # Load modules
-module load PrgEnv-intel
-module load ip-intel/2.0.0
-module load cray-mpich
-module load NetCDF-intel-sandybridge/3.6.3
+#module load PrgEnv-intel
+#module load ip-intel/2.0.0
+#module load cray-mpich
+#module load NetCDF-intel-sandybridge/3.6.3
 
 ulimit -s 512000
 set -x
@@ -23,6 +23,41 @@ AWK="/bin/awk --posix"
 
 # Create the working directory and cd into it
 cd ${DATA}
+
+# Directory for the CRTM files:
+export FIXcrtm=${FIXcrtm:-/gpfs/gp1/nco/ops/nwprod/fix}
+
+# Set up some environment variables
+export MPICH_ENV_DISPLAY=1
+export MPICH_VERSION_DISPLAY=1
+export MPICH_ABORT_ON_ERROR=1
+export MPICH_RANK_REORDER_DISPLAY=1
+export ATP_ENABLED=0
+export MALLOC_MMAP_MAX=0
+export MALLOC_TRIM_THRESHOLD_=134217728
+export OMP_NUM_THREADS=2
+export KMP_AFFINITY=disabled
+export OMP_STACKSIZE=500M
+export FORT_BUFFERED=true
+
+export MP_EAGER_LIMIT=165536
+export MP_COREFILE_FORMAT=lite
+export MP_EUIDEVELOP=min
+export MP_EUILIB=us
+export MP_MPILIB=mpich2
+
+export MP_LABELIO=yes
+export MP_USE_BULK_XFER=yes
+export MP_SHARED_MEMORY=yes
+
+export MPICH_ALLTOALL_THROTTLE=0
+export KMP_STACKSIZE=1024m
+export MP_TASK_AFFINITY=cpu:2
+
+# Set to yes for faster collective ops (mpi reduce)
+# but may not yield bitwise identical results from
+# run to run when yes.
+export MP_COLLECTIVE_OFFLOAD=yes
 
 # Make sure START_TIME is in the correct format
 START_TIME=${PDY}' '${cyc}
@@ -138,7 +173,6 @@ fi
 ls -lrt 
 # Link to binary radar data
 if [ -r "${PREPDIR2}/hrrr.t${HH}z.NSSLRefInGSI.bufr" ]; then
-  # JY ln -s ${PREPDIR2}/hrrr.t${HHz}.RefInGSI3D.dat ./refInGSI
   ln -s ${PREPDIR2}/hrrr.t${HH}z.NSSLRefInGSI.bufr ./refInGSI
 else
   echo "Warning: ${PREPDIR2}/hrrr.t${HH}z.RefInGSI3D.dat does not exist!"
@@ -175,10 +209,9 @@ fi
 
 anavinfo=${FIXhrrr}/hrrr_anavinfo_arw_netcdf
 BERROR=${FIXhrrr}/hrrr_berror_stats_global
-SATANGL=${FIXhrrr}/hrrr_global_satangbias.txt
+# SATANGL=${FIXhrrr}/hrrr_global_satangbias.txt
 SATINFO=${FIXhrrr}/hrrr_global_satinfo.txt
 RTMFIX=${FIXcrtm}/crtm_v2.1.3
-#RTMFIX=${FIXcrtm}
 
 RTMAERO=${RTMFIX}/AerosolCoeff.bin
 RTMCLDS=${RTMFIX}/CloudCoeff.bin
@@ -204,7 +237,7 @@ SURFACEPROVIDERLIST=${FIXhrrr}/hrrr_gsd_sfcobs_provider.txt # mesonet network us
 # Fixed fields
  cp $anavinfo anavinfo
  cp $BERROR   berror_stats
- cp $SATANGL  satbias_angle
+# cp $SATANGL  satbias_angle
  cp $SATINFO  satinfo
  cp $CONVINFO convinfo
  cp $OZINFO   ozinfo
@@ -214,8 +247,8 @@ SURFACEPROVIDERLIST=${FIXhrrr}/hrrr_gsd_sfcobs_provider.txt # mesonet network us
  cp $SURFACEUSELIST gsd_sfcobs_uselist.txt
  cp $SURFACEPROVIDERLIST gsd_sfcobs_provider.txt
 
- cp ${FIXhrrr}/satbias_out_last ./satbias_in
- cp ${FIXhrrr}/satbias_pc.out_last ./satbias_pc
+# cp ${FIXhrrr}/satbias_out_last ./satbias_in
+# cp ${FIXhrrr}/satbias_pc.out_last ./satbias_pc
 
 # 
 #    # CRTM Spectral and Transmittance coefficients
@@ -284,8 +317,9 @@ export pgm=hrrr_gsi
 
 #startmsg
 cp ${EXEChrrr}/hrrr_gsi .
-runline="time aprun -cc depth -n 120 -N 12 -d 2 ./hrrr_gsi"
-$runline
+runline="aprun -n 120 -N 12 -d2 -cc depth ./hrrr_gsi"
+#runline="aprun -n 240 -N 24 ./hrrr_gsi"
+$runline < gsiparm.anl >> $DATA/$pgmout 2>errfile
 
 # Loop over first and last outer loops to generate innovation
 # diagnostic files for indicated observation types (groups)
@@ -353,8 +387,9 @@ EOF
 export pgm=hrrr_gsi
 #startmsg
 cp ${EXEChrrr}/hrrr_gsi .
-runline="time aprun -cc depth -n 120 -N 12 -d 2 ./hrrr_gsi"
-$runline
+runline="aprun -n 120 -N 12 -d2 -cc depth ./hrrr_gsi"
+#runline="aprun -n 240 -N 24 ./hrrr_gsi"
+$runline < gsiparm.anl >> $DATA/$pgmout 2>errfile
 
 cp gsiparm.anl gsiparm.anl_cloud
 cp wrf_inout ${COMOUT}/hrrr.t${cyc}z.wrf_inout
