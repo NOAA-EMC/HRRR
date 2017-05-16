@@ -9,10 +9,10 @@
 # 2016-02-05  C Alexander / G Manikin   HRRRv2 
 
 # Load modules
-#module load PrgEnv-intel
-#module load ip-intel/2.0.0
-#module load cray-mpich
-#module load NetCDF-intel-sandybridge/3.6.3
+module load PrgEnv-intel
+module load ip-intel/2.0.0
+module load cray-mpich
+module load NetCDF-intel-sandybridge/3.6.3
 
 ulimit -s 512000
 set -x
@@ -28,31 +28,11 @@ cd ${DATA}
 export FIXcrtm=${FIXcrtm:-/gpfs/gp1/nco/ops/nwprod/fix}
 
 # Set up some environment variables
-export MPICH_ENV_DISPLAY=1
-export MPICH_VERSION_DISPLAY=1
-export MPICH_ABORT_ON_ERROR=1
-export MPICH_RANK_REORDER_DISPLAY=1
 export ATP_ENABLED=0
 export MALLOC_MMAP_MAX=0
 export MALLOC_TRIM_THRESHOLD_=134217728
-export OMP_NUM_THREADS=2
-export KMP_AFFINITY=disabled
 export OMP_STACKSIZE=500M
-export FORT_BUFFERED=true
-
-export MP_EAGER_LIMIT=165536
-export MP_COREFILE_FORMAT=lite
-export MP_EUIDEVELOP=min
-export MP_EUILIB=us
-export MP_MPILIB=mpich2
-
-export MP_LABELIO=yes
-export MP_USE_BULK_XFER=yes
-export MP_SHARED_MEMORY=yes
-
-export MPICH_ALLTOALL_THROTTLE=0
 export KMP_STACKSIZE=1024m
-export MP_TASK_AFFINITY=cpu:2
 
 # Set to yes for faster collective ops (mpi reduce)
 # but may not yield bitwise identical results from
