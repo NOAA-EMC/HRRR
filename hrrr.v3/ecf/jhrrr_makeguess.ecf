@@ -1,0 +1,57 @@
+#BSUB -J %E%hrrr_%DOMAIN%_makeguess_%CYC%
+#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_makeguess_%CYC%.o%J
+#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_makeguess_%CYC%.o%J
+#BSUB -cwd /tmpnwprd
+#BSUB -R "span[ptile=24]"
+#BSUB -n 144
+#BSUB -R affinity[core:distribute=balance]
+#BSUB -q %QUEUE%
+#BSUB -L /bin/sh
+#BSUB -W 00:15
+#BSUB -P %PROJ%
+#BSUB -x
+#BSUB -a poe
+
+%include <head.h>
+%include <envir-p2.h>
+
+# EXPORT list here
+
+set -x
+
+export cyc=%CYC%
+export dom=%DOMAIN%
+export job=hrrr_%DOMAIN%_makeguess_%CYC%
+
+# versions file for HRRR model $mod_ver
+VERSION_FILE=$NWROOT/versions/hrrr.ver
+if [ -f $VERSION_FILE ]; then
+  . $VERSION_FILE
+else
+  ecflow_client --abort
+  exit
+fi
+
+# CALL executable job script here
+$NWROOT/hrrr.${hrrr_ver}/jobs/JHRRR_MAKEGUESS
+
+if [ $? -ne 0 ]; then
+  ecflow_client --abort
+  exit
+fi
+
+%include <tail.h>
+%manual
+##########################################################################
+# Purpose: to prepare the boundary conditions for the Rapid Refresh Model
+##########################################################################
+
+
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+
+# include manual page below
+%end

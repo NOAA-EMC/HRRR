@@ -1,0 +1,21 @@
+#!/bin/ksh
+
+mkdir /gpfs/hps3/stmp/Geoffrey.Manikin/change
+rm /gpfs/hps3/stmp/Geoffrey.Manikin/change/*
+cd /gpfs/hps3/stmp/Geoffrey.Manikin/change
+
+hours="19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36"
+cp /gpfs/hps3/emc/meso/save/Geoffrey.Manikin/nwprod2/hrrr.v3.0.0/parm/hrrrak/wmo/grib2_awips_hrrrakfXX.91 .
+echo 'into'
+
+for fhr in $hours; do
+cp grib2_awips_hrrrakfXX.91 grib2_awips_hrrrakf${fhr}.91
+fhr1=`expr $fhr - 1`
+vi grib2_awips_hrrrakf${fhr}.91 << EOF
+   :1,\$ s/XX/$fhr
+   :1,\$ s/YY/$fhr1
+   :wq
+EOF
+sleep 1
+done
+exit

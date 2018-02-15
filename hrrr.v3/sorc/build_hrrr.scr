@@ -1,0 +1,179 @@
+set -x
+
+module purge
+module load ncep
+module load craype-sandybridge
+module use -a /opt/cray/modulefiles
+
+module load /gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod/hrrr.v3.0.0/modulefiles/HRRR/v3.0.0
+module unload PNetCDF-intel-sandybridge/1.5.0
+
+echo "modules for serial wrf"
+module list
+
+sleep 1
+
+export BASE=`pwd`
+
+##############################
+
+cd ${BASE}/hrrr_wrfarw.fd/WRFV3.8.1
+./clean -aa
+./clean -a
+./clean
+cp configure.wrf.serial configure.wrf
+./compile em_real
+
+##############################
+
+cd ${BASE}/hrrr_update_bc.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_wps.fd/WPSV3.9.0.1
+./clean -aa
+./clean -a
+./clean
+cp configure.wps.optim configure.wps
+./compile
+cp ungrib/src/ungrib.exe ${BASE}/../exec/hrrr_wps_ungrib
+cp metgrid/src/metgrid.exe ${BASE}/../exec/hrrr_wps_metgrid
+
+##############################
+
+cd ${BASE}/hrrr_wrfpost.fd
+make clean
+make
+
+##############################
+module purge
+module load ncep
+module load craype-haswell
+module use -a /opt/cray/modulefiles
+
+module load /gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod/hrrr.v3.0.0/modulefiles/HRRR/v3.0.0
+
+echo "modules for wrf"
+module list
+
+sleep 1
+
+cd ${BASE}/hrrr_wrfarw.fd/WRFV3.8.1
+./clean -aa
+./clean -a
+./clean
+cp configure.wrf.optim configure.wrf
+./compile em_real
+cp main/real.exe ${BASE}/../exec/hrrr_wrfarw_real
+cp main/wrf.exe ${BASE}/../exec/hrrr_wrfarw_fcst
+
+##############################
+
+module purge
+module load ncep
+module load craype-haswell
+module use -a /opt/cray/modulefiles
+module load /gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod/hrrr.v3.0.0/modulefiles/HRRR/v3.0.0.da
+module list
+
+cd ${BASE}/hrrr_gsi.fd
+make clean
+cd ${BASE}/hrrr_gsi.fd/gsdcloud
+make clean
+make
+cd ${BASE}/hrrr_gsi.fd
+make
+make install
+make library
+
+##############################
+
+module unload craype-haswell
+module load craype-sandybridge
+
+cd ${BASE}/hrrr_process_enkf.fd
+make clean
+make
+make install
+ 
+##############################
+
+cd ${BASE}/hrrr_full_cycle_surface.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_process_cloud.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_process_imssnow.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_process_mosaic.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_process_sst.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_process_lightning.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_update_gvf.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_ref2tten.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_sndp.fd
+make clean
+make 
+
+##############################
+
+cd ${BASE}/hrrr_wrfbufr.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_stnmlist.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_smartinit_conus.fd
+make clean
+make
+
+##############################
+
+cd ${BASE}/hrrr_smartinit_ak.fd
+make clean
+make
+
+##############################

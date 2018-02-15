@@ -1,0 +1,5 @@
+export hrrr_ver=v3.0.0
+export crtm_ver_analysis=v2.2.3
+export crtm_ver_post=v2.0.6
+export prod_util_ver=v1.0.21
+export grib_util_ver=v1.0.5

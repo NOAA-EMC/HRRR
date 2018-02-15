@@ -1,0 +1,46 @@
+#BSUB -J %E%hrrr_%DOMAIN%_emailwarining_%CYC%
+#BSUB -o /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_emailwarning_%CYC%.o%J
+#BSUB -e /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_emailwarning_%CYC%.o%J
+#BSUB -cwd /tmpnwprd
+#BSUB -L /bin/sh
+#BSUB -W 00:05
+#BSUB -P %PROJ%
+#BSUB -q %QUEUE%_serv2
+#BSUB -n 1
+#BSUB -R "rusage[mem=500]" -R "affinity[core]"
+
+%include <head.h>
+%include <envir-p2.h>
+
+# EXPORT list here
+
+export cyc=%CYC%
+export dom=%DOMAIN%
+export job=hrrr_%DOMAIN%emailwarning_%CYC%
+export NET=hrrr
+export RUN=hrrr
+
+#CALL executable job script here
+$NWROOT/jobs/JEMAIL_OUT
+
+if [ $? -ne 0 ]; then
+  ecflow_client --msg="***JOB ${ECF_NAME} ERROR RUNNING J-SCRIPT ***"
+  ecflow_client --abort
+  exit
+fi
+
+%include <tail.h>
+%manual
+######################################################################
+# Purpose: Send out email warning for HRRR cancelation
+#
+######################################################################
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+
+# include manual page below
+%end
+

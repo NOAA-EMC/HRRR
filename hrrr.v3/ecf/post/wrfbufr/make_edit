@@ -1,0 +1,20 @@
+#!/bin/sh 
+#
+
+mkdir /gpfs/hps3/stmp/Geoffrey.Manikin
+mkdir /gpfs/hps3/stmp/Geoffrey.Manikin/work
+rm /gpfs/hps3/stmp/Geoffrey.Manikin/work/*
+cd /gpfs/hps3/stmp/Geoffrey.Manikin/work
+
+. /gpfs/hps3/emc/meso/save/Geoffrey.Manikin/nwprod2/versions/hrrr.ver
+cp /gpfs/hps3/emc/meso/save/Geoffrey.Manikin/nwprod2/hrrr.${model_ver}/staging/ecf/post/wrfbufr/jhrrr_wrfbufr_fXX.ecf .
+hours="00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36"
+for fhr in $hours; do
+ cp jhrrr_wrfbufr_fXX.ecf jhrrr_wrfbufr_f${fhr}.ecf
+ vi jhrrr_wrfbufr_f${fhr}.ecf << EOF 
+   :1,\$ s/XX/${fhr}
+   :wq
+EOF
+mv jhrrr_wrfbufr_f${fhr}.ecf /gpfs/hps3/emc/meso/save/Geoffrey.Manikin/nwprod2/hrrr.${model_ver}/staging/ecf/post/wrfbufr/.
+done
+exit

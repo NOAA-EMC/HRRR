@@ -1,0 +1,48 @@
+# makefile for nssl_porcess
+#! /bin/sh -v
+
+# Define the fortran compiler and options
+
+FC  =  mpif90
+FLAGS= -g -traceback 
+GSILIBS =../../lib -lw3emc_i4r8 -lw3nco_i4r8 -lbacio -lbufr_i4r8
+
+G2_VER=v2.5.0
+G2TMPL_VER=v1.3.0
+JASPER_VER=v1.900.1
+PNG_VER=v1.2.44
+Z_VER=v1.2.6
+
+CORELIB  = /scratch3/NCEPDEV/nwprod/lib
+
+G2_INC4     = -I${CORELIB}/g2/$(G2_VER)/incmod/g2_$(G2_VER)_4
+G2TMPL_INC  = -I${CORELIB}/g2tmpl/$(G2TMPL_VER)/incmod/g2tmpl_${G2TMPL_VER}
+G2_LIB4     = ${CORELIB}/g2/$(G2_VER)/libg2_$(G2_VER)_4.a
+G2TMPL_LIB  = ${CORELIB}/g2tmpl/$(G2TMPL_VER)/libg2tmpl_${G2TMPL_VER}.a
+JASPER_LIB  = ${CORELIB}/jasper/$(JASPER_VER)/libjasper_$(JASPER_VER).a
+PNG_LIB     = ${CORELIB}/png/$(PNG_VER)/libpng.a
+Z_LIB       = ${CORELIB}/z/$(Z_VER)/libz_$(Z_VER).a
+NETCDF      = /apps/netcdf/3.6.3-intel
+
+INCLD=  -I${NETCDF}/include -I../../../include ${G2_INC4}
+LIBS =  \
+        ${G2_LIB4} ${G2TMPL_LIB} ${JASPER_LIB} ${PNG_LIB} ${Z_LIB} \
+        -L${NETCDF}/lib -lnetcdf -L${GSILIBS}
+
+OBJS = nc_readwrt_mod.o grib2_read_mod.o
+
+all: update_GVF gen_annual_maxmin_GVF
+
+update_GVF: ${OBJS} update_GVF.o
+	${FC} -o update_GVF.exe ${FLAGS} update_GVF.o ${OBJS} ${LIBS} 
+
+gen_annual_maxmin_GVF: ${OBJS} gen_annual_maxmin_GVF.o
+	${FC} -o gen_annual_maxmin_GVF.exe ${FLAGS} gen_annual_maxmin_GVF.o ${OBJS} ${LIBS} 
+
+.SUFFIXES : .f90 .o
+
+.f90.o :
+	${FC} ${FLAGS} ${INCLD} -c $<
+
+clean:
+	/bin/rm -f *.o *.mod *.exe
