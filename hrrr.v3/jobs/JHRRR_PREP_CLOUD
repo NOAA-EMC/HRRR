@@ -20,7 +20,7 @@ export RUN_ENVIR=${RUN_ENVIR:-nco}
 #####################################################################################
 if [ "$RUN_ENVIR" != nco ]      ### For Developers
 then
-  hrrr_ver=${hrrr_ver:-v2.0.0}
+  hrrr_ver=${hrrr_ver:-v3.0.0}
   PARA_CONFIG=${hrrr_para_config:-/meso/save/${LOGNAME}/hrrr.${hrrr_ver}/user/hrrr_para_config}
   if [ -s $PARA_CONFIG ] ; then . $PARA_CONFIG ; fi
   export userid=$LOGNAME

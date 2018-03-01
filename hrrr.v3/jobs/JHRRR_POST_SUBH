@@ -30,8 +30,8 @@ export model=${model:-hrrr}
 ###################################
 # Load the GRIB Utilities module
 ####################################
-. /usrx/local/Modules/default/init/ksh
-module load grib_util
+. /opt/modules/default/init/ksh
+module load grib_util/${grib_util_ver}
 
 #####################################################################################
 # This block is for Developer's test run:
@@ -89,7 +89,6 @@ export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 export GEMPAKhrrr=${GEMPAKhrrr:-$HOMEhrrr/gempak}
 
-export WGRIB2=${WGRIB2:-${NWROOT}/grib_util.${grib_util_ver}/exec/wgrib2}
 export FIXcrtm=${FIXcrtm:-${NWROOT}/lib/crtm/${crtm_ver_post}/src/fix}
 
 ###########################################

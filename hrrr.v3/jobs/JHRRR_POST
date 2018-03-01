@@ -26,8 +26,8 @@ export model=${model:-hrrr}
 ###################################
 # Load the GRIB Utilities module
 ####################################
-. /usrx/local/Modules/default/init/ksh
-module load grib_util
+. /opt/modules/default/init/ksh
+module load grib_util/${grib_util_ver}
 
 #####################################################################################
 # This block is for Developer's test run:
@@ -81,12 +81,6 @@ export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 export FIXgem=${FIXgem:-${HOMEhrrr}/gempak/fix}
 export FIXcrtm=${FIXcrtm:-${NWROOT}/lib/crtm/${crtm_ver_post}/src/fix}
-
-export WGRIB2=${WGRIB2:-${NWROOT}/grib_util.${grib_util_ver}/exec/wgrib2}
-export CNVGRIB=${CNVGRIB:-${NWROOT}/grib_util.${grib_util_ver}/exec/cnvgrib}
-export GRB2INDEX=${GRB2INDEX:-${NWROOT}/grib_util.${grib_util_ver}/exec/grb2index}
-export GRBINDEX=${GRBINDEX:-${NWROOT}/grib_util.${grib_util_ver}/exec/grbindex}
-export TOCGRIB2=${TOCGRIB2:-${NWROOT}/grib_util.${grib_util_ver}/exec/tocgrib2}
 
 ###########################################
 # Run setpdy and initialize PDY variables

@@ -22,6 +22,12 @@ export NET=${NET:-hrrr}
 export RUN=${RUN:-hrrr}
 export model=${model:-hrrr}
 
+###################################
+# Load the GRIB UTILITIES module
+####################################
+. /opt/modules/default/init/ksh
+module load grib_util/${grib_util_ver}
+
 #####################################################################################
 # This block is for Developer's test run:
 # Run config file to get input parameters
@@ -81,8 +87,6 @@ export EXEChrrr=${EXEChrrr:-${HOMEhrrr}/exec}
 export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
-
-export WGRIB2=${WGRIB2:-$NWROOT/grib_util.${grib_util_ver}/exec/wgrib2}
 
 ###########################################
 # Run setpdy and initialize PDY variables
