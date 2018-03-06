@@ -78,6 +78,8 @@ module use -a /opt/cray/modulefiles
 module load /gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod/hrrr.v3.0.0/modulefiles/HRRR/v3.0.0.da
 module list
 
+export CRAYPE_LINK_TYPE=dynamic
+
 cd ${BASE}/hrrr_gsi.fd
 make clean
 cd ${BASE}/hrrr_gsi.fd/gsdcloud

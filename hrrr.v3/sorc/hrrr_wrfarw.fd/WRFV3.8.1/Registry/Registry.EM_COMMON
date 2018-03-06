@@ -2869,7 +2869,7 @@ package   wenopd_scalar  moist_adv_opt==4            -             -
 package   maxmin_output  output_diagnostics==1            -    state:t2min,t2max,tt2min,tt2max,t2mean,t2std,q2min,q2max,tq2min,tq2max,q2mean,q2std,skintempmin,skintempmax,tskintempmin,tskintempmax,skintempmean,skintempstd,u10max,v10max,spduv10max,tspduv10max,u10mean,v10mean,spduv10mean,u10std,v10std,spduv10std,raincvmax,rainncvmax,traincvmax,trainncvmax,raincvmean,rainncvmean,raincvstd,rainncvstd,swradmin,swradmax,tswradmin,tswradmax,swradmean,swradstd
 
 #package   nwp_output     nwp_diagnostics==1            -       state:wspd10max,w_up_max,w_dn_max,up_heli_max,w_mean,grpl_max,hail_maxk1,hail_max2d
-package   nwp_output     nwp_diagnostics==1            -       state:wspd10max,u10max,v10max,wspd80max,u80max,v80max,w_up_max,w_dn_max,refd_max,refdm10c_max,refl_10cm,up_heli_max,up_heli_min,up_heli_max16,up_heli_min16,up_heli_max02,up_heli_min02,up_heli_max03,up_heli_max03rel_vort_max,rel_vort_max01,w_mean,grpl_max,ltg1_max,ltg2_max,ltg3_max,nci_ltg,nca_ltg,nci_w,nca_w,nci_wq,nca_wq,nci_refd,nca_refd,qr_max_ci,qg_max_ci,uh,uh16,uh02,uh03,hail_maxk1,hail_max2d
+package   nwp_output     nwp_diagnostics==1            -       state:wspd10max,wspd10umax,wspd10vmax,wspd80max,wspd80umax,wspd80vmax,w_up_max,w_dn_max,refd_max,refdm10c_max,refl_10cm,up_heli_max,up_heli_min,up_heli_max16,up_heli_min16,up_heli_max02,up_heli_min02,up_heli_max03,rel_vort_max,rel_vort_max01,w_mean,grpl_max,ltg1_max,ltg2_max,ltg3_max,nci_ltg,nca_ltg,nci_w,nca_w,nci_wq,nca_wq,nci_refd,nca_refd,qr_max_ci,qg_max_ci,uh,uh16,uh02,uh03,hail_maxk1,hail_max2d
 
 package   dfi_setup      dfi_stage==0                -             -
 package   dfi_bck        dfi_stage==1                -             -
