@@ -221,8 +221,13 @@
 
        <param>
            <shortname>ACM_GRAUPEL_ON_SURFACE</shortname>
-           <scale>4.0</scale>
+           <scale>6.0</scale>
        </param>
+
+       <param>
+           <shortname>ACM_FRAIN_ON_SURFACE</shortname>
+           <scale>6.0</scale>
+       </param> 
 
        <param>
            <shortname>GSD_CSNOW_ON_SURFACE</shortname>
@@ -284,6 +289,12 @@
        </param>
 
        <param>
+           <shortname>MAX_REF_ON_ISOTHERMAL_-10C</shortname>
+           <table_info>NCEP</table_info>
+           <scale>-4.0</scale>
+       </param>
+
+       <param>
            <shortname>REFD_ON_ISOTHERMAL</shortname>
            <table_info>NCEP</table_info>  
            <fixed_sfc1_type>isothermal</fixed_sfc1_type>
@@ -307,13 +318,23 @@
        </param>
 
        <param>
-           <shortname>MAX_MAXUVV_ON_SPEC_PRES_LVL_ABOVE_GRND_40-100hpa</shortname>
+           <shortname>MAX_UGD_ON_SPEC_HGT_LVL_ABOVE_GRND_10m</shortname>
+           <scale>-4.0</scale>
+       </param>
+
+       <param>
+           <shortname>MAX_VGD_ON_SPEC_HGT_LVL_ABOVE_GRND_10m</shortname>
+           <scale>-4.0</scale>
+       </param>
+
+       <param>
+           <shortname>MAX_MAXUVV_ON_SPEC_PRES_LVL_ABOVE_GRND_10-100hpa</shortname>
            <table_info>NCEP</table_info>
            <scale>-4.0</scale>
        </param>
 
        <param>
-           <shortname>MAX_MAXDVV_ON_SPEC_HGT_LVL_ABOVE_GRND_40-100hpa</shortname>
+           <shortname>MAX_MAXDVV_ON_SPEC_HGT_LVL_ABOVE_GRND_10-100hpa</shortname>
            <table_info>NCEP</table_info>
            <scale>-4.0</scale>
        </param>
@@ -322,6 +343,56 @@
            <shortname>MAX_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_2-5km</shortname>
            <table_info>NCEP</table_info>
            <scale>3.0</scale>
+       </param>
+
+       <param>
+           <shortname>GSD_MIN_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_2-5km</shortname>
+           <table_info>NCEP</table_info>
+           <scale>3.0</scale>
+       </param>
+
+       <param>
+           <shortname>GSD_MAX_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_0-2km</shortname>
+           <table_info>NCEP</table_info>
+           <scale>3.0</scale>
+       </param>
+
+       <param>
+           <shortname>GSD_MIN_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_0-2km</shortname>
+           <table_info>NCEP</table_info>
+           <scale>3.0</scale>
+       </param>
+
+       <param>
+           <shortname>GSD_MAX_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_0-3km</shortname>
+           <table_info>NCEP</table_info>
+           <scale>3.0</scale>
+       </param>
+
+       <param>
+           <shortname>GSD_MIN_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_0-3km</shortname>
+           <table_info>NCEP</table_info>
+           <scale>3.0</scale>
+       </param>
+
+       <param>
+           <shortname>GSD_MAX_REL_VORT_ON_SPEC_HGT_LVL_ABOVE_GRND_0-2km</shortname>
+           <scale>5.0</scale>
+       </param>
+
+       <param>
+           <shortname>GSD_MAX_REL_VORT_ON_SPEC_HGT_LVL_ABOVE_GRND_0-1km</shortname>
+           <scale>5.0</scale>
+       </param>
+
+       <param>
+           <shortname>GSD_MAX_COLMAX_GRAUPEL_HAIL_DIAMETER</shortname>
+           <scale>4.0</scale>
+       </param>
+
+       <param>
+           <shortname>GSD_MAX_SIGMA_LVL_MAX_GRAUPEL_HAIL_DIAMETER</shortname>
+           <scale>4.0</scale>
        </param>
 
        <param>
@@ -542,6 +613,11 @@
 
        <param>
            <shortname>INST_ULWRF_ON_TOP_OF_ATMOS</shortname>
+           <scale>4.0</scale>
+       </param>
+
+       <param>
+           <shortname>INST_USWRF_ON_TOP_OF_ATMOS</shortname>
            <scale>4.0</scale>
        </param>
 
@@ -944,7 +1020,7 @@
           <level>1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 
                  20. 21. 22. 23. 24. 25. 26. 27. 28. 29. 30. 31. 32. 33. 34. 35. 36. 37. 38. 39. 
                  40. 41. 42. 43. 44. 45. 46. 47. 48. 49. 50.</level>
-          <scale>-3.0</scale>
+          <scale>3.0</scale>
        </param>
 
    </paramset>
