@@ -13,7 +13,7 @@
       PARAMETER (GAMD=0.01,GAMi=0.0,GAMsubj=-0.0400, &
                  CPD_P=1004.705243,ROVCP_P=0.285714286, &
                  RD_P=287.0586407,G0_P=9.80665,CPOVR_P=3.5, &
-                 CONST=5.255303)
+                 CONST=5.255303,pi=3.141592653589793)
       PARAMETER (A2=17.2693882,A3=273.16,A4=35.86,PQ0=379.90516)
       PARAMETER(MBUF=2000000,JF=1000000)
       CHARACTER CBUF(MBUF)
@@ -197,16 +197,20 @@
 
 !      ---   get values at level 6 for lapse rate calculations
 
-          QQ = Q(I,J,6)/(1.+Q(i,j,6))
+          QQ = Q(I,J,5)/(1.+Q(i,j,5))
 
-          exn(i,j) = cpd_p*(p(i,j,6)/P1000)**rovcp_p
+          exn(i,j) = cpd_p*(p(i,j,5)/P1000)**rovcp_p
 !          theta6=((P1000/P(I,J,6))**CAPA)*T(I,J,6)
 !          T6 = theta6*EXN(i,j)/(CPD_P*(1.+0.6078*QQ))
 !          T6 = theta6*EXN(i,j)/CPD_P
-          T6=T(I,J,6)
+
+! --- Change the lapse rate calculation to use 5 model levels (~300 m)
+! --- instead of 6 model levels (~460 m).
+
+          T5=T(I,J,5)
           Z1=Z(I,J,1)
-          Z6=Z(I,J,6)
-          GAM = (T1-T6)/(Z6-Z1)
+          Z5=Z(I,J,5)
+          GAM = (T1-T5)/(Z5-Z1)
 
 !============================================
           if (topo_ndfd(i,j).le.zs ) then
@@ -231,6 +235,12 @@
 
 ! --- temperature
           tnew(i,j) = tsfc
+
+! --- Use the 2mT if the terrain differences are <= 1
+          zdiff = abs(zs-topo_ndfd(i,j))
+          if(zdiff .le. 1.0)then
+            tnew(i,j)=t2(i,j)
+          endif
 
 !       Set dewpoint depression to that at original sfc
 
@@ -287,9 +297,21 @@
           tup = thetavc*(pnew(i,j)/P1000)**rovcp_p / (1.+0.6078*qc)
 !          tup=thetavc
           alttup=t2(i,j)+frac*(t(i,j,k)-t2(i,j))
+
+! original temperature computation
+          alttup=tup
             
 !  provisional 2m temp at NDFD topo
           tnew(i,j) = t2(i,j) + (alttup-t1)
+
+          zdiff = abs(topo_ndfd(i,j)-zs)
+          if(zdiff .le. 1.0)then
+! --- Use the 2mT if the terrain differences are <= 1
+            tnew(i,j)=t2(i,j)
+          else
+! --- Smoothly adjust the downscaled temperature
+            tnew(i,j) = t2(i,j) + ((alttup-t1)*(tanh(zdiff-2*pi)+1)/2)
+          endif
 
 ! --- Don't let extrapolated temp to be any larger than
 !       the value at the RAP terrain level.

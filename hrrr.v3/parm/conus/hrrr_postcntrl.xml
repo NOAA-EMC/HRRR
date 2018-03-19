@@ -1038,6 +1038,13 @@
           <scale>3.0</scale>
        </param>
 
+       <param>
+          <shortname>SOILW_ON_DEPTH_BEL_LAND_SFC</shortname>
+          <level>0. 1.</level>
+          <level2>0. 1.</level2>
+          <scale>3.0</scale>
+       </param>
+
    </paramset>
 
 </postxml>

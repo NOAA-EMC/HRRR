@@ -43,7 +43,7 @@ C
       INCLUDE "parmsoil"
 C-----------------------------------------------------------------------
                              P A R A M E T E R
-     & (NSTAT=1500,LCL1ML=13,LCL1SL=50)
+     & (NSTAT=2000,LCL1ML=13,LCL1SL=50)
 !       NWORDM=(LCL1ML+1)*LM+2*LCL1SL
 !     &, LRECPR=4*(8+9+LCL1ML*LM+LCL1SL))
 
@@ -1883,6 +1883,11 @@ C
 C------------------QW, QI AND QINT--------------------------------------
 C
 
+!!!
+!!! skip section for now
+!!!
+!	goto 221
+
       DO 220 L=2,LM
 C
 !$OMP parallel do private(cwmkl,fiq,hh,iwkl,lml,pp,qc,qi,qint,qkl,qw,
@@ -1968,6 +1973,7 @@ C----------------------------------------------------------------------
 !	write(6,*) 'here d'
   210                 CONTINUE
   220                 CONTINUE
+  221                 continue
 C----------------------------------------------------------------------
 C----------------------------------------------------------------------
 C***
