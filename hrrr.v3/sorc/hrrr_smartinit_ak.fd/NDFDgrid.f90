@@ -519,7 +519,7 @@
 !        if (VALIDPT(I,J) .and. (PQ0/PSFC(I,J)*EXP(A2*(dewnew(I,J)-A3)/
 !     &      (dewnew(I,J)-A4))) .lt. 9.9E10) THEN
         if (VALIDPT(I,J)) THEN
-         qnew(i,j)=PQ0/PSFC(I,J)*EXP(A2*(dewnew(I,J)-A3)/ &
+         qnew(i,j)=PQ0/PNEW(I,J)*EXP(A2*(dewnew(I,J)-A3)/ &
                    (dewnew(I,J)-A4))
         else
           qnew(i,j)=SPVAL
