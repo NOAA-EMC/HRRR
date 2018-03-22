@@ -116,11 +116,11 @@ ln -s ${FIXcrtm}/AerosolCoeff/Big_Endian/AerosolCoeff.bin AerosolCoeff.bin
 ln -s ${FIXcrtm}/EmisCoeff/Big_Endian/Nalli.EK-PDF.W_W-RefInd.EmisCoeff.bin EmisCoeff.bin
 
 # Run unipost
-#startmsg
+startmsg
 cp ${EXEChrrr}/hrrr_wrfpost .
 runline="aprun -n 48 -N 24 ./hrrr_wrfpost"
 $runline
-#err=$?;export err ;err_chk
+err=$?;export err ;err_chk
 
 cp WRFTWO* ${POSTMGRDIR}/wrfsfc_${fhr}${fmin}.grib2
 

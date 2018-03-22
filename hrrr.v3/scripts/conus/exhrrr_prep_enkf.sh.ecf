@@ -82,6 +82,7 @@ startmsg
 cp ${EXEChrrr}/hrrr_process_enkf .
 runline="aprun -n 96 -N 24 ./hrrr_process_enkf"
 $runline
+export err=$?; err_chk
 
 cp enspreproc_arw_mem* ${HRRRGES_ENKF}
 tar -cvf hrrr_enspreproc_${availtime}.tar enspreproc*

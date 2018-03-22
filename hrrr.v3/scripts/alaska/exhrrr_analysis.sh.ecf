@@ -356,10 +356,11 @@ $gsi_namelist
 EOF
 
 export pgm=hrrr_gsi
-#startmsg
+startmsg
 cp ${EXEChrrr}/hrrr_gsi .
-runline="aprun -j1 -cc depth -n 180 -N 12 -d 2 ./hrrr_gsi
+runline="aprun -j1 -cc depth -n 180 -N 12 -d 2 ./hrrr_gsi"
 $runline < gsiparm.anl >> $DATA/$pgmout 2>errfile
+export err=$?; err_chk
 
 cp gsiparm.anl gsiparm.anl_cloud
 

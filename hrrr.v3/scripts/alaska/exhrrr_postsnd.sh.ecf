@@ -55,7 +55,7 @@ ln -sf hrrr_bufr.tbl fort.32
 ln -sf profilm.c1.${tmmark} fort.66
 ln -sf class1.bufr fort.78
 ${EXEChrrr}/hrrr_sndp < hrrr_modtop.parm  > sndp.out
-#export err=$?; err_chk
+export err=$?; err_chk
 
 #need to manipulate the file to get it to be compatible
 #  with gempak on wcoss

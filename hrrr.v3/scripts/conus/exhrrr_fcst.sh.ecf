@@ -231,7 +231,7 @@ cp ${EXEChrrr}/hrrr_wrfarw_fcst .
 # quilting with nio_groups = 4 and 72 tasks per group - 108 nodes
 runline="aprun -n 1008 -N 12 -d2 -cc depth ./hrrr_wrfarw_fcst : -n 288 -N 12 ./hrrr_wrfarw_fcst"
 $runline
-#export err=$?; err_chk
+export err=$?; err_chk
 
 err_chk
 cp rsl.out.0000 ${COMOUT}/hrrr.t${cyc}z.rslout
