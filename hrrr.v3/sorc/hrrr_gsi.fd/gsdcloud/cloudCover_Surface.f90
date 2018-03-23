@@ -163,7 +163,7 @@ SUBROUTINE cloudCover_Surface(mype,nlat,nlon,nsig,r_radius,thunderRadius,&
 !  analysis of surface/METAR cloud observations
 ! *****************************************************************
 
-   DO ista=1,numsao
+   loopstation: DO ista=1,numsao
      i1 = int(oi(ista)+0.0001_r_kind) 
      j1 = int(oj(ista)+0.0001_r_kind)
      min_dist =  Odist(ista)
@@ -195,7 +195,7 @@ SUBROUTINE cloudCover_Surface(mype,nlat,nlon,nsig,r_radius,thunderRadius,&
               write(6,*) 'cloudCover_Surface: check the station no.', ista, 'at process ', mype
               write(6,*) ic,OI(ista),OJ(ista)
               write(6,*) (ocld(k,ista),k=1,12)
-              call stop2(114)
+              cycle loopstation
            endif
         enddo
 ! clean the whole column up to ceilometer height (12 kft) if ob is CLR
@@ -316,7 +316,7 @@ SUBROUTINE cloudCover_Surface(mype,nlat,nlon,nsig,r_radius,thunderRadius,&
                            endif
                        else
                            write(6,*) 'cloudCover_Surface: wrong cloud coverage observation!'
-                           call stop2(114)
+                           cycle loopstation
                        endif
                        endif
                        firstcloud = firstcloud + 1
@@ -369,7 +369,7 @@ SUBROUTINE cloudCover_Surface(mype,nlat,nlon,nsig,r_radius,thunderRadius,&
            vis2qc(i1,j1) = ( (betav/144.7_r_kind) ** 1.14_r_kind) / 1000._r_kind
      endif  ! cloud or clear
 
-   ENDDO   ! ista
+   ENDDO  loopstation ! ista
 
 
 !   Determine if the layer is dry or it has inversion.
