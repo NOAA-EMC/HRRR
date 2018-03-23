@@ -1,5 +1,5 @@
 SUBROUTINE cloudCover_Surface(mype,nlat,nlon,nsig,r_radius,thunderRadius,&
-                        cld_bld_hgt,t_bk,p_bk,q,h_bk,zh,  &
+                        t_bk,p_bk,q,h_bk,zh,  &
                         mxst_p,NVARCLD_P,numsao,OI,OJ,OCLD,OWX,Oelvtn,Odist,&
                         cld_cover_3d,cld_type_3d,wthr_type,pcp_type_3d,     &
                         watericemax, kwatericemax,vis2qc)
@@ -25,7 +25,6 @@ SUBROUTINE cloudCover_Surface(mype,nlat,nlon,nsig,r_radius,thunderRadius,&
 !     nsig        - no. of levels
 !     r_radius    - influence radius of the cloud observation
 !     thunderRadius -
-!     cld_bld_hgt - Height below which cloud building is done 
 !
 !     t_bk        - 3D background potentional temperature (K)
 !     p_bk        - 3D background pressure  (hPa)
@@ -74,7 +73,6 @@ SUBROUTINE cloudCover_Surface(mype,nlat,nlon,nsig,r_radius,thunderRadius,&
   REAL(r_single), intent(in) :: r_radius
   integer(i_kind),intent(in) :: nlat,nlon,nsig
   real(r_single), intent(in) :: thunderRadius
-  real(r_kind),   intent(in) :: cld_bld_hgt
 !
 !  surface observation
 !
@@ -119,13 +117,13 @@ SUBROUTINE cloudCover_Surface(mype,nlat,nlon,nsig,r_radius,thunderRadius,&
   REAL (r_kind)   :: spval_p
   PARAMETER ( spval_p    =  99999.0_r_kind )
 
-  INTEGER(i_kind) :: i,j,k
+  INTEGER(i_kind) :: i,j,k,k1
   INTEGER(i_kind) :: i1,j1,ic
   INTEGER(i_kind) :: nx_p, ny_p, nztn_p
   INTEGER(i_kind) :: ista
-  INTEGER(i_kind) :: ich !, iob,job 
+  INTEGER(i_kind) :: ich, iob,job 
   
-  REAL(r_kind) :: min_dist !, dist
+  REAL(r_kind) :: min_dist, dist
   REAL(r_kind) :: zdiff
   REAL(r_kind) :: zlev_clr,cloud_dz,cl_base_ista,betav
 !
@@ -294,7 +292,6 @@ SUBROUTINE cloudCover_Surface(mype,nlat,nlon,nsig,r_radius,thunderRadius,&
                  if (zdiff<underlim) then
                     if((cl_base_ista >= 1.0 .and. (firstcloud==0 .or. abs(zdiff)<cloud_dz)) .or. &
                        (cl_base_ista < 1.0 .and. (abs(zdiff)<cloud_dz)) ) then
-                       if (h_bk(i1,j1,k) < cld_bld_hgt) then !limit cloud building to below a specified height 
                        if(ocld(ic,ista) == 1 ) then
                           cld_cover_3d(i1,j1,k)=max(cld_cover_3d(i1,j1,k),0.1_r_single)
                           pcp_type_3d(i1,j1,k)=0
@@ -317,7 +314,6 @@ SUBROUTINE cloudCover_Surface(mype,nlat,nlon,nsig,r_radius,thunderRadius,&
                        else
                            write(6,*) 'cloudCover_Surface: wrong cloud coverage observation!'
                            cycle loopstation
-                       endif
                        endif
                        firstcloud = firstcloud + 1
                     end if  ! zdiff < cloud_dz
