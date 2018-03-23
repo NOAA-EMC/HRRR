@@ -1,0 +1,12 @@
+hrrr.v2.0.15 - released 3/23/2018
+  Update to GSI code to address operational RAP crash on 3/22/2018.
+
+sorc and fix files changed:
+  /nwprod2/hrrr.v2.0.15/sorc/hrrr_gsi.fd/gsdcloud/cloudCover_Surface.f90
+
+new or revised executables:
+  hrrr_gsi
+
+implementation instructions:
+  Recompile hrrr_gsi.
+

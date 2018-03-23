@@ -1,0 +1,8 @@
+
+Release Notes:  HRRR v2.0.12
+
+v2.0.8 - released August 24, 2017
+  Remove level3 and level2.5 radar radial wind from GSI namelist
+
+parm file change:
+  /nwprod2/hrrr.v2.0.12/parm/hrrr_gsiparm.anl.sh
