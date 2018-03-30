@@ -69,7 +69,7 @@ env
 
 export HOMEhrrr=${HOMEhrrr:-${NWROOT}/${NET}.${hrrr_ver}}
 export SCRIPTShrrr=${SCRIPTShrrr:-$HOMEhrrr/scripts/${dom}}
-export GEMPAKhrrr=${GEMPAKhrrr:-$HOMEhrrr/gempak}
+export FIXgem=${FIXgem:-${HOMEhrrr}/gempak/fix}
 
 export RUN=hrrr
 export GRIB=wrfsfc
