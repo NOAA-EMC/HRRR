@@ -48,6 +48,7 @@ date
 # obtain unique process id (pid) and make temp directory
 ####################################
 export DATA=${DATAROOT}/${jobid}
+export PROFDIR=${DATAROOT}/hrrr_${dom}_wrfbufr_${envir}_${cyc}_f${fhr}
 mkdir -p $DATA
 cd $DATA
 
