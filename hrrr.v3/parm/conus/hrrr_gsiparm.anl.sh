@@ -49,7 +49,7 @@ OBS_INPUT::
    prepbufr       uv          null      uv                   1.0     0     0
    prepbufr       spd         null      spd                  1.0     0     0
    prepbufr       dw          null      dw                   1.0     0     0
-   radarbufr      rw          null      rw                   1.0     0     0
+   l2rwbufr       rw          null      rw                   1.0     0     0
    prepbufr       sst         null      sst                  1.0     0     0
    gpsrobufr      gps_ref     null      gps                  1.0     0     0
    ssmirrbufr     pcp_ssmi    dmsp      pcp_ssmi             1.0    -1     0

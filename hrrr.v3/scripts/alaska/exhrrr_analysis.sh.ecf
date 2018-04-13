@@ -145,12 +145,6 @@ else
 fi
 
 #add radial velocity data
-if [ -r "${PREPDIR}/rap.${PDY}/rap.t${cyc}z.radwnd.tm00.bufr_d" ]; then
-  ln -s ${PREPDIR}/rap.${PDY}/rap.t${cyc}z.radwnd.tm00.bufr_d ./radarbufr
-else
-  echo "Warning: ${PREPDIR}/rap.${PDY}/rap.t${cyc}z.radwnd.tm00.bufr_d is not available"
-fi
-
 if [ -r "${PREPDIR}/rap.${PDY}/rap.t${cyc}z.nexrad.tm00.bufr_d" ]; then
   ln -s ${PREPDIR}/rap.${PDY}/rap.t${cyc}z.nexrad.tm00.bufr_d ./l2rwbufr
 else
