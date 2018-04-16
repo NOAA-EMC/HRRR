@@ -97,7 +97,7 @@ export COMINradar=${COMINradar:-$(compath.py hourly/prod)}
 export COMINlight=${COMINlight:-$(compath.py rap/prod)}
 
 # NSSL Mosaic Data
-export COMINmosaic=${COMINmosaic:-${DCOMROOT}/us007003/ldmdata/upperair/mrms}
+export COMINmosaic=${COMINmosaic:-${DCOMROOT}/us007003/ldmdata/obs/upperair/mrms}
 
 ##############################################
 # Define COM directories
