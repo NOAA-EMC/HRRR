@@ -361,16 +361,16 @@ cp gsiparm.anl gsiparm.anl_cloud
 ## trim snow
 trim_snow='03'
 if [ ${cyc} -eq ${trim_snow} ]; then
-  if [ -r ${PREPBUFR}/rap.${PDY}/rap.t${cyc}z.imssnow.grib2 ]; then
+  if [ -r ${PREPBUFR}/rap.t${cyc}z.imssnow.grib2 ]; then
      echo "trim snow based on imssnow "
-     cp ${PREPBUFR}/rap.${PDY}/rap.t${cyc}z.imssnow.grib2 ./imssnow2
+     cp ${PREPBUFR}/rap.t${cyc}z.imssnow.grib2 ./imssnow2
      cp ${FIXhrrr}/hrrrak_geo_em.d01.nc ./geo_em.d01.nc
      cp ${EXEChrrr}/hrrr_process_imssnow .
      runline="aprun -n 360 -N 24 ./hrrr_process_imssnow"
      $runline
      export err=$?; err_chk
   else
-    echo "${PREPBUFR}/rap.${PDY}/rap.t${cyc}z.imssnow.grib2 does not exist!!"
+    echo "${PREPBUFR}/rap.t${cyc}z.imssnow.grib2 does not exist!!"
     echo "NOTE: no snow file available for ${cyc}z cycle!!!!"
   fi
 else
