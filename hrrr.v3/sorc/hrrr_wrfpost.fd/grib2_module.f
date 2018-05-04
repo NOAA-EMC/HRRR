@@ -901,6 +901,10 @@
         idrsnum=0
         print*,' changing to simple packing for constant fields'
        end if 
+       if((abs(maxval(datafld1)-minval(datafld1)) < 0.1) .and. (datafld1(1) > 500.0))then
+        idrsnum=0
+        print*,' changing to simple packing for constant fields: max-min < 0.1'
+       end if
 !       print *,'aft g2sec5,packingmethod=',pset%packing_method,'idrsnum=',idrsnum, &
 !         'data=',maxval(datafld1),minval(datafld1)
 !
