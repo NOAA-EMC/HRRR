@@ -194,8 +194,9 @@ program  process_NASALaRC_cloud
   index=0
 !
 !  read in the NASA LaRC cloud data
-  maxobs=(1800*700 + 1500*850)*1
+!  maxobs=(1800*700 + 1500*850)*1
   satfile='NASA_LaRC_cloud.bufr'
+  call read_NASALaRC_cloud_bufr_survey(satfile,east_time, west_time,maxobs)
   allocate(lat_l(maxobs))
   allocate(lon_l(maxobs))
   allocate(ptop_l(maxobs))
@@ -208,7 +209,6 @@ program  process_NASALaRC_cloud
   lon_l =-9.
   lwp_l =-9.
   phase_l=-9
-  call read_NASALaRC_cloud_bufr_survey(satfile,east_time, west_time)
   call read_NASALaRC_cloud_bufr(satfile,atime,east_time, west_time,   &   
             maxobs,numobs, ptop_l, teff_l, phase_l, lwp_l,lat_l, lon_l)
 
@@ -282,9 +282,8 @@ program  process_NASALaRC_cloud
                    xdist(ii,jj,index(ii,jj)) = sqrt(      &
                       (XC+1-ii)**2 + (YC+1-jj)**2)
                  else
-                   write(6,*) ' too many data in one grid, increase nfov'
+                   write(6,*) 'ALERT: too many data in one grid, increase nfov'
                    write(6,*) nfov, ii,jj
-                   stop 1234
                  end if
          endif
          enddo ! ii
@@ -522,8 +521,8 @@ subroutine read_NASALaRC_cloud_bufr(satfile,atime,east_time, west_time, &
        if(obs(6,1) < 1.e7 .and. obs(6,1) > 10.0) then
          ntb = ntb+1
          if(ntb > maxobs) then
-           write(*,*) 'Error: need to increase maxobs',maxobs, ntb
-           stop 1234
+           write(*,*) 'ALERT: need to increase maxobs',maxobs, ntb
+           ntb = maxobs
          endif
          lat(ntb)=obs(1,1)
          lon(ntb)=obs(2,1)
@@ -571,7 +570,7 @@ subroutine sortmed(p,n,is)
       return
 end subroutine sortmed
 
-subroutine read_NASALaRC_cloud_bufr_survey(satfile,east_time, west_time)
+subroutine read_NASALaRC_cloud_bufr_survey(satfile,east_time, west_time,maxobs)
 !
 !   PRGMMR: Ming Hu          ORG: GSD        DATE: 2010-07-09
 !
@@ -617,12 +616,13 @@ subroutine read_NASALaRC_cloud_bufr_survey(satfile,east_time, west_time)
 !
   CHARACTER*40, intent(in)    ::   satfile
   integer(i_kind),intent(out) :: east_time, west_time
+  integer,intent(out) :: maxobs
 
-  INTEGER ::   maxobs, numobs  ! dimension
+  INTEGER ::   numobs  ! dimension
   INTEGER(i_kind) ::  obs_time
   REAL*8      time_offset
 
-  INTEGER(i_kind),parameter :: max_obstime=10
+  INTEGER(i_kind),parameter :: max_obstime=30
   integer(i_kind) :: num_obstime_all(max_obstime)
   integer(i_kind) :: num_subset_all(max_obstime)
   integer(i_kind) :: num_obstime_hh(max_obstime)
@@ -631,6 +631,7 @@ subroutine read_NASALaRC_cloud_bufr_survey(satfile,east_time, west_time)
 !
   character*10  atime
   integer :: i,ii,hhh
+  integer :: numobs_east, numobs_west
 !
 !**********************************************************************
 !
@@ -691,13 +692,24 @@ subroutine read_NASALaRC_cloud_bufr_survey(satfile,east_time, west_time)
  DO i=1,num_obstime
    if(num_subset_all(i) > 10) then
       if(num_obstime_hh(i) == 15 .or. num_obstime_hh(i) == 45 ) then
-         if(east_time < num_obstime_all(i)) east_time=num_obstime_all(i)
+         if(east_time < num_obstime_all(i)) then
+              east_time=num_obstime_all(i)
+              numobs_east=num_subset_all(i)
+         endif
       endif
       if(num_obstime_hh(i) == 30 .or. num_obstime_hh(i) == 0 ) then
-         if(west_time < num_obstime_all(i)) west_time=num_obstime_all(i)
+         if(west_time < num_obstime_all(i)) then
+             west_time=num_obstime_all(i)
+             numobs_west=num_subset_all(i)
+         endif
       endif
    endif
  ENDDO
- write(*,*) 'east_time=',east_time
- write(*,*) 'west_time=',west_time
+ write(*,*) 'east_time and number=',east_time,numobs_east
+ write(*,*) 'west_time and number=',west_time,numobs_west
+ 
+ maxobs=numobs_west+numobs_east
+ maxobs=maxobs+int(maxobs*0.2)
+ write(*,*) 'maxobs=',maxobs
+
 end subroutine read_NASALaRC_cloud_bufr_survey
