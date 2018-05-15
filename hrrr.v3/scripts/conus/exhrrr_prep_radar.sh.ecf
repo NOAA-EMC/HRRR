@@ -154,15 +154,28 @@ fi
 
 
 # find lightning bufr file
-if [ -s $COMINlight/rap.${PDY}/rap.t${cyc}z.lghtng.tm00.bufr_d ]
-then
-  cp $COMINlight/rap.${PDY}/rap.t${cyc}z.lghtng.tm00.bufr_d ./rap.t${cyc}z.lghtng.tm00.bufr_d
-elif [ -s $COMINlight/rap_e.${PDY}/rap_e.t${cyc}z.lghtng.tm00.bufr_d ]
-then
-  cp $COMINlight/rap_e.${PDY}/rap_e.t${cyc}z.lghtng.tm00.bufr_d ./rap.t${cyc}z.lghtng.tm00.bufr_d
-else
-  echo 'No bufr file found for lightning processing'
-fi
+icnt=1
+while [ $icnt -lt 40 ]
+do
+  if [ -s $COMINlight/rap.${PDY}/rap.t${cyc}z.lghtng.tm00.bufr_d ]
+  then
+    sleep 3
+    cpreq $COMINlight/rap.${PDY}/rap.t${cyc}z.lghtng.tm00.bufr_d ./rap.t${cyc}z.lghtng.tm00.bufr_d
+    break
+  elif [ -s $COMINlight/rap_e.${PDY}/rap_e.t${cyc}z.lghtng.tm00.bufr_d ]
+  then
+    sleep 3
+    cpreq $COMINlight/rap_e.${PDY}/rap_e.t${cyc}z.lghtng.tm00.bufr_d ./rap.t${cyc}z.lghtng.tm00.bufr_d
+    break
+  fi
+  sleep 10
+  icnt=$((icnt + 1))
+  if [ $icnt -gt 36 ]
+  then
+    msg="FATAL ERROR: No bufr file found for lightning processing after 6 minutes waiting. Checking rap_dump jobs!"
+    err_exit $msg
+  fi
+done
 
 ln -s rap.t${cyc}z.lghtng.tm00.bufr_d lghtngbufr
 
