@@ -29,7 +29,6 @@ if [ $cyc -eq 00 -o $cyc -eq 06 -o $cyc -eq 12 -o $cyc -eq 18 ]; then
 else
   export FCST_LENGTH=18
 fi
-
 export OMP_NUM_THREADS=2
 
 # Set up some constants

@@ -79,7 +79,7 @@ setpdy.sh
 export COM_RAD=${COM_RAD:-${COMROOTp1}/hourly/prod}
 
 # VIIRS Greenness Fraction Data
-export GVF=${GVF:-${DCOMROOTp1}/us007003/viirs}
+export GVF=${GVF:-${DCOMROOT}/us007003/viirs}
 
 # Define cycm1 since we need land-sfc fields for previous hour
 export cycm1=`expr $cyc - 1`
@@ -101,7 +101,7 @@ mkdir -m 775 -p $COMOUT
 # Define GES directories
 ##############################################
 export gespath=${gespath:-${GESROOT}/${envir}}
-export HRRRGES_SFC=$gespath/${RUN}/hrrrges_sfc/${DOM}
+export HRRRGES_SFC=$gespath/${RUN}/hrrrges_sfc/${dom}
 
 mkdir -m 775 -p $HRRRGES_SFC
 env

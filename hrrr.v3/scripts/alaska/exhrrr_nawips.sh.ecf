@@ -55,7 +55,7 @@ while [ $fhcnt -le $fend ] ; do
   fhr3=$fhcnt
   typeset -Z3 fhr3
   GRIBIN=$COMIN/${model}.${cycle}.${GRIB}f${fhr}.ak.grib2
-  GEMGRD=${hrrrak}_${PDY}${cyc}f${fhr3}'00'
+  GEMGRD=${RUN}_${PDY}${cyc}f${fhr3}'00'
   NAGRIB=nagrib2
   GRIBIN_chk=$GRIBIN.idx
 
@@ -107,9 +107,7 @@ EOF
   gpend
 
   if [ $SENDCOM = "YES" ] ; then
-     # JY mv $GEMGRD $COMOUT/$GEMGRD
-     mv $GEMGRD $COMOUT/.${GEMGRD}
-     mv $COMOUT/.${GEMGRD} $COMOUT/${GEMGRD}
+     cpfs $GEMGRD $COMOUT/${GEMGRD}
      if [ $SENDDBN = "YES" ] ; then
        $DBNROOT/bin/dbn_alert MODEL ${DBN_ALERT_TYPE}${ALERT_EXT} $job \
            $COMOUT/$GEMGRD

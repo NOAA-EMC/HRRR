@@ -107,7 +107,7 @@ setpdy.sh
 # Define COM directories
 ##############################################
 export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMINm1=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDYm1}/${dom}}
+export COMINm1=${COMINm1:-${COMROOT}/${NET}/${envir}/${RUN}.${PDYm1}/${dom}}
 export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 
 if [ "$cyc" -lt 04 ]; then

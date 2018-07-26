@@ -22,17 +22,6 @@ export NET=${NET:-hrrr}
 export RUN=${RUN:-hrrr}
 export model=${model:-hrrr}
 
-#
-# Now set up GEMPAK/NTRANS environment
-#
-. ${NWROOTp1}/gempak/.gempak
-
-###################################
-# Load the GRIB Utilities module
-####################################
-. /opt/modules/default/init/ksh
-module load grib_util/${grib_util_ver}
-
 #####################################################################################
 # This block is for Developer's test run:
 # Run config file to get input parameters
@@ -77,6 +66,11 @@ export pgmout="OUTPUT.$$"
 export SENDSMS=${SENDSMS:-YES}
 export SENDCOM=${SENDCOM:-YES}
 export SENDDBN=${SENDDBN:-YES}
+
+## Turn off Alaska wmo alerts for now
+if [ $dom = alaska ]; then
+  export SENDDBN_NTC=NO
+fi
 export ALERT_EXT=${ALERT_EXT:-}
 
 ####################################
@@ -89,7 +83,7 @@ export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 export GEMPAKhrrr=${GEMPAKhrrr:-$HOMEhrrr/gempak}
 
-export FIXcrtm=${FIXcrtm:-${NWROOT}/lib/crtm/${crtm_ver_post}/src/fix}
+export FIXcrtm_post=${FIXcrtm_post:-${NWROOT}/lib/crtm/${crtm_ver_post}/src/fix}
 
 ###########################################
 # Run setpdy and initialize PDY variables
@@ -103,6 +97,7 @@ setpdy.sh
 export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMNAWP=${COMNAWP:-${COMOUT}/nawips}
+export WMO=${WMO:-${COMOUT}/wmo}
 
 env
 export INPUT_DATA=${DATAROOT}/hrrr_${dom}_fcst_${envir}_${cyc}

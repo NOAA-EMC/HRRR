@@ -49,11 +49,6 @@ else
   export fend=18
 fi
 
-#
-# Now set up GEMPAK/NTRANS environment
-#
-. ${NWROOTp1}/gempak/.gempak
-
 # Run setpdy and initialize PDY variables
 setpdy.sh
 . PDY
@@ -69,11 +64,15 @@ env
 
 export HOMEhrrr=${HOMEhrrr:-${NWROOT}/${NET}.${hrrr_ver}}
 export SCRIPTShrrr=${SCRIPTShrrr:-$HOMEhrrr/scripts/${dom}}
-export FIXgem=${FIXgem:-${HOMEhrrr}/gempak/fix}
+export FIXgem=${GEMPAKhrrr:-$HOMEhrrr/gempak/fix}
 
 export RUN=hrrr
 export GRIB=wrfsfc
-export DBN_ALERT_TYPE=HRRR_GEMPAK
+if [ $dom = conus ]; then
+  export DBN_ALERT_TYPE=HRRR_GEMPAK
+elif [ $dom = alaska ]; then
+  export DBN_ALERT_TYPE=HRRR_AK_GEMPAK
+fi
 export EXT=""
 export ALERT_EXT=${ALERT_EXT:-}
 

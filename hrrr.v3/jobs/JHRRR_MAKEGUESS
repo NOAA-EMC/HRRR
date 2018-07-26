@@ -22,12 +22,6 @@ export NET=${NET:-hrrr}
 export RUN=${RUN:-hrrr}
 export model=${model:-hrrr}
 
-###################################
-# Load the GRIB UTILITIES module
-####################################
-. /opt/modules/default/init/ksh
-module load grib_util/${grib_util_ver}
-
 #####################################################################################
 # This block is for Developer's test run:
 # Run config file to get input parameters
@@ -128,7 +122,7 @@ setpdy.sh
 export COM=${COM:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}}
 export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMRAP=${COMRAP:-$(compath.py rap/para)}
+export COMRAP=${COMRAP:-$(compath.py rap/prod)}
 
 mkdir -m 775 -p $COM $COMOUT
 env

@@ -95,14 +95,14 @@ if [ ${cyc} -eq ${time_updateSST} ]; then
     cp ${COMINsst}/sst.${PDY}/rtgssthr_grb_0.083.grib2 SSTRTG
     cp ${EXEChrrr}/hrrr_process_sst .
     ln -s SSTRTG latest.SST
-    runline="aprun -n 360 -N 24 ./hrrr_process_sst"
+    runline="aprun -n 240 -N 24 ./hrrr_process_sst"
     $runline >> process_sst.out
     export err=$?; err_chk
  elif [ -r "${COMINsst}/sst.${PDYm1}/rtgssthr_grb_0.083.grib2" ]; then
     cp ${COMINsst}/sst.${PDYm1}/rtgssthr_grb_0.083.grib2 SSTRTG
     cp ${EXEChrrr}/hrrr_process_sst .
     ln -s SSTRTG latest.SST
-    runline="aprun -n 360 -N 24 ./hrrr_process_sst"
+    runline="aprun -n 240 -N 24 ./hrrr_process_sst"
     $runline >> process_sst.out
     export err=$?; err_chk
   else
@@ -145,10 +145,10 @@ else
 fi
 
 #add radial velocity data
-if [ -r "${PREPDIR}/rap.${PDY}/rap.t${cyc}z.nexrad.tm00.bufr_d" ]; then
-  ln -s ${PREPDIR}/rap.${PDY}/rap.t${cyc}z.nexrad.tm00.bufr_d ./l2rwbufr
+if [ -r "${PREPBUFR}/${prepsuffix}.t${cyc}z.nexrad.tm00.bufr_d" ]; then
+  ln -s ${PREPBUFR}/${prepsuffix}.t${cyc}z.nexrad.tm00.bufr_d ./l2rwbufr
 else
-  echo "Warning: ${PREPDIR}/rap.${PDY}/rap.t${cyc}z.nexrad.tm00.bufr_d is not available"
+  echo "Warning: ${PREPBUFR}/${prepsuffix}.t${cyc}z.nexrad.tm00.bufr_d is not available"
 fi
 
 #add SATWND data
@@ -179,17 +179,17 @@ BERROR=${FIXhrrr}/hrrrak_berror_stats_global
 # SATANGL=${FIXhrrr}/hrrr_global_satangbias.txt
 SATINFO=${FIXhrrr}/hrrrak_global_satinfo.txt
 
-RTMAERO=${FIXcrtm}/AerosolCoeff.bin
-RTMCLDS=${FIXcrtm}/CloudCoeff.bin
-RTMEMIS_IRwater=${FIXcrtm}/Nalli.IRwater.EmisCoeff.bin
-RTMEMIS_IRice=${FIXcrtm}/NPOESS.IRice.EmisCoeff.bin
-RTMEMIS_IRland=${FIXcrtm}/NPOESS.IRland.EmisCoeff.bin
-RTMEMIS_IRsnow=${FIXcrtm}/NPOESS.IRsnow.EmisCoeff.bin
-RTMEMIS_VISice=${FIXcrtm}/NPOESS.VISice.EmisCoeff.bin
-RTMEMIS_VISland=${FIXcrtm}/NPOESS.VISland.EmisCoeff.bin
-RTMEMIS_VISsnow=${FIXcrtm}/NPOESS.VISsnow.EmisCoeff.bin
-RTMEMIS_VISwater=${FIXcrtm}/NPOESS.VISwater.EmisCoeff.bin
-RTMEMIS_MWwater=${FIXcrtm}/FASTEM5.MWwater.EmisCoeff.bin
+RTMAERO=${FIXcrtm_anal}/AerosolCoeff.bin
+RTMCLDS=${FIXcrtm_anal}/CloudCoeff.bin
+RTMEMIS_IRwater=${FIXcrtm_anal}/Nalli.IRwater.EmisCoeff.bin
+RTMEMIS_IRice=${FIXcrtm_anal}/NPOESS.IRice.EmisCoeff.bin
+RTMEMIS_IRland=${FIXcrtm_anal}/NPOESS.IRland.EmisCoeff.bin
+RTMEMIS_IRsnow=${FIXcrtm_anal}/NPOESS.IRsnow.EmisCoeff.bin
+RTMEMIS_VISice=${FIXcrtm_anal}/NPOESS.VISice.EmisCoeff.bin
+RTMEMIS_VISland=${FIXcrtm_anal}/NPOESS.VISland.EmisCoeff.bin
+RTMEMIS_VISsnow=${FIXcrtm_anal}/NPOESS.VISsnow.EmisCoeff.bin
+RTMEMIS_VISwater=${FIXcrtm_anal}/NPOESS.VISwater.EmisCoeff.bin
+RTMEMIS_MWwater=${FIXcrtm_anal}/FASTEM5.MWwater.EmisCoeff.bin
 
 CONVINFO=${FIXhrrr}/hrrrak_nam_regional_convinfo
 OZINFO=${FIXhrrr}/hrrrak_global_ozinfo.txt    
@@ -232,8 +232,8 @@ ln -s $RTMEMIS_MWwater ./FASTEM5.MWwater.EmisCoeff.bin
 
 # Copy CRTM coefficient files based on entries in satinfo file
 for file in `awk '{if($1!~"!"){print $1}}' ./satinfo | sort | uniq` ;do 
-   ln -s ${FIXcrtm}/${file}.SpcCoeff.bin ./
-   ln -s ${FIXcrtm}/${file}.TauCoeff.bin ./
+   ln -s ${FIXcrtm_anal}/${file}.SpcCoeff.bin ./
+   ln -s ${FIXcrtm_anal}/${file}.TauCoeff.bin ./
 done
 
 # Only need this file for single obs test
@@ -283,8 +283,9 @@ export pgm=hrrr_gsi
 
 #startmsg
 cp ${EXEChrrr}/hrrr_gsi .
-runline="aprun -j1 -cc depth -n 180 -N 12 -d 2 ./hrrr_gsi"
+runline="aprun -n 120 -N 12 -d2 -cc depth ./hrrr_gsi"
 $runline < gsiparm.anl >> $DATA/$pgmout 2>errfile
+export err=$?; err_chk
 
 # Loop over first and last outer loops to generate innovation
 # diagnostic files for indicated observation types (groups)
@@ -350,9 +351,9 @@ $gsi_namelist
 EOF
 
 export pgm=hrrr_gsi
-startmsg
+#startmsg
 cp ${EXEChrrr}/hrrr_gsi .
-runline="aprun -j1 -cc depth -n 180 -N 12 -d 2 ./hrrr_gsi"
+runline="aprun -n 120 -N 12 -d2 -cc depth ./hrrr_gsi"
 $runline < gsiparm.anl >> $DATA/$pgmout 2>errfile
 export err=$?; err_chk
 
@@ -366,7 +367,7 @@ if [ ${cyc} -eq ${trim_snow} ]; then
      cp ${PREPBUFR}/rap.t${cyc}z.imssnow.grib2 ./imssnow2
      cp ${FIXhrrr}/hrrrak_geo_em.d01.nc ./geo_em.d01.nc
      cp ${EXEChrrr}/hrrr_process_imssnow .
-     runline="aprun -n 360 -N 24 ./hrrr_process_imssnow"
+     runline="aprun -n 240 -N 24 ./hrrr_process_imssnow"
      $runline
      export err=$?; err_chk
   else

@@ -22,6 +22,7 @@ export EXT=$4
 export 'PS4=$RUN:$SECONDS + '
 
 cd $DATA
+# JY $utilscript/setup.sh
 
 NAGRIB_TABLE=${NAGRIB_TABLE:-${NWROOTp1}/gempak/fix/nagrib.tbl}
 NAGRIB=nagrib2
@@ -106,9 +107,7 @@ EOF
   gpend
 
   if [ $SENDCOM = "YES" ] ; then
-     # JY mv $GEMGRD $COMOUT/$GEMGRD
-     mv $GEMGRD $COMOUT/.${GEMGRD}
-     mv $COMOUT/.${GEMGRD} $COMOUT/${GEMGRD}
+     cpfs $GEMGRD $COMOUT/.
      if [ $SENDDBN = "YES" ] ; then
        $DBNROOT/bin/dbn_alert MODEL ${DBN_ALERT_TYPE}${ALERT_EXT} $job \
            $COMOUT/$GEMGRD

@@ -92,6 +92,7 @@ export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMNAWP=${COMAWP:-${COMOUT}/nawips}
 mkdir -m 775 -p $COMNAWP
 
+export PROFDIR=${DATAROOT}/hrrr_wrfbufr_${dom}_${envir}_${cyc}_f${fhr}
 env
 
 ########################################################
@@ -108,7 +109,7 @@ postmsg "$jlogfile" "$msg"
 # Remove the Temporary working directory
 ##############################
 cd $DATA
-#if [ ${KEEPDATA} = NO ] ; then rm -rf $DATA ; fi
+if [ ${KEEPDATA} = NO ] ; then rm -rf $DATA ; fi
 
 date
 

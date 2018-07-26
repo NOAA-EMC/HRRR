@@ -23,12 +23,6 @@ export NET=${NET:-hrrr}
 export RUN=${RUN:-hrrr}
 export model=${model:-hrrr}
 
-###################################
-# Load the GRIB Utilities module
-####################################
-. /opt/modules/default/init/ksh
-module load grib_util/${grib_util_ver}
-
 #####################################################################################
 # This block is for Developer's test run:
 # Run config file to get input parameters
@@ -69,6 +63,12 @@ export pgmout="OUTPUT.$$"
 export SENDECF=${SENDECF:-YES}
 export SENDCOM=${SENDCOM:-YES}
 export SENDDBN=${SENDDBN:-YES}
+
+#Turn off Alaska wmo alerts for now
+if [ $dom = alaska ]; then
+  export SENDDBN_NTC=NO
+fi
+
 export ALERT_EXT=${ALERT_EXT:-}
 
 ####################################
@@ -80,7 +80,7 @@ export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 export FIXgem=${FIXgem:-${HOMEhrrr}/gempak/fix}
-export FIXcrtm=${FIXcrtm:-${NWROOT}/lib/crtm/${crtm_ver_post}/src/fix}
+export FIXcrtm_post=${FIXcrtm_post:-${NWROOT}/lib/crtm/${crtm_ver_post}/src/fix}
 
 ###########################################
 # Run setpdy and initialize PDY variables

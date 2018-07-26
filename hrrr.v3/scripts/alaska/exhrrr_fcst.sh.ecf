@@ -20,7 +20,12 @@ set -x
 AWK="/bin/gawk --posix"
 DATE=/bin/date
 export FCST_INTERVAL=3
-export FCST_LENGTH=1
+if [ $cyc -eq 00 -o $cyc -eq 06 -o $cyc -eq 12 -o $cyc -eq 18 ]; then
+  export FCST_LENGTH=36
+else
+  export FCST_LENGTH=18
+fi
+
 export OMP_NUM_THREADS=2
 
 # Set up some constants
@@ -217,8 +222,10 @@ now=`${DATE} +%Y%m%d%H%M%S`
 
 # Run wrf
 startmsg
-cp ${EXEChrrr}/hrrr_wrfarw_fcst hrrr_wrfarw
-runline="aprun -n 1116 -N 12 -d2 -cc depth ./hrrr_wrfarw"
+#XXW cp ${EXEChrrr}/hrrr_wrfarw_fcst hrrr_wrfarw
+cp ${EXEChrrr}/hrrr_wrfarw_fcst .
+#XXW runline="aprun -n 1116 -N 12 -d2 -cc depth ./hrrr_wrfarw"
+runline="aprun -n 1008 -N 12 -d2 -cc depth ./hrrr_wrfarw_fcst : -n 288 -N 12 ./hrrr_wrfarw_fcst"
 $runline
 export err=$?; err_chk
 

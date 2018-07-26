@@ -42,7 +42,11 @@ else
 fi
 
 # Insert land surface variables into the wrf_inout file
+if [ $cyc -eq 0 ]; then
+START_TIME=$PDYm1$cycm1
+else
 START_TIME=$PDY$cycm1
+fi
 counter=1
 while [[ $counter -lt 36 ]]; do
   counterhr=$counter

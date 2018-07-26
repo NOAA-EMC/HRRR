@@ -118,8 +118,8 @@ ln -s $DATA/profilm.c1.tm00 fort.79
 datestr=`date`
 echo about to run program at $datestr
 
-startmsg
-cp ${EXEChrrr}/hrrr_wrfbufr .
+#startmsg
+cp ${EXEChrrr}/hrrr_wrfbufr_${dom} hrrr_wrfbufr
 runline="aprun -n 1 -N 1 ./hrrr_wrfbufr"
 $runline
 export err=$?; err_chk

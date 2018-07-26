@@ -78,7 +78,7 @@ export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 
-export FIXcrtm=${FIXcrtm:-${NWROOT}/lib/crtm/${crtm_ver_analysis}/fix}
+export FIXcrtm_anal=${FIXcrtm_anal:-${NWROOT}/lib/crtm/${crtm_ver_analysis}/fix}
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
@@ -91,10 +91,10 @@ setpdy.sh
 export COM=${COM:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}}
 export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMINsst=${COMINgfs:-$(compath.py gfs/prod)}
-export PREPDIR=${PREPDIR:-${COMROOT}/rap/para}
-export COMRAP=${COMRAP:-${COMROOT}/rap/para}
-export COMRAP_E=${COMRAP_E:-${COMROOT}/rap/para}
+export COMINsst=${COMINsst:-${COMROOTp2}/gfs/prod}
+export PREPDIR=${PREPDIR:-${COMROOT}/rap/prod}
+export COMRAP=${COMRAP:-${COMROOT}/rap/prod}
+export COMRAP_E=${COMRAP_E:-${COMROOT}/rap/prod}
 export PREPDIR2=${PREPDIR2:-${COMIN}}
 
 export gespath=${gespath:-$GESROOT/${envir}}
@@ -119,7 +119,7 @@ postmsg "$jlogfile" "$msg"
 # Remove the Temporary working directory
 ##############################
 cd $DATA
-if [ ${KEEPDATA} = NO ] ; then rm -rf $DATA ; fi
+if [ ${KEEPDATA} = NO -a $dom = conus ] ; then rm -rf $DATA ; fi
 
 date
 

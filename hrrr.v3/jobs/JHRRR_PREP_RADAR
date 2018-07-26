@@ -39,7 +39,7 @@ date
 ########################################################
 # obtain unique process id (pid) and make temp directory
 ########################################################
-export DATA=${DATAROOT}/hrrr_prep_radar_${envir}_${cyc}
+export DATA=${DATAROOT}/hrrr_${dom}_prep_radar_${envir}_${cyc}
 if [ ! -d $DATA ]; then
   mkdir -p $DATA
 fi
