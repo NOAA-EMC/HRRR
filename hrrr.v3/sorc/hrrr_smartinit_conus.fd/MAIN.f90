@@ -194,7 +194,9 @@
        write(0,*) 'minval Q2 after bitmap',minval(downq)
        write(0,*) 'maxval Q2 after bitmap',maxval(downq) 
 
-       DEC=3.0
+! Change precision of specific humidity
+!      DEC=3.0
+       DEC=6.0
        GFLD%ibmap=0
        GFLD%bmap=BITMAP
 
@@ -290,7 +292,9 @@
          ENDIF
        ENDDO
 
-       DEC=3.0
+! Need more precision for downscaled pressure
+!      DEC=3.0
+       DEC=6.0
        GFLD%ibmap=0
        GFLD%bmap=BITMAP
 
@@ -322,7 +326,8 @@
 !      Write sea level pressure to grib2
 !-----------------------------------------
 
-       DEC=3.0
+!      DEC=6.0
+       DEC=-0.1
        GFLD%bmap=GFLD8%bmap
 
        CALL FILL_FLD(GFLD,ITOT,IM,JM,SLP)
@@ -354,7 +359,8 @@
 !-----------------------------------------
 !      Write surface wind gust to grib2
 !-----------------------------------------
-       DEC=3.0
+!      DEC=3.0
+       DEC=-4.0
        GFLD%bmap=GFLD8%bmap
 
        CALL FILL_FLD(GFLD,ITOT,IM,JM,WGUST)

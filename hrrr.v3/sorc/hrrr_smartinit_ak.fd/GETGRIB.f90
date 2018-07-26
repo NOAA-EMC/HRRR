@@ -1,6 +1,6 @@
       SUBROUTINE GETGRIB(PSFC,ZSFC,PMID,HGHT,T,Q,UWND,VWND, &
         T2,Q2,D2,U10,V10,COAST,GUST,VIS,TCLD,BASEZ, &
-        CEIL,PMSL,VALIDPT,DATE,IFHR,GDIN,GFLD,GFLD8)
+        CEIL,PMSL,SFCR,VALIDPT,DATE,IFHR,GDIN,GFLD,GFLD8)
         
        use grddef
        use rdgrib
@@ -56,7 +56,7 @@
        T2(ILIM,JLIM),Q2(ILIM,JLIM),D2(ILIM,JLIM),COAST(ILIM,JLIM), &
        U10(ILIM,JLIM),V10(ILIM,JLIM),HGHT(ILIM,JLIM,MAXLEV), &
        VIS(ILIM,JLIM),GUST(ILIM,JLIM),BASEZ(ILIM,JLIM), &
-       CEIL(ILIM,JLIM),TCLD(ILIM,JLIM),PMSL(ILIM,JLIM)
+       CEIL(ILIM,JLIM),TCLD(ILIM,JLIM),PMSL(ILIM,JLIM),SFCR(ILIM,JLIM)
       TYPE(GRIBFIELD)::GFLD,GFLD_S,GFLD8,GFLD8_S
 !
 !      allocate(grid(itot))
@@ -149,6 +149,9 @@
                     ISSREF,IRET,ISTAT)
        J=K
 
+       print*,'minval hght',minval(hght(:,:,ll))
+       print*,'maxval hght',maxval(hght(:,:,ll))
+
       ENDDO
 
 !   get the vertical profile of temperature
@@ -188,6 +191,8 @@
        CALL SETVAR_g2(LUGB,LUGI,NUMVAL,J,JDISC,JIDS,JPDTN,JPDT,JGDTN, &   
                     JGDT,KF,K,KPDS,KGDS,MASK,GRID,Q(:,:,LL),GFLD, &
                     ISSREF,IRET,ISTAT)
+        print*,'minval q',minval(q(:,:,LL))
+        print*,'maxval q',maxval(q(:,:,LL))
        J=K
 
       ENDDO
@@ -327,6 +332,21 @@
                      ISSREF,IRET,ISTAT)
        print*,'minval v10',minval(v10)
        print*,'maxval v10',maxval(v10)
+
+! SFCR (Surface Roughness)
+
+       JDISC = 2
+       JPDT(1) = 0
+       JPDT(2) = 001
+       JPDT(10) = 001
+       JPDT(12) = 000
+       J=0
+
+      CALL SETVAR_g2(LUGB,LUGI,NUMVAL,J,JDISC,JIDS,JPDTN,JPDT,JGDTN,JGDT,KF,K,&
+                     KPDS,KGDS,MASK,GRID,SFCR,GFLD,ISSREF,IRET,ISTAT)
+
+        write(0,*) 'SFCR(1,1): ', SFCR(1,1)
+        print*,'minval(sfcr),maxval(sfcr):',minval(sfcr),maxval(sfcr)
 
 !   vegetation fraction (actually vegetation type...)
       JDISC = 2

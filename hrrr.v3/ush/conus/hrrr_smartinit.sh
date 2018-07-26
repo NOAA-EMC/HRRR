@@ -36,7 +36,9 @@ ${WGRIB2} WRFNAT${fhr}.tm00 | grep -F -f hrrr_smartnatparams | ${WGRIB2} -i -gri
 ${GRB2INDEX} hrrr_natgrd.tm00 grib2file_index 
 
 export wgrib2def="lambert:265:25.0:25.0 238.445999:2145:2539.703 20.191999:1377:2539.703"
-${WGRIB2} hrrr_natgrd.tm00 -set_grib_type c3 -set_bitmap 1 -new_grid_winds grid -new_grid_interpolation bilinear -new_grid ${wgrib2def} hrrr.NDFDCSf${fhr}.grib2
+${WGRIB2} hrrr_natgrd.tm00 -set_grib_type c3 -set_bitmap 1 -new_grid_winds grid -new_grid_interpolation bilinear \
+          -if "`cat ${PARMhrrr}/hrrr_smart_neighbor_fields.txt`" -new_grid_interpolation neighbor -fi \
+          -new_grid ${wgrib2def} hrrr.NDFDCSf${fhr}.grib2
 
 mv hrrr.NDFDCSf${fhr}.grib2 hrrr.NDFDCSf${fhr}
 ${GRB2INDEX} hrrr.NDFDCSf${fhr} hrrr.NDFDCSf${fhr}I

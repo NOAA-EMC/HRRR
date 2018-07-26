@@ -36,7 +36,9 @@ ${GRB2INDEX} hrrr_natgrd.tm00 grib2file_index
 #export  wgrib2def="nps:210:60 181.429:1649:2976.563 40.530101:1105:2976.563"
 export wgrib2def="nps:210.000000:60.000000 181.429000:1649:2976.563000 40.530101:1105:2976.563000"
 
-${WGRIB2} hrrr_natgrd.tm00 -set_grib_type c3 -set_bitmap 1 -new_grid_winds grid -new_grid_interpolation bilinear -new_grid ${wgrib2def} hrrr.NDFDAKf${fhr}.grib2
+${WGRIB2} hrrr_natgrd.tm00 -set_grib_type c3 -set_bitmap 1 -new_grid_winds grid -new_grid_interpolation bilinear \
+          -if "`cat ${PARMhrrr}/hrrrak_smart_neighbor_fields.txt`" -new_grid_interpolation neighbor -fi \
+          -new_grid ${wgrib2def} hrrr.NDFDAKf${fhr}.grib2
 
 mv hrrr.NDFDAKf${fhr}.grib2 hrrr.NDFDAKf${fhr}
 ${GRB2INDEX} hrrr.NDFDAKf${fhr} hrrr.NDFDAKf${fhr}I
@@ -58,7 +60,6 @@ rm -rf smart.ksh
 varEOF=EOF
 cat > smart.ksh <<EOF
 #!/bin/ksh -l
-#/gpfs/hps3/emc/meso/save/$USER/nwprod2/hrrr.v3.0.0/exec/hrrr_smartinit_ak <<EOF >> smartinitak.out${fhr}
 $EXEChrrr/hrrr_smartinit_ak <<EOF >> smartinitak.out${fhr}
 $fhr
 $cyc
