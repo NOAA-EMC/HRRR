@@ -1,0 +1,42 @@
+C-------------------------------------------------------------
+C***  SET PRIMARY GRID DIMENSIONS AND PRESSURE OUTPUT LEVELS
+c      PARAMETER (IM=73,JM=60,LM=27,LSM=39)
+C west08 domain      PARAMETER (IM=332,JM=371,LM=59,LSM=39)
+c      PARAMETER (IM=342,JM=210,LM=41,LSM=39)
+C  Hawaii native domain
+c      PARAMETER (IM=89,JM=143,LM=60,LSM=39)
+c ncar west 10
+c      PARAMETER (IM=269,JM=298,LM=50,LSM=39)
+c ncar west 08
+c      PARAMETER (IM=223,JM=501,LM=60,LSM=39)
+c ops 12 km
+c      PARAMETER (IM=606,JM=1067,LM=60,LSM=39)
+c Ligia's WRF em experiment 
+c      PARAMETER (IM=329,JM=229,LM=36,LSM=39)
+C WRF NMM domain
+c      PARAMETER (IM=223,JM=501,LM=60,LSM=39)
+C WRF CMAQ 
+C      PARAMETER (IM=419,JM=768,LM=60,LSM=39)
+C 32Km SREF em
+C      PARAMETER (IM=299,JM=249,LM=35,LSM=39)
+C DWFE NCAR
+C      PARAMETER (IM=1009,JM=719,LM=37,LSM=39)
+C DWFE NMM
+c      PARAMETER (IM=719,JM=1019,LM=37,LSM=39)
+C NCAR daily 22 km run
+c      PARAMETER (IM=259,JM=163,LM=27,LSM=39)
+C WRF DTC tutorial case
+c      PARAMETER (IM=123,JM=201,LM=60,LSM=39)
+C WRF launcher domain=Matt's parallel run domain
+CZhou            PARAMETER (IM=309,JM=210,LM=28,LSM=39)  !GRIB-221 for RSM
+
+C 32km SREF WRF-NCAR
+C       PARAMETER (IM=238,JM=193,LM=35,LSM=39)    !here IM, JM, LM is layers, not levels. Levels = LM+1
+C 32km SREF WRF-NMM
+C       PARAMETER (IM=185,JM=315,LM=50,LSM=39)    !here IM, JM, LM is layers, not levels. Levels = LM+1
+
+        PARAMETER (NSOIL=6,NROOT=3)
+
+   
+C
+C-------------------------------------------------------------

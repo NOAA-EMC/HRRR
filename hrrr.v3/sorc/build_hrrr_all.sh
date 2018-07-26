@@ -21,7 +21,8 @@ export BUILD_hrrr_process_lightning=yes
 export BUILD_hrrr_update_gvf=yes
 export BUILD_hrrr_ref2tten=yes
 export BUILD_hrrr_sndp=yes
-export BUILD_hrrr_wrfbufr=yes
+export BUILD_hrrr_wrfbufr_conus=yes
+export BUILD_hrrr_wrfbufr_alaska=yes
 export BUILD_hrrr_stnmlist=yes
 export BUILD_hrrr_smartinit_conus=yes
 export BUILD_hrrr_smartinit_ak=yes
@@ -189,10 +190,19 @@ fi
 
 ##############################
 
-if [ $BUILD_hrrr_wrfbufr = yes ] ; then
+if [ $BUILD_hrrr_wrfbufr_conus = yes ] ; then
 
-echo " .... Building hrrr_wrfbufr .... "
-$BASE/build_hrrr_wrfbufr.sh > $logs_dir/build_wrfbufr.log 2>&1
+echo " .... Building hrrr_wrfbufr_conus .... "
+$BASE/build_hrrr_wrfbufr_conus.sh > $logs_dir/build_wrfbufr_conus.log 2>&1
+
+fi
+
+##############################
+
+if [ $BUILD_hrrr_wrfbufr_alaska = yes ] ; then
+
+echo " .... Building hrrr_wrfbufr_alaska .... "
+$BASE/build_hrrr_wrfbufr_alaska.sh > $logs_dir/build_wrfbufr_alaska.log 2>&1
 
 fi
 

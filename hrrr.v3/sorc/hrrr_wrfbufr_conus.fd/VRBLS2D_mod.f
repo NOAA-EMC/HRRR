@@ -1,0 +1,23 @@
+      module vrbls2d
+      real, allocatable ::
+     & U10   (:,:),AKMS  (:,:),AKHS  (:,:),THS   (:,:),QS(:,:)
+     &,UZ0(:,:),VZ0(:,:),THZ0(:,:),QZ0(:,:)
+     &,SNO   (:,:),TSHLTR   (:,:),QSHLTR(:,:)
+     &,V10(:,:),ACPREC(:,:),CUPREC(:,:),ANCPRC(:,:),CUPPT(:,:)
+     &,SMSTAV(:,:),SSROFF(:,:),BGROFF(:,:),VEGFRC(:,:)
+     &,ACSNOW(:,:),ACSNOM(:,:),CMC(:,:),SST(:,:)
+     &,RSWIN(:,:),RLWIN(:,:),RLWTOA(:,:)
+     &,TG(:,:),SFCSHX(:,:),PSLP(:,:)
+     &,SFCLHX(:,:),FIS(:,:),T500(:,:),Z1000(:,:),SLP(:,:)
+     &,CFRACL(:,:),CFRACM(:,:),CFRACH(:,:),ACFRST(:,:)
+     &,ACFRCV(:,:),NCFRST(:,:),NCFRCV(:,:),HBOT(:,:)
+     &,HTOP(:,:),ASWIN(:,:),ALWIN(:,:),ASWOUT(:,:)
+     &,ALWOUT(:,:),ASWTOA(:,:),ALWTOA(:,:),CZEN(:,:)
+     &,CZMEAN(:,:),SIGT4(:,:),RSWOUT(:,:),RADOT(:,:)
+     &,SMSTOT(:,:),PCTSNO(:,:),PSHLTR(:,:),TH10(:,:)
+     &,Q10(:,:),SR(:,:),PREC(:,:),SUBSHX(:,:)
+     &,SNOPCX(:,:),SFCUVX(:,:),SFCEVP(:,:),POTEVP(:,:)
+     &,Z0(:,:),USTAR(:,:),TWBS(:,:),QWBS(:,:)
+     &,SFCEXC(:,:),GRNFLX(:,:),SOILTB(:,:),F(:,:)
+     &,CPRATE(:,:)
+      end module vrbls2d
