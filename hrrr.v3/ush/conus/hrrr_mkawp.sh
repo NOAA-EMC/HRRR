@@ -39,7 +39,7 @@ then
     cp xtrn.${cycle}.hrrr${fhr} $WMO/grib2.t${cyc}z.awphrrr184_f${fhr}_${cyc}
   fi
 
-  if test "$SENDDBN" = 'YES'
+  if [ $SENDDBN_NTC = YES -a $fhr -le 18 ]
   then
 #    $DBNROOT/bin/dbn_alert MODEL NTC_LOW${ALERT_EXT} $job $WMO/grib2.${cycle}.awphrrr184_f${fhr}_${cyc} 
     $DBNROOT/bin/dbn_alert NTC_LOW $NET $job $WMO/grib2.${cycle}.awphrrr184_f${fhr}_${cyc} 

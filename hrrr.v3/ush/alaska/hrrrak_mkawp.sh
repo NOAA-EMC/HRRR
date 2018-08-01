@@ -31,7 +31,7 @@ then
   export FORT12=hrrrak.t${cyc}z.ndfdf${fhr}.grib2i
   export FORT51=xtrn.${cycle}.hrrr${fhr}
 
-  $TOCGRIB2 <$PARMutil/grib2_awips_hrrrakf${fhr}.91  parm='KWBY' >> $pgmout 2> errfile
+  $TOCGRIB2 <$PARMhrrr/wmo/grib2_awips_hrrrakf${fhr}.91  parm='KWBY' >> $pgmout 2> errfile
   err=$?;export err ;err_chk
 
   if test "$SENDCOM" = 'YES'
@@ -39,7 +39,7 @@ then
     cp xtrn.${cycle}.hrrr${fhr} $WMO/grib2.t${cyc}z.awphrrr91_f${fhr}_${cyc}
   fi
 
-  if test "$SENDDBN" = 'YES'
+  if test "$SENDDBN_NTC" = 'YES'
   then
 #    $DBNROOT/bin/dbn_alert MODEL NTC_LOW${ALERT_EXT} $job $WMO/grib2.${cycle}.awphrrr91_f${fhr}_${cyc} 
     $DBNROOT/bin/dbn_alert NTC_LOW $NET $job $WMO/grib2.${cycle}.awphrrr91_f${fhr}_${cyc} 

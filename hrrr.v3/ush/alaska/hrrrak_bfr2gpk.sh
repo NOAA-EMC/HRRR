@@ -26,7 +26,7 @@ export INFILE
 
 #  Set output directory:
 
-outfilbase=hrrrak_${PDY}${cyc}
+outfilbase=hrrr_${PDY}${cyc}
 
 namsnd << EOF > /dev/null
 SNBUFR   = $INFILE
@@ -53,7 +53,7 @@ mv $COMNAWP/.$sfc $COMNAWP/$sfc
 mv $COMNAWP/.$aux $COMNAWP/$aux
 
 if [ "$SENDDBN" = 'YES' ] ; then
-  $DBNROOT/bin/dbn_alert MODEL SFC_HRRR${ALERT_EXT} $job $COMNAWP/$sfc
-  $DBNROOT/bin/dbn_alert MODEL SFC_HRRR${ALERT_EXT} $job $COMNAWP/$aux
-  $DBNROOT/bin/dbn_alert MODEL SND_HRRR${ALERT_EXT} $job $COMNAWP/$snd
+  $DBNROOT/bin/dbn_alert MODEL SFC_HRRR_AK${ALERT_EXT} $job $COMNAWP/$sfc
+  $DBNROOT/bin/dbn_alert MODEL SFC_HRRR_AK${ALERT_EXT} $job $COMNAWP/$aux
+  $DBNROOT/bin/dbn_alert MODEL SND_HRRR_AK${ALERT_EXT} $job $COMNAWP/$snd
 fi
