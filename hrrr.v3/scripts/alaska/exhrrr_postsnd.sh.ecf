@@ -69,7 +69,7 @@ fi
 #Send bufr file
 if test "$SENDDBN" = 'YES'
   then
-   $DBNROOT/bin/dbn_alert MODEL HRRR_BUFRSND${ALERT_EXT} $job $COMOUT/hrrr.t${cyc}z.class1.bufr.ak.${tmmark}
+   $DBNROOT/bin/dbn_alert MODEL HRRR_AK_BUFRSND${ALERT_EXT} $job $COMOUT/hrrr.t${cyc}z.class1.bufr.ak.${tmmark}
 fi
 ### break out bufr file into individual station files
  cat <<EOF > stnmlist_input
@@ -100,7 +100,7 @@ fi
 #Send the alerts
 if test "$SENDDBN" = 'YES'
   then
-   $DBNROOT/bin/dbn_alert MODEL HRRR_BUFRSND_TAR${ALERT_EXT} $job ${COMOUT}/hrrr.${cycle}.bufrsnd.tar.ak.gz
+   $DBNROOT/bin/dbn_alert MODEL HRRR_AK_BUFRSND_TAR${ALERT_EXT} $job ${COMOUT}/hrrr.${cycle}.bufrsnd.tar.ak.gz
 fi
 
 # make gempak files
