@@ -41,7 +41,7 @@
       INTEGER :: JDISC,JPDTN,JGDTN,LPOS
       INTEGER,DIMENSION(:) :: KPDS(200),KGDS(200)
       INTEGER,DIMENSION(:) :: JIDS(200),JPDT(200),JGDT(200)
-      real zs,qv,qq,t1,e,enl,dwpt,z6,t6,gam,gamd,gami,tsfc,td
+      real zs,qv,qq,t1,e,enl,dwpt,z5,t5,gam,gamd,gami,tsfc,td
       real const,tddep,td_orig,zdif_max,tup, qvdif2m5m,qv2m
       real qc,qvc,thetavc,uc,vc,ratio,speed,speedc,frac
       real tmean,dz,theta1,theta6
@@ -125,7 +125,7 @@
           STOP 'STOP - Input terrain has higher elevation than &
             maximum model level read in.  Input additional model levels'
         endif
-110   continue 
+110   continue
 
         do j=1,jm
         do i=1,im
@@ -195,19 +195,22 @@
           qv = qq/(1.-qq)
 !          qvdif2m5m = qv2m - psfc(i,j)
 
-!      ---   get values at level 6 for lapse rate calculations
+!      ---   get values at level 5 for lapse rate calculations
 
-          QQ = Q(I,J,6)/(1.+Q(i,j,6))
+          QQ = Q(I,J,5)/(1.+Q(i,j,5))
 
-          exn(i,j) = cpd_p*(p(i,j,6)/P1000)**rovcp_p
-!          theta6=((P1000/P(I,J,6))**CAPA)*T(I,J,6)
-!          T6 = theta6*EXN(i,j)/(CPD_P*(1.+0.6078*QQ))
-!          T6 = theta6*EXN(i,j)/CPD_P
+          exn(i,j) = cpd_p*(p(i,j,5)/P1000)**rovcp_p
+!          theta5=((P1000/P(I,J,5))**CAPA)*T(I,J,5)
+!          T5 = theta5*EXN(i,j)/(CPD_P*(1.+0.6078*QQ))
+!          T5 = theta5*EXN(i,j)/CPD_P
 
-          T6=T(I,J,6)
+! --- Change the lapse rate calculation to use 5 model levels (~300 m)
+! --- instead of 6 model levels (~460 m).
+
+          T5=T(I,J,5)
           Z1=Z(I,J,1)
-          Z6=Z(I,J,6)
-          GAM = (T1-T6)/(Z6-Z1)
+          Z5=Z(I,J,5)
+          GAM = (T1-T5)/(Z5-Z1)
 
 !============================================
           if (topo_ndfd(i,j).le.zs ) then
@@ -259,7 +262,9 @@
 !         Here, when topo-NDFD > topo-RAP, we allow a small
 !        subisothermal lapse rate with slight warming with height.
 
-          GAM = MIN(GAMD,MAX(GAM,GAMsubj))
+!         GAM = MIN(GAMD,MAX(GAM,GAMsubj))
+! Constrain local lapse rate to be between dry adiabatic and isothermal
+          GAM = MIN(GAMD,MAX(GAM,GAMi))
 
           DO K=1,LM
            if (z(i,j,k) .gt. topo_ndfd(i,j)) go to 781
@@ -291,15 +296,15 @@
            qc = qvc/(1.+qvc)
           endif
 ! --- temperature
-          tup = thetavc*(pnew(i,j)/P1000)**rovcp_p / (1.+0.6078*qc)
+!         tup = thetavc*(pnew(i,j)/P1000)**rovcp_p / (1.+0.6078*qc)
 !          tup=thetavc
-          alttup=t2(i,j)+frac*(t(i,j,k)-t2(i,j))
+!         alttup=t2(i,j)+frac*(t(i,j,k)-t2(i,j))
 
 ! original temperature computation
 !         alttup=tup
             
 !  provisional 2m temp at NDFD topo
-          tnew(i,j) = t2(i,j) + (alttup-t1)
+!         tnew(i,j) = t2(i,j) + (alttup-t1)
 
 !         zdiff = abs(topo_ndfd(i,j)-zs)
 !         if(zdiff .le. 1.0)then
@@ -317,8 +322,14 @@
 
           tsfc=t2(i,j) + (zs-topo_ndfd(i,j))*gam
 
+!         if (tnew(i,j) .gt. t2(i,j)) then
+!          tnew(i,j) = min(tnew(i,j),tsfc)
+!         endif
+
+! lapse rate suggestion from Guoqing
+          tnew(i,j)=tsfc
           if (tnew(i,j) .gt. t2(i,j)) then
-           tnew(i,j) = min(tnew(i,j),tsfc)
+           tnew(i,j) = t2(i,j)
           endif
 
            qv=q2(i,j)

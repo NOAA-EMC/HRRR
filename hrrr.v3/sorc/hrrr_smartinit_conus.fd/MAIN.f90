@@ -111,7 +111,8 @@
          ENDIF
        ENDDO
 
-       DEC=-2.0
+       DEC=-4.0
+!      DEC=-2.0
 !       GFLD%ibmap=255
        GFLD%ibmap=0
        GFLD%bmap=BITMAP
@@ -158,7 +159,8 @@
          ENDIF
        ENDDO
 
-       DEC=-2.0
+       DEC=-4.0
+!      DEC=-2.0
        GFLD%ibmap=0
        GFLD%bmap=BITMAP
 
