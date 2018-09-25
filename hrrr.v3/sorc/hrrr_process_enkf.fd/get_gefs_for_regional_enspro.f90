@@ -1,4 +1,4 @@
-subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
+subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem,jcap_ens)
 !$$$  subprogram documentation block
 !                .      .    .                                       .
 ! subprogram:    get_gefs_for_regionl  read gefsozone for regional
@@ -81,6 +81,7 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
   implicit none
 
   logical, intent(in) :: enpert4arw,wrt_pert_sub,wrt_pert_mem
+  integer(i_kind),intent(in) :: jcap_ens
   type(sub2grid_info) grd_gfs,grd_mix,grd_gfst,grd_arw
   type(get_wrf_mass_ensperts_class) :: wrf_mass_ensperts
   type(spec_vars) sp_gfs
@@ -257,7 +258,15 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
      nlat_gfs=sighead%latf+2
      nlon_gfs=sighead%lonf
      nsig_gfs=sighead%levs
-     jcap_gfs=sighead%jcap
+     if(sighead%jcap > 0)then
+        jcap_gfs=sighead%jcap
+     else if(jcap_ens > 0)then
+        jcap_gfs=jcap_ens
+     else
+        write(6,*)'ERROR jcap is undefined'
+        call stop2(555)
+     endif
+
      if (allocated(vcoord))     deallocate(vcoord)
      allocate(vcoord(nsig_gfs+1,3,2))
      vcoord(1:nsig_gfs+1,1:sighead%nvcoord,1)=sighead%vcoord(1:nsig_gfs+1,1:sighead%nvcoord)
@@ -301,7 +310,14 @@ subroutine get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
      nlat_gfs=latb+2
      nlon_gfs=lonb
      nsig_gfs=levs
-     jcap_gfs=jcap
+     if(jcap > 0)then
+        jcap_gfs=jcap
+     else if(jcap_ens > 0)then
+        jcap_gfs=jcap_ens
+     else
+        write(6,*)'ERROR jcap is undefined'
+        call stop2(555)
+     endif
 
      if (allocated(vcoord))     deallocate(vcoord)
      allocate(vcoord(nsig_gfs+1,3,2))
