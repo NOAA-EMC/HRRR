@@ -128,6 +128,13 @@ runline="aprun -n 48 -N 24 ./hrrr_wrfpost"
 $runline
 err=$?;export err ;err_chk
 
+mv WRFPRS${fhr}.tm00 WRFPRS${fhr}_org.tm00
+mv WRFNAT${fhr}.tm00 WRFNAT${fhr}_org.tm00
+mv WRFTWO${fhr}.tm00 WRFTWO${fhr}_org.tm00
+${WGRIB2} WRFPRS${fhr}_org.tm00 -set_radius 1:6370000 -set_grib_type same -grib_out WRFPRS${fhr}.tm00
+${WGRIB2} WRFNAT${fhr}_org.tm00 -set_radius 1:6370000 -set_grib_type same -grib_out WRFNAT${fhr}.tm00
+${WGRIB2} WRFTWO${fhr}_org.tm00 -set_radius 1:6370000 -set_grib_type same -grib_out WRFTWO${fhr}.tm00
+
 # create alternate version of sfc file to avoid duplicate parameters
 #   when tacking it on to end of pressure file;  it also keeps the
 #   pressure level records out of the native level file
