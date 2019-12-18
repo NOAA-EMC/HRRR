@@ -46,9 +46,25 @@ timestr=`${DATE} +%Y-%m-%d_%H_%M_%S -d "${START_TIME}  ${fhr} hours"`
 timestr2=`${DATE} +%Y-%m-%d_%H:%M:%S -d "${START_TIME}  ${fhr} hours"`
 
 # Save files for surface cycle
+targetsize=9903525684
 if [ $fhr -lt 18 ]
 then
-  cp ${INPUT_DATA}/wrfout_d01_${timestr} ${HRRRGES_SFC}/hrrrak_${PDY}${cyc}f0${fhr}
+  counter=1
+  while [[ $counter -lt 36 ]]; do
+  filesize=$(stat -c%s ${INPUT_DATA}/wrfout_d01_${timestr})
+  echo $filesize
+  if [ $filesize -eq $targetsize ]; then
+    cp ${INPUT_DATA}/wrfout_d01_${timestr} ${HRRRGES_SFC}/hrrrak_${PDY}${cyc}f0${fhr}
+      break
+  else
+    sleep 5
+    counter=` expr $counter + 1 `
+  fi
+  done
+  if [ $counter -eq 36 ]; then
+    echo "WARNING: Forecast Hour f0${fhr} still short on node! Copy anyway."
+    cp ${INPUT_DATA}/wrfout_d01_${timestr} ${HRRRGES_SFC}/hrrrak_${PDY}${cyc}f0${fhr}
+  fi
 fi
 
 cat > itag <<EOF
@@ -127,13 +143,6 @@ cp ${EXEChrrr}/hrrr_wrfpost .
 runline="aprun -n 48 -N 24 ./hrrr_wrfpost"
 $runline
 err=$?;export err ;err_chk
-
-mv WRFPRS${fhr}.tm00 WRFPRS${fhr}_org.tm00
-mv WRFNAT${fhr}.tm00 WRFNAT${fhr}_org.tm00
-mv WRFTWO${fhr}.tm00 WRFTWO${fhr}_org.tm00
-${WGRIB2} WRFPRS${fhr}_org.tm00 -set_radius 1:6370000 -set_grib_type same -grib_out WRFPRS${fhr}.tm00
-${WGRIB2} WRFNAT${fhr}_org.tm00 -set_radius 1:6370000 -set_grib_type same -grib_out WRFNAT${fhr}.tm00
-${WGRIB2} WRFTWO${fhr}_org.tm00 -set_radius 1:6370000 -set_grib_type same -grib_out WRFTWO${fhr}.tm00
 
 # create alternate version of sfc file to avoid duplicate parameters
 #   when tacking it on to end of pressure file;  it also keeps the

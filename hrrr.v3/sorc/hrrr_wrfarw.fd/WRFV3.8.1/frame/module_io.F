@@ -1257,6 +1257,7 @@ SUBROUTINE wrf_ioclose ( DataHandle, Status )
             write(0,*)' closed NetCDF output history file DateStr=',DateStr,'status=', Status
 
             if(fname(1:10)=='wrfout_d01')then
+              CALL system( "fsync " // fname )
               write(0,*)' write_fcstdone'
               if(status==0)call write_fcstdone(DateStr)
             endif
@@ -1284,6 +1285,7 @@ SUBROUTINE wrf_ioclose ( DataHandle, Status )
             write(0,*)' closed parallel NetCDF output history file DateStr=',DateStr,'status=', Status
             
             if(fname(1:10)=='wrfout_d01')then
+              CALL system( "fsync " // fname )
               write(0,*)' write_fcstdone'
               if(Status==0)call write_fcstdone(DateStr)
             endif

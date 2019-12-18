@@ -122,8 +122,7 @@ $runline
 err=$?;export err ;err_chk
 
 cp WRFTWO* ${POSTMGRDIR}/wrfsfc_${fhr}${fmin}.grib2
-mv ${POSTMGRDIR}/wrfsfc_${fhr}${fmin}.grib2 ${POSTMGRDIR}/wrfsfc_${fhr}${fmin}_org.grib2
-${WGRIB2} ${POSTMGRDIR}/wrfsfc_${fhr}${fmin}_org.grib2 -set_radius 1:6370000 -set_grib_type same -grib_out ${POSTMGRDIR}/wrfsfc_${fhr}${fmin}.grib2
+${WGRIB2} ${POSTMGRDIR}/wrfsfc_${fhr}${fmin}.grib2 -s >${POSTMGRDIR}/wrfsfc_${fhr}${fmin}.grib2.idx
 
 if [ $fhr -eq 00 -a $fmin -eq 00 ]; then
 if [ $SENDCOM = YES ]
@@ -141,14 +140,18 @@ fi
 
 if [ $fmin -eq 00 -a $fhr -ne 00 ]; then
 # Append 15, 30, 45 and 60 min GRIB2 files together
-  let checkCount=3
-  while [ $checkCount -gt 0 ]; do
+  let checkCount=0
+  while [ $checkCount -le 20 ]; do
     # Append 15, 30, 45 and 60 min GRIB2 files together
-    if [ ! -r ${POSTMGRDIR}/wrfsfc_${fhrm1}15.grib2 -o ! -r ${POSTMGRDIR}/wrfsfc_${fhrm1}30.grib2 -o ! -r ${POSTMGRDIR}/wrfsfc_${fhrm1}45.grib2 ]; then
+    if [ ! -r ${POSTMGRDIR}/wrfsfc_${fhrm1}15.grib2.idx -o ! -r ${POSTMGRDIR}/wrfsfc_${fhrm1}30.grib2.idx -o ! -r ${POSTMGRDIR}/wrfsfc_${fhrm1}45.grib2.idx ]; then
       sleep 45
-      ((checkCount--))
+      ((checkCount++))
+      if [ $checkCount -gt 16 ]; then
+        echo "FATAL ERROR: Waiting for previous ${POSTMGRDIR}/wrfsfc_${fhrm1}15.grib2 ${POSTMGRDIR}/wrfsfc_${fhrm1}30.grib2 \
+              ${POSTMGRDIR}/wrfsfc_${fhrm1}45.grib2 for 10 minutes. Please check previous three post_subh jobs"
+      fi
     else
-      let checkCount=-1  # all files exist
+      break #all files exist
     fi
   done
 
@@ -180,11 +183,7 @@ proj=
 output=T
 pdsext=no
 NAGRIB=nagrib2
-
 cp WRFTWO* grib2f${fhr}${fmin}
-mv grib2f${fhr}${fmin} grib2f${fhr}${fmin}_org
-${WGRIB2} grib2f${fhr}${fmin}_org -set_radius 1:6370000 -set_grib_type same -grib_out grib2f${fhr}${fmin}
-
 cp $GEMPAKhrrr/fix/hrrr_g2varsncep1.tbl g2varsncep1.tbl
 cp $GEMPAKhrrr/fix/hrrr_g2varswmo2.tbl g2varswmo2.tbl
 cp $GEMPAKhrrr/fix/hrrr_g2vcrdncep1.tbl g2vcrdncep1.tbl
