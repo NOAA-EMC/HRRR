@@ -12,7 +12,7 @@ module use -a /opt/cray/modulefiles
 module load $BASE/../modulefiles/HRRR/v3.0.0.da
 module list
 
-cd ${BASE}/hrrr_smartinit_ak.fd
+cd ${BASE}/hrrr_smartinit.fd
 make clean
 make
 
