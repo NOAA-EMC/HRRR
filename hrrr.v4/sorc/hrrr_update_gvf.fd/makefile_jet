@@ -1,0 +1,48 @@
+# makefile for nssl_porcess
+#! /bin/sh -v
+
+# Define the fortran compiler and options
+GSIDIR=/mnt/lfs1/projects/rtwbl/mhu/rapcode/work/buildgsi
+FC  =  mpif90 -f90=ifort
+FLAGS= -g -traceback 
+GSILIBS =${GSIDIR}/lib -lw3emc_v -lw3nco_v -lbacio_v -lbufr_v
+
+G2_VER=v2.5.0
+G2TMPL_VER=v1.3.0
+JASPER_VER=v1.900.1
+PNG_VER=v1.2.44
+Z_VER=v1.2.6
+
+UPPDIR=/mnt/lfs3/projects/rtwbl/mhu/rapcode/git_local/rapid-refresh/UPP_2015/comupp
+
+G2_INC4     = -I${UPPDIR}/include
+G2TMPL_INC  = -I${UPPDIR}/include
+G2_LIB4     = ${UPPDIR}/lib/libg2.a
+G2TMPL_LIB  = ${UPPDIR}/lib/libg2tmpl.a
+JASPER_LIB  = -L/usr/lib64 -ljasper
+PNG_LIB     = -L/usr/lib64 -lpng
+Z_LIB       = -L/usr/lib64 -lz
+NETCDF      = /apps/netcdf/3.6.3-intel
+
+INCLD=  -I${NETCDF}/include -I${GSIDIR}/include ${G2_INC4}
+LIBS =  \
+        ${G2_LIB4} ${G2TMPL_LIB} ${JASPER_LIB} ${PNG_LIB} ${Z_LIB} \
+        -L${NETCDF}/lib -lnetcdf -L${GSILIBS}
+
+OBJS = nc_readwrt_mod.o grib2_read_mod.o
+
+all: update_GVF gen_annual_maxmin_GVF
+
+update_GVF: ${OBJS} update_GVF.o
+	${FC} -o update_GVF.exe ${FLAGS} update_GVF.o ${OBJS} ${LIBS} 
+
+gen_annual_maxmin_GVF: ${OBJS} gen_annual_maxmin_GVF.o
+	${FC} -o gen_annual_maxmin_GVF.exe ${FLAGS} gen_annual_maxmin_GVF.o ${OBJS} ${LIBS} 
+
+.SUFFIXES : .f90 .o
+
+.f90.o :
+	${FC} ${FLAGS} ${INCLD} -c $<
+
+clean:
+	/bin/rm -f *.o *.mod *.exe

@@ -1,0 +1,9 @@
+
+#NETCDF_HOME="/apps/netcdf/4.2.1.1-intel"
+NETCDF_HOME=${NETCDF}
+
+mpif90  -f90=ifort -I${NETCDF_HOME}/include -O3 -fp-model precise -c da_module_couple_uv.f90 -o da1.o 
+mpif90  -f90=ifort -I${NETCDF_HOME}/include -O3 -fp-model precise -c da_netcdf_interface.f90 -o da2.o 
+mpif90  -f90=ifort -I${NETCDF_HOME}/include -O3 -fp-model precise -c da_update_bc.f90 -o da3.o 
+mpif90  -f90=ifort -O3 -fp-model precise da1.o da2.o da3.o -o da_update_bc.exe ${NETCDF_HOME}/lib/libnetcdf.so ${NETCDF_HOME}/lib/libnetcdff.so
+

@@ -1,0 +1,44 @@
+&share
+ wrf_core = 'ARW',
+ max_dom = 1,
+ start_date = '2013-03-25_03:00:00','2006-08-16_12:00:00',
+ end_date = '2013-03-26_12:00:00','2006-08-16_12:00:00',
+ interval_seconds = 10800,
+ io_form_geogrid = 2,
+ debug_level = 1,
+/
+
+&geogrid
+ parent_id         = 1,  1,
+ parent_grid_ratio = 1,  3,
+ i_parent_start    = 1, 31,
+ j_parent_start    = 1, 17,
+ e_we          = 1800, 112,
+ e_sn          = 1060,  97,
+ geog_data_res = 'bnu_soil_30s+modis_15s_lakes+maxsnowalb_modis+albedo_modis+modis_lai'
+ dx = 3000,
+ dy = 3000,
+ map_proj =  'lambert',
+ ref_lat   = 38.5,
+ ref_lon   = -97.5,
+ truelat1  = 38.5,
+ truelat2  = 38.5,
+ stand_lon = -97.5,
+ geog_data_path = '/scratch4/BMC/wrfruc/smirnova/GEOG'
+ opt_geogrid_tbl_path = '/scratch3/BMC/wrfruc/smirnova/CASESTUDIES/hrrr3_large/static37'
+ ref_x = 900.0,
+ ref_y = 530.0,
+/
+
+&ungrib
+ out_format = 'WPS',
+ prefix = 'FILE',
+/
+
+&metgrid
+ fg_name = 'RAP',
+ constants_name = 'QNWFA_QNIFA_Monthly_GFS',
+ io_form_metgrid = 2,
+ process_only_bdy = 10,
+ opt_metgrid_tbl_path = '/home/rtrr/HRRRdev1/static/WPS',
+/

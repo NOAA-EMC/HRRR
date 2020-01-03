@@ -1,0 +1,61 @@
+____________________Release Notes      SP v 2.0.2 _____________________________Eugene Mirvis
+EMC/NCEP/NOAA 					NCWCP				05.29.2014
+____________________________________________________________________________________
+This new version of the sp v2.0.2 has been tested on WCOSS "/usrx/local/nceplibs" 
+and on Zeus
+In this version, James Taft has introduced an additional loop threading at sptranf0.f at:
+....
+
+ DO J=JB,JE
+        CLAT(J)=SQRT(1.-SLATX(J)**2)
+        SLAT(J)=SLATX(J)
+        WLAT(J)=WLATX(J)
+        CALL SPLEGEND(IROMB,MAXWV,SLAT(J),CLAT(J),EPS,EPSTOP,
+     &                PLN(1,J),PLNTOP(1,J))
+      ENDDO
+C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      END
+...
+with
+...
+      DO J=JB,JE
+        CLAT(J)=SQRT(1.-SLATX(J)**2)
+        SLAT(J)=SLATX(J)
+        WLAT(J)=WLATX(J)
+      ENDDO
+C$OMP PARALLEL DO
+      DO J=JB,JE
+        CALL SPLEGEND(IROMB,MAXWV,SLAT(J),CLAT(J),EPS,EPSTOP,
+     &                PLN(1,J),PLNTOP(1,J))
+      ENDDO
+C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      END
+
+...
+This version had been tested with unit tests, post and relocation code and after several months of parallel runs is moving for implementation:
+
+The source code is available now at EMC repository with a tag v2.0.2: 
+https://svnemc.ncep.noaa.gov/projects/nceplibs/sp/tags/v2.0.2/ 
+
+The build is available in: 
+/usrx/local/nceplibs : 
+
+-rw-r--r--  1 Eugene.Mirvis       nceplibs  428004 May 29 17:40 libsp_v2.0.2_4.a 
+-rw-r--r--  1 Eugene.Mirvis       nceplibs  457332 May 29 17:40 libsp_v2.0.2_8.a 
+-rw-r--r--  1 Eugene.Mirvis       nceplibs  450012 May 29 17:41 libsp_v2.0.2_d.a 
+
+and the working related copy at: 
+drwxr-xr-x  3 Eugene.Mirvis g01 131072 May 29 17:41 sp_v2.0.2 
+
+The building scripts are :
+makelibsp.sh_<arch> or on WCOSS: 
+./makelibsp.sh_Linux
+That should create 3 libraries:
+ ../../libsp_v2.0.2_4.a
+../../libsp_v2.0.2_8.a
+../../libsp_v2.0.2_d.a
+
+Two levels up from $SP_SRC
+
+README.TXT is available at source directory.
+

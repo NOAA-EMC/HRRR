@@ -1,0 +1,20 @@
+#!/bin/ksh
+#--------------------------------------------------------------------
+# Example #4: convert a t254 file with 2 soil layers and osu lsm
+# physics, to a t382 file with 4 soil layers and noah lsm physics
+# and landice initialization.
+# note: the old style surface files do not have terrain, so you
+# must get this field from a sigma file.
+#--------------------------------------------------------------------
+export CLIMO_FIELDS_OPT=3
+export LANDICE_OPT=1
+export IVSSFC=200501
+export LSOIL=4
+export SIGINP=/gpfs/td1/global/noscrub/Shrinivas.Moorthi/data/siganl.gfs.2012102300
+export SFCOUT=sfc.out
+export DATA=/gpfs/td1/meso/save/Eugene.Mirvis/SP_debug/WCOSS/utest/global_chgres_lst
+./global_chgres.sh /gpfs/td1/global/noscrub/Shrinivas.Moorthi/data/siganl.gfs.2012102300 \
+		./t574.sig.input.file  \
+                   ./out_one_254-382 \
+                   ./t574.sfc.output.file 574 0 440 220
+

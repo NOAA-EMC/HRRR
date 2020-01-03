@@ -1,0 +1,57 @@
+#BSUB -J %E%hrrrdas_makebc_%CYC%
+#BSUB -o  /%COM%/output/%ENVIR%/today/hrrrdas_makebc_%CYC%.o%J
+#BSUB -e  /%COM%/output/%ENVIR%/today/hrrrdas_makebc_%CYC%.o%J
+#BSUB -cwd /tmpnwprd
+#BSUB -R "span[ptile=24]"
+#BSUB -R affinity[core:distribute=balance]
+#BSUB -n 144 
+#BSUB -q %QUEUE%
+#BSUB -L /bin/sh
+#BSUB -W 01:00
+#BSUB -P %PROJ%
+#BSUB -x
+#BSUB -a poe
+
+%include <head.h>
+%include <envir-p2.h>
+
+# EXPORT list here
+
+set -x
+
+export cyc=%CYC%
+export dom=hrrrdas
+export job=hrrrdas_makebc_%CYC%
+
+# versions file for High-Resolution Rapid Refresh model $mod_ver
+VERSION_FILE=$NWROOT/versions/hrrr.ver
+if [ -f $VERSION_FILE ]; then
+  . $VERSION_FILE
+else
+  ecflow_client --abort
+  exit
+fi
+
+# CALL executable job script here
+$NWROOT/hrrr.${hrrr_ver}/jobs/JHRRRDAS_MAKEBC
+
+if [ $? -ne 0 ]; then
+  ecflow_client --abort
+  exit
+fi
+
+%include <tail.h>
+%manual
+##########################################################################
+# Purpose: to prepare the boundary conditions for the Rapid Refresh Model
+##########################################################################
+
+
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+
+# include manual page below
+%end

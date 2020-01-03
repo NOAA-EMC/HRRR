@@ -1,0 +1,60 @@
+This is a brief document to the changes associated with 
+adding L Wicker's adaptive implicit advection.  Soon
+to be on the NY Times best selling list..
+
+Code changes are confined to:
+
+./Registry/Registry.EM_COMMON
+
+where I added two variables to the "dynamics" namelist
+
+rconfig   real    w_crit_cfl              namelist,dynamics 1             2.0     irh    "w_crit_cfl"            ""critical W-CFL where w-damping is applied""
+rconfig   integer zadvect_implicit        namelist,dynamics 1             0       irh    "zadvect_implicit"      ""turns on adaptive implicit advection in vertical""
+
+The first variable is used to specify the W-CFL value to relax to when w-damping is turned on.  I used this for RK5 implementations - default value is same as compiled value (2.0)
+The second variable is where the magic is happening - setting zadvect_implicit (default is off) equal to "1", turns on the adaptive implicit advection.
+
+./dyn_em
+
+I made substantial changes to 4 modules:
+
+a)   Module_em.F
+     Initial changes to module_em.F merged with WRF_AIA code module_em.F
+
+b)   Solve_em.F
+     Added changes from AIA code to solve_em.F  RK4 and RK5 integrations schemes are now implemented.
+
+c)   Module_advect_em.F
+     Added semi-lagrangian changes to the scalar_pd and wenopd routines.  These will be useful at any time, since the vertical courant number can be larger than 1 and SL upstream is PD.
+
+d)   Module_big_step_utilities_em.F 
+     added ww split code for ex/im advection, and updated w_damp routine to be more flexible with using w_crit_cfl from namelist
+
+The only place I messed with HRRR-specific codes is where I had added (caused I needed the height information) the "phi" and "phib" arrays already in some calling interfaces,
+and the HRRR code had already added those arrays.  The HRRR code put the extra arrays further down in the argument list, and I had them all with the other 3D arrays.  I think
+I did that in 2-3 places, but in all cases, the arrays were passed, simply in a different location in the list.  So you might run into that issue with any merger with other code.
+
+Added subroutines into the modules are:
+
+ww_split [Module_big_step_utilities_em.F]
+advect_u/v/w/phi/s_implicit, TRIDIAG, TRIDIAG2D [module_advect_em.F]
+
+TRIDIAG is not used - if you can be clever about speeding up TRIDIA2D, that will gain you time, as it is called every large time step for all advection variables and each column.
+The implicit advecton is called only on the last RK step.
+
+Note about implicit_advection routines:
+  I have formulated the implicit solution in terms of increments to the tendency arrays - so that roundoff should not be a problem.  Also, to make sure, I used double precision
+  variables locally in the routines and the TRIDIAG2 solution.  I have tried to run both ways, and clearly, SP words will be faster, although I am thinking that a lot of the
+  temporary arrays, which are 2D in (i,k), may be in cache even using DP words.
+
+Note about the increased use of "rk_order" in the code:
+  In older versions of WRF, you would run across a lot of statements, for the WENO and PD calls which are "rk_step < 3".  In order to implement the RK4, RK5, and AIA seamlessly,
+  I have made sure that "< 3" is now "< rk_order", which is extracted at the top of subroutines where it is used.  So in the namelist, rk_ord can be 2, 3, 4, 5
+
+Note about extra printing:
+  I have some extra diagnostic printing that is outputted ONLY ONCE at the beginning of the run.  If you need to turn all off, look for parameter statements at the top of
+  solve_em, ww_split and w_damp for the print_flag and set to false.
+
+
+Lou Wicker, Dec 13th, 2018
+...with modifications by J. Kenyon (8 Feb 2019) for compatibility with the hybrid vertical coordinate

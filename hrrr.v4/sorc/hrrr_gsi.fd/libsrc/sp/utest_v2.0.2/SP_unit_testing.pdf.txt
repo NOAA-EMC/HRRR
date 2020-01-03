@@ -1,0 +1,27 @@
+__________________________________________ Eugene Mirvis
+SP UNIT TESTING TESTING
+Run SP unit tests:
+1. Create the testing directory and
+   >svn checkout https://svnemc.ncep.noaa.gov/projects/nceplibs/sp/branches/utest_v2
+
+2. cd u01_gaussGD_tst
+
+3. setenv NCEPLIBS /usrx/local/nceplibs/ or any other directories where it's installed
+
+or load a module, if you have it already:
+   module load sp_v2.0.2
+
+4. Run first 3 tests using script:
+   >./comp_exe_genALL.sh
+   The results should match file "test_result"
+
+5. >cd ../u02_eq_spceGD_tst/
+
+6. Run script :
+   >./comp_exe_genALL.sh
+   In that directory
+   The results should match file "compile_test_results"
+   Deviation from lower 4rd mantis digit is acceptable if not ---- see me.
+
+Done
+

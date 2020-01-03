@@ -1,0 +1,19 @@
+#!/bin/ksh
+#--------------------------------------------------------------------
+# Example #1: convert a t574 file with 4 soil layers and noah lsm
+# physics and NO landice, to a 574 file with 2 soil layers and
+# osu lsm physics (and no landice).
+#--------------------------------------------------------------------
+#export CLIMO_FIELDS_OPT=3
+export LANDICE_OPT=3
+export IVSSFC=200004
+export LSOIL=2
+export SIGINP=/gpfs/td1/global/noscrub/Shrinivas.Moorthi/data/siganl.gfs.2012102300
+export SFCOUT=sfc.out
+export DATA=/gpfs/thm/u/Eugene.Mirvis/WCOSS/utest/global_chgres_lst
+./global_chgres.sh  /gpfs/td1/global/noscrub/Shrinivas.Moorthi/data/siganl.gfs.2012102300 \
+                   ./t574.sfc.input.file \
+                    out_one_574-254 \
+                   ./t254.sfc.output.file  \
+                    254 0 768 384 
+

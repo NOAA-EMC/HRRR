@@ -1,0 +1,18 @@
+#--------------------------------------------------------------------
+# Example #3: convert a t254 file with 2 soil layers and osu lsm
+# physics, to a t382 file with 4 soil layers and noah lsm physics and
+# NO landice initialization.
+# note: the old style surface files do not have terrain, so you
+# must get this field from a sigma file.
+#--------------------------------------------------------------------
+
+export CLIMO_FIELDS_OPT=3
+export LANDICE_OPT=3
+export IVSSFC=200501
+export LSOIL=4
+
+./global_chgres.sh ./t254.sig.input.file  \
+                   ./t254.sfc.input.file  \
+                   ./t382.sig.output.file \
+                   ./t382.sfc.output.file  382 0 1152 576
+

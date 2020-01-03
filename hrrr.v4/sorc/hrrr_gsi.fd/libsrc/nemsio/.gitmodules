@@ -1,0 +1,6 @@
+[submodule "wrf"]
+	path = wrf
+	url = https://github.com/yyr/wrf
+[submodule "libsrc/crtm"]
+	path = libsrc/crtm
+	url = ../comgsi/crtm

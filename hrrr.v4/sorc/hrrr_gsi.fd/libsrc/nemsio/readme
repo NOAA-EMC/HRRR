@@ -1,0 +1,51 @@
+nceplibs/nemsio lib:
+
+svn site:
+https://svnemc.ncep.noaa.gov/projects/nceplibs/nemsio/trunk
+
+--- 20120723
+1)fix data type for input argument IX in subroutine BAFRINDEX of bafrio.f
+
+2)when option "rdwr" is chosen to update a nemsio grib file, a bug is fixed to read out pressure fields.
+
+3)For nemsio grib file, the Gaussian grid information will be computed only once.
+
+These changes have no impact on the results.
+
+ 
+--- 20120509:
+
+1)This nemsio version is v17978 from nemsio repository :
+
+https://svnemc.ncep.noaa.gov/projects/nems/branches/nemsio
+
+It is considered as a first merged version from user's application on zeus. 
+This version has byteswap inside. It reads a binary file using machine endianness, if failed it then reads the file with opposite machine endianness. It writes a file with machine endianness unless it is specified in "gdatatype". 
+
+
+2)Potential problems when updating user's application to this version:
+
+Since nemsio fixed some field names and changed precision in ncep grib table, you may notice that some fields are changing names and values. But so far I don't expect any serious problem to prevent your application from running due to nemsio upgrade except in NEMS NMMB code. If you are updating nemsio lib and your application can not run properly, please let me know.
+
+a)NEMS NMMB 
+If you are on NEMS trunk version 16506 or earlier, and would like to stick at that version but to use nemsio version 16500 and later, NEMS NMMB code should made following changes:
+    step 1) go to nems code: src/atmos/share:
+       - remove module_NEMSIO_MPI.F90, 
+       - delete module_NEMSIO_MPI.o in makefile
+    step 2) in src/atmos/nmm: 
+	change:
+	"use module_nemsio_mpi"
+	to:
+	"use nemsio_module_mpi"
+	in file module_PHYSICS_INIT_READ_NEMSIO.F90 and module_DYNAMICS_INIT_READ_NEMSIO.F90
+
+b)NEMS GFS output data
+  If you are accessing folowing NEMS GFS output flx fields from NEMS trunk verion 14719 and before, 
+    csulwrf csuswrf csdlwrf csdswrf snohfa smcwlt smcref sunshine
+
+  You should access them with standard names in ncep grib table, which are shown in NEMS trunk verion 14725 and later.
+    csulf csusf csdlf csdsf  snohf wilt fldcp sunsd
+
+
+@@@: 
+  if you have questions on nemsio lib, please email: jun.wang@noaa.gov

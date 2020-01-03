@@ -1,0 +1,12 @@
+SHELL       = /bin/sh
+
+FC          = ifort
+FFLAGS      = -O -g -traceback
+
+#CC          = icc
+#CCFLAGS     = -O3 -DUNDERSCORE -DLINUX
+
+AR          = ar
+ARFLAGS     = -rvu
+
+RM          = rm

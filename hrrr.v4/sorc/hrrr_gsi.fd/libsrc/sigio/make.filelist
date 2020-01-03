@@ -1,0 +1,15 @@
+# The list of files that need preprocessing
+FPP_FILES =
+
+# The list of regular source files
+FSRC_FILES = \
+ sigio_module.f \
+ sigio_r_module.f
+
+# The complete list of source files
+SRC_FILES = $(FSRC_FILES) \
+            $(FPP_FILES)
+
+# The list of object files
+OBJ_FILES = ${FSRC_FILES:.f=.o} \
+            ${FPP_FILES:.F=.o}

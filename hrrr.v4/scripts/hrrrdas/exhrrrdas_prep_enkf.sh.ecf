@@ -1,0 +1,147 @@
+#!/bin/ksh -l
+################################################################################
+####  UNIX Script Documentation Block
+#                      .                                             .
+# Script name:       exhrrr_prep_enkf.sh.sms
+# Script description:  runs the GSI and boundary update for the HRRR cycle
+#
+# Author:   Ming Hu / Geoff Manikin / Julia Zhu  Org: EMC       Date: 2011-10-01
+#
+# Script history log:
+# 2011-10-01  M Hu / G Manikin / J Zhu
+# 2018-01-24  B Blake / G Manikin / C Alexander - HRRRv3 
+
+ulimit -s 512000
+set -x
+
+# Set paths to unix commands
+DATE=/bin/date
+AWK="/bin/awk --posix"
+
+# Create the working directory and cd into it
+cd $DATA
+
+# Make sure START_TIME is in the correct format
+START_TIME=${PDY}' '${cychrrr}
+echo $START_TIME
+echo $cychrrr
+START_TIME=`echo "${START_TIME}" | sed 's/\([[:digit:]]\{2\}\)$/ \1/'`
+START_TIME=`${DATE} -d "${START_TIME}"`
+
+# START GSI
+# Bring over background field (it's modified by GSI so we can't link to it)
+time_str=`${DATE} "+%Y-%m-%d_%H_%M_%S" -d "${START_TIME}"`
+echo " time_str = ${time_str}"
+
+# read in grid specs
+#inputfile=${HRRRDASBC}/wrfinput_d01_${time_str}
+#ln -s ${inputfile} wrf_inout_d01
+#inputfile=${HRRRDASBC}/wrfinput_d02_${time_str}
+#ln -s ${inputfile} wrf_inout_d02
+
+#cp ${FIXhrrr}/hrrr_gridspecs ./wrf_inout
+
+# Set fixed files
+anavinfo=${FIXhrrr}/hrrr_anavinfo_arw_netcdf
+processanl=${PARMhrrr}/hrrr_process_enkf.anl
+
+# Fixed fields
+cp $anavinfo anavinfo
+cp $processanl namelist.input
+# 
+
+# Find closest GFS EnKF forecast to analysis time
+#
+CYCSTART_TIME=${PDY}' '${cychrrr}
+
+stampcycle=`date -d "${CYCSTART_TIME}" +%s`
+minHourDiff=100
+loops="009"
+for loop in $loops; do
+  for timelist in `ls ${COMINgfs}/enkfgdas.*/*/mem080/gdas*.atmf${loop}s.nemsio`; do
+# availtime variables are path-relative
+# -f9 was used for /gpfs/hps/nco/ops/com/gfs/prod/enkf.YYYYMMDD
+# -f8 was used for /gpfs/dell3/ptmp/emc.glopara/ROTDIRS/prfv3rt1/enkf.gdas.YYYYMMDD
+    availtimeyyyymmdd=`echo ${timelist} | cut -d'/' -f9 | cut -c 10-17`
+#    availtimeyyyymmdd=`echo ${timelist} | cut -d'/' -f8 | cut -c 11-18`
+# -f10 was used for /gpfs/hps/nco/ops/com/gfs/prod/enkf.YYYYMMDD/HH
+# -f9 was used for /gpfs/dell3/ptmp/emc.glopara/ROTDIRS/prfv3rt1/enkf.gdas.YYYYMMDD/HH
+    availtimehh=`echo ${timelist} | cut -d'/' -f10`
+#    availtimehh=`echo ${timelist} | cut -d'/' -f9`
+    availtime=${availtimeyyyymmdd}${availtimehh}
+    AVAIL_TIME=`echo "${availtime}" | sed 's/\([[:digit:]]\{2\}\)$/ \1/'`
+    AVAIL_TIME=`date -d "${AVAIL_TIME}"`
+
+    stamp_avail=`date -d "${AVAIL_TIME} ${loop} hours" +%s`
+
+    hourDiff=`echo "($stampcycle - $stamp_avail) / (60 * 60 )" | bc`;
+    if [[ ${stampcycle} -lt ${stamp_avail} ]]; then
+       hourDiff=`echo "($stamp_avail - $stampcycle) / (60 * 60 )" | bc`;
+    fi
+
+    if [[ ${hourDiff} -lt ${minHourDiff} ]]; then
+       minHourDiff=${hourDiff}
+       EYYYYMMDD=$(echo ${availtime} | cut -c1-8)
+       EHH=$(echo ${availtime} | cut -c9-10)
+       enkfcstname=gdas.t${EHH}z.atmf${loop}s
+    fi
+  done
+done
+ls ${COMINgfs}/enkfgdas.${EYYYYMMDD}/${EHH}/mem???/${enkfcstname}.nemsio > filelist01_80mem
+sed -n 1,36p filelist01_80mem > filelist01
+
+maxback="24" # how many hours ago to search for wrfout in nwges
+minback="0" # minimum number of cycles to go back for background in nwges
+
+for back in $( seq "$minback" "$maxback" ) ; do
+    time_str=`${DATE} "+%Y-%m-%d_%H_%M_%S" -d "${START_TIME} ${back} hours ago "`
+    inputfile=${HRRRDASBC}/wrfinput_d01_${time_str}
+
+    if [[ -f "$inputfile" ]] ; then
+       ln -s ${inputfile} wrf_inout
+       break
+    else
+       echo "File $back hours back is unavailable: $inputfile"
+    fi
+done
+
+export pgm=hrrr_process_enkf
+startmsg
+cp ${EXEChrrr}/hrrr_process_enkf .
+runline="aprun -n 576 -N 12 ./hrrr_process_enkf"
+$runline
+export err=$?; err_chk
+
+mkdir d01
+mv en_perts4arw.mem00?? d01/.
+#tar -cvf hrrr_enspreproc_${availtime}.tar d01/enspreproc*
+#cp hrrr_enspreproc_${availtime}.tar $COMOUT/.
+
+rm wrf_inout
+for back in $( seq "$minback" "$maxback" ) ; do
+    time_str=`${DATE} "+%Y-%m-%d_%H_%M_%S" -d "${START_TIME} ${back} hours ago "`
+    inputfile=${HRRRDASBC}/wrfinput_d02_${time_str}
+
+    if [[ -f "$inputfile" ]] ; then
+       ln -s ${inputfile} wrf_inout
+       break
+    else
+       echo "File $back hours back is unavailable: $inputfile"
+    fi
+done
+
+runline="aprun -n 864 -N 12 ./hrrr_process_enkf"
+$runline
+export err=$?; err_chk
+mkdir d02
+mv en_perts4arw.mem00?? d02/.
+
+time_str=`${DATE} "+%Y%m%d%H%M" -d "${START_TIME}"`
+mv d01 ${HRRRDASENSP}/enspert_d01_${time_str}
+mv d02 ${HRRRDASENSP}/enspert_d02_${time_str}
+
+
+msg="JOB $job HAS COMPLETED NORMALLY."
+postmsg "$jlogfile" "$msg"
+
+exit 0

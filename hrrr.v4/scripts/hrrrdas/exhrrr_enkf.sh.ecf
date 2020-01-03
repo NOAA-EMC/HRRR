@@ -1,0 +1,275 @@
+#!/bin/ksh -l
+################################################################################
+####  UNIX Script Documentation Block
+#                      .                                             .
+# Script name:       exhrrr_analysis_sh.sms
+# Script description:  runs the GSI and boundary update for the HRRR cycle
+#
+# Author:   Ming Hu / Geoff Manikin / Julia Zhu  Org: EMC       Date: 2011-10-01
+#
+# Script history log:
+# 2014-08-01  C Alexander / M Hu / G Manikin / J Yang - HRRRv1
+# 2016-02-05  C Alexander / G Manikin -  HRRRv2 
+# 2018-01-24  B Blake / G Manikin / C Alexander - HRRRv3
+
+ulimit -s 512000
+set -x
+
+# Set paths to unix commands
+DATE=/bin/date
+AWK="/bin/awk --posix"
+
+# Create the working directory and cd into it
+cd ${DATA}
+
+# Set up some environment variables
+export ATP_ENABLED=0
+export MALLOC_MMAP_MAX=0
+export MALLOC_TRIM_THRESHOLD_=134217728
+export OMP_STACKSIZE=500M
+export KMP_STACKSIZE=1024m
+export OMP_NUM_THREADS=2
+
+# Set to yes for faster collective ops (mpi reduce)
+# but may not yield bitwise identical results from
+# run to run when yes.
+export MP_COLLECTIVE_OFFLOAD=yes
+
+# Make sure START_TIME is in the correct format
+START_TIME=${PDY}' '${cyc}
+echo $START_TIME
+echo $cyc
+START_TIME=`echo "${START_TIME}" | sed 's/\([[:digit:]]\{2\}\)$/ \1/'`
+START_TIME=`${DATE} -d "${START_TIME}"`
+
+gdate=`${DATE} "+%Y%m%d%H" -d "${START_TIME}"`
+POSTERIOR_INFLATION_FACTOR=1.20
+
+# Bring over background field (it's modified by GSI so we can't link to it)
+time_str=`${DATE} "+%Y-%m-%d_%H_%M_%S" -d "${START_TIME}"`
+echo " time_str = ${time_str}"
+
+domainid=`printf %2.2i $DOMAIN`
+timestr1=`${DATE} +%Y%m%d%H%M -d "${START_TIME} 1 hours ago"`
+
+# Look for background from pre-forecast background
+ensmem=1
+echo "ensemble number = $no_member"
+no_member=36
+while [[ $ensmem -le $no_member ]];do
+
+  print "\$ensmem is $ensmem"
+  ensmemid=`printf %4.4i $ensmem`
+  member=`printf %03i $ensmem`
+
+  # get background for each member
+  inputfile=${COMIN}/hrrr.t${cyc}z.wrfinput_d${domainid}.mem${ensmemid}
+  if [ -r ${inputfile} ]; then
+     ln -s ${inputfile} firstguess.mem${member}
+     ln -s ${inputfile} analysis.mem${member}
+  else
+     echo "${inputfile} does not exist!!"
+
+     if [ ${cyc} -eq 09 -o ${cyc} -eq 21 ]; then
+        echo "skip EnKF for cold start"
+        exit 0
+     fi
+
+     errmsg="FATAL ERROR: No background file for analysis at ${time_str}!!!!"
+     echo $errmsg
+     echo " Cycle ${PDY}${cyc}: GSI failed because of no background" 
+     err_exit $errmsg
+  fi
+
+  # next member
+  (( ensmem += 1 ))
+
+done
+
+# copy member 1 firstguess file to ensmean firstguess file 
+# needed to retrieve background pressure field for distance calculation
+cp firstguess.mem001 firstguess.ensmean
+
+#
+#type="conv"
+#
+#  ANAVINFO=${FIX_ROOT}/hrrrdas_anavinfo_arw_netcdf_HRRRENS_radar
+# link all diag files
+ln -s ${COMOUT}/diag_conv_ges.${PDY}${cyc}.d${domainid}.mean ./diag_conv_ges.ensmean
+ensmem=1
+while [[ $ensmem -le $no_member ]];do
+
+  print "\$ensmem is $ensmem"
+  ensmemid=`printf %4.4i $ensmem`
+  member="mem"`printf %03i $ensmem`
+
+  ln -s ${COMOUT}/diag_conv_ges.${PDY}${cyc}.d${domainid}.mem${ensmemid} ./diag_conv_ges.${member}
+
+  # next member
+  (( ensmem += 1 ))
+
+done
+
+# Set fixed files
+#   berror   = forecast model background error statistics
+#   specoef  = CRTM spectral coefficients
+#   trncoef  = CRTM transmittance coefficients
+#   RTMEMIS = CRTM coefficients for IR sea surface emissivity model
+#   aerocoef = CRTM coefficients for aerosol effects
+#   cldcoef  = CRTM coefficients for cloud effects
+#   satinfo  = text file with information about assimilation of brightness temperatures
+#   satangl  = angle dependent bias correction file (fixed in time)
+#   pcpinfo  = text file with information about assimilation of prepcipitation rates
+#   ozinfo   = text file with information about assimilation of ozone data
+#   errtable = text file with obs error for conventional data (regional only)
+#   convinfo = text file with information about assimilation of conventional data
+#   bufrtable= text file ONLY needed for single obs test (oneobstest=.true.)
+#   bftab_sst= bufr table for sst ONLY needed for sst retrieval (retrieval=.true.)
+
+anavinfo=${FIXhrrr}/hrrrdas_anavinfo_arw_netcdf_HRRRENS
+SATINFO=${FIXhrrr}/hrrr_global_satinfo.txt
+CONVINFO=${FIXhrrr}/hrrr_nam_regional_convinfo
+OZINFO=${FIXhrrr}/hrrr_global_ozinfo.txt    
+SATBIAS=${FIXhrrr}/hrrrdas_satbias_in
+
+# Fixed fields
+cp $anavinfo anavinfo
+cp $SATINFO  satinfo
+cp $CONVINFO convinfo
+cp $OZINFO   ozinfo
+cp $SATBIAS  satbias_in
+ 
+ENKF_NAMELIST=${PARMhrrr}/hrrrdas_enkf_wrf_namelist.sh
+# Build the GSI namelist on-the-fly
+COVINFLATENH=0.0
+COVINFLATESH=0.0
+COVINFLATETR=0.0
+CORRLENGTHNH=300
+CORRLENGTHSH=300
+CORRLENGTHTR=300
+
+NMEM_ENKF=36
+if [ $domainid -eq 01 ]; then
+   NLONS=399
+   NLATS=249
+   NLEVS=50
+else
+   NLONS=1800
+   NLATS=1060
+   NLEVS=50
+fi
+
+. $ENKF_NAMELIST
+cat << EOF > enkf.nml
+
+ $enkf_namelist
+
+EOF
+
+export pgm=hrrr_enkf
+. prep_step
+
+startmsg
+cp ${EXEChrrr}/hrrr_enkf .
+if [ $domainid -eq 01 ]; then
+   runline="aprun -j1 -cc depth -n 60 -N 12 -d 2 ./hrrr_enkf"
+else
+   runline="aprun -j1 -cc depth -n 120 -N 2 ./hrrr_enkf"
+   runline="aprun -j1 -cc depth -n 120 -N 2 -d 2 ./hrrr_enkf"
+fi
+
+$runline < enkf.nml >> $DATA/${pgmout}_conv_d${domainid} 2>errfile
+export err=$?; err_chk
+cp enkf.nml enkf.nml_conv
+ls -l  > filelist.d01
+
+if [ $domainid -eq 01 ]; then
+
+# calculate ensemble mean
+   startmsg
+   runlinemean="aprun -j1 -cc depth -n 60 -N 12 -d 2 ./hrrr_cal_ensmean ./ analysis.ensmean analysis.mem 36"
+   cp ${EXEChrrr}/hrrr_cal_ensmean .
+   cp analysis.mem001 analysis.ensmean
+   $runlinemean >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
+#   errmsg="FATAL ERROR: ${PDY}${cyc}: calculate ensemble mean post failed !!!!"
+   export err=$?; err_chk
+
+   outputfile=${COMIN}/hrrr.t${cyc}z.analysis_d${domainid}.mean
+   if [ -r ${outputfile} ]; then
+        rm ${outputfile}
+   fi
+   cp analysis.ensmean ${outputfile}
+
+   msg="JOB $job HAS COMPLETED NORMALLY."
+   postmsg "$jlogfile" "$msg"
+   exit 0
+fi
+
+#######################
+# now let use radar reflectivity on domain 2
+#######################
+#
+#type="radardbz"
+# link all diag files
+rm -f ./diag_conv_ges.*
+ln -s ${COMOUT}/diag_radardbz_ges.${PDY}${cyc}.d${domainid}.mem${ensmemid} ./diag_conv_ges.ensmean
+ensmem=1
+while [[ $ensmem -le $no_member ]];do
+
+  print "\$ensmem is $ensmem"
+  ensmemid=`printf %4.4i $ensmem`
+  member="mem"`printf %03i $ensmem`
+
+  rm -f ./diag_conv_ges.${member}
+  ln -s ${COMOUT}/diag_radardbz_ges.${PDY}${cyc}.d${domainid}.mem${ensmemid} ./diag_conv_ges.${member}
+
+  # next member
+  (( ensmem += 1 ))
+
+done
+
+
+anavinfo=${FIXhrrr}/hrrrdas_anavinfo_arw_netcdf_HRRRENS_radar
+cp $anavinfo anavinfo
+ 
+ENKF_NAMELIST=${PARMhrrr}/hrrrdas_enkf_wrf_namelist.sh
+# Build the GSI namelist on-the-fly
+#  if [ ${RADAR_ONLY} -eq 1 ]; then
+      COVINFLATENH=0.0
+      COVINFLATESH=0.0
+      COVINFLATETR=0.0
+      CORRLENGTHNH=18
+      CORRLENGTHSH=18
+      CORRLENGTHTR=18
+#  fi
+
+. $ENKF_NAMELIST
+cat << EOF > enkf.nml
+
+ $enkf_namelist
+
+EOF
+
+$runline < enkf.nml >> $DATA/${pgmout}_dbz_d${domainid} 2>errfile
+export err=$?; err_chk
+cp enkf.nml enkf.nml_dbz
+ls -l > filelist.d02
+
+# calculate ensemble mean
+startmsg
+runlinemean="aprun -j1 -cc depth -n 120 -N 2 -d 2 ./hrrr_cal_ensmean ./ analysis.ensmean analysis.mem 36"
+cp ${EXEChrrr}/hrrr_cal_ensmean .
+cp analysis.mem001 analysis.ensmean
+$runlinemean >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
+export err=$?; err_chk
+
+outputfile=${COMIN}/hrrr.t${cyc}z.analysis_d${domainid}.mean
+if [ -r ${outputfile} ]; then
+   rm ${outputfile}
+fi
+cp analysis.ensmean ${outputfile}
+
+msg="JOB $job HAS COMPLETED NORMALLY."
+postmsg "$jlogfile" "$msg"
+
+exit 0

@@ -1,0 +1,55 @@
+#BSUB -J %E%hrrr_%DOMAIN%_cleanup_%CYC%
+#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_cleanup_%CYC%.o%J
+#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_cleanup_%CYC%.o%J
+#BSUB -cwd /tmpnwprd
+#BSUB -q %QUEUESERV%
+#BSUB -L /bin/sh
+#BSUB -W 00:30
+#BSUB -P %PROJ%
+#BSUB -R rusage[mem=2500]
+#BSUB -R affinity[core]
+
+%include <head.h>
+%include <envir-p2.h>
+
+# EXPORT list here
+
+set -x
+
+export cyc=%CYC%
+export dom=%DOMAIN%
+export job=hrrr_%DOMAIN%_cleanup_%CYC%
+
+# versions file for HRRR model $mod_ver
+VERSION_FILE=$NWROOT/versions/hrrr.ver
+if [ -f $VERSION_FILE ]; then
+  . $VERSION_FILE
+else
+  ecflow_client --abort
+  exit
+  exit
+fi
+
+# CALL executable job script here
+$NWROOT/hrrr.${hrrr_ver}/jobs/JHRRR_CLEANUP
+
+if [ $? -ne 0 ]; then
+  ecflow_client --abort
+  exit
+fi
+
+%include <tail.h>
+%manual
+##########################################################################
+# Purpose: to cleanup working directories for HRRR Model
+##########################################################################
+
+
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+
+# include manual page below
+%end

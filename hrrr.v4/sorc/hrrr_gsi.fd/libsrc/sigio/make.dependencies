@@ -1,0 +1,2 @@
+sigio_module.o : sigio_module.f 
+sigio_r_module.o : sigio_r_module.f sigio_module.o 

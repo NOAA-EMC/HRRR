@@ -1,0 +1,37 @@
+#!/bin/ksh --login
+
+#BSUB -oo /gpfs/hps3/ptmp/Benjamin.Blake/outputhrrrconus/hrrr_makebc.out13z
+#BSUB -eo /gpfs/hps3/ptmp/Benjamin.Blake/outputhrrrconus/hrrr_makebc.out13z
+#BSUB -J hrrr_makebc_13
+#BSUB -cwd /gpfs/hps3/ptmp/Benjamin.Blake
+#BSUB -W 00:40
+#BSUB -P HRRR-T2O 
+#BSUB -q "devonprod"
+#BSUB -M 1800
+#BSUB -extsched 'CRAYLINUX[]' -R '1*{select[craylinux && !vnode]} + 168*{select[craylinux && vnode]span[ptile=24] cu[type=cabinet]}' rusage[mem=1800]
+#BSUB -x
+#BSUB -a poe
+
+set -x
+. /gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod/hrrr.v4.0.0/hrrr.ver
+
+# Load modules
+. /opt/modules/default/init/ksh
+module load prod_util/${prod_util_ver}
+#module load prod_envir
+module load grib_util/${grib_util_ver}
+
+# EXPORT list here
+export KMP_AFFINITY=disabled
+export OMP_NUM_THREADS=1
+
+export envir=prod
+export RUN_ENVIR=prod
+export cyc=13
+export job=hrrr_makebc_13
+export group_name=meso
+export COMDATEROOT=/gpfs/hps/nco/ops/com
+DATE=`cat ${COMDATEROOT}/date/t${cyc}z | cut -c7-14`
+
+# CALL executable job script here
+/gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/jobs/JHRRR_MAKEBC

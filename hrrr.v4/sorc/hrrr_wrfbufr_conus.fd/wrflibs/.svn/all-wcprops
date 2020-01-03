@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/projects/!svn/ver/92511/hrrr/trunk/hrrr_cray/sorc/hrrr_wrfbufr.fd/wrflibs
+END
+libwrfio_nf.a
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/projects/!svn/ver/92511/hrrr/trunk/hrrr_cray/sorc/hrrr_wrfbufr.fd/wrflibs/libwrfio_nf.a
+END
+libio_grib1.a
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/projects/!svn/ver/92511/hrrr/trunk/hrrr_cray/sorc/hrrr_wrfbufr.fd/wrflibs/libio_grib1.a
+END
+libio_grib_share.a
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/projects/!svn/ver/92511/hrrr/trunk/hrrr_cray/sorc/hrrr_wrfbufr.fd/wrflibs/libio_grib_share.a
+END
+librsl_lite.a
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/projects/!svn/ver/92511/hrrr/trunk/hrrr_cray/sorc/hrrr_wrfbufr.fd/wrflibs/librsl_lite.a
+END
+libfftpack.a
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/projects/!svn/ver/92511/hrrr/trunk/hrrr_cray/sorc/hrrr_wrfbufr.fd/wrflibs/libfftpack.a
+END
+libwrfio_int.a
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/projects/!svn/ver/92511/hrrr/trunk/hrrr_cray/sorc/hrrr_wrfbufr.fd/wrflibs/libwrfio_int.a
+END
+libwrflib.a
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/projects/!svn/ver/92511/hrrr/trunk/hrrr_cray/sorc/hrrr_wrfbufr.fd/wrflibs/libwrflib.a
+END
+pack_utils.o
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/projects/!svn/ver/92511/hrrr/trunk/hrrr_cray/sorc/hrrr_wrfbufr.fd/wrflibs/pack_utils.o
+END
+libesmf_time.a
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/projects/!svn/ver/92511/hrrr/trunk/hrrr_cray/sorc/hrrr_wrfbufr.fd/wrflibs/libesmf_time.a
+END

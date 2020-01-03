@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 2.6)
+if(BUILD_NEMSIO)
+  find_package(MPI REQUIRED)
+  include_directories(${MPI_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH} )
+  file(GLOB NEMSIO_SRC ${NEMSIO_DIR}/*.f90)
+  set_source_files_properties( ${NEMSIO_SRC} COMPILE_FLAGS ${NEMSIO_Fortran_FLAGS} )
+  add_library( ${nemsio} STATIC ${NEMSIO_SRC} )
+  set_target_properties( ${nemsio} PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_INCLUDE_OUTPUT_DIRECTORY} )
+ 
+endif()

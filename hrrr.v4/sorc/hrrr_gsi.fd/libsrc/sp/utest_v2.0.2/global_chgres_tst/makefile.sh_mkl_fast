@@ -1,0 +1,20 @@
+#!/bin/sh
+set -x
+export LIBDIR=/nwprod/lib
+export FCMP=${1:-ifort}
+export FCMP95=${2:-${FCMP}}
+  export INCS="-I $LIBDIR/incmod/sfcio_4"
+
+  export LIBS="-L/global/noscrub/Shrinivas.Moorthi/para/lib -lsigio_4 -L$LIBDIR -lsfcio_4 -llandsfcutil_d -lip_d -lgfsio_4 -lbacio_4 -lw3emc_d -lw3nco_d -lnemsio /gpfs/thm/u/Eugene.Mirvis/WCOSS/lib_mkl-fftmkl/libsp_d.a"
+
+ export FFLAGSM="  -O3 -i4 -r8 -xHOST -convert big_endian "
+ export FFLAGS2M=" -O3 -i4 -r8 -xHOST -convert big_endian -FR"
+
+ export RECURS=
+
+ export LIBFLAGSM=" "
+ export LDFLAGSM=-mkl
+ export OMPFLAGM=-openmp 
+make -f Makefile
+#make -f Makefile2
+
