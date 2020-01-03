@@ -1,9 +1,0 @@
-
-Release Notes:  HRRR v2.0.13
-
-v2.0.8 - released Sept 5, 2017
-  Bug fix for hrrr_forecastpre crashing on 20170829 01z which due to soil tmeperature cooling too much.
-
-
-Source code change:
-  /nwprod2/hrrr.v2.0.13/sorc/hrrr_full_cycle_surface.fd/update_netcdf_mass.f90
