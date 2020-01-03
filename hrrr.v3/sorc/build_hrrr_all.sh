@@ -5,27 +5,26 @@ cd $BASE
 
 #build switches
 
-export BUILD_hrrr_wrfarw_serial=yes
-export BUILD_hrrr_update_bc=yes
-export BUILD_hrrr_wps=yes
-export BUILD_hrrr_wrfpost=yes
-export BUILD_hrrr_wrfarw=yes
-export BUILD_hrrr_gsi=yes
-export BUILD_hrrr_process_enkf=yes
-export BUILD_hrrr_full_cycle_surface=yes
-export BUILD_hrrr_process_cloud=yes
-export BUILD_hrrr_process_imssnow=yes
-export BUILD_hrrr_process_mosaic=yes
-export BUILD_hrrr_process_sst=yes
-export BUILD_hrrr_process_lightning=yes
-export BUILD_hrrr_update_gvf=yes
-export BUILD_hrrr_ref2tten=yes
-export BUILD_hrrr_sndp=yes
-export BUILD_hrrr_wrfbufr_conus=yes
-export BUILD_hrrr_wrfbufr_alaska=yes
-export BUILD_hrrr_stnmlist=yes
-export BUILD_hrrr_smartinit_conus=yes
-export BUILD_hrrr_smartinit_ak=yes
+export BUILD_hrrr_wrfarw_serial=no
+export BUILD_hrrr_update_bc=no
+export BUILD_hrrr_wps=no
+export BUILD_hrrr_wrfpost=no
+export BUILD_hrrr_wrfarw=no
+export BUILD_hrrr_gsi=no
+export BUILD_hrrr_process_enkf=no
+export BUILD_hrrr_full_cycle_surface=no
+export BUILD_hrrr_process_cloud=no
+export BUILD_hrrr_process_imssnow=no
+export BUILD_hrrr_process_mosaic=no
+export BUILD_hrrr_process_sst=no
+export BUILD_hrrr_process_lightning=no
+export BUILD_hrrr_update_gvf=no
+export BUILD_hrrr_ref2tten=no
+export BUILD_hrrr_sndp=no
+export BUILD_hrrr_wrfbufr_conus=no
+export BUILD_hrrr_wrfbufr_alaska=no
+export BUILD_hrrr_stnmlist=no
+export BUILD_hrrr_smartinit=yes
 
  . /opt/modules/default/init/ksh
 
@@ -217,19 +216,10 @@ fi
 
 ##############################
 
-if [ $BUILD_hrrr_smartinit_conus = yes ] ; then
+if [ $BUILD_hrrr_smartinit = yes ] ; then
 
-echo " .... Building hrrr_smartinit_conus .... "
-$BASE/build_hrrr_smartinit_conus.sh > $logs_dir/build_smartinit_conus.log 2>&1
-
-fi
-
-##############################
-
-if [ $BUILD_hrrr_smartinit_ak = yes ] ; then
-
-echo " .... Building hrrr_smartinit_ak .... "
-$BASE/build_hrrr_smartinit_ak.sh > $logs_dir/build_smartinit_ak.log 2>&1
+echo " .... Building hrrr_smartinit .... "
+$BASE/build_hrrr_smartinit.sh > $logs_dir/build_smartinit.log 2>&1
 
 fi
 

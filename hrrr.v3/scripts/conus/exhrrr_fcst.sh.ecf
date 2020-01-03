@@ -18,8 +18,8 @@ ulimit -c 0
 set -x
 
 # Submit post manager jobs
-bsub < ${HOMEhrrr}/sms/post/jhrrr_postmgr_${cyc}.bsub 
-bsub < ${HOMEhrrr}/sms/post/jhrrr_postmgr_subh_${cyc}.bsub 
+#bsub < ${HOMEhrrr}/sms/post/jhrrr_postmgr_${cyc}.bsub 
+#bsub < ${HOMEhrrr}/sms/post/jhrrr_postmgr_subh_${cyc}.bsub 
 
 AWK="/bin/gawk --posix"
 DATE=/bin/date

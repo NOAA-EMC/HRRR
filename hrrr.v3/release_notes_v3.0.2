@@ -1,0 +1,35 @@
+﻿Release Notes:  HRRR v3.0.2
+
+
+v3.0.2 - released September 25, 2018
+* Changes to HRRR for FV3GFS implementation
+   * Modified the EnKF processing code to be able to process the FV3GDAS EnKF files
+
+
+* Repository Details
+   * After cloning the hrrr.v3.0.2 branch of the EMC_hrrr git repository using the command below, retrieve the new code from the hrrr.v3 directory.
+      * git clone -b hrrr.v3.0.2 https://${USER}@vlab.ncep.noaa.gov/code-review/a/EMC_hrrr hrrr.v3.0.2
+      * git clone -b hrrr.v3.0.2 ssh://${USER}@vlab.ncep.noaa.gov:29418/EMC_hrrr hrrr.v3.0.2
+   * The build script is located here: hrrr.v3.0.2/hrrr.v3/sorc/build_hrrr_all.sh
+   * To build the code, run build_hrrr_all.sh and specify which codes you would like compiled within the script ("yes" or "no" switches).
+
+
+* parm, scripts, and sorc files changed
+   * parm/alaska/hrrrak_process_enkf.anl
+   * parm/conus/hrrr_process_enkf.anl
+   * scripts/alaska/exhrrr_prep_enkf.sh.ecf
+   * scripts/conus/exhrrr_prep_enkf.sh.ecf
+   * sorc/hrrr_process_enkf.fd/get_gefs_for_regional.enspro.f90
+   * sorc/hrrr_process_enkf.fd/gfsp2wrfg.f90
+
+
+* revised executables
+   * hrrr_process_enkf
+
+    
+* implementation instructions
+   * Retrieve the new parm, scripts, and sorc files 
+   * Recompile the process_enkf code
+   * Edit exhrrr_prep_enkf.sh.ecf for CONUS and Alaska - refer to lines 57-65 for path-relative variables
+   * Need to test FV3GFS upgrade concurrently
+

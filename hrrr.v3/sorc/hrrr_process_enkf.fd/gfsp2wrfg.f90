@@ -45,6 +45,7 @@ PROGRAM gfsp2wrfg
 
   implicit none
   logical :: enpert4arw,wrt_pert_sub,wrt_pert_mem
+  integer :: jcap_ens
 !
 ! Declare variables.
 !
@@ -52,7 +53,7 @@ PROGRAM gfsp2wrfg
                   switch_on_derivatives,tendsflag,nfldsig,   &
                   grid_ratio_ens,n_ens,grid_ratio_ens,grid_ratio_wrfmass,&
                   enpert4arw,wrt_pert_sub,wrt_pert_mem,wrf_mass_hybridcord,&
-                  use_gfs_nemsio
+                  use_gfs_nemsio,jcap_ens
 !
 !
 !
@@ -90,6 +91,7 @@ PROGRAM gfsp2wrfg
   wrt_pert_sub=.false.
   wrt_pert_mem=.false.
   wrf_mass_hybridcord=.false.
+  jcap_ens=574
 
   open(11,file='namelist.input')
     read(11,setup,iostat=ios)
@@ -140,7 +142,7 @@ PROGRAM gfsp2wrfg
   call create_ensemble
 !
 !mhu  call read_gfs_for_regional
-  call get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem)
+  call get_gefs_for_regional_enspro(enpert4arw,wrt_pert_sub,wrt_pert_mem,jcap_ens)
 
 
 ! release space

@@ -19,12 +19,13 @@ mkdir -p $DATA/smart
 cd $DATA/smart
 
 export tmmark=tm00
+WGRIB2=/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.5/exec/wgrib2
 
 cp ${COMIN}/hrrr.t${cyc}z.wrfnatf${fhr}.grib2 WRFNAT${fhr}.tm00
 ${GRB2INDEX} WRFNAT${fhr}.tm00 WRFNAT${fhr}i.tm00
 
-cp ${FIXhrrr}/hrrr_terrain_consensus.gb2 TOPONDFDCS
-cp ${FIXhrrr}/hrrr_smartmask_consensus.gb2 LANDNDFDCS
+cp ${FIXhrrr}/conus_terrain_hrrr.gb2 TOPONDFDCS
+cp ${FIXhrrr}/conus_mask_hrrr.gb2 LANDNDFDCS
 
 ${GRB2INDEX} TOPONDFDCS TOPONDFDCSI
 ${GRB2INDEX} LANDNDFDCS LANDNDFDCSI
@@ -36,14 +37,17 @@ ${WGRIB2} WRFNAT${fhr}.tm00 | grep -F -f hrrr_smartnatparams | ${WGRIB2} -i -gri
 ${GRB2INDEX} hrrr_natgrd.tm00 grib2file_index 
 
 export wgrib2def="lambert:265:25.0:25.0 238.445999:2145:2539.703 20.191999:1377:2539.703"
-${WGRIB2} hrrr_natgrd.tm00 -set_radius 1:6370000 -set_grib_type c3 -set_bitmap 1 -new_grid_winds grid -new_grid_interpolation bilinear \
+#${WGRIB2} hrrr_natgrd.tm00 -set_grib_type c3 -set_bitmap 1 -new_grid_winds grid -new_grid_interpolation bilinear -new_grid ${wgrib2def} hrrr.NDFDCSf${fhr}.grib2
+
+${WGRIB2} hrrr_natgrd.tm00 -set_radius 1:6370000 -set_grib_type c3 -set_bitmap 1 -new_grid_winds grid \
+          -new_grid_interpolation bilinear \
           -if "`cat ${PARMhrrr}/hrrr_smart_neighbor_fields.txt`" -new_grid_interpolation neighbor -fi \
           -new_grid ${wgrib2def} hrrr.NDFDCSf${fhr}.grib2
 
 mv hrrr.NDFDCSf${fhr}.grib2 hrrr.NDFDCSf${fhr}
 ${GRB2INDEX} hrrr.NDFDCSf${fhr} hrrr.NDFDCSf${fhr}I
 
-cp ${COMROOT}/date/t${cyc}z DATE
+cp /gpfs/hps/nco/ops/com/date/t${cyc}z DATE
 
 export pgm=hrrr_smartinit_conus
 . prep_step
@@ -60,7 +64,10 @@ rm -rf smart.ksh
 varEOF=EOF
 cat > smart.ksh <<EOF
 #!/bin/ksh -l
-${EXEChrrr}/hrrr_smartinit_conus <<EOF >> smartinitcs.out${fhr}
+$EXEChrrr/hrrr_smartinit <<EOF >> smartinitcs.out${fhr}
+HRRR
+CS
+GRIB2
 $fhr
 $cyc
 $varEOF

@@ -83,7 +83,7 @@ else
   export RAP_RUN=rap
 fi
 
-export COMINnasalarc=${COMINnasalarc:-${COMROOT}/rap/para/${RAP_RUN}.${PDY}}
+export COMINnasalarc=${COMINnasalarc:-${COMROOT}/rap/prod/${RAP_RUN}.${PDY}}
 
 ##############################################
 # Define COM directories

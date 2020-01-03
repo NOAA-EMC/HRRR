@@ -48,31 +48,36 @@ else
 START_TIME=$PDY$cycm1
 fi
 counter=2
+targetsize=9903525684
 while [[ $counter -lt 36 ]]; do
   counterhr=$counter
   typeset -Z2 counterhr
   CYC_TIME=`$NDATE -${counter} $START_TIME`
   if [ -r ${HRRRGES_SFC}/hrrrak_${CYC_TIME}f0$counterhr ]; then
-    echo " Cycle surface fields based on hrrr_${CYC_TIME}f0$counterhr"
-    cp ${HRRRGES_SFC}/hrrrak_${CYC_TIME}f0$counterhr ./wrfout_d01_save
-    cp ${EXEChrrr}/hrrr_full_cycle_surface .
-    runline="aprun -n 4 -N 4 ./hrrr_full_cycle_surface"
-    $runline >> full_cycle_surface.out
-    export err=$?; err_chk
-    break
+    filesize=$(stat -c%s ${HRRRGES_SFC}/hrrrak_${CYC_TIME}f0$counterhr)
+    echo $filesize  
+    if [ $filesize -eq $targetsize ]; then
+      echo " Cycle surface fields based on hrrr_${CYC_TIME}f0$counterhr"
+      cp ${HRRRGES_SFC}/hrrrak_${CYC_TIME}f0$counterhr ./wrfout_d01_save
+      cp ${EXEChrrr}/hrrr_full_cycle_surface .
+      runline="aprun -n 4 -N 4 ./hrrr_full_cycle_surface"
+      $runline >> full_cycle_surface.out
+      export err=$?; err_chk
+      break
+    fi
   fi
   counter=` expr $counter + 3 `
 done
 
 if [[ $counter -ge 36 ]]; then
-  ${ECHO} "WARNING: No land surface data cycled for background at ${PDY}${cyc}!!!!"
+  echo "WARNING: No land surface data cycled for background at ${PDY}${cyc}!!!!"
 fi
 
 echo 'past cycle surface'
 # Update GVF with real-time data
 #/gpfs/gp1/nco/ops/dcom/us007003/viirs/GVF-WKL-GLB_v1r0_npp_s20170907_e20170913_c201709141256340.grib2
-latestGVF=`ls ${GVF}/GVF-WKL-GLB_v1r0_npp_s*_e${PDYm1}_c${PDY}*.grib2`
-latestGVF2=`ls ${GVF}/GVF-WKL-GLB_v1r0_npp_s*_e${PDYm2}_c${PDYm1}*.grib2`
+latestGVF=`ls ${GVF}/GVF-WKL-GLB_v2r3_npp_s*_e${PDYm1}_c${PDY}*.grib2`
+latestGVF2=`ls ${GVF}/GVF-WKL-GLB_v2r3_npp_s*_e${PDYm2}_c${PDYm1}*.grib2`
 if [ -r "$latestGVF" ]; then
    cp ${EXEChrrr}/hrrr_update_gvf .
    cp ${FIXhrrr}/hrrrak_gvf_VIIRS_4KM.MIN.1gd4r.new gvf_VIIRS_4KM.MIN.1gd4r.new
@@ -88,8 +93,8 @@ elif [ -r "$latestGVF2" ]; then
    runline="aprun -n 4 -N 4 ./hrrr_update_gvf"
    $runline >> update_gvf.out
 else
-   ${ECHO} "$latestGVF and $latestGVF2 do not exist!!"
-   ${ECHO} "Warning: No GVF real-time data available for background at ${PDY}${cyc}!!!!"
+   echo "$latestGVF and $latestGVF2 do not exist!!"
+   echo "Warning: No GVF real-time data available for background at ${PDY}${cyc}!!!!"
 fi
 
 # Link to the radar binary data

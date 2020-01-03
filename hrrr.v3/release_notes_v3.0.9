@@ -1,0 +1,46 @@
+Release Notes:  HRRR v3.0.9
+
+v3.0.9 - released December 19, 2019
+* Changes to HRRR smartinit for RTMA/URMA version 2.8 upgrade
+   * Consolidated the HRRR codes for all grids into one source code
+   * Added fields needed for use in the stability calculation for 10-m wind observations, for radiance data assimilation in RTMA and lapse-rate adjustment for 2-m temperature for both grids:
+      * skin temperature, lapse rate, model surface pressure
+     and added the following for CONUS (already written out for Alaska):
+      * surface roughness
+      * pressure, temperature, mixing ratio, u, v, height at model level 1
+      * pressure, temperature, and mixing ratio at model level 2
+
+   * Change the wind downscaling to be the maximum of the 10-m winds (instead of model level 1 winds) and vertically interpolated winds multiplied by 0.7 (to account for surface friction).  This is only done in the portion of the code where the NDFD terrain > model terrain.
+
+
+* Repository Details
+   * After cloning the hrrr.v3.0.9 tag of the EMC_hrrr git repository using the command below, retrieve the new code from the hrrr.v3 directory.
+      * git clone -b hrrr.v3.0.9 https://${USER}@vlab.ncep.noaa.gov/code-review/a/EMC_hrrr
+      * git clone -b hrrr.v3.0.9 ssh://${USER}@vlab.ncep.noaa.gov:29418/EMC_hrrr
+
+
+* parm/sorc/ush files changed
+   * parm/conus/hrrr_smart_neighbor_fields.txt
+   * parm/conus/hrrr_smartnatparams
+   * sorc/build_hrrr_all.sh
+   * sorc/build_hrrr_smartinit.sh
+   * sorc/hrrr_smartinit.fd
+   * ush/alaska/hrrrak_smartinit.sh
+   * ush/conus/hrrr_smartinit.sh
+
+
+* sorc files deleted
+   * build_hrrr_smartinit_ak.sh
+   * build_hrrr_smartinit_conus.sh
+   * hrrr_smartinit_ak.fd/
+   * hrrr_smartinit_conus.fd/
+
+
+* resource changes
+   * Disk usage has increased by ~20 GB total/day.  HRRR CONUS smartinit has increased from ~12 GB/day to ~32 GB/day.
+   * There is no effect on timing
+
+
+* implementation instructions
+   * Retrieve the updated parm files, sorc directory, build scripts, and ush scripts, and re-build the smartinit code.  There will be one executable, hrrr_smartinit, instead of 2 executables, one for each domain.
+
