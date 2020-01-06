@@ -3728,18 +3728,6 @@
        <scale>4.0</scale>
     </param>
 
-    <param>
-       <post_avblfldidx>427</post_avblfldidx>
-       <shortname>UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_2-5km</shortname>
-       <longname>Updraft Helicity on Specified Height Level Above Ground</longname>
-       <pname>UPHL</pname>
-       <fixed_sfc1_type>spec_hgt_lvl_above_grnd</fixed_sfc1_type>
-       <level>5000.</level>
-       <fixed_sfc2_type>spec_hgt_lvl_above_grnd</fixed_sfc2_type>
-       <level2>2000.</level2>
-       <scale>-3.0</scale>
-    </param>
-
 <!-- 428-433-->
     <param>
        <post_avblfldidx>428</post_avblfldidx>
@@ -5403,30 +5391,6 @@
     </param>
 
 
-    <param>
-       <post_avblfldidx>700</post_avblfldidx>
-       <shortname>GSD_MAX_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_1-6km</shortname>
-       <pdstmpl>tmpl4_8</pdstmpl>
-       <pname>MXUPHL</pname>
-       <stats_proc>MAX</stats_proc>
-       <fixed_sfc1_type>spec_hgt_lvl_above_grnd</fixed_sfc1_type>
-       <level>6000.</level>
-       <fixed_sfc2_type>spec_hgt_lvl_above_grnd</fixed_sfc2_type>
-       <level2>1000.</level2>
-       <scale>3.0</scale>
-    </param>
-
-    <param>
-       <post_avblfldidx>701</post_avblfldidx>
-       <shortname>GSD_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_1-6km</shortname>
-       <pname>UPHL</pname>
-       <fixed_sfc1_type>spec_hgt_lvl_above_grnd</fixed_sfc1_type>
-       <level>6000.</level>
-       <fixed_sfc2_type>spec_hgt_lvl_above_grnd</fixed_sfc2_type>
-       <level2>1000.</level2>
-       <scale>3.0</scale>
-    </param>
-
     <!-- no grib2 definition for 702-710 -->
     <param>
        <post_avblfldidx>702</post_avblfldidx>
@@ -5746,17 +5710,6 @@
     </param>
 
     <param>
-       <post_avblfldidx>727</post_avblfldidx>
-       <shortname>GSD_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_2-5km</shortname>
-       <pname>UPHL</pname>
-       <fixed_sfc1_type>spec_hgt_lvl_above_grnd</fixed_sfc1_type>
-       <level>5000.</level>
-       <fixed_sfc2_type>spec_hgt_lvl_above_grnd</fixed_sfc2_type>
-       <level2>2000.</level2>
-       <scale>3.0</scale>
-    </param>
-
-    <param>
        <post_avblfldidx>772</post_avblfldidx>
        <shortname>INST_SWDDNI_ON_SURFACE</shortname>
        <pname>VBDSF</pname>
@@ -5913,19 +5866,6 @@
        <level>5000.</level>
        <fixed_sfc2_type>spec_hgt_lvl_above_grnd</fixed_sfc2_type>
        <level2>2000.</level2>
-       <scale>3.0</scale>
-    </param>
-
-    <param>
-       <post_avblfldidx>787</post_avblfldidx>
-       <shortname>GSD_MIN_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_1-6km</shortname>
-       <pdstmpl>tmpl4_8</pdstmpl>
-       <pname>MNUPHL</pname>
-       <stats_proc>MIN</stats_proc>
-       <fixed_sfc1_type>spec_hgt_lvl_above_grnd</fixed_sfc1_type>
-       <level>6000.</level>
-       <fixed_sfc2_type>spec_hgt_lvl_above_grnd</fixed_sfc2_type>
-       <level2>1000.</level2>
        <scale>3.0</scale>
     </param>
 

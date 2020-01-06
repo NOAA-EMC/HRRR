@@ -400,30 +400,6 @@
        </param>
 
        <param>
-           <shortname>GSD_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_2-5km</shortname>
-           <table_info>NCEP</table_info>
-           <scale>3.0</scale>
-       </param>
-
-       <param>
-           <shortname>GSD_MAX_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_1-6km</shortname>
-           <table_info>NCEP</table_info>
-           <scale>3.0</scale>
-       </param>
-
-       <param>
-           <shortname>GSD_MIN_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_1-6km</shortname>
-           <table_info>NCEP</table_info>
-           <scale>3.0</scale>
-       </param>
-
-       <param>
-           <shortname>GSD_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_1-6km</shortname>
-           <table_info>NCEP</table_info>
-           <scale>3.0</scale>
-       </param>
-
-       <param>
            <shortname>GSD_MAX_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_0-2km</shortname>
            <table_info>NCEP</table_info>
            <scale>3.0</scale>
