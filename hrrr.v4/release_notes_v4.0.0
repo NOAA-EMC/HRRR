@@ -1,0 +1,172 @@
+elease Notes:  HRRR v4.0.0
+
+v4.0.0 - released January 3, 2020
+   - Now uses WRF Version 3.9
+   - Updated versions of GSI and post processor
+   - Introduce HRRR data assimilation system (runs every hour over CONUS only)
+   - Forecasts extended to 48 hours for the 00/06/12/18z cycles
+   - Improved radiation, LSM, and PBL schemes
+   - Better representation of sub-grid clouds
+   - Lake model for small lakes; FVCOM data for Great Lakes
+   - Specification of smoke from VIIRS fire radiative power, 3D transport of smoke
+   - Upgrade being made concurrently with RAPv5
+
+REPOSITORY DETAILS
+     After cloning the EMC_hrrr git repository, retrieve the new code from the hrrr.v4 directory.
+     The build script is located here: EMC_hrrr/hrrr.v4/sorc/build_hrrr_all.sh
+
+Information on the brand new HRRRDAS
+   - Runs every hour
+   - Comprised of 36 1-hour forecasts
+   - HRRRDAS analysis mean is used to initialize the ref2tten job for the HRRR CONUS instead of RAP guess file
+   - HRRRDAS members are used as the background ensemble for the HRRR CONUS GSI analysis
+
+Output and Resources
+- output changes - conus 
+   - multiple new parameters in all output files
+   - output now available to f48 at 00/06/12/18z
+   - smoke output now available in the wrfnat, wrfprs, and wrfsfc output files 
+   - nawips output is now located in .../com/hrrr/prod/hrrr.$YYYYMMDD/conus/gempak
+
+- output changes - alaska 
+   - multiple new parameters in all output files
+   - output now available to f48 at 00/06/12/18z
+   - smoke output now available in the wrfnat, wrfprs, and wrfsfc output files 
+   - nawips output is located in .../com/hrrr/prod/hrrr.$YYYYMMDD/alaska/gempak
+
+- output - hrrrdas
+   - com output located in hrrrdas subdirectory within .../com/hrrr/prod/hrrr.$YYYYMMDD
+   - nwges output located in .../nwges/prod/hrrr
+
+- compute resource information - conus
+   - still runs every hour, but now to f48 at 00/06/12/18z
+   - forecast job changes from 108 nodes (24 tasks/node) to 78 nodes (24 tasks/node), except at 00/06/12/18Z when 138 nodes (24 tasks/node) are used
+   - analysis job changes from 15 nodes (24 tasks/node) to 60 nodes (24 tasks/node)
+   - single cycle runtime for non-extended forecasts increases by ~5 minutes
+      - runtime increases from 3.5 to 4.5 minutes for makeguess job
+      - runtime increases from 1.5 to 2.5 minutes for ref2tten job
+      - runtime increases from 4.5 to 5.5 minutes for forecastpre job
+      - runtime increases by ~1-2 minutes for analysis job (cycle-to-cycle runtime variability)
+   - single cycle runtime for extended forecasts decreases by ~3 minutes
+      - runtime decreases from ~63 minutes to ~56 minutes for forecast job
+      - runtime increases from 3.5 to 4.5 minutes for makeguess job
+      - runtime increases from 4.5 to 5.5 minutes for forecastpre job
+      - runtime increases by ~1-2 minutes for analysis job (cycle-to-cycle runtime variability)
+      - runtime increases from 28 minutes to 38 minutes for makebc job (this task runs separate of the others and is not included in the single cycle runtime)
+   - disk space usage changes 
+      - Total: 3.3 TB/day to 3.6 TB/day
+      - com: 2.8 TB/day to 3.1 TB/day
+      - gempak subdirectory: 379 GB/day to 397 GB/day
+      - wmo subdirectory: 70 GB/day to 77 GB/day
+
+- compute resource information - alaska
+   - runs every third hour, out to f18 at 03/09/15/21z and out to f48 at 00/06/12/18z
+   - forecast job changes from 108 nodes (24 tasks/node) to 78 nodes (24 tasks/node)
+   - single cycle runtime for non-extended forecasts remains about the same
+      - runtime decreases from 25 minutes to 23 minutes for forecast job
+      - runtime increases from 3 minutes to 4 minutes for makeguess job
+   - single cycle runtime for extended forecasts increases by ~12 minutes
+      - runtime increases from 44 minutes to 55 minutes for forecast job
+      - runtime increases from 3 minutes to 4 minutes for makeguess job
+      - runtime increases from 21 minutes to 30 minutes for makebc job (this task runs separate of the others and is not included in the single cycle runtime)
+   - disk space usage
+      - Total: 0.8 TB/day to 0.9 TB.day
+      - com: 0.6 TB/day to 0.7 TB/day
+      - gempak subdirectory: 212 GB/day to 224 GB/day
+      - wmo subdirectory: 11 GB/day to 13 GB/day
+
+- compute resource information - hrrrdas
+   - runs every hour
+   - single cycle runtime for all cycles except 09/21Z is ~52 minutes
+   - single cycle runtime for 09/21Z cycles is ~55 minutes
+      - forecast jobs for 09/21Z cycles are initiated by the makeguess job which runs 10 minutes after the prep cloud job is submitted
+
+- Data retention for files in /com and /nwges under prod/para/test environments
+   - asking to maintain current retention of data in /com and in prod and recommend same retention for parallel.
+   - Please mirror smartinit, wrfprs, wrfsfc, wrfnat, class1 bufr files to development machine along with gempak subdirectories
+
+- new executables
+   - hrrr_cal_bcpert
+   - hrrr_cal_ensmean
+   - hrrr_copy_hrrrdas
+   - hrrr_cycle_netcdf
+   - hrrrdas_wrfarw_fcst
+   - hrrrdas_wrfarw_real
+   - hrrr_enkf
+   - hrrr_fires_ncfmake
+   - hrrr_full_cycle_surface_enkf
+   - hrrr_initialens
+   - hrrr_prep_chem_sources
+   - hrrr_process_fvcom
+   - hrrr_process_mosaic_enkf
+   - hrrr_smartinit
+   - hrrr_smoke_fre_bbm_alaska
+   - hrrr_smoke_fre_bbm_conus
+   - hrrr_smoke_merge_frp_alaska
+   - hrrr_smoke_merge_frp_conus
+   - hrrr_smoke_proc_j01_frp_alaska
+   - hrrr_smoke_proc_j01_frp_conus
+   - hrrr_smoke_proc_modis_frp_alaska
+   - hrrr_smoke_proc_modis_frp_conus
+   - hrrr_smoke_proc_npp_frp_alaska
+   - hrrr_smoke_proc_npp_frp_conus
+   - hrrr_smoke_qc_modis
+   - hrrr_smoke_qc_viirs
+   - hrrr_write_idate
+
+- revised executables
+   - hrrr_full_cycle_surface
+   - hrrr_gsi
+   - hrrr_process_cloud
+   - hrrr_process_enkf
+   - hrrr_process_imssnow
+   - hrrr_process_lightning
+   - hrrr_process_mosaic
+   - hrrr_process_sst
+   - hrrr_ref2tten
+   - hrrr_sndp
+   - hrrr_stnmlist
+   - hrrr_update_bc
+   - hrrr_update_gvf
+   - hrrr_wps_metgrid
+   - hrrr_wps_ungrib
+   - hrrr_wrfarw_fcst
+   - hrrr_wrfarw_real
+   - hrrr_wrfbufr_alaska
+   - hrrr_wrfbufr_conus
+   - hrrr_wrfpost
+     
+- eliminated executables
+   - hrrr_smartinit_ak
+   - hrrr_smartinit_conus
+
+
+- changes to directories
+   - ecf, fix, parm, scripts, ush - hrrrdas subdirectories must be created
+   - nawips output is now located in .../com/hrrr/prod/hrrr.$YYYYMMDD/conus/gempak and .../com/hrrr/prod/hrrr.$YYYYMMDD/alaska/gempak
+
+- pre-implementation testing requirements
+   - need to test obsproc upgrade concurrently
+   - need to test verification code changes
+   - need to test smartinit update
+   - please get guesses for conus and alaska for the hrrrges_sfc directories from the developers
+   - need to run parallel RAP simultaneously - HRRRv4 cannot run without RAPv5 running
+   - please retrieve large fix files from the following directory on WCOSS: /gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod_final/hrrr.v4.0.0/fix
+   - please retrieve large parm files from the following directory on WCOSS and place in the corresponding hrrr.v4.0.0/parm subdirectories: /gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod_final/parm_hrrr
+
+- Dissemination info
+   - output should be placed into /gpfs/hps/nco/ops/com/hrrr/para
+   - output should be placed on ftp server
+   - output should be placed on paranomads - a directory structure has been set up
+   - request that all gempak output be transferred to DEVWCOSS as well as all wrfsfc files
+   - code is proprietary, and restricted data is used but is not disseminated
+
+- Archive to HPSS
+   - scripts may need to be modified to save extra forecast hours at 00/06/12/18z
+   - Add HRRRDAS to HPSS archive - please set up hpss retention scripts to save the HRRRDAS analysis mean and GSI diag files for each cycle
+   - Estimates for tarballs for runhistory
+      - bufr: 1.6 GB/day (similar to HRRRv3)
+      - init: 1.64 TB/day to ??? TB/day
+      - wrf: 254 GB/day to 329 GB/day
+      - hrrrdas: 0.33 TB/day
+
