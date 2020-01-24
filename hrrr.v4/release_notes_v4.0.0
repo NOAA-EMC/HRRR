@@ -165,8 +165,8 @@ Output and Resources
    - scripts may need to be modified to save extra forecast hours at 00/06/12/18z
    - Add HRRRDAS to HPSS archive - please set up hpss retention scripts to save the HRRRDAS analysis mean and GSI diag files for each cycle
    - Estimates for tarballs for runhistory
-      - bufr: 1.6 GB/day (similar to HRRRv3)
-      - init: 1.64 TB/day to ??? TB/day
+      - bufr: 1.7 GB/day (similar to HRRRv3)
+      - init: 1.1 TB/day to 1.01 TB/day
       - wrf: 254 GB/day to 329 GB/day
       - hrrrdas: 0.33 TB/day
 
