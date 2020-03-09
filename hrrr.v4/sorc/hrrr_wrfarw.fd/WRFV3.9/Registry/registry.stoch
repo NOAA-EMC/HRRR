@@ -6,18 +6,18 @@ state    real   VERTSTRUCS    ikj  dyn_em 1 -   rd         "VERTSTRUCS"     "ver
  
 
 # full or possibly thin (i.e., length of 1) 3D arrays depending of dimension i{stoclev}j 
-state    real   field_sf        i{stoclev}j  dyn_em 1 -   rhdf=(p2c) "field_sf      " "field for surface perturbations " ""
-state    real   field_pbl       i{stoclev}j  dyn_em 1 -   rhdf=(p2c) "field_pbl     " "field for surface perturbations " ""
-state    real   field_conv      i{stoclev}j  dyn_em 1 -   rhdf=(p2c) "field_conv     " "field for surface perturbations " ""
-state    real   ru_tendf_stoch  i{stoclev}j  dyn_em 1 X   rhdf=(p2c) "ru_tendf_stoch" "stochastic forcing, U " "m/s^2"
-state    real   rv_tendf_stoch  i{stoclev}j  dyn_em 1 Y   rhdf=(p2c) "rv_tendf_stoch" "stochastic forcing, V " "m/s^2"
-state    real   rt_tendf_stoch  i{stoclev}j  dyn_em 1 -   rhdf=(p2c) "rt_tendf_stoch" "stochastic forcing, T " "K/s"
-state    real   rand_pert       i{stoclev}j  dyn_em 1 -   rhdf=(p2c) "rand_pert"       "randomn field " ""
-state    real   pattern_spp_conv i{stoclev}j dyn_em 1 -   rhdf=(p2c) "pattern_spp_conv" "pattern sppt conv" ""
-state    real   pattern_spp_pbl i{stoclev}j  dyn_em 1 -   rhdf=(p2c) "pattern_spp_pbl" "pattern sppt pbl" ""
-state    real   pattern_spp_mp  i{stoclev}j  dyn_em 1 -   rhdf=(p2c) "pattern_spp_mp"  "pattern sppt mp" ""
-state    real   pattern_spp_lsm i{stoclev}j  dyn_em 1 -   rhdf=(p2c) "pattern_spp_lsm" "pattern sppt lsm" ""
-state    real   rstoch          i{stoclev}j  dyn_em 1 -   rhdf=(p2c) "rstoch"          "randomn field for SPPT" ""
+state    real   field_sf        i{stoclev}j  dyn_em 1 -   rhd "field_sf      " "field for surface perturbations " ""
+state    real   field_pbl       i{stoclev}j  dyn_em 1 -   rhd "field_pbl     " "field for surface perturbations " ""
+state    real   field_conv      i{stoclev}j  dyn_em 1 -   rhd "field_conv     " "field for surface perturbations " ""
+state    real   ru_tendf_stoch  i{stoclev}j  dyn_em 1 X   rhd "ru_tendf_stoch" "stochastic forcing, U " "m/s^2"
+state    real   rv_tendf_stoch  i{stoclev}j  dyn_em 1 Y   rhd "rv_tendf_stoch" "stochastic forcing, V " "m/s^2"
+state    real   rt_tendf_stoch  i{stoclev}j  dyn_em 1 -   rhd "rt_tendf_stoch" "stochastic forcing, T " "K/s"
+state    real   rand_pert       i{stoclev}j  dyn_em 1 -   rhd "rand_pert"       "randomn field " ""
+state    real   pattern_spp_conv i{stoclev}j dyn_em 1 -   rhd "pattern_spp_conv" "pattern sppt conv" ""
+state    real   pattern_spp_pbl i{stoclev}j  dyn_em 1 -   rhd "pattern_spp_pbl" "pattern sppt pbl" ""
+state    real   pattern_spp_mp  i{stoclev}j  dyn_em 1 -   rhd "pattern_spp_mp"  "pattern sppt mp" ""
+state    real   pattern_spp_lsm i{stoclev}j  dyn_em 1 -   rhd "pattern_spp_lsm" "pattern sppt lsm" ""
+state    real   rstoch          i{stoclev}j  dyn_em 1 -   rhd "rstoch"          "randomn field for SPPT" ""
 
 # 2d arrays
 state    real  SPSTREAMFORCC  {istoch}{jstoch}   misc   1 -  -          "SPSTREAMFORCC"  "real  spect. coeff. of stoch. streamfunction perturb." ""

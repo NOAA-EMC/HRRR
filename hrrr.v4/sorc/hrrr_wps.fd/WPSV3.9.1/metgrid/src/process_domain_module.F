@@ -774,7 +774,7 @@ integer, parameter :: BDR_WIDTH = 3
                                      we_mem_s, we_mem_e, we_mem_stag_s, we_mem_stag_e, &
                                      sn_mem_s, sn_mem_e, sn_mem_stag_s, sn_mem_stag_e )
          else
-            call process_intermediate_fields(input_name, do_const_processing, temp_date, fg_data, got_this_field, &
+            call process_intermdt_fields(input_name, do_const_processing, temp_date, fg_data, got_this_field, &
                                              landmask, process_bdy_width, &
                                              u_field, v_field, &
                                              dom_dx, dom_dy, &
@@ -996,7 +996,7 @@ integer, parameter :: BDR_WIDTH = 3
    !
    ! Purpose:
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   subroutine process_intermediate_fields(input_name, do_const_processing, temp_date, fg_data, got_this_field, &
+   subroutine process_intermdt_fields(input_name, do_const_processing, temp_date, fg_data, got_this_field, &
                                           landmask, process_bdy_width, &
                                           u_field, v_field, &
                                           dom_dx, dom_dy, &
@@ -1446,7 +1446,7 @@ integer, parameter :: BDR_WIDTH = 3
          end if
       end if
 
-   end subroutine process_intermediate_fields
+   end subroutine process_intermdt_fields
 
 
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
