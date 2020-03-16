@@ -40,7 +40,8 @@ program  process_NASALaRC_cloud
 ! MPI variables
   integer :: npe, mype,ierror
 !SATID
-  integer, parameter :: satidgoeswest=259  ! GOES 15
+!  integer, parameter :: satidgoeswest=259  ! GOES 15  Stopped after March 2nd, 2020
+  integer, parameter :: satidgoeswest=271  ! GOES 17
   integer, parameter :: satidgoeseast=270  ! GOES 16
   real     :: rad2deg = 180.0/3.1415926
   integer,parameter  :: boxMAX=10
