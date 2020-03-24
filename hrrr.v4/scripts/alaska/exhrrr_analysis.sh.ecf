@@ -342,7 +342,7 @@ RTMEMIS_MWwater=${FIXcrtm_anal}/FASTEM6.MWwater.EmisCoeff.bin
 CONVINFO=${FIXhrrr}/hrrrak_nam_regional_convinfo
 OZINFO=${FIXhrrr}/hrrrak_global_ozinfo.txt    
 PCPINFO=${FIXhrrr}/hrrrak_global_pcpinfo.txt
-ATMS_BEAMWIDTH=${FIXrap}/hrrrak_atms_beamwidth.txt
+ATMS_BEAMWIDTH=${FIXhrrr}/hrrrak_atms_beamwidth.txt
 
 OBERROR=${FIXhrrr}/hrrrak_nam_errtable.r3dv
 AIRCRAFTREJECTLIST=${FIXhrrr}/hrrrak_current_bad_aircraft.txt   # aircraft reject list

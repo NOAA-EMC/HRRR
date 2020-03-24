@@ -231,7 +231,7 @@ SURFACEPROVIDERLIST=${FIXhrrr}/hrrr_gsd_sfcobs_provider.txt # mesonet network us
  cp $PCPINFO  pcpinfo
  cp $OBERROR  errtable
  cp $AIRCRAFTREJECTLIST current_bad_aircraft
- cp $SURFACEUSELIST gsd_sfcobs_uselist.txt
+# cp $SURFACEUSELIST gsd_sfcobs_uselist.txt
  cp $SURFACEPROVIDERLIST gsd_sfcobs_provider.txt
  
 #    # CRTM Spectral and Transmittance coefficients
