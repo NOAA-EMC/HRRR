@@ -37,12 +37,12 @@ fi
 
 echo ${PDY}${cyc}
 cp ${PARMhrrr}/hrrr_prepobs_prep.bufrtable ./prepobs_prep.bufrtable
-ln -s ${FIXhrrr}/hrrrdas_geo_em.d01.nc geo_em.d01.nc 
+ln -sf ${FIXhrrr}/hrrrdas_geo_em.d01.nc geo_em.d01.nc 
 
 # Link to the prepbufr data
 if [ -r "${COMINnasalarc}/${RAP_RUN}.t${cyc}z.lgycld.tm00.bufr_d" ]; then
   cp ${COMINnasalarc}/${RAP_RUN}.t${cyc}z.lgycld.tm00.bufr_d . 
-  ln -s ${RAP_RUN}.t${cyc}z.lgycld.tm00.bufr_d NASA_LaRC_cloud.bufr
+  ln -sf ${RAP_RUN}.t${cyc}z.lgycld.tm00.bufr_d NASA_LaRC_cloud.bufr
 else
   echo "WARNING: ${COMINnasalarc}/${RAP_RUN}.t${cyc}z.lgycld.tm00.bufr_d does not exist!"
   echo "cloud processing will run with the NASALaRC data missing"
@@ -79,7 +79,7 @@ cat << EOF > namelist_nasalarc
 EOF
 
 rm geo_em.d01.nc
-ln -s ${FIXhrrr}/hrrrdas_geo_em.d02.nc geo_em.d01.nc 
+ln -sf ${FIXhrrr}/hrrrdas_geo_em.d02.nc geo_em.d01.nc 
 runline="aprun -n 4 -N 4 ./hrrr_process_cloud"
 $runline
 export err=$?; err_chk

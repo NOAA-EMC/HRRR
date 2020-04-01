@@ -119,7 +119,7 @@ subhtimes="16 30 46 60"
 count=1
 for subhtime in ${subhtimes}; do
   if [ -r "${DATA_RADAR}/${subhtime}/RefInGSI.dat" ]; then
-    ln -s ${DATA_RADAR}/${subhtime}/RefInGSI3D.dat ./RefInGSI3D.dat_0${count}
+    ln -sf ${DATA_RADAR}/${subhtime}/RefInGSI3D.dat ./RefInGSI3D.dat_0${count}
   else
     echo "FATAL ERROR ${DATA_RADAR}/${subhtime}/RefInGSI3D.dat does not exist!"
     err_exit 1
@@ -132,7 +132,7 @@ subhtimes="16 30 46 60"
 count=1
 for subhtime in ${subhtimes}; do
   if [ -r "${DATA_RADAR}/${subhtime}/LightningInGSI.dat" ]; then
-    ln -s ${DATA_RADAR}/${subhtime}/LightningInGSI.dat ./LightningInGSI.dat_0${count}
+    ln -sf ${DATA_RADAR}/${subhtime}/LightningInGSI.dat ./LightningInGSI.dat_0${count}
   else
     echo "ERROR ${DATA_RADAR}/${subhtime}/LightningInGSI.dat does not exist!"
 #    err_exit 1

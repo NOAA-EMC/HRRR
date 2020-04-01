@@ -54,12 +54,15 @@ ymdh=$YYYYMMDDHH
 hh=$HH
 
 cp ${PARMhrrr}/hrrrak_prepobs_prep.bufrtable  ./prepobs_prep.bufrtable
-ln -s ${FIXhrrr}/hrrrak_geo_em.d01.nc geo_em.d01.nc 
+ln -sf ${FIXhrrr}/hrrrak_geo_em.d01.nc geo_em.d01.nc 
 
 # find NSSL grib2 mosaic files
 COM_MOSAIC_GRIB2=${COMINmosaic}/conus/MergedReflectivityQC
 mmm1=$((mm - 1))
 mmm2=$((mm - 2))
+if [ $mmm1 -lt 0 ]; then let mmm1=mmm1+60; fi
+if [ $mmm2 -lt 0 ]; then let mmm2=mmm1+60; fi
+
 numgrib2_00=`ls ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mm}??.grib2.gz | wc -l`
 numgrib2_01=`ls ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mmm1}??.grib2.gz | wc -l`
 numgrib2_02=`ls ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mmm2}??.grib2.gz | wc -l`
@@ -117,14 +120,14 @@ else
    else
       numtiles=81
       export MOSAICdir=$COMINradar/radar.${ymdh}
-      ln -s ${MOSAICdir}/tile1/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t1
-      ln -s ${MOSAICdir}/tile2/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t2
-      ln -s ${MOSAICdir}/tile3/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t3
-      ln -s ${MOSAICdir}/tile4/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t4
-      ln -s ${MOSAICdir}/tile5/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t5
-      ln -s ${MOSAICdir}/tile6/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t6
-      ln -s ${MOSAICdir}/tile7/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t7
-      ln -s ${MOSAICdir}/tile8/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t8
+      ln -sf ${MOSAICdir}/tile1/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t1
+      ln -sf ${MOSAICdir}/tile2/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t2
+      ln -sf ${MOSAICdir}/tile3/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t3
+      ln -sf ${MOSAICdir}/tile4/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t4
+      ln -sf ${MOSAICdir}/tile5/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t5
+      ln -sf ${MOSAICdir}/tile6/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t6
+      ln -sf ${MOSAICdir}/tile7/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t7
+      ln -sf ${MOSAICdir}/tile8/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t8
    fi
 fi
 
@@ -176,7 +179,7 @@ do
   fi
 done
 
-ln -s rap.t${cyc}z.lghtng.tm00.bufr_d lghtngbufr
+ln -sf rap.t${cyc}z.lghtng.tm00.bufr_d lghtngbufr
 
 echo ${ymdh} > ./lightning_cycle_date
 

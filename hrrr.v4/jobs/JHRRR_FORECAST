@@ -49,19 +49,12 @@ date
 ####################################
 # obtain unique process id (pid) and make temp directory
 ####################################
-export DATA=${DATAROOT}/hrrr_${dom}_fcst_${cyc}
-rm -rf $DATA
+export DATA=${DATAROOT}/hrrr_${dom}_fcst_${envir}_${cyc}
+if [ "${dom}" != hrrrdas ]; then
+  rm -rf $DATA
+fi
 mkdir -p $DATA
 cd $DATA
-
-if [ "${dom}" = hrrrdas ]; then
-   echo "run forecast for member =$ensmem"
-   ensmemid=`printf %4.4i $ensmem`
-
-   rm -rf mem${ensmemid}
-   mkdir mem${ensmemid}
-   cd mem${ensmemid}
-fi
 
 export cycle=t${cyc}z
 export tmmark=tm00
@@ -91,6 +84,17 @@ export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 
+if [ "${dom}" = hrrrdas ]; then
+   . $PARMhrrr/hrrrdas_para_config.fcst
+   ensmem=$ENSBEG
+   echo "run forecast for member =$ensmem"
+   ensmemid=`printf %4.4i $ensmem`
+
+   rm -rf $DATA/mem${ensmemid}
+   mkdir $DATA/mem${ensmemid}
+   cd $DATA/mem${ensmemid}
+fi
+
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
@@ -117,6 +121,20 @@ env
 ${HRRR_FCSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_fcst.sh.ecf}
 ########################################################
 
+if [ "${dom}" = hrrrdas ]; then
+   (( ensmem = $ensmem + 1 ))
+   while [[ $ensmem -le $ENSEND ]]; do
+     echo "run forecast for member =$ensmem"
+     ensmemid=`printf %4.4i $ensmem`
+
+     rm -rf $DATA/mem${ensmemid}
+     mkdir $DATA/mem${ensmemid}
+     cd $DATA/mem${ensmemid}
+     ${HRRR_FCSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_fcst.sh.ecf}
+     (( ensmem = $ensmem + 1 ))
+  done
+fi
+
 cat $pgmout
 
 msg="ENDED NORMALLY."
@@ -127,6 +145,17 @@ export KEEPDATA=YES
 # Remove the Temporary working directory
 ########################################
 cd $DATA
-if [ ${KEEPDATA} = NO ] ; then rm -rf $DATA ; fi
+if [ ${KEEPDATA} = NO ] ; then 
+  if [ "${dom}" = hrrrdas ]; then
+    ensmem=$ENSBEG
+    while [[ $ensmem -le $ENSEND ]]; do
+      ensmemid=`printf %4.4i $ensmem`
+      rm -rf $DATA/mem${ensmemid}
+      (( ensmem = $ensmem + 1 ))
+    done
+  else
+     rm -rf $DATA ;
+  fi
+fi
 
 date

@@ -47,7 +47,7 @@ date
 ####################################
 # obtain unique process id (pid) and make temp directory
 ####################################
-export DATA=${DATAROOT}/hrrr_${dom}_makeguess_${cyc}
+export DATA=${DATAROOT}/hrrr_${dom}_makeguess_${envir}_${cyc}
 mkdir -p $DATA
 cd $DATA
 
@@ -126,9 +126,9 @@ export COMRAP=${COMRAP:-$(compath.py rap/prod)}
 
 export gespath=${gespath:-${GESROOT}/${envir}}
 export HRRRDASENSP=${HRRRDASENSP:-$gespath/${NET}/hrrrdasensp}
-export HRRRGESSFC=${HRRRGESSFC:-$gespath/${NET}/hrrrges_sfc/conus}
+export HRRRGESSFC=${HRRRGESSFC:-$gespath/${NET}/hrrrges_sfc/${dom}}
 
-mkdir -m 775 -p $COM $COMOUT
+mkdir -m 775 -p $COM $COMOUT $HRRRGESSFC $HRRRDASENSP 
 env
 
 ########################################################
@@ -145,7 +145,7 @@ postmsg "$jlogfile" "$msg"
 # Remove the Temporary working directory
 ##############################
 cd $DATA
-#if [ ${KEEPDATA} = NO ] ; then rm -rf $DATA ; fi
+if [ ${KEEPDATA} = NO ] ; then rm -rf $DATA ; fi
 
 date
 

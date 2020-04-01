@@ -142,14 +142,14 @@ if [ ${cyc} -eq 09 -o ${cyc} -eq 21 ]; then
       fileguessin=${COMIN}/hrrr.t${cyc}z.wrfguess_d01.mem${ensmemid}
       if [ -s ${filein} ]; then
          echo " Initial condition ${filein} "
-         ln -s ${filein} wrfinput_d01
-         ln -s ${filein} wrfvar_output 
+         ln -sf ${filein} wrfinput_d01
+         ln -sf ${filein} wrfvar_output 
       else
          echo "initial file does not exist= ${filein} try=${fileguessin}"
          if [ -s ${fileguessin} ];then
             echo " Initial condition ${fileguessin} "
-            ln -s ${fileguessin} wrfinput_d01
-            ln -s ${fileguessin} wrfvar_output 
+            ln -sf ${fileguessin} wrfinput_d01
+            ln -sf ${fileguessin} wrfvar_output 
          else
             errmsg="FATAL ERROR: No initial condition available for forecast - exit"
             echo $errmsg
@@ -161,12 +161,12 @@ if [ ${cyc} -eq 09 -o ${cyc} -eq 21 ]; then
       fileguessin=${COMIN}/hrrr.t${cyc}z.wrfguess_d02.mem${ensmemid}
       if [ -s ${filein} ]; then
          echo " Initial condition ${filein} "
-         ln -s ${filein} wrfinput_d02
+         ln -sf ${filein} wrfinput_d02
       else
          echo "initial file does not exist= ${filein} try=${fileguessin}"
          if [ -s ${fileguessin} ]; then
             echo " Initial condition ${fileguessin} "
-            ln -s ${fileguessin} wrfinput_d02
+            ln -sf ${fileguessin} wrfinput_d02
          else
             errmsg="FATAL ERROR: No initial condition available for forecast - exit"
             echo $errmsg
@@ -178,14 +178,14 @@ if [ ${cyc} -eq 09 -o ${cyc} -eq 21 ]; then
       filein=${COMIN}/hrrr.t${cyc}z.wrfguess_d01.mem${ensmemid}
       if [ -s ${filein} ]; then
          echo " Initial condition ${filein} "
-         ln -s ${filein} wrfinput_d01
-         ln -s ${filein} wrfvar_output 
+         ln -sf ${filein} wrfinput_d01
+         ln -sf ${filein} wrfvar_output 
       else
          echo "initial file does not exist= ${filein} try=${fileguessin}"
          if [ -s ${fileguessin} ];then
             echo " Initial condition ${fileguessin} "
-            ln -s ${fileguessin} wrfinput_d01
-            ln -s ${fileguessin} wrfvar_output 
+            ln -sf ${fileguessin} wrfinput_d01
+            ln -sf ${fileguessin} wrfvar_output 
          else
             errmsg="FATAL ERROR: No initial condition available for forecast - exit"
             echo $errmsg
@@ -197,12 +197,12 @@ if [ ${cyc} -eq 09 -o ${cyc} -eq 21 ]; then
       filein=${COMIN}/hrrr.t${cyc}z.wrfguess_d02.mem${ensmemid}
       if [ -s ${filein} ]; then
          echo " Initial condition ${filein} "
-         ln -s ${filein} wrfinput_d02
+         ln -sf ${filein} wrfinput_d02
       else
          echo "initial file does not exist= ${filein} try=${fileguessin}"
          if [ -s ${fileguessin} ]; then
             echo " Initial condition ${fileguessin} "
-            ln -s ${fileguessin} wrfinput_d02
+            ln -sf ${fileguessin} wrfinput_d02
          else
             errmsg="FATAL ERROR: No initial condition available for forecast - exit"
             echo $errmsg
@@ -215,8 +215,8 @@ else
    filein=${COMIN}/hrrr.t${cyc}z.wrfinput_d01.mem${ensmemid}
    if [ -s ${filein} ]; then
       echo " Initial condition ${filein} "
-      ln -s ${filein} wrfinput_d01
-      ln -s ${filein} wrfvar_output 
+      ln -sf ${filein} wrfinput_d01
+      ln -sf ${filein} wrfvar_output 
    else
       echo "initial file does not exist=${filein}"
       errmsg="FATAL ERROR: No initial condition available for forecast - exit"
@@ -227,7 +227,7 @@ else
    filein=${COMIN}/hrrr.t${cyc}z.wrfinput_d02.mem${ensmemid}
    if [ -s ${filein} ]; then
       echo " Initial condition ${filein} "
-      ln -s ${filein} wrfinput_d02
+      ln -sf ${filein} wrfinput_d02
    else
       echo "initial file does not exist=${filein}"
       errmsg="FATAL ERROR: No initial condition available for forecast - exit"
@@ -284,7 +284,7 @@ for file in ${WRF_DAT_FILES[@]}; do
   tempfile=`basename ${file}`
   tempname=`echo ${tempfile} | sed s/hrrrdas_run_//`
   rm -f ${tempname}
-  ln -s ${file} ${tempname}
+  ln -sf ${file} ${tempname}
 done
 
 # Get the start and end time components

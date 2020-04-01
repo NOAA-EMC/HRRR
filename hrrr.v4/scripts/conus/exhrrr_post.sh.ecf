@@ -47,6 +47,7 @@ timestr2=`${DATE} +%Y-%m-%d_%H:%M:%S -d "${START_TIME}  ${fhr} hours"`
 
 # Save files for surface cycle
 targetsize=15870850680
+targetsize=16061363612
 if [ $fhr -lt 12 ]
 then
   counter=1
@@ -79,63 +80,63 @@ ${VALIDTIMEUNITS}
 EOF
 
 rm -f fort.*
-ln -s ${PARMhrrr}/hrrr_post_avblflds.xml post_avblflds.xml
-ln -s ${PARMhrrr}/hrrr_params_grib2_tbl_new params_grib2_tbl_new
+ln -sf ${PARMhrrr}/hrrr_post_avblflds.xml post_avblflds.xml
+ln -sf ${PARMhrrr}/hrrr_params_grib2_tbl_new params_grib2_tbl_new
 
 # use special postcntrl for fhr=0,1 to eliminate duplicate precip records
 if [ $fhr -eq 0 -o $fhr -eq 1 ]
 then
-ln -s ${PARMhrrr}/hrrr_postcntrl_anl.xml postcntrl.xml
-ln -s ${PARMhrrr}/hrrr_postxconfig_anl-NT.txt postxconfig-NT.txt
+ln -sf ${PARMhrrr}/hrrr_postcntrl_anl.xml postcntrl.xml
+ln -sf ${PARMhrrr}/hrrr_postxconfig_anl-NT.txt postxconfig-NT.txt
 else
-ln -s ${PARMhrrr}/hrrr_postcntrl.xml postcntrl.xml
-ln -s ${PARMhrrr}/hrrr_postxconfig-NT.txt postxconfig-NT.txt
+ln -sf ${PARMhrrr}/hrrr_postcntrl.xml postcntrl.xml
+ln -sf ${PARMhrrr}/hrrr_postxconfig-NT.txt postxconfig-NT.txt
 fi
 
-ln -s ${PARMhrrr}/hrrr_ETAMPNEW_DATA eta_micro_lookup.dat
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/imgr_g11.SpcCoeff.bin imgr_g11.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/imgr_g12.SpcCoeff.bin imgr_g12.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/imgr_g13.SpcCoeff.bin imgr_g13.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/imgr_g15.SpcCoeff.bin imgr_g15.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/imgr_mt1r.SpcCoeff.bin imgr_mt1r.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/imgr_mt2.SpcCoeff.bin imgr_mt2.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/amsre_aqua.SpcCoeff.bin amsre_aqua.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/tmi_trmm.SpcCoeff.bin tmi_trmm.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmi_f13.SpcCoeff.bin ssmi_f13.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmi_f14.SpcCoeff.bin ssmi_f14.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmi_f15.SpcCoeff.bin ssmi_f15.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmis_f16.SpcCoeff.bin ssmis_f16.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmis_f17.SpcCoeff.bin ssmis_f17.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmis_f18.SpcCoeff.bin ssmis_f18.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmis_f19.SpcCoeff.bin ssmis_f19.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmis_f20.SpcCoeff.bin ssmis_f20.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/seviri_m10.SpcCoeff.bin seviri_m10.SpcCoeff.bin
-ln -s ${FIXcrtm_post}/SpcCoeff/Big_Endian/v.seviri_m10.SpcCoeff.bin v.seviri_m10.SpcCoeff.bin
-ln -s ${FIXhrrr}/hrrr_imgr_insat3d.SpcCoeff.bin imgr_insat3d.SpcCoeff.bin
+ln -sf ${PARMhrrr}/hrrr_ETAMPNEW_DATA eta_micro_lookup.dat
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/imgr_g11.SpcCoeff.bin imgr_g11.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/imgr_g12.SpcCoeff.bin imgr_g12.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/imgr_g13.SpcCoeff.bin imgr_g13.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/imgr_g15.SpcCoeff.bin imgr_g15.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/imgr_mt1r.SpcCoeff.bin imgr_mt1r.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/imgr_mt2.SpcCoeff.bin imgr_mt2.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/amsre_aqua.SpcCoeff.bin amsre_aqua.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/tmi_trmm.SpcCoeff.bin tmi_trmm.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmi_f13.SpcCoeff.bin ssmi_f13.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmi_f14.SpcCoeff.bin ssmi_f14.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmi_f15.SpcCoeff.bin ssmi_f15.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmis_f16.SpcCoeff.bin ssmis_f16.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmis_f17.SpcCoeff.bin ssmis_f17.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmis_f18.SpcCoeff.bin ssmis_f18.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmis_f19.SpcCoeff.bin ssmis_f19.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/ssmis_f20.SpcCoeff.bin ssmis_f20.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/seviri_m10.SpcCoeff.bin seviri_m10.SpcCoeff.bin
+ln -sf ${FIXcrtm_post}/SpcCoeff/Big_Endian/v.seviri_m10.SpcCoeff.bin v.seviri_m10.SpcCoeff.bin
+ln -sf ${FIXhrrr}/hrrr_imgr_insat3d.SpcCoeff.bin imgr_insat3d.SpcCoeff.bin
 
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/imgr_g11.TauCoeff.bin imgr_g11.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/imgr_g12.TauCoeff.bin imgr_g12.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/imgr_g13.TauCoeff.bin imgr_g13.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/imgr_g15.TauCoeff.bin imgr_g15.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/imgr_mt1r.TauCoeff.bin imgr_mt1r.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/imgr_mt2.TauCoeff.bin imgr_mt2.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/amsre_aqua.TauCoeff.bin amsre_aqua.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/tmi_trmm.TauCoeff.bin tmi_trmm.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmi_f13.TauCoeff.bin ssmi_f13.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmi_f14.TauCoeff.bin ssmi_f14.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmi_f15.TauCoeff.bin ssmi_f15.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmis_f16.TauCoeff.bin ssmis_f16.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmis_f17.TauCoeff.bin ssmis_f17.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmis_f18.TauCoeff.bin ssmis_f18.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmis_f19.TauCoeff.bin ssmis_f19.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmis_f20.TauCoeff.bin ssmis_f20.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/seviri_m10.TauCoeff.bin seviri_m10.TauCoeff.bin
-ln -s ${FIXcrtm_post}/TauCoeff/ODAS/Big_Endian/v.seviri_m10.TauCoeff.bin v.seviri_m10.TauCoeff.bin
-ln -s ${FIXhrrr}/hrrr_imgr_insat3d.TauCoeff.bin imgr_insat3d.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/imgr_g11.TauCoeff.bin imgr_g11.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/imgr_g12.TauCoeff.bin imgr_g12.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/imgr_g13.TauCoeff.bin imgr_g13.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/imgr_g15.TauCoeff.bin imgr_g15.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/imgr_mt1r.TauCoeff.bin imgr_mt1r.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/imgr_mt2.TauCoeff.bin imgr_mt2.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/amsre_aqua.TauCoeff.bin amsre_aqua.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/tmi_trmm.TauCoeff.bin tmi_trmm.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmi_f13.TauCoeff.bin ssmi_f13.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmi_f14.TauCoeff.bin ssmi_f14.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmi_f15.TauCoeff.bin ssmi_f15.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmis_f16.TauCoeff.bin ssmis_f16.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmis_f17.TauCoeff.bin ssmis_f17.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmis_f18.TauCoeff.bin ssmis_f18.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmis_f19.TauCoeff.bin ssmis_f19.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/ssmis_f20.TauCoeff.bin ssmis_f20.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODPS/Big_Endian/seviri_m10.TauCoeff.bin seviri_m10.TauCoeff.bin
+ln -sf ${FIXcrtm_post}/TauCoeff/ODAS/Big_Endian/v.seviri_m10.TauCoeff.bin v.seviri_m10.TauCoeff.bin
+ln -sf ${FIXhrrr}/hrrr_imgr_insat3d.TauCoeff.bin imgr_insat3d.TauCoeff.bin
 
-ln -s ${FIXcrtm_post}/CloudCoeff/Big_Endian/CloudCoeff.bin CloudCoeff.bin
-ln -s ${FIXcrtm_post}/AerosolCoeff/Big_Endian/AerosolCoeff.bin AerosolCoeff.bin
-ln -s ${FIXcrtm_post}/EmisCoeff/Big_Endian/Nalli.EK-PDF.W_W-RefInd.EmisCoeff.bin EmisCoeff.bin
+ln -sf ${FIXcrtm_post}/CloudCoeff/Big_Endian/CloudCoeff.bin CloudCoeff.bin
+ln -sf ${FIXcrtm_post}/AerosolCoeff/Big_Endian/AerosolCoeff.bin AerosolCoeff.bin
+ln -sf ${FIXcrtm_post}/EmisCoeff/Big_Endian/Nalli.EK-PDF.W_W-RefInd.EmisCoeff.bin EmisCoeff.bin
 
 # Run unipost
 startmsg

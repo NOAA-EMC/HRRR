@@ -32,7 +32,8 @@ then
   export FORT51=xtrn.${cycle}.hrrr${fhr}
 
   $TOCGRIB2 <$PARMhrrr/wmo/grib2_awips_hrrrakf${fhr}.91  parm='KWBY' >> $pgmout 2> errfile
-  err=$?;export err ;err_chk
+# err=$?;export err ;err_chk
+  err=$?;export err ;echo "err=$err"
 
   if test "$SENDCOM" = 'YES'
   then

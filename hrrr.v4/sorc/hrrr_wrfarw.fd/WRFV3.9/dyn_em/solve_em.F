@@ -1674,6 +1674,7 @@ BENCH_START(advance_w_tim)
          IF ( config_flags%non_hydrostatic ) THEN
            CALL advance_w( grid%w_2, rw_tend, grid%ww, w_save,         &
                            grid%u_2, grid%v_2,                         &
+                           grid%u_save, grid%v_save,                   &
                            grid%mu_2, grid%mut, muave, grid%muts,      &
                            grid%c1h, grid%c2h, grid%c1f, grid%c2f,     &
                            grid%c3h, grid%c4h, grid%c3f, grid%c4f,     &

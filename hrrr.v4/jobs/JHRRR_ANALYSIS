@@ -46,7 +46,7 @@ date
 ####################################
 # obtain unique process id (pid) and make temp directory
 ####################################
-export DATA=${DATAROOT}/hrrr_${dom}_anl_${cyc}
+export DATA=${DATAROOT}/hrrr_${dom}_anl_${envir}_${cyc}
 mkdir -p $DATA
 cd $DATA
 
@@ -93,8 +93,7 @@ export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 
-#export FIXcrtm_anal=${FIXcrtm_anal:-${NWROOTprod}/lib/crtm/${crtm_ver_analysis}/fix}
-export FIXcrtm_anal=${FIXcrtm_anal:-/gpfs/hps3/emc/da/noscrub/Michael.Lueken/CRTM_REL-${crtm_ver_analysis}/fix_update}
+export FIXcrtm_anal=${FIXcrtm_anal:-${NWROOThps}/lib/crtm/${crtm_ver_analysis}/fix}
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
@@ -121,7 +120,6 @@ export HRRRGES_SFC=${HRRRGES_SFC:-$gespath/${NET}/hrrrges_sfc/${dom}}
 export HRRRDASGES=${HRRRDASGES:-$gespath/${NET}/hrrrdasges}
 export RAPGES_SATBIAS=${RAPGES_SATBIAS:-${GESROOT}/${envir}/rap/rapges_satbias}
 
-
 mkdir -m 775 -p $COM $COMOUT 
 
 env
@@ -140,7 +138,12 @@ postmsg "$jlogfile" "$msg"
 # Remove the Temporary working directory
 ##############################
 cd $DATA
-if [ ${KEEPDATA} = NO -a $dom = conus ] ; then rm -rf $DATA ; fi
-
+if [ ${KEEPDATA} = NO -a $dom = conus ] ; then 
+  if [ "${dom}" = hrrrdas ]; then
+    rm -rf $DATA/mem${ensmemid} ;
+  else
+    rm -rf $DATA ; 
+  fi
+fi
 date
 

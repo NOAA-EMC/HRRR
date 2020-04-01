@@ -46,7 +46,7 @@ date
 # obtain unique process id (pid) and make temp directory
 ####################################
 #export DATA=${DATAROOT}/${jobid}
-export DATA=${DATAROOT}/hrrr_${dom}_process_enkf_${cyc}
+export DATA=${DATAROOT}/hrrr_${dom}_process_enkf_${envir}_${cyc}
 mkdir -p $DATA
 cd $DATA
 
@@ -95,7 +95,12 @@ export gespath=${gespath:-${GESROOT}/${envir}}
 export HRRRGES_ENKF=${HRRRGES_ENKF:-$gespath/${RUN}/hrrrges_enkf/${dom}}
 export HRRRGES_SFC=${HRRRGES_SFC:-$gespath/${RUN}/hrrrges_sfc/${dom}}
 export COMINgfs=${COMINgfs:-$(compath.py gfs/prod)}
+export HRRRDASBC=${HRRRDASBC:-$gespath/${NET}/hrrrdasbc}
+export HRRRDASENSP=${HRRRDASENSP:-$gespath/${NET}/hrrrdasensp}
 
+mkdir -m 775 -p $COM $COMOUT $HRRRDASENSP
+
+mkdir -m 775 -p $HRRRDASBC $COMOUT
 env
 
 ########################################################

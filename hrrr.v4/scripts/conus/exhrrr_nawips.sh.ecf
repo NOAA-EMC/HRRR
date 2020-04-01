@@ -24,7 +24,8 @@ export 'PS4=$RUN:$SECONDS + '
 cd $DATA
 # JY $utilscript/setup.sh
 
-NAGRIB_TABLE=${NAGRIB_TABLE:-${NWROOTp1}/gempak/fix/nagrib.tbl}
+#NAGRIB_TABLE=${NAGRIB_TABLE:-${NWROOTp1}/gempak/fix/nagrib.tbl}
+NAGRIB_TABLE=${NAGRIB_TABLE:-${FIXgem}/nagrib.tbl}
 NAGRIB=nagrib2
 cp ${FIXgem}/hrrr_g2varsncep1.tbl g2varsncep1.tbl
 cp ${FIXgem}/hrrr_g2varswmo2.tbl g2varswmo2.tbl

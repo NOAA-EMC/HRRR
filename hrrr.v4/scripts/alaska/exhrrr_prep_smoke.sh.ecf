@@ -13,6 +13,9 @@ fi
 
 # Flag variables to control execution:
 SENDCOM=${SENDCOM:-YES}
+# need this because have toruble load module now:
+#MPISER=/gpfs/hps/nco/ops/nwprod/mpiserial.v3.0.0/exec/mpiserial
+export MPISER=${MPISER:-${NWROOThps}/mpiserial.${mpiserial_ver}/exec/mpiserial}
 
 LSB_MAX_NUM_PROCESSORS="${LSB_MAX_NUM_PROCESSORS:-1}"
 if (( LSB_MAX_NUM_PROCESSORS > 1 )) ; then

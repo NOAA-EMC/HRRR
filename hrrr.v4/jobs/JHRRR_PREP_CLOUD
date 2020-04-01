@@ -39,7 +39,7 @@ date
 ########################################################
 # obtain unique process id (pid) and make temp directory
 ########################################################
-export DATA=${DATAROOT}/hrrr_${dom}_prep_cloud_${cyc}
+export DATA=${DATAROOT}/hrrr_${dom}_prep_cloud_${envir}_${cyc}
 mkdir -p $DATA
 cd $DATA
 

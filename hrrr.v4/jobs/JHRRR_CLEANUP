@@ -59,7 +59,7 @@ export pgmout="OUTPUT.$$"
 
 fhr=00
 if [ $cyc -eq 00 -o $cyc -eq 06 -o $cyc -eq 12 -o $cyc -eq 18 ]; then
-  endfhr=36
+  endfhr=48
 else 
   endfhr=18
 fi

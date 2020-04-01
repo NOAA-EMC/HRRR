@@ -113,13 +113,13 @@ cd ${DATA}
 # Bring in initial condition file 
 if [ -s ${COMIN}/hrrr.t${cyc}z.wrf_inout ]; then
    echo " Initial condition ${COMIN}/hrrr.t${cyc}z.wrf_inout "
-   ln -s ${COMIN}/hrrr.t${cyc}z.wrf_inout wrfinput_d01
-   ln -s ${COMIN}/hrrr.t${cyc}z.wrf_inout wrfvar_output
+   ln -sf ${COMIN}/hrrr.t${cyc}z.wrf_inout wrfinput_d01
+   ln -sf ${COMIN}/hrrr.t${cyc}z.wrf_inout wrfvar_output
 elif [ -s $COMOUT/hrrr.t${cyc}z.wrfguess ]; then
    echo " Could not find wrf_inout file"
    echo " Initial condition ${COMIN}/hrrr.t${cyc}z.wrfguess "
-   ln -s ${COMIN}/hrrr.t${cyc}z.wrfguess wrfinput_d01
-   ln -s ${COMIN}/hrrr.t${cyc}z.wrfguess wrfvar_output
+   ln -sf ${COMIN}/hrrr.t${cyc}z.wrfguess wrfinput_d01
+   ln -sf ${COMIN}/hrrr.t${cyc}z.wrfguess wrfvar_output
 else
    errmsg="FATAL ERROR: No initial condition available for forecast - exit"
    echo $errmsg
@@ -145,7 +145,7 @@ for file in ${WRF_DAT_FILES[@]}; do
   tempfile=`basename ${file}`
   tempname=`echo ${tempfile} | sed s/hrrr_run_//`
   rm -f ${tempname}
-  ln -s ${file} ${tempname}
+  ln -sf ${file} ${tempname}
 done
 
 # Get the start and end time components

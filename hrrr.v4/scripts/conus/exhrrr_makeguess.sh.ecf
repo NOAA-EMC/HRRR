@@ -115,7 +115,7 @@ echo $end_yyyymmdd_hhmmss
 
 # Link the Vtable into the work directory
 rm -f Vtable
-ln -s ${PARMhrrr}/hrrr_vtable Vtable
+ln -sf ${PARMhrrr}/hrrr_vtable Vtable
 
 # Copy the namelist into the work directory
 cp ${PARMhrrr}/hrrr_namelist.wps ${WPSNAMELIST} 
@@ -332,7 +332,7 @@ while [ ${i} -lt ${#alphabet[*]} -a ${n} -lt ${#gribfiles[*]} ]; do
       id="${alphabet[${i}]}${alphabet[${j}]}${alphabet[${k}]}"
       cp ${SOURCE_PATH}/${gribfiles[${n}]} GRIBFILE_COMPLEX.${id}
       $WGRIB2 GRIBFILE_COMPLEX.${id} -set_grib_type s -grib_out GRIBFILE_SIMPLE.${id}
-      ln -s GRIBFILE_SIMPLE.${id} GRIBFILE.${id}
+      ln -sf GRIBFILE_SIMPLE.${id} GRIBFILE.${id}
       (( k=k+1 ))
       (( n=n+1 ))
     done
@@ -389,8 +389,8 @@ echo "FCST INTERVAL = ${FCST_INTERVAL}"
 
 # Link to geogrid static files
 rm -f geo_*.d01.nc
-ln -s ${FIXhrrr}/hrrr_geo_em.d01.nc geo_em.d01.nc 
-ln -s ${PARMhrrr}/hrrr_METGRID.TBL METGRID.TBL
+ln -sf ${FIXhrrr}/hrrr_geo_em.d01.nc geo_em.d01.nc 
+ln -sf ${PARMhrrr}/hrrr_METGRID.TBL METGRID.TBL
 
 # Create patterns for updating the namelist
 equal=[[:blank:]]*=[[:blank:]]*
@@ -497,7 +497,7 @@ for src in ${source_list[*]}; do
     datestr=`${DATE} +"%Y-%m-%d_%H" -d "${START_TIME}  ${fcst} hours"`
     rm -f ${src}:${datestr}
     if [ -e ${source_path_list[${i}]}/${src}:${datestr} ]; then
-      ln -s ${source_path_list[${i}]}/${src}:${datestr}
+      ln -sf ${source_path_list[${i}]}/${src}:${datestr}
     fi
     (( fcst=fcst+${FCST_INTERVAL} ))
   done
@@ -658,7 +658,7 @@ while [ ${fcst} -le ${FCST_LENGTH} ]; do
     err_exit 
   fi
   rm -f ${real_prefix}.d01.${time_str}${real_suffix}
-  ln -s ${DATA_MET}/${real_prefix}.d01.${time_str}${real_suffix}
+  ln -sf ${DATA_MET}/${real_prefix}.d01.${time_str}${real_suffix}
   (( fcst = fcst + ${FCST_INTERVAL} ))
 done
 
@@ -667,7 +667,7 @@ for file in ${WRF_DAT_FILES[@]}; do
   tempfile=`basename ${file}`
   tempname=`echo ${tempfile} | sed s/hrrr_run_//`
   rm -f ${tempname}
-  ln -s ${file} ${tempname}
+  ln -sf ${file} ${tempname}
 done
 
 # Get the start and end time components

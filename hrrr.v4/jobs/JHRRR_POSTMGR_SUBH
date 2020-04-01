@@ -47,7 +47,7 @@ date
 ####################################
 # obtain unique process id (pid) and make temp directory
 ####################################
-export DATA=${DATAROOT}/hrrr_${dom}_postmgr_subh_${cyc}
+export DATA=${DATAROOT}/hrrr_${dom}_postmgr_subh_${envir}_${cyc}
 mkdir -p $DATA
 cd $DATA
 
@@ -86,7 +86,7 @@ export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 
 env
-export INPUT_DATA=${DATAROOT}/hrrr_${dom}_fcst_${cyc}
+export INPUT_DATA=${DATAROOT}/hrrr_${dom}_fcst_${envir}_${cyc}
 
 ########################################################
 # Execute the script.

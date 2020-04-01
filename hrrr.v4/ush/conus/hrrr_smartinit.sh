@@ -43,7 +43,7 @@ ${WGRIB2} hrrr_natgrd.tm00 -set_radius 1:6370000 -set_grib_type c3 -set_bitmap 1
 mv hrrr.NDFDCSf${fhr}.grib2 hrrr.NDFDCSf${fhr}
 ${GRB2INDEX} hrrr.NDFDCSf${fhr} hrrr.NDFDCSf${fhr}I
 
-cp ${COMROOTprod}/date/t${cyc}z DATE
+cp ${COMROOT}/date/t${cyc}z DATE
 
 export pgm=hrrr_smartinit
 . prep_step

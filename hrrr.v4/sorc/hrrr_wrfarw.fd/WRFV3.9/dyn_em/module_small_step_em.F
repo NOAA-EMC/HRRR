@@ -1409,6 +1409,7 @@ END SUBROUTINE advance_mu_t
 !------------------------------------------------------------
 
 SUBROUTINE advance_w( w, rw_tend, ww, w_save, u, v,  &
+                      u_save, v_save,             &
                       mu1, mut, muave, muts,      &
                       c1h, c2h, c1f, c2f,         &
                       c3h, c4h, c3f, c4f,         &
@@ -1466,6 +1467,9 @@ SUBROUTINE advance_w( w, rw_tend, ww, w_save, u, v,  &
                                              cqw,     &
                                              alb,     &
                                              alt
+      REAL, DIMENSION(  ims:ime , kms:kme, jms:jme ), &
+            INTENT(INOUT) ::                          &
+                                             u_save, v_save
 
       REAL, DIMENSION( ims:ime , jms:jme ), &
             INTENT(IN   )  ::               &
@@ -1476,6 +1480,7 @@ SUBROUTINE advance_w( w, rw_tend, ww, w_save, u, v,  &
                                    ht,      &
                                    msftx,   &
                                    msfty
+      REAL, DIMENSION( ims:ime , jms:jme )        :: qq
 
       REAL, DIMENSION( kms:kme ),  INTENT(IN   )  :: fnp,     &
                                                      fnm,     &
@@ -1504,6 +1509,7 @@ SUBROUTINE advance_w( w, rw_tend, ww, w_save, u, v,  &
       real :: htop,hbot,hdepth,hk
       real    :: pi,dampmag
       REAL :: muthk, muthkm1
+      real :: factor, rlthresh
 
 !<DESCRIPTION>
 !
@@ -1695,6 +1701,16 @@ SUBROUTINE advance_w( w, rw_tend, ww, w_save, u, v,  &
     ENDDO
 
     IF (config_flags%damp_opt .eq. 3) THEN
+
+      !-- Use 110 m/s threshold to limit wind speed in the ZDAMP layer
+      rlthresh = 110.
+      k=k_end
+      DO i=i_start, i_end
+        qq(i,j)=max(u_save(i,k,j)**2 + v_save(i,k,j)**2,           &
+               u_save(i,k-1,j)**2 + v_save(i,k-1,j)**2,            &
+               u_save(i,k-2,j)**2 + v_save(i,k-2,j)**2)/rlthresh**2
+      ENDDO
+
       DO k=k_end+1,2,-1
       DO i=i_start, i_end
           htop=(ph_1(i,k_end+1,j)+phb(i,k_end+1,j))/g
@@ -1703,6 +1719,17 @@ SUBROUTINE advance_w( w, rw_tend, ww, w_save, u, v,  &
           dampwt(k) = 0.
           if(hk .ge. hbot)then
             dampwt(k) = dampmag*sin(0.5*pi*(hk-hbot)/hdepth)*sin(0.5*pi*(hk-hbot)/hdepth)
+
+            !-- add u,v damping from Rainer Bleck
+            if(k<=k_end) then
+              if (qq(i,j) > 1.) then
+                qq(i,j)=sqrt((qq(i,j)-1.)*qq(i,j))
+                factor=1. - (dts/86400.)*2.*qq(i,j) * 2.**(0.4*(k-k_end))
+                u_save(i,k,j) = u_save(i,k,j)*factor
+                v_save(i,k,j) = v_save(i,k,j)*factor
+              end if
+            endif
+
           endif
           w(i,k,j) = (w(i,k,j) - dampwt(k)*mut(i,j)*w_save(i,k,j))/(1.+dampwt(k))
       ENDDO

@@ -46,7 +46,7 @@ date
 ####################################
 # obtain unique process id (pid) and make temp directory
 ####################################
-export DATA=$DATAROOT/hrrr_${dom}_prep_smoke_${cyc}
+export DATA=$DATAROOT/hrrr_${dom}_prep_smoke_${envir}_${cyc}
 mkdir -p $DATA
 cd $DATA
 
@@ -70,6 +70,7 @@ export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 
+export MPISER=${MPISER:-${NWROOThps}/mpiserial.${mpiserial_ver}/exec/mpiserial}
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################

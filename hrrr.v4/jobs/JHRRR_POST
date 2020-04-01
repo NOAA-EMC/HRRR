@@ -48,7 +48,7 @@ date
 ####################################
 # obtain unique process id (pid) and make temp directory
 ####################################
-export DATA=${DATAROOT}/hrrr_${dom}_post_${cyc}_f${fhr}
+export DATA=${DATAROOT}/hrrr_${dom}_post_${envir}_${cyc}_f${fhr}
 mkdir -p $DATA
 cd $DATA
 
@@ -80,7 +80,7 @@ export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 export FIXgem=${FIXgem:-${HOMEhrrr}/gempak/fix}
-export FIXcrtm_post=${FIXcrtm_post:-${NWROOT}/lib/crtm/${crtm_ver_post}/src/fix}
+export FIXcrtm_post=${FIXcrtm_post:-${NWROOThps}/lib/crtm/${crtm_ver_post}/src/fix}
 
 ###########################################
 # Run setpdy and initialize PDY variables
@@ -103,7 +103,7 @@ env
 
 ########################################################
 # Execute the script.
-export INPUT_DATA=${DATAROOT}/hrrr_${dom}_fcst_${cyc}
+export INPUT_DATA=${DATAROOT}/hrrr_${dom}_fcst_${envir}_${cyc}
 ${HRRR_POSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_post.sh.ecf}
 ########################################################
 

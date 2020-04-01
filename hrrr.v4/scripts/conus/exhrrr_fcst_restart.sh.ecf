@@ -156,7 +156,7 @@ for file in ${WRF_DAT_FILES[@]}; do
   tempfile=`basename ${file}`
   tempname=`echo ${tempfile} | sed s/hrrr_run_//`
   rm -f ${tempname}
-  ln -s ${file} ${tempname}
+  ln -sf ${file} ${tempname}
 done
 
 # Get the start and end time components

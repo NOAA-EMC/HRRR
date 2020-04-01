@@ -48,8 +48,8 @@ date
 ####################################
 # obtain unique process id (pid) and make temp directory
 ####################################
-export DATA=${DATAROOT}/hrrr_${dom}_post_${cyc}_f${fhr}${fmin}
-export POSTMGRDIR=${DATAROOT}/hrrr_${dom}_postmgr_subh_${cyc}
+export DATA=${DATAROOT}/hrrr_${dom}_post_${envir}_${cyc}_f${fhr}${fmin}
+export POSTMGRDIR=${DATAROOT}/hrrr_${dom}_postmgr_subh_${envir}_${cyc}
 mkdir -p $DATA
 cd $DATA
 
@@ -83,7 +83,7 @@ export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 export GEMPAKhrrr=${GEMPAKhrrr:-$HOMEhrrr/gempak}
 
-export FIXcrtm_post=${FIXcrtm_post:-${NWROOT}/lib/crtm/${crtm_ver_post}/src/fix}
+export FIXcrtm_post=${FIXcrtm_post:-${NWROOThps}/lib/crtm/${crtm_ver_post}/src/fix}
 
 ###########################################
 # Run setpdy and initialize PDY variables
@@ -100,7 +100,7 @@ export COMNAWP=${COMNAWP:-${COMOUT}/gempak}
 export WMO=${WMO:-${COMOUT}/wmo}
 
 env
-export INPUT_DATA=${DATAROOT}/hrrr_${dom}_fcst_${cyc}
+export INPUT_DATA=${DATAROOT}/hrrr_${dom}_fcst_${envir}_${cyc}
 
 mkdir -m 775 -p $COMOUT $PCOM $COMNAWP
 

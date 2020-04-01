@@ -46,7 +46,7 @@ date
 ####################################
 # obtain unique process id (pid) and make temp directory
 ####################################
-export DATA=${DATAROOT}/hrrr_${dom}_enkf_${cyc}_d0${DOMAIN}
+export DATA=${DATAROOT}/hrrr_${dom}_enkf_${envir}_${cyc}_d0${DOMAIN}
 rm -fr $DATA
 mkdir -p $DATA
 cd $DATA
@@ -79,7 +79,7 @@ export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 
-export FIXcrtm_anal=${FIXcrtm_anal:-${NWROOT}/lib/crtm/${crtm_ver_analysis}/fix}
+export FIXcrtm_anal=${FIXcrtm_anal:-${NWROOThps}/lib/crtm/${crtm_ver_analysis}/fix}
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
@@ -122,7 +122,7 @@ postmsg "$jlogfile" "$msg"
 # Remove the Temporary working directory
 ##############################
 cd $DATA
-if [ ${KEEPDATA} = NO -a $dom = conus ] ; then rm -rf $DATA ; fi
+if [ ${KEEPDATA} = NO -a $dom = hrrrdas ] ; then rm -rf $DATA ; fi
 
 date
 

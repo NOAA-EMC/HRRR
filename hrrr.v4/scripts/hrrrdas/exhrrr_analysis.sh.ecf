@@ -87,7 +87,7 @@ fi
 if [ -r ${bkfile} ]; then
   echo " GSI background run using ${bkfile}"
   cp -p ${bkfile} ${inputfile}
-  ln -s ${inputfile} ./wrf_inout_d01
+  ln -sf ${inputfile} ./wrf_inout_d01
 # No background available so abort
 else
   echo "${bkfile} does not exist!!"
@@ -111,7 +111,7 @@ fi
 if [ -r ${bkfile} ]; then
   echo " GSI background run using ${bkfile}"
   cp -p ${bkfile} ${inputfile}
-  ln -s ${inputfile} ./wrf_inout_d02
+  ln -sf ${inputfile} ./wrf_inout_d02
 # No background available so abort
 else
   echo "${bkfile} does not exist!!"
@@ -136,7 +136,7 @@ fi
 if [ -r "${PREPBUFR}/${prepsuffix}.t${cyc}z.prepbufr.tm00" ]; then
  cp ${PREPBUFR}/${prepsuffix}.t${cyc}z.prepbufr.tm00 .
  mv ${prepsuffix}.t${cyc}z.prepbufr.tm00 newgblav.${PDY}.rap.t${cyc}z.prepbufr
- ln -s newgblav.${PDY}.rap.t${cyc}z.prepbufr ./prepbufr
+ ln -sf newgblav.${PDY}.rap.t${cyc}z.prepbufr ./prepbufr
 else
  echo "Warning: ${PREPBUFR}/${prepsuffix}.t${cyc}z.prepbufr.tm00 does not exist!"
 fi
@@ -145,35 +145,35 @@ ls -lrt
 # Link to binary radar data
 obsfile=${PREPDIR2}/hrrr.t${cyc}z.NSSLRefInGSI_d01.bufr
 if [ -r "${obsfile}" ]; then
-  ln -s ${obsfile} ./refInGSI
+  ln -sf ${obsfile} ./refInGSI
 else
   echo "Warning: ${obsfile} does not exist!"
 fi
 
 obsfile=${PREPDIR2}/hrrr.t${cyc}z.Gridded_ref_d01.nc
 if [ -r "${obsfile}" ]; then
-  ln -s ${obsfile} ./dbzobs.nc
+  ln -sf ${obsfile} ./dbzobs.nc
 else
   echo "Warning: ${obsfile} does not exist!"
 fi
 
 obsfile=${PREPDIR2}/hrrr.t${cyc}z.NASALaRCCloudInGSI_d01.bufr
 if [ -r "${obsfile}" ]; then
-  ln -s ${obsfile} ./larcInGSI
+  ln -sf ${obsfile} ./larcInGSI
 else
   echo "Warning: ${obsfile} does not exist!"
 fi
 
 # add radial velocity data
 if [ -r "${PREPBUFR}/${prepsuffix}.t${cyc}z.nexrad.tm00.bufr_d" ]; then
-  ln -s ${PREPBUFR}/${prepsuffix}.t${cyc}z.nexrad.tm00.bufr_d ./l2rwbufr
+  ln -sf ${PREPBUFR}/${prepsuffix}.t${cyc}z.nexrad.tm00.bufr_d ./l2rwbufr
 else
   echo "Warning: ${PREPBUFR}/${prepsuffix}.t${cyc}z.nexrad.tm00.bufr_d is not available"
 fi
 
 # add SATWND data
 if [ -r "${PREPBUFR}/${prepsuffix}.t${cyc}z.satwnd.tm00.bufr_d" ]; then
-  ln -s ${PREPBUFR}/${prepsuffix}.t${cyc}z.satwnd.tm00.bufr_d ./satwndbufr
+  ln -sf ${PREPBUFR}/${prepsuffix}.t${cyc}z.satwnd.tm00.bufr_d ./satwndbufr
 else
   echo "Warning: ${PREPBUFR}/${prepsuffix}.t${cyc}z.satwnd.tm00.bufr_d is not available"
 fi
@@ -231,26 +231,26 @@ SURFACEPROVIDERLIST=${FIXhrrr}/hrrr_gsd_sfcobs_provider.txt # mesonet network us
  cp $PCPINFO  pcpinfo
  cp $OBERROR  errtable
  cp $AIRCRAFTREJECTLIST current_bad_aircraft
- cp $SURFACEUSELIST gsd_sfcobs_uselist.txt
+#cp $SURFACEUSELIST gsd_sfcobs_uselist.txt
  cp $SURFACEPROVIDERLIST gsd_sfcobs_provider.txt
  
 #    # CRTM Spectral and Transmittance coefficients
-ln -s $RTMAERO  ./AerosolCoeff.bin
-ln -s $RTMCLDS  ./CloudCoeff.bin
-ln -s $RTMEMIS_IRwater ./Nalli.IRwater.EmisCoeff.bin
-ln -s $RTMEMIS_IRice ./NPOESS.IRice.EmisCoeff.bin
-ln -s $RTMEMIS_IRsnow ./NPOESS.IRsnow.EmisCoeff.bin
-ln -s $RTMEMIS_IRland ./NPOESS.IRland.EmisCoeff.bin
-ln -s $RTMEMIS_VISice ./NPOESS.VISice.EmisCoeff.bin
-ln -s $RTMEMIS_VISland ./NPOESS.VISland.EmisCoeff.bin
-ln -s $RTMEMIS_VISsnow ./NPOESS.VISsnow.EmisCoeff.bin
-ln -s $RTMEMIS_VISwater ./NPOESS.VISwater.EmisCoeff.bin
-ln -s $RTMEMIS_MWwater ./FASTEM5.MWwater.EmisCoeff.bin
+ln -sf $RTMAERO  ./AerosolCoeff.bin
+ln -sf $RTMCLDS  ./CloudCoeff.bin
+ln -sf $RTMEMIS_IRwater ./Nalli.IRwater.EmisCoeff.bin
+ln -sf $RTMEMIS_IRice ./NPOESS.IRice.EmisCoeff.bin
+ln -sf $RTMEMIS_IRsnow ./NPOESS.IRsnow.EmisCoeff.bin
+ln -sf $RTMEMIS_IRland ./NPOESS.IRland.EmisCoeff.bin
+ln -sf $RTMEMIS_VISice ./NPOESS.VISice.EmisCoeff.bin
+ln -sf $RTMEMIS_VISland ./NPOESS.VISland.EmisCoeff.bin
+ln -sf $RTMEMIS_VISsnow ./NPOESS.VISsnow.EmisCoeff.bin
+ln -sf $RTMEMIS_VISwater ./NPOESS.VISwater.EmisCoeff.bin
+ln -sf $RTMEMIS_MWwater ./FASTEM5.MWwater.EmisCoeff.bin
 
 # Copy CRTM coefficient files based on entries in satinfo file
 for file in `awk '{if($1!~"!"){print $1}}' ./satinfo | sort | uniq` ;do 
-   ln -s ${FIXcrtm_anal}/${file}.SpcCoeff.bin ./
-   ln -s ${FIXcrtm_anal}/${file}.TauCoeff.bin ./
+   ln -sf ${FIXcrtm_anal}/${file}.SpcCoeff.bin ./
+   ln -sf ${FIXcrtm_anal}/${file}.TauCoeff.bin ./
 done
 
 # Only need this file for single obs test
@@ -274,9 +274,9 @@ export pgm=hrrr_gsi
 
 startmsg
 if [ $ensmem -gt 00 ]; then
-   ln -s ../mean/d01/obs_input.* .
+   ln -sf ../mean/d01/obs_input.* .
 fi
-ln -s wrf_inout_d01 wrf_inout
+ln -sf wrf_inout_d01 wrf_inout
 cp ${EXEChrrr}/hrrr_gsi .
 runline="aprun -j1 -cc depth -n 48 -N 12 -d 2 ./hrrr_gsi"
 $runline < gsiparm.anl >> $DATA/${pgmout}_d01 2>errfile
@@ -348,16 +348,16 @@ rm pe0*
 rm wrf_inout
 if [ $ensmem -gt 00 ]; then
    rm obs_input.*
-   ln -s ../mean/d02/obs_input.* .
+   ln -sf ../mean/d02/obs_input.* .
 fi
-ln -s wrf_inout_d02 wrf_inout
+ln -sf wrf_inout_d02 wrf_inout
 
 ls -lrt
 # Link to binary radar data
 obsfile=${PREPDIR2}/hrrr.t${cyc}z.NSSLRefInGSI_d02.bufr
 if [ -r "${obsfile}" ]; then
   rm refInGSI
-  ln -s ${obsfile} ./refInGSI
+  ln -sf ${obsfile} ./refInGSI
 else
   echo "Warning: ${obsfile} does not exist!"
 fi
@@ -365,7 +365,7 @@ fi
 obsfile=${PREPDIR2}/hrrr.t${cyc}z.Gridded_ref_d02.nc
 if [ -r "${obsfile}" ]; then
   rm  dbzobs.nc
-  ln -s ${obsfile} ./dbzobs.nc
+  ln -sf ${obsfile} ./dbzobs.nc
 else
   echo "Warning: ${obsfile} does not exist!"
 fi
@@ -373,7 +373,7 @@ fi
 obsfile=${PREPDIR2}/hrrr.t${cyc}z.NASALaRCCloudInGSI_d02.bufr
 if [ -r "${obsfile}" ]; then
   rm larcInGSI
-  ln -s ${obsfile} ./larcInGSI
+  ln -sf ${obsfile} ./larcInGSI
 else
   echo "Warning: ${obsfile} does not exist!"
 fi

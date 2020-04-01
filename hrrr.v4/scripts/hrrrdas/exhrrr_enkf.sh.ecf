@@ -65,8 +65,8 @@ while [[ $ensmem -le $no_member ]];do
   # get background for each member
   inputfile=${COMIN}/hrrr.t${cyc}z.wrfinput_d${domainid}.mem${ensmemid}
   if [ -r ${inputfile} ]; then
-     ln -s ${inputfile} firstguess.mem${member}
-     ln -s ${inputfile} analysis.mem${member}
+     ln -sf ${inputfile} firstguess.mem${member}
+     ln -sf ${inputfile} analysis.mem${member}
   else
      echo "${inputfile} does not exist!!"
 
@@ -95,7 +95,7 @@ cp firstguess.mem001 firstguess.ensmean
 #
 #  ANAVINFO=${FIX_ROOT}/hrrrdas_anavinfo_arw_netcdf_HRRRENS_radar
 # link all diag files
-ln -s ${COMOUT}/diag_conv_ges.${PDY}${cyc}.d${domainid}.mean ./diag_conv_ges.ensmean
+ln -sf ${COMOUT}/diag_conv_ges.${PDY}${cyc}.d${domainid}.mean ./diag_conv_ges.ensmean
 ensmem=1
 while [[ $ensmem -le $no_member ]];do
 
@@ -103,7 +103,7 @@ while [[ $ensmem -le $no_member ]];do
   ensmemid=`printf %4.4i $ensmem`
   member="mem"`printf %03i $ensmem`
 
-  ln -s ${COMOUT}/diag_conv_ges.${PDY}${cyc}.d${domainid}.mem${ensmemid} ./diag_conv_ges.${member}
+  ln -sf ${COMOUT}/diag_conv_ges.${PDY}${cyc}.d${domainid}.mem${ensmemid} ./diag_conv_ges.${member}
 
   # next member
   (( ensmem += 1 ))
@@ -212,7 +212,7 @@ fi
 #type="radardbz"
 # link all diag files
 rm -f ./diag_conv_ges.*
-ln -s ${COMOUT}/diag_radardbz_ges.${PDY}${cyc}.d${domainid}.mem${ensmemid} ./diag_conv_ges.ensmean
+ln -sf ${COMOUT}/diag_radardbz_ges.${PDY}${cyc}.d${domainid}.mem${ensmemid} ./diag_conv_ges.ensmean
 ensmem=1
 while [[ $ensmem -le $no_member ]];do
 
@@ -221,7 +221,7 @@ while [[ $ensmem -le $no_member ]];do
   member="mem"`printf %03i $ensmem`
 
   rm -f ./diag_conv_ges.${member}
-  ln -s ${COMOUT}/diag_radardbz_ges.${PDY}${cyc}.d${domainid}.mem${ensmemid} ./diag_conv_ges.${member}
+  ln -sf ${COMOUT}/diag_radardbz_ges.${PDY}${cyc}.d${domainid}.mem${ensmemid} ./diag_conv_ges.${member}
 
   # next member
   (( ensmem += 1 ))

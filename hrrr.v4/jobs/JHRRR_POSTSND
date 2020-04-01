@@ -35,7 +35,7 @@ if [ "$RUN_ENVIR" != nco ]      ### For Developers, "group_name" is passed from 
 then
   group_name=${group_name:-meso}
   package_name=${package_name:-hrrr}
-#  . /${group_name}/save/${LOGNAME}/${package_name}${NWROOTprod}/parm/${package_name}_para_config
+#  . /${group_name}/save/${LOGNAME}/${package_name}${NWROOThps}/parm/${package_name}_para_config
   export userid=${userid:-$LOGNAME}
   export DATA=${DATA:-/ptmpd1/$userid}
 fi
@@ -47,7 +47,7 @@ date
 ####################################
 # obtain unique process id (pid) and make temp directory
 ####################################
-export DATA=${DATAROOT}/hrrr_${dom}_sndp_${cyc}
+export DATA=${DATAROOT}/hrrr_${dom}_sndp_${envir}_${cyc}
 mkdir -p $DATA
 cd $DATA
 
@@ -74,7 +74,7 @@ export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 export FIXgem=${FIXgem:-${HOMEhrrr}/gempak/fix}
 
-export HOMEobsproc_shared_bufr_cword=${HOMEobsproc_shared_bufr_cword:-$NWROOTprod/obsproc_shared/bufr_cword.${obsproc_shared_bufr_cword_ver}}
+export HOMEobsproc_shared_bufr_cword=${HOMEobsproc_shared_bufr_cword:-$NWROOThps/obsproc_shared/bufr_cword.${obsproc_shared_bufr_cword_ver}}
 export USHobsproc_shared_bufr_cword=${USHobsproc_shared_bufr_cword:-$HOMEobsproc_shared_bufr_cword/ush}
 export EXECobsproc_shared_bufr_cword=${EXECobsproc_shared_bufr_cword:-$HOMEobsproc_shared_bufr_cword/exec}
 
@@ -92,7 +92,7 @@ export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMNAWP=${COMAWP:-${COMOUT}/gempak}
 mkdir -m 775 -p $COMNAWP
 
-export PROFDIR=${DATAROOT}/hrrr_${dom}_wrfbufr_${cyc}_f${fhr}
+export PROFDIR=${DATAROOT}/hrrr_${dom}_wrfbufr_${envir}_${cyc}
 env
 
 ########################################################

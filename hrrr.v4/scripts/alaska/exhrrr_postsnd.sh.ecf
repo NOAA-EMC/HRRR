@@ -35,7 +35,7 @@ rm -rf profilm*
 # copy in the profilm file from each forecast hour's wrfbufr directory
 while [ $fhr -le $endfhr ]
 do
-   PROFDIR=${DATAROOT}/hrrr_${dom}_wrfbufr_${cyc}_f${fhr}
+   PROFDIR=${DATAROOT}/hrrr_${dom}_wrfbufr_${envir}_${cyc}_f${fhr}
    cp ${PROFDIR}/profilm.c1.f${fhr} .
    if [ $fhr -ne 0 ]; then
      let "fhr1=fhr-1"

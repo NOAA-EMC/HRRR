@@ -87,7 +87,7 @@ echo $end_yyyymmdd_hhmmss
 
 # Link the Vtable into the work directory
 rm -f Vtable
-ln -s ${PARMhrrr}/hrrr_vtable Vtable
+ln -sf ${PARMhrrr}/hrrr_vtable Vtable
 
 # Copy the namelist into the work directory
 cp ${PARMhrrr}/hrrr_namelist.wps ${WPSNAMELIST} 
@@ -304,7 +304,7 @@ while [ ${i} -lt ${#alphabet[*]} -a ${n} -lt ${#gribfiles[*]} ]; do
       id="${alphabet[${i}]}${alphabet[${j}]}${alphabet[${k}]}"
       cp ${SOURCE_PATH}/${gribfiles[${n}]} GRIBFILE_COMPLEX.${id}
       $WGRIB2 GRIBFILE_COMPLEX.${id} -set_grib_type s -grib_out GRIBFILE_SIMPLE.${id}
-      ln -s GRIBFILE_SIMPLE.${id} GRIBFILE.${id}
+      ln -sf GRIBFILE_SIMPLE.${id} GRIBFILE.${id}
       (( k=k+1 ))
       (( n=n+1 ))
     done
@@ -362,9 +362,9 @@ echo "FCST INTERVAL = ${FCST_INTERVAL}"
 
 # Link to geogrid static files
 rm -f geo_*.d01.nc
-ln -s ${FIXhrrr}/hrrrdas_geo_em.d01.nc geo_em.d01.nc 
-ln -s ${FIXhrrr}/hrrrdas_geo_em.d02.nc geo_em.d02.nc 
-ln -s ${PARMhrrr}/hrrr_METGRID.TBL METGRID.TBL
+ln -sf ${FIXhrrr}/hrrrdas_geo_em.d01.nc geo_em.d01.nc 
+ln -sf ${FIXhrrr}/hrrrdas_geo_em.d02.nc geo_em.d02.nc 
+ln -sf ${PARMhrrr}/hrrr_METGRID.TBL METGRID.TBL
 
 # Create patterns for updating the namelist
 equal=[[:blank:]]*=[[:blank:]]*
@@ -471,7 +471,7 @@ for src in ${source_list[*]}; do
     datestr=`${DATE} +"%Y-%m-%d_%H" -d "${START_TIME}  ${fcst} hours"`
     rm -f ${src}:${datestr}
     if [ -e ${source_path_list[${i}]}/${src}:${datestr} ]; then
-      ln -s ${source_path_list[${i}]}/${src}:${datestr}
+      ln -sf ${source_path_list[${i}]}/${src}:${datestr}
     fi
     (( fcst=fcst+${FCST_INTERVAL} ))
   done
@@ -480,7 +480,7 @@ done
 
 
 if [ -e ${PARMhrrr}/hrrrdas_QNWFA_QNIFA_Monthly_GFS ]; then
-   ln -s ${PARMhrrr}/hrrrdas_QNWFA_QNIFA_Monthly_GFS QNWFA_QNIFA_Monthly_GFS
+   ln -sf ${PARMhrrr}/hrrrdas_QNWFA_QNIFA_Monthly_GFS QNWFA_QNIFA_Monthly_GFS
    echo "stripped hrrrdas_ from hrrrdas_QNWFA_QNIFA_Monthly_GFS"
 else
   echo "WARNING: Constant file ${PARMhrrr}/hrrrdas_QNWFA_QNIFA_Monthly_GFS does not exist!"
@@ -642,14 +642,14 @@ while [ ${fcst} -le ${FCST_LENGTH} ]; do
     err_exit 
   fi
   rm -f ${real_prefix}.d01.${time_str2}${real_suffix}
-  ln -s ${DATA_MET}/${real_prefix}.d01.${time_str}${real_suffix} ${real_prefix}.d01.${time_str2}${real_suffix}
+  ln -sf ${DATA_MET}/${real_prefix}.d01.${time_str}${real_suffix} ${real_prefix}.d01.${time_str2}${real_suffix}
 
   if [ ! -r "${DATA_MET}/${real_prefix}.d02.${time_str}${real_suffix}" ]; then
     echo "FATAL ERROR: Input file '${DATA_MET}/${real_prefix}.d02.${time_str}${real_suffix}' is missing"
     err_exit 
   fi
   rm -f ${real_prefix}.d02.${time_str2}${real_suffix}
-  ln -s ${DATA_MET}/${real_prefix}.d02.${time_str}${real_suffix} ${real_prefix}.d02.${time_str2}${real_suffix}
+  ln -sf ${DATA_MET}/${real_prefix}.d02.${time_str}${real_suffix} ${real_prefix}.d02.${time_str2}${real_suffix}
 
   (( fcst = fcst + ${FCST_INTERVAL} ))
 done
@@ -659,7 +659,7 @@ for file in ${WRF_DAT_FILES[@]}; do
   tempfile=`basename ${file}`
   tempname=`echo ${tempfile} | sed s/hrrrdas_run_//`
   rm -f ${tempname}
-  ln -s ${file} ${tempname}
+  ln -sf ${file} ${tempname}
 done
 
 # Get the start and end time components
@@ -763,7 +763,7 @@ echo "real completed successfully at `${DATE}`"
 # link HRRR surface file here
 YYYYMMDDHH=`${DATE} "+%Y%m%d%H" -d "${START_TIME} 1 hour ago"`
 hrrrsfcfile=${HRRRGESSFC}/hrrr_${YYYYMMDDHH}f001
-ln -s ${hrrrsfcfile} wrfout_d01_save
+ln -sf ${hrrrsfcfile} wrfout_d01_save
 startmsg
 cp ${EXEChrrr}/hrrr_full_cycle_surface_enkf .
 runline="aprun -n 1 -N 1 ./hrrr_full_cycle_surface_enkf 1"
@@ -802,8 +802,8 @@ while [[ $ensmem -le $no_member ]];do
 
   rm -f wrfinput_d01.mem${ensmemid} wrfinput_d02.mem${ensmemid}
   # get background for each member
-  ln -s ${COMOUT}/hrrr.t${cyc}z.wrfguess_d01.mem${ensmemid} wrfinput_d01.mem${ensmemid}
-  ln -s ${COMOUT}/hrrr.t${cyc}z.wrfguess_d02.mem${ensmemid} wrfinput_d02.mem${ensmemid}
+  ln -sf ${COMOUT}/hrrr.t${cyc}z.wrfguess_d01.mem${ensmemid} wrfinput_d01.mem${ensmemid}
+  ln -sf ${COMOUT}/hrrr.t${cyc}z.wrfguess_d02.mem${ensmemid} wrfinput_d02.mem${ensmemid}
 
   # next member
   (( ensmem += 1 ))
@@ -812,8 +812,8 @@ done
 
 time_str=`${DATE} "+%Y%m%d%H%M" -d "${START_TIME}"`
 rm -fr d01 d02
-ln -s ${HRRRDASENSP}/enspert_d01_${time_str} d01
-ln -s ${HRRRDASENSP}/enspert_d02_${time_str} d02
+ln -sf ${HRRRDASENSP}/enspert_d01_${time_str} d01
+ln -sf ${HRRRDASENSP}/enspert_d02_${time_str} d02
 
 
   # Build the namelist and input file on-the-fly

@@ -35,9 +35,9 @@ echo " time_str = ${time_str}"
 
 # read in grid specs
 #inputfile=${HRRRDASBC}/wrfinput_d01_${time_str}
-#ln -s ${inputfile} wrf_inout_d01
+#ln -sf ${inputfile} wrf_inout_d01
 #inputfile=${HRRRDASBC}/wrfinput_d02_${time_str}
-#ln -s ${inputfile} wrf_inout_d02
+#ln -sf ${inputfile} wrf_inout_d02
 
 #cp ${FIXhrrr}/hrrr_gridspecs ./wrf_inout
 
@@ -98,7 +98,7 @@ for back in $( seq "$minback" "$maxback" ) ; do
     inputfile=${HRRRDASBC}/wrfinput_d01_${time_str}
 
     if [[ -f "$inputfile" ]] ; then
-       ln -s ${inputfile} wrf_inout
+       ln -sf ${inputfile} wrf_inout
        break
     else
        echo "File $back hours back is unavailable: $inputfile"
@@ -123,7 +123,7 @@ for back in $( seq "$minback" "$maxback" ) ; do
     inputfile=${HRRRDASBC}/wrfinput_d02_${time_str}
 
     if [[ -f "$inputfile" ]] ; then
-       ln -s ${inputfile} wrf_inout
+       ln -sf ${inputfile} wrf_inout
        break
     else
        echo "File $back hours back is unavailable: $inputfile"

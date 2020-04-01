@@ -55,7 +55,7 @@ echo $end_yyyymmdd_hhmmss
 (( fcst_interval_sec = ${FCST_INTERVAL} * 3600 ))
 
 # Link the Vtable into the work directory
-ln -s $PARMhrrrdas/hrrrdas_Vtable.${SOURCE} Vtable
+ln -sf $PARMhrrrdas/hrrrdas_Vtable.${SOURCE} Vtable
 
 # Copy the namelist into the work directory
 cp $PARMhrrrdas/hrrrdas_namelist.wps namelist.wps
@@ -159,7 +159,7 @@ while [ ${i} -lt ${#alphabet[*]} -a ${n} -lt ${#gribfiles[*]} ]; do
     while [ ${k} -lt ${#alphabet[*]} -a ${n} -lt ${#gribfiles[*]} ]; do
       id="${alphabet[${i}]}${alphabet[${j}]}${alphabet[${k}]}"
       echo ${gribfiles[${n}]}, GRIBFILE.${id}
-      ln -s ${gribfiles[${n}]} GRIBFILE.${id}
+      ln -sf ${gribfiles[${n}]} GRIBFILE.${id}
       (( k=k+1 ))
       (( n=n+1 ))
     done
@@ -187,7 +187,7 @@ echo "GFS ungrib completed at `${DATE}`"
 # Link the Vtable into the work directory
 rm -f Vtable
 rm -f GRIBFILE*
-ln -s $PARMhrrrdas/hrrrdas_Vtable.${SOURCE2} Vtable
+ln -sf $PARMhrrrdas/hrrrdas_Vtable.${SOURCE2} Vtable
 
 FCST_LENGTH="0"
 END_TIME=`$NDATE +${FCST_LENGTH} $START_TIME`
@@ -264,7 +264,7 @@ $EXEChrrrdas/hrrr_wps_ungrib > ungribsst.out
 export err=$?;err_chk
 
 rm SST
-ln -s sst:${YYYYMMDDHH}  SST
+ln -sf sst:${YYYYMMDDHH}  SST
 
 echo "SST ungrib completed at `${DATE}`"
 
@@ -428,7 +428,7 @@ for src in ${source_list[*]}; do
     datestr=${yyyy}-${mm}-${dd}_${hh}
 #    rm -f ${src}:${datestr}
     if [ -e ${source_path_list[${i}]}/${src}:${datestr} ]; then
-      ln -s ${source_path_list[${i}]}/${src}:${datestr} 
+      ln -sf ${source_path_list[${i}]}/${src}:${datestr} 
     fi
     (( fcst=fcst+${FCST_INTERVAL} ))
   done
@@ -440,10 +440,10 @@ i=0
 for const in ${constant_list[*]}; do
 #  rm -f ${const}*
   if [ -e ${constant_path_list[${i}]}/${const} ]; then
-    ln -s ${constant_path_list[${i}]}/${const}
+    ln -sf ${constant_path_list[${i}]}/${const}
     echo "sst file is available"
   elif [ -e ${constant_path_list[${i}]}/hrrrdas_${const} ]; then
-    ln -s ${constant_path_list[${i}]}/hrrrdas_${const} ${const}
+    ln -sf ${constant_path_list[${i}]}/hrrrdas_${const} ${const}
     echo "stripped hrrrdas_ from hrrrdas_QNWFA_QNIFA_Monthly_GFS"
   else
     echo "WARNING: Constant file ${constant_path_list[${i}]}/${const} does not exis
@@ -519,7 +519,7 @@ do
 
 wait
 
-   ln -s ${HRRRDASBC}/wrfinput_d01_${syyyy}-${smm}-${sdd}_${shh}_00_00 wrfinput_d01
+   ln -sf ${HRRRDASBC}/wrfinput_d01_${syyyy}-${smm}-${sdd}_${shh}_00_00 wrfinput_d01
    cp ${EXEChrrrdas}/hrrr_cal_bcpert .
    ensmem=1
    while [[ $ensmem -le $no_member ]];do
@@ -527,7 +527,7 @@ wait
      print "\$ensmem is $ensmem"
      ensmemid=`printf %4.4i $ensmem`
 
-     ln -s ${HRRRDASBC}/wrfbdy_d01.${start_YYYYMMDDHHMM}.mem${ensmemid} wrfbdy_d01_mem${ensmemid}
+     ln -sf ${HRRRDASBC}/wrfbdy_d01.${start_YYYYMMDDHHMM}.mem${ensmemid} wrfbdy_d01_mem${ensmemid}
      runline="aprun -n 1 -N 1 ./hrrr_cal_bcpert wrfbdy_d01_mem${ensmemid} wrfinput_d01 ${pert_bank_dir}"
      $runline
      export err=$?; err_chk

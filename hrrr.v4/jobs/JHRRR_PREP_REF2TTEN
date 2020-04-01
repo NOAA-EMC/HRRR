@@ -37,7 +37,7 @@ date
 ########################################################
 # obtain unique process id (pid) and make temp directory
 ########################################################
-export DATA=${DATAROOT}/hrrr_${dom}_ref2tten_${cyc}
+export DATA=${DATAROOT}/hrrr_${dom}_ref2tten_${envir}_${cyc}
 mkdir -p $DATA
 cd $DATA
 
@@ -76,7 +76,7 @@ setpdy.sh
 # Define Input Data Directories
 ########################################
 # Hourly Radar Data
-export COM_RAD=${COM_RAD:-${COMROOTp1}/hourly/prod}
+export COM_RAD=${COM_RAD:-${COMROOTp3}/hourly/prod}
 
 # VIIRS Greenness Fraction Data
 export GVF=${GVF:-${DCOMROOT}/prod/viirs}
@@ -106,7 +106,7 @@ export HRRRGES_SFC=$gespath/${RUN}/hrrrges_sfc/${dom}
 mkdir -m 775 -p $HRRRGES_SFC
 env
 
-export DATA_RADAR=${DATA_RADAR:-${DATAROOT}/hrrr_${dom}_prep_radar_${cyc}}
+export DATA_RADAR=${DATA_RADAR:-${DATAROOT}/hrrr_${dom}_prep_radar_${envir}_${cyc}}
 
 ########################################################
 # Execute the script.

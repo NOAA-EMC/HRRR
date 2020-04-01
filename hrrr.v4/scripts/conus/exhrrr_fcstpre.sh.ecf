@@ -112,13 +112,13 @@ cd ${DATA}
 # Bring in initial condition file 
    if [ -s ${COMIN}/hrrr.t${cyc}z.wrfguess_pre ]; then
      echo " Initial condition ${COMIN}/hrrr.t${cyc}z.wrfguess_pre "
-     ln -s ${COMIN}/hrrr.t${cyc}z.wrfguess_pre wrfinput_d01
-     ln -s ${COMIN}/hrrr.t${cyc}z.wrfguess_pre wrfvar_output
+     ln -sf ${COMIN}/hrrr.t${cyc}z.wrfguess_pre wrfinput_d01
+     ln -sf ${COMIN}/hrrr.t${cyc}z.wrfguess_pre wrfvar_output
      cp ${PARMhrrr}/hrrr_wrfpre.nl ${WRF_NAMELIST}
    elif [ -s ${COMIN}/hrrr.t${cyc}z.wrfguess_rap ]; then
      echo "WARNING: No ${COMIN}/hrrr.t${cyc}z.wrfguess_pre available, Using initial condition ${COMIN}/hrrr.t${cyc}z.wrfguess_rap"
-     ln -s ${COMIN}/hrrr.t${cyc}z.wrfguess_rap wrfinput_d01
-     ln -s ${COMIN}/hrrr.t${cyc}z.wrfguess_rap wrfvar_output
+     ln -sf ${COMIN}/hrrr.t${cyc}z.wrfguess_rap wrfinput_d01
+     ln -sf ${COMIN}/hrrr.t${cyc}z.wrfguess_rap wrfvar_output
      cp ${PARMhrrr}/hrrr_wrfpre_norad.nl ${WRF_NAMELIST}
    else
      echo "FATAL ERROR: No initial condition available for Pre-Forecast"
@@ -152,7 +152,7 @@ for file in ${WRF_DAT_FILES[@]}; do
   tempfile=`basename ${file}`
   tempname=`echo ${tempfile} | sed s/hrrr_run_//`
   rm -f ${tempname}
-  ln -s ${file} ${tempname}
+  ln -sf ${file} ${tempname}
 done
 
 # Get the start and end time components
