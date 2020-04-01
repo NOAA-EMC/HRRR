@@ -64,7 +64,6 @@ fi
 
 # Insert land surface variables into the wrf_inout file
 targetsize=9091753436
-targetsize=9096528560
 START_TIME=$PDY$cyc
 counter=3
 while [[ $counter -lt 36 ]]; do
@@ -107,14 +106,14 @@ if [ ${cyc} -eq ${time_updateSST} ]; then
   if [ -r "${COMINsst}/sst.${PDY}/rtgssthr_grb_0.083.grib2" ]; then
     cp ${COMINsst}/sst.${PDY}/rtgssthr_grb_0.083.grib2 SSTRTG
     cp ${EXEChrrr}/hrrr_process_sst .
-    ln -sf SSTRTG latest.SST
+    ln -s SSTRTG latest.SST
     runline="aprun -n 1 -N 1 ./hrrr_process_sst"
     $runline >> process_sst.out
     export err=$?; err_chk
  elif [ -r "${COMINsst}/sst.${PDYm1}/rtgssthr_grb_0.083.grib2" ]; then
     cp ${COMINsst}/sst.${PDYm1}/rtgssthr_grb_0.083.grib2 SSTRTG
     cp ${EXEChrrr}/hrrr_process_sst .
-    ln -sf SSTRTG latest.SST
+    ln -s SSTRTG latest.SST
     runline="aprun -n 1 -N 1 ./hrrr_process_sst"
     $runline >> process_sst.out
     export err=$?; err_chk
@@ -139,34 +138,34 @@ fi
 if [ -r "${PREPBUFR}/${prepsuffix}.t${cyc}z.prepbufr.tm00" ]; then
  cp ${PREPBUFR}/${prepsuffix}.t${cyc}z.prepbufr.tm00 .
  mv ${prepsuffix}.t${cyc}z.prepbufr.tm00 newgblav.${PDY}.rap.t${cyc}z.prepbufr
- ln -sf newgblav.${PDY}.rap.t${cyc}z.prepbufr ./prepbufr
+ ln -s newgblav.${PDY}.rap.t${cyc}z.prepbufr ./prepbufr
 else
  echo "Warning: ${PREPBUFR}/${prepsuffix}.t${cyc}z.prepbufr.tm00 does not exist!"
 fi
 
 # Link to binary radar data
 if [ -r "${PREPDIR2}/hrrrak.t${cyc}z.NSSLRefInGSI.bufr" ]; then
-  ln -sf ${PREPDIR2}/hrrrak.t${cyc}z.NSSLRefInGSI.bufr ./refInGSI
+  ln -s ${PREPDIR2}/hrrrak.t${cyc}z.NSSLRefInGSI.bufr ./refInGSI
 else
   echo "Warning: ${PREPDIR2}/hrrrak.t${cyc}z.RefInGSI3D.dat does not exist!"
 fi
 
 if [ -r "${PREPDIR2}/hrrrak.t${cyc}z.NASALaRCCloudInGSI.bufr" ]; then
-  ln -sf ${PREPDIR2}/hrrrak.t${cyc}z.NASALaRCCloudInGSI.bufr ./larcInGSI
+  ln -s ${PREPDIR2}/hrrrak.t${cyc}z.NASALaRCCloudInGSI.bufr ./larcInGSI
 else
   echo "Warning: ${PREPDIR2}/NASALaRCCloudInGSI.bufr does not exist!"
 fi
 
 #add radial velocity data
 if [ -r "${PREPBUFR}/${prepsuffix}.t${cyc}z.nexrad.tm00.bufr_d" ]; then
-  ln -sf ${PREPBUFR}/${prepsuffix}.t${cyc}z.nexrad.tm00.bufr_d ./l2rwbufr
+  ln -s ${PREPBUFR}/${prepsuffix}.t${cyc}z.nexrad.tm00.bufr_d ./l2rwbufr
 else
   echo "Warning: ${PREPBUFR}/${prepsuffix}.t${cyc}z.nexrad.tm00.bufr_d is not available"
 fi
 
 #add SATWND data
 if [ -r "${PREPBUFR}/${prepsuffix}.t${cyc}z.satwnd.tm00.bufr_d" ]; then
-  ln -sf ${PREPBUFR}/${prepsuffix}.t${cyc}z.satwnd.tm00.bufr_d ./satwndbufr
+  ln -s ${PREPBUFR}/${prepsuffix}.t${cyc}z.satwnd.tm00.bufr_d ./satwndbufr
 else
   echo "Warning: ${PREPBUFR}/${prepsuffix}.t${cyc}z.satwnd.tm00.bufr_d is not available"
 fi
@@ -177,7 +176,7 @@ for obstype in ${radfilelist}
 do
   obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.1b${obstype}.tm00.bufr_d"
   if [ -r "${obsfile}" ]; then
-    ln -sf ${obsfile} ./${obstype}bufr
+    ln -s ${obsfile} ./${obstype}bufr
   else
     echo "Warning: ${obsfile} is not available"
   fi
@@ -187,7 +186,7 @@ done
 #new platforms
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.sevcsr.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./seviribufr
+  ln -s ${obsfile} ./seviribufr
 else
   echo "Warning: ${obsfile} is not available"
 fi
@@ -197,7 +196,7 @@ for obstype in ${radfilelist}
 do
   obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.${obstype}.tm00.bufr_d"
   if [ -r "${obsfile}" ]; then
-    ln -sf ${obsfile} ./${obstype}bufr
+    ln -s ${obsfile} ./${obstype}bufr
   else
     echo "Warning: ${obsfile} is not available"
   fi
@@ -205,21 +204,21 @@ done
 
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.airsev.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./airsbufr
+  ln -s ${obsfile} ./airsbufr
 else
   echo "Warning: ${obsfile} is not available"
 fi
 
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.ssmisu.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./ssmisbufr
+  ln -s ${obsfile} ./ssmisbufr
 else
   echo "Warning: ${obsfile} is not available"
 fi
 
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.mtiasi.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./iasibufr
+  ln -s ${obsfile} ./iasibufr
 else
   echo "Warning: ${obsfile} is not available"
 fi
@@ -227,7 +226,7 @@ fi
 #add goes sounder data
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.goesnd.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./gsnd1bufr
+  ln -s ${obsfile} ./gsnd1bufr
 else
   echo "Warning: ${obsfile} is not available"
 fi
@@ -235,14 +234,14 @@ fi
 #add rars data
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.esamua.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./amsuabufrears
+  ln -s ${obsfile} ./amsuabufrears
 else
   echo "Warning: ${obsfile} is not available"
 fi
 
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.esmhs.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./mhsbufrears
+  ln -s ${obsfile} ./mhsbufrears
 else
   echo "Warning: ${obsfile} is not available"
 fi
@@ -250,21 +249,21 @@ fi
 #new rars
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.esatms.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./atmsbufrears
+  ln -s ${obsfile} ./atmsbufrears
 else
   echo "Warning: ${obsfile} is not available"
 fi
 
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.escris.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./crisbufrears
+  ln -s ${obsfile} ./crisbufrears
 else
   echo "Warning: ${obsfile} is not available"
 fi
 
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.esiasi.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./iasibufrears
+  ln -s ${obsfile} ./iasibufrears
 else
   echo "Warning: ${obsfile} is not available"
 fi
@@ -272,36 +271,36 @@ fi
 #new directbroadcast
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.atmsdb.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./atmsbufr_db
+  ln -s ${obsfile} ./atmsbufr_db
 else
   echo "Warning: ${obsfile} is not available"
 fi
 
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.crisdb.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./crisbufr_db
-  ln -sf ${obsfile} ./crisfsbufr_db
+  ln -s ${obsfile} ./crisbufr_db
+  ln -s ${obsfile} ./crisfsbufr_db
 else
   echo "Warning: ${obsfile} is not available"
 fi
 
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.iasidb.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./iasibufr_db
+  ln -s ${obsfile} ./iasibufr_db
 else
   echo "Warning: ${obsfile} is not available"
 fi
 
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.crisf4.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./crisfsbufr
+  ln -s ${obsfile} ./crisfsbufr
 else
   echo "Warning: ${obsfile} is not available"
 fi
 
 obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.gsrcsr.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./abibufr
+  ln -s ${obsfile} ./abibufr
 else
   echo "Warning: ${obsfile} is not available"
 fi
@@ -369,22 +368,22 @@ SURFACEPROVIDERLIST=${FIXhrrr}/hrrrak_gsd_sfcobs_provider.txt # mesonet network 
 
 # 
 #    # CRTM Spectral and Transmittance coefficients
-ln -sf $RTMAERO  ./AerosolCoeff.bin
-ln -sf $RTMCLDS  ./CloudCoeff.bin
-ln -sf $RTMEMIS_IRwater ./Nalli.IRwater.EmisCoeff.bin
-ln -sf $RTMEMIS_IRice ./NPOESS.IRice.EmisCoeff.bin
-ln -sf $RTMEMIS_IRsnow ./NPOESS.IRsnow.EmisCoeff.bin
-ln -sf $RTMEMIS_IRland ./NPOESS.IRland.EmisCoeff.bin
-ln -sf $RTMEMIS_VISice ./NPOESS.VISice.EmisCoeff.bin
-ln -sf $RTMEMIS_VISland ./NPOESS.VISland.EmisCoeff.bin
-ln -sf $RTMEMIS_VISsnow ./NPOESS.VISsnow.EmisCoeff.bin
-ln -sf $RTMEMIS_VISwater ./NPOESS.VISwater.EmisCoeff.bin
-ln -sf $RTMEMIS_MWwater ./FASTEM6.MWwater.EmisCoeff.bin
+ln -s $RTMAERO  ./AerosolCoeff.bin
+ln -s $RTMCLDS  ./CloudCoeff.bin
+ln -s $RTMEMIS_IRwater ./Nalli.IRwater.EmisCoeff.bin
+ln -s $RTMEMIS_IRice ./NPOESS.IRice.EmisCoeff.bin
+ln -s $RTMEMIS_IRsnow ./NPOESS.IRsnow.EmisCoeff.bin
+ln -s $RTMEMIS_IRland ./NPOESS.IRland.EmisCoeff.bin
+ln -s $RTMEMIS_VISice ./NPOESS.VISice.EmisCoeff.bin
+ln -s $RTMEMIS_VISland ./NPOESS.VISland.EmisCoeff.bin
+ln -s $RTMEMIS_VISsnow ./NPOESS.VISsnow.EmisCoeff.bin
+ln -s $RTMEMIS_VISwater ./NPOESS.VISwater.EmisCoeff.bin
+ln -s $RTMEMIS_MWwater ./FASTEM6.MWwater.EmisCoeff.bin
 
 # Copy CRTM coefficient files based on entries in satinfo file
 for file in `awk '{if($1!~"!"){print $1}}' ./satinfo | sort | uniq` ;do 
-   ln -sf ${FIXcrtm_anal}/${file}.SpcCoeff.bin ./
-   ln -sf ${FIXcrtm_anal}/${file}.TauCoeff.bin ./
+   ln -s ${FIXcrtm_anal}/${file}.SpcCoeff.bin ./
+   ln -s ${FIXcrtm_anal}/${file}.TauCoeff.bin ./
 done
 
 # Copy cycled satellite radiance bias correction
