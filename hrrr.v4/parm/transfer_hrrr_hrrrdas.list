@@ -23,17 +23,41 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-com/hrrr/_ENVIR_/hrrr._PDYm1_/ /scratch4/NCEPDEV/rstprod/com/hrrr/_ENVIR_/hrrr._PDYm1_/
-+ /conus/
-+ /conus/gempak/
-+ /conus/gempak/*
+com/hrrr/_ENVIR_/hrrr._PDY_/
++ /hrrrdas/
++ /hrrrdas/hrrr.t??z.NSSLRefInGSI_d0?.bufr
++ /hrrrdas/hrrr.t??z.NASALaRCCloudInGSI_d0?.bufr
++ /hrrrdas/hrrr.t??z.obs_seq_mrms_d0?.out
++ /hrrrdas/hrrr.t??z.Gridded_ref_d0?.nc
++ /hrrrdas/hrrrdas.t??z.makebc.tar
++ /hrrrdas/hrrr.t??z.wrfguess_d0?.mem00??
++ /hrrrdas/hrrr.t??z.wrfbdy
++ /hrrrdas/hrrr.t??z.wrfhistory*
++ /hrrrdas/hrrr.t??z.*grib2*
++ /hrrrdas/hrrr.t??z.*fits*
++ /hrrrdas/hrrr.t??z.*rsl*
++ /hrrrdas/hrrr.t??z.class1.bufr.tm00
++ /hrrrdas/gempak/
++ /hrrrdas/gempak/*
 - *
-E
+B 1040000
 
-com/hrrr/_ENVIR_/hrrr._PDY_/ /scratch4/NCEPDEV/rstprod/com/hrrr/_ENVIR_/hrrr._PDY_/
-+ /conus/
-+ /conus/gempak/
-+ /conus/gempak/*
+com/hrrr/_ENVIR_/hrrr._PDYm1_/
++ /hrrrdas/
++ /hrrrdas/hrrr.t??z.NSSLRefInGSI_d0?.bufr
++ /hrrrdas/hrrr.t??z.NASALaRCCloudInGSI_d0?.bufr
++ /hrrrdas/hrrr.t??z.obs_seq_mrms_d0?.out
++ /hrrrdas/hrrr.t??z.Gridded_ref_d0?.nc
++ /hrrrdas/hrrrdas.t??z.makebc.tar
++ /hrrrdas/hrrr.t??z.wrfguess_d0?.mem00??
++ /hrrrdas/hrrr.t??z.wrfbdy
++ /hrrrdas/hrrr.t??z.wrfhistory*
++ /hrrrdas/hrrr.t??z.*grib2*
++ /hrrrdas/hrrr.t??z.*fits*
++ /hrrrdas/hrrr.t??z.*rsl*
++ /hrrrdas/hrrr.t??z.class1.bufr.tm00
++ /hrrrdas/gempak/
++ /hrrrdas/gempak/*
 - *
-E
+B 1040000
 

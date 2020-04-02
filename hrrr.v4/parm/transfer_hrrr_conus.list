@@ -33,8 +33,8 @@ com/hrrr/_ENVIR_/hrrr._PDY_/
 + /conus/hrrr.t??z.*fits*
 + /conus/hrrr.t??z.*rsl*
 + /conus/hrrr.t??z.class1.bufr.tm00
-+ /conus/nawips/
-+ /conus/nawips/*
++ /conus/gempak/
++ /conus/gempak/*
 - *
 B 1040000
 
@@ -48,8 +48,8 @@ com/hrrr/_ENVIR_/hrrr._PDYm1_/
 + /conus/hrrr.t??z.*fits*
 + /conus/hrrr.t??z.*rsl*
 + /conus/hrrr.t??z.class1.bufr.tm00
-+ /conus/nawips/
-+ /conus/nawips/*
++ /conus/gempak/
++ /conus/gempak/*
 - *
 B 1040000
 

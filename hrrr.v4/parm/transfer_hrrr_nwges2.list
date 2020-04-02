@@ -31,6 +31,9 @@ _GESROOT_/_ENVIR_/hrrr/
 + /hrrrges_sfc/alaska/
 + /hrrrges_sfc/alaska/hrrrak__PDYm1_??f00[23]
 + /hrrrges_sfc/alaska/hrrrak__PDY_??f00[23]
++ /hrrrges_sfc/hrrrdas/
++ /hrrrges_sfc/hrrrdas/hrrrdas__PDYm1_??f00[23]
++ /hrrrges_sfc/hrrrdas/hrrrdas__PDY_??f00[23]
 - *
 B 543000
 # This directory is a good candidate for compression

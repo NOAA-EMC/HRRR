@@ -11,6 +11,12 @@ module use -a /opt/cray/modulefiles
 module load $BASE/../modulefiles/HRRR/v4.0.0.da
 module list
 
+cd ${BASE}/hrrr_prep_smoke.fd/process-obs/QC
+make clean
+make 
+cp -fp qc_modis.exe ${BASE}/../exec/hrrr_smoke_qc_modis
+cp -fp qc_viirs.exe ${BASE}/../exec/hrrr_smoke_qc_viirs
+
 cd ${BASE}/hrrr_prep_smoke.fd/prep-chem/cycle_netcdf
 make clean
 ./mk-wrf-wcoss-cray

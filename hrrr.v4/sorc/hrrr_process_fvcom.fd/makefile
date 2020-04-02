@@ -12,7 +12,7 @@ CPPFLAGS =  -DLINUX -Dfunder -DFortranByte=char -DFortranInt=int -DFortranLlong=
 W3FLAGS = -I/${W3EMC_INC4}
 INCLD= -I${NETCDF}/include
 LIBS =  ${NWPLIBS} \
-        ${NETCDF}/lib/libnetcdff.a ${NETCDF}/lib/libnetcdf.a  \
+        ${NETCDF}/lib/libnetcdf.a ${NETCDF}/lib/libnetcdf.a  \
         ${HDF5}/lib/libhdf5hl_fortran.a ${HDF5}/lib/libhdf5_hl.a ${HDF5}/lib/libhdf5_fortran.a ${HDF5}/lib/libhdf5.a /usr/lib64/libz.a
 
 

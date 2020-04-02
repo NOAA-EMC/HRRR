@@ -23,17 +23,28 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-com/hrrr/_ENVIR_/hrrr._PDYm1_/ /scratch4/NCEPDEV/rstprod/com/hrrr/_ENVIR_/hrrr._PDYm1_/
-+ /conus/
-+ /conus/gempak/
-+ /conus/gempak/*
+_GESROOT_/_ENVIR_/hrrr/
++ /hrrrdasges/
++ /hrrrdasges/hrrrdas_d0?__PDY_????f??_mem00??
++ /hrrrdasensp
++ /hrrrdasensp/enspert_d0?__PDY_????
++ /hrrrdasbc
++ /hrrrdasbc/wrfbdy_d0?._PDY_????.mem00??
 - *
-E
+B 543000
+# This directory is a good candidate for compression
+#Z
 
-com/hrrr/_ENVIR_/hrrr._PDY_/ /scratch4/NCEPDEV/rstprod/com/hrrr/_ENVIR_/hrrr._PDY_/
-+ /conus/
-+ /conus/gempak/
-+ /conus/gempak/*
+_GESROOT_/_ENVIR_/hrrr/
++ /hrrrdasges/
++ /hrrrdasges/hrrrdas_d0?__PDYm1_????f??_mem00??
++ /hrrrdasensp
++ /hrrrdasensp/enspert_d0?__PDYm1_????
++ /hrrrdasbc
++ /hrrrdasbc/wrfbdy_d0?._PDYm1_????.mem00??
++ /hrrrdasbc/wrfinput*
 - *
-E
+B 543000
+# This directory is a good candidate for compression
+#Z
 

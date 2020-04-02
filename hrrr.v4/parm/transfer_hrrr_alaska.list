@@ -33,8 +33,8 @@ com/hrrr/_ENVIR_/hrrr._PDY_/
 + /alaska/*.t??z.*fits*
 + /alaska/*.t??z.*rsl*
 + /alaska/*.t??z.class1.bufr.tm00
-+ /alaska/nawips/
-+ /alaska/nawips/*
++ /alaska/gempak/
++ /alaska/gempak/*
 - *
 B 1040000
 
@@ -48,8 +48,8 @@ com/hrrr/_ENVIR_/hrrr._PDYm1_/
 + /alaska/*.t??z.*fits*
 + /alaska/*.t??z.*rsl*
 + /alaska/*.t??z.class1.bufr.tm00
-+ /alaska/nawips/
-+ /alaska/nawips/*
++ /alaska/gempak/
++ /alaska/gempak/*
 - *
 B 1040000
 

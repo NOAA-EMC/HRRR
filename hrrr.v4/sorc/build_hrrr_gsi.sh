@@ -42,5 +42,5 @@ set -e
 cp bin/gsi.x        ${BASE}/../exec/hrrr_gsi
 cp bin/enkf_wrf.x   ${BASE}/../exec/hrrr_enkf
 cp bin/enspreproc.x ${BASE}/../exec/hrrr_process_enkf
-
+cp bin/initialens.x ${BASE}/../exec/hrrr_initialens
 ##############################
