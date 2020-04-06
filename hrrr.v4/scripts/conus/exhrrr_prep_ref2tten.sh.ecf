@@ -25,7 +25,7 @@ export MPI_IB_RAILS=2
 export MPI_GROUP_MAX=128
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
 
-export HRRRDAS_MEAN=${COMOUT}/../hrrrdas/hrrr.t${cycm1}z.analysis_d02.mean
+export HRRRDAS_MEAN=${COMOUTm1}/../hrrrdas/hrrr.t${cycm1}z.analysis_d02.mean
 
 rm $DATA/*
 cd $DATA
