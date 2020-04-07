@@ -1109,7 +1109,7 @@ state    real   acfrcv           ij     misc        1         -      -
 state integer   ncfrcv           ij     misc        1         -      -
 
 # new rad variables
-state    real   o3rad           ikj     misc        1         -      rdf=(p2c)      "o3rad"    "RADIATION 3D OZONE" "ppmv"
+state    real   o3rad           ikj     misc        1         -      rd      "o3rad"    "RADIATION 3D OZONE" "ppmv"
 
 # incoming optical depth derived from aerosol data
 state  real   aerodm    i{lsa}jm{ty}    misc        1    -   -     -
@@ -1117,12 +1117,12 @@ state  real   pina      {lsa}           misc        1    -   -      "PINA"     "
 
 # array to hold aerosol optical depth that has been interpolated to model levels and time
 state  real   -         ikjf            aerod       1    -   -             -
-state  real   ocarbon   ikjf            aerod       1    -   df=(p2c)     "ocarbon"         "organic carbon"          -
-state  real   seasalt   ikjf            aerod       1    -   df=(p2c)     "seasalt"         "sea salt"                -
-state  real   dust      ikjf            aerod       1    -   df=(p2c)     "dust"            "dust"                    -
-state  real   bcarbon   ikjf            aerod       1    -   df=(p2c)     "bcarbon"         "black carbon"            -
-state  real   sulfate   ikjf            aerod       1    -   df=(p2c)     "sulfate"         "sulfate"                 -
-state  real   upperaer  ikjf            aerod       1    -   df=(p2c)     "upperaer"        "volcanic ash"            -
+state  real   ocarbon   ikjf            aerod       1    -   d     "ocarbon"         "organic carbon"          -
+state  real   seasalt   ikjf            aerod       1    -   d     "seasalt"         "sea salt"                -
+state  real   dust      ikjf            aerod       1    -   d     "dust"            "dust"                    -
+state  real   bcarbon   ikjf            aerod       1    -   d     "bcarbon"         "black carbon"            -
+state  real   sulfate   ikjf            aerod       1    -   d     "sulfate"         "sulfate"                 -
+state  real   upperaer  ikjf            aerod       1    -   d     "upperaer"        "volcanic ash"            -
 state  real   aodtot    ij              misc        1    -      r         "aodtot"          "TOTAL AEROSOL OPTICAL DEPTH"  -
 
 # cam radiation variables
@@ -1163,14 +1163,14 @@ state   real    F_RIMEF_PHY    ikj     misc         1         -      rdu     "F_
 state   real    qndropsource   ikj     misc         1         -      r        "qndropsource"         "Droplet number source"   "#/kg/s"
 
 # cyl 3DPWP variables
-state   real    OM_TMP        i{nocnl}j      misc         1        Z     i012rhdu=(copy_fcnm)f=(c2f_interp:grid_id)    "OM_TMP" "temperature"   "k"
-state   real    OM_S          i{nocnl}j      misc         1        Z     i012rhdu=(copy_fcnm)f=(c2f_interp:grid_id)  "OM_S" "salinity"       "degree"
+state   real    OM_TMP        i{nocnl}j      misc         1        Z     i012rhdu=(copy_fcnm)    "OM_TMP" "temperature"   "k"
+state   real    OM_S          i{nocnl}j      misc         1        Z     i012rhdu=(copy_fcnm)  "OM_S" "salinity"       "degree"
 state   real    OM_DEPTH      i{nocnl}j      misc         1        Z     i012rhd   "OM_DEPTH"   "depth"     "m"
-state   real    OM_U          i{nocnl}j      misc         1        Z     i012rhdu=(copy_fcnm)f=(c2f_interp:grid_id)   "OM_U"   "u current"     "m/s"
-state   real    OM_V          i{nocnl}j      misc         1        Z     i012rhdu=(copy_fcnm)f=(c2f_interp:grid_id)   "OM_V"   "v current"     "m/s"
+state   real    OM_U          i{nocnl}j      misc         1        Z     i012rhdu=(copy_fcnm)   "OM_U"   "u current"     "m/s"
+state   real    OM_V          i{nocnl}j      misc         1        Z     i012rhdu=(copy_fcnm)   "OM_V"   "v current"     "m/s"
 state   real    OM_LAT        ij       misc         1        -     i012rd   "OM_LAT"  "om lat"       "degree"
 state   real    OM_LON        ij       misc         1        -     i012rd   "OM_LON"  "om lon"       "degree"
-state   real    OM_ML         ij       misc         1        -     i012rhdu=(copy_fcnm)f=(c2f_interp:grid_id)   "OM_ML"  "om ml"       "m"
+state   real    OM_ML         ij       misc         1        -     i012rhdu=(copy_fcnm)   "OM_ML"  "om ml"       "m"
 state   real    OM_TINI       i{nocnl}j      misc         1        Z     i012rd   "OM_TINI"   "temperature init"     "k"
 state   real    OM_SINI       i{nocnl}j      misc         1        Z     i012rd   "OM_SINI"       "salinity init"     "degree"
 

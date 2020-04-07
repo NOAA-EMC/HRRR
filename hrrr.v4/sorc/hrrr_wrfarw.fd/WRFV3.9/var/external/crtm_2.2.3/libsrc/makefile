@@ -28,8 +28,8 @@ include make.dependencies
 
 .SUFFIXES: .fpp .f90 .o
 
-.f90.o:
-	$(SFC) -c $(FCFLAGS_CRTM) $<
+#.f90.o:
+#	$(SFC) -c $(FCFLAGS_CRTM) $<
 #	x=`echo "$(SFC)" | awk '{print $$1}'` ; export x ; \
 #        if [ $$x = "ifort" ] ; then \
 #           $(SFC) -c $(FCFLAGS_CRTM) -assume byterecl $< ; \

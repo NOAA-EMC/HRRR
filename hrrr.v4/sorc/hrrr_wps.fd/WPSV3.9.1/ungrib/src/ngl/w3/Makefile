@@ -40,10 +40,10 @@ $(LIB): $(OBJ_MOD) $(OBJS) $(OBJS_CC)
 clean:
 	$(RM) $(OBJ_MOD) $(OBJS) $(OBJS_CC) *.mod *.a
 
-.f.o:
-	$(RM) $*.o
-	$(FC) $(F77FLAGS) -c $< 
-
-.c.o:
-	$(RM) $*.o
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< 
+#.f.o:
+#	$(RM) $*.o
+#	$(FC) $(F77FLAGS) -c $< 
+#
+#.c.o:
+#	$(RM) $*.o
+#	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< 

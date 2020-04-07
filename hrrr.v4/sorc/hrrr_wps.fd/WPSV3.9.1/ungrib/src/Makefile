@@ -86,14 +86,14 @@ rrpr.o:			misc_definitions_module.o module_debug.o filelist.o gridinfo.o module_
 
 read_namelist.o:	misc_definitions_module.o module_debug.o read_namelist.F
 
-.F.o:
-			$(CPP) $(CPPFLAGS) $(FDEFS) $< > $*.f90
-			$(FC) -c $(FFLAGS) $*.f90
+#.F.o:
+#			$(CPP) $(CPPFLAGS) $(FDEFS) $< > $*.f90
+#			$(FC) -c $(FFLAGS) $*.f90
 #			$(RM) $*.f90
 
-.c.o:
-	$(RM) $@
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
+#.c.o:
+#	$(RM) $@
+#	$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
 
 
 clean:
