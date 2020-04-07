@@ -127,7 +127,11 @@ cd ${DATA}
 # Add smoke fields to wrfinput_d01
 ${USHhrrr}/hrrr_smoke_wrfinput_pre.ksh wrfinput_d01
 ## cycle smoke
-${USHhrrr}/hrrr_cycle_smoke.ksh wrfinput_d01
+if [ $cyc -eq 00 ]; then
+${USHhrrr}/hrrr_cycle_smoke.ksh wrfinput_d01 ${PDYm1}${cycm1}
+else
+${USHhrrr}/hrrr_cycle_smoke.ksh wrfinput_d01 ${PDY}${cycm1}
+fi
 
 # Bring in boundary file with data for previous hour
 # 

@@ -8,7 +8,7 @@ to_file="$1"
 now="${2:-${START_TIME:-$PDY$cyc}}"
 
 maxback="${maxback:-9}" # how many hours ago to search for wrfout in nwges
-minback="${minback:-1}" # minimum number of cycles to go back for smoke in nwges
+minback="${minback:-0}" # minimum number of cycles to go back for smoke in nwges
 
 dom="${dom:-conus}"
 gesdir="${gespath}/hrrr/hrrrges_sfc/$dom"
