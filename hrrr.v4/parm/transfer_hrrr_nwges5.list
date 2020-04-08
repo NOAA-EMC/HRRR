@@ -24,27 +24,27 @@
 # transferred.
 
 _GESROOT_/_ENVIR_/hrrr/
-+ /hrrrdasges/
-+ /hrrrdasges/hrrrdas_d0?__PDY_????f??_mem00??
 + /hrrrdasensp
 + /hrrrdasensp/enspert_d0?__PDY_????
 + /hrrrdasbc
 + /hrrrdasbc/wrfbdy_d0?._PDY_????.mem00??
++ /hrrrdasbc/wrfinput*
++ /hrrrdasges/
++ /hrrrdasges/hrrrdas_small_d0?__PDY_????f??_mem00??
 - *
-B 543000
+B 54300000
 # This directory is a good candidate for compression
 #Z
 
 _GESROOT_/_ENVIR_/hrrr/
-+ /hrrrdasges/
-+ /hrrrdasges/hrrrdas_d0?__PDYm1_????f??_mem00??
 + /hrrrdasensp
 + /hrrrdasensp/enspert_d0?__PDYm1_????
 + /hrrrdasbc
 + /hrrrdasbc/wrfbdy_d0?._PDYm1_????.mem00??
-+ /hrrrdasbc/wrfinput*
++ /hrrrdasges/
++ /hrrrdasges/hrrrdas_small_d0?__PDYm1_????f??_mem00??
 - *
-B 543000
+B 54300000
 # This directory is a good candidate for compression
 #Z
 

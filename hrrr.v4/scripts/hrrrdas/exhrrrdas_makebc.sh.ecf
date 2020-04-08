@@ -517,8 +517,6 @@ do
 
    done
 
-wait
-
    ln -sf ${HRRRDASBC}/wrfinput_d01_${syyyy}-${smm}-${sdd}_${shh}_00_00 wrfinput_d01
    cp ${EXEChrrrdas}/hrrr_cal_bcpert .
    ensmem=1

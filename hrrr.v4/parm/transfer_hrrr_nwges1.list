@@ -23,11 +23,11 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-_GESROOT_/_ENVIR_/hrrr/
-+ /hrrrges_enkf/
-+ /hrrrges_enkf/conus/***
-+ /hrrrges_enkf/alaska/***
-+ /hrrrges_enkf/hrrrdas/***
+#_GESROOT_/_ENVIR_/hrrr/
+#+ /hrrrges_enkf/
+#+ /hrrrges_enkf/conus/***
+#+ /hrrrges_enkf/alaska/***
+#+ /hrrrges_enkf/hrrrdas/***
 
 + /hrrrges_sfc/
 + /hrrrges_sfc/conus/

@@ -784,15 +784,13 @@ while [[ $ensmem -le $no_member ]];do
   ensmemid=`printf %4.4i $ensmem`
 
   # get background for each member
-  cpreq ${COMOUT}/hrrr.t${cyc}z.wrfguess_d01_rap ${COMOUT}/hrrr.t${cyc}z.wrfguess_d01.mem${ensmemid} &
-  cpreq ${COMOUT}/hrrr.t${cyc}z.wrfguess_d02_rap ${COMOUT}/hrrr.t${cyc}z.wrfguess_d02.mem${ensmemid} &
+  cpreq ${COMOUT}/hrrr.t${cyc}z.wrfguess_d01_rap ${COMOUT}/hrrr.t${cyc}z.wrfguess_d01.mem${ensmemid}
+  cpreq ${COMOUT}/hrrr.t${cyc}z.wrfguess_d02_rap ${COMOUT}/hrrr.t${cyc}z.wrfguess_d02.mem${ensmemid}
 
   # next member
   (( ensmem += 1 ))
 
 done
-
-wait
 
 ensmem=1
 while [[ $ensmem -le $no_member ]];do

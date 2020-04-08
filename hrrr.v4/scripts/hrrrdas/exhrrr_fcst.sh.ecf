@@ -428,11 +428,9 @@ echo "running ncks"
 
 ncks -d west_east,0,1798 -d west_east_stag,0,1799 -d south_north,0,1058 -d south_north_stag,0,1059 -v "T,QVAPOR,SMOIS,P_TOP,ZNU,ZNW,RDX,RDY,MAPFAC_M,XLAT,XLONG,MUB,MU,P,PH,PHB,U,V,XLAND,SEAICE,SST,IVGTYP,ISLTYP,VEGFRA,SNOW,U10,V10,TSLB,TSK,Q2,SOILT1,TH2,QCLOUD,QRAIN,QSNOW,QICE,QGRAUP,QNRAIN,QNICE,QNCLOUD,REFL_10CM,W,C3H,C4H,C3F,C4F,Times" wrfout_d02_${timestr2} ./wrfout_small_d02_${timestr2}
 
-cp -p wrfout_d01_${timestr2} ${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem${ensmemid} &
-cp -p wrfout_d02_${timestr2} ${HRRRDASGES}/hrrrdas_d02_${timestr1}f01_mem${ensmemid} &
-cp -p wrfout_small_d02_${timestr2} ${HRRRDASGES}/hrrrdas_small_d02_${timestr1}f01_mem${ensmemid} &
-
-wait
+cp -p wrfout_d01_${timestr2} ${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem${ensmemid}
+cp -p wrfout_d02_${timestr2} ${HRRRDASGES}/hrrrdas_d02_${timestr1}f01_mem${ensmemid}
+cp -p wrfout_small_d02_${timestr2} ${HRRRDASGES}/hrrrdas_small_d02_${timestr1}f01_mem${ensmemid}
 
 msg="JOB $job FOR HRRR_FORECAST HAS COMPLETED NORMALLY"
 postmsg "$jlogfile" "$msg"
