@@ -43,7 +43,6 @@ START_TIME=`echo "${START_TIME}" | sed 's/\([[:digit:]]\{2\}\)$/ \1/'`
 START_TIME=`${DATE} -d "${START_TIME}"`
 
 gdate=`${DATE} "+%Y%m%d%H" -d "${START_TIME}"`
-POSTERIOR_INFLATION_FACTOR=1.20
 
 # Bring over background field (it's modified by GSI so we can't link to it)
 time_str=`${DATE} "+%Y-%m-%d_%H_%M_%S" -d "${START_TIME}"`
@@ -153,10 +152,12 @@ if [ $domainid -eq 01 ]; then
    NLONS=399
    NLATS=249
    NLEVS=50
+   POSTERIOR_INFLATION_FACTOR=1.20
 else
    NLONS=1800
    NLATS=1060
    NLEVS=50
+   POSTERIOR_INFLATION_FACTOR=1.08
 fi
 
 . $ENKF_NAMELIST

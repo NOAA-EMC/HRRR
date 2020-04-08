@@ -24,11 +24,7 @@ AWK="/bin/gawk --posix"
 echo $START_TIME
 numtiles=${MOSAICTILENUM}
 
-if [ $cyc -eq 00 ]; then
-START_TIME=${PDYm1}' '${cyc}
-else
 START_TIME=${PDY}' '${cyc}
-fi
 
 echo "${START_TIME}"
 echo `echo "${START_TIME}" | ${AWK} '/^[[:digit:]]{10}$/'`
