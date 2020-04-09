@@ -92,7 +92,7 @@ setpdy.sh
 export COM=${COM:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}}
 export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMINsst=${COMINsst:-${COMROOTp2}/gfs/prod}
+export COMINsst=${COMINsst:-${COMROOTp3}/gfs/prod}
 export PREPDIR=${PREPDIR:-${COMROOT}/rap/prod}
 export COMRAP=${COMRAP:-${COMROOT}/rap/prod}
 export COMRAP_E=${COMRAP_E:-${COMROOT}/rap/prod}
