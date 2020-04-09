@@ -255,9 +255,9 @@ else
   echo "Warning: ${obsfile} is not available"
 fi
 
-obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.escris.tm00.bufr_d"
+obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.escrsf.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./crisbufrears
+  ln -sf ${obsfile} ./crisfsbufrears
 else
   echo "Warning: ${obsfile} is not available"
 fi
@@ -277,9 +277,8 @@ else
   echo "Warning: ${obsfile} is not available"
 fi
 
-obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.crisdb.tm00.bufr_d"
+obsfile="${PREPBUFR}/${prepsuffix}.t${cyc}z.crsfdb.tm00.bufr_d"
 if [ -r "${obsfile}" ]; then
-  ln -sf ${obsfile} ./crisbufr_db
   ln -sf ${obsfile} ./crisfsbufr_db
 else
   echo "Warning: ${obsfile} is not available"
