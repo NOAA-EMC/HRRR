@@ -5506,6 +5506,17 @@
     </param>
 
     <param>
+       <post_avblfldidx>727</post_avblfldidx>
+       <shortname>GSD_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_2-5km</shortname>
+       <pname>UPHL</pname>
+       <fixed_sfc1_type>spec_hgt_lvl_above_grnd</fixed_sfc1_type>
+       <level>5000.</level>
+       <fixed_sfc2_type>spec_hgt_lvl_above_grnd</fixed_sfc2_type>
+       <level2>2000.</level2>
+       <scale>3.0</scale>
+    </param>
+
+    <param>
        <post_avblfldidx>729</post_avblfldidx>
        <shortname>VEG_MAX_ON_SURFACE</shortname>
        <pname>VEGMAX</pname>

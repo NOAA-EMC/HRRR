@@ -1866,14 +1866,14 @@ entire_atmos
 ?
 ?
 ?
-420
-MAX_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_2-5km
-maximum Updraft Helicity on Specified Height Level Above Ground
+727
+GSD_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_2-5km
+?
 1
-tmpl4_8
-MXUPHL
+tmpl4_0
+UPHL
 NCEP
-MAX
+?
 spec_hgt_lvl_above_grnd
 0
 ?

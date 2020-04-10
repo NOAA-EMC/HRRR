@@ -265,7 +265,7 @@
        </param>
 
        <param>
-           <shortname>MAX_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_2-5km</shortname>
+           <shortname>GSD_UPHL_ON_SPEC_HGT_LVL_ABOVE_GRND_2-5km</shortname>
            <table_info>NCEP</table_info>
            <scale>3.0</scale>
        </param>
