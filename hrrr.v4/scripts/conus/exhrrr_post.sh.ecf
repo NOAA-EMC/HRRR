@@ -45,29 +45,6 @@ export SPL=2.,5.,7.,10.,20.,30.\
 timestr=`${DATE} +%Y-%m-%d_%H_%M_%S -d "${START_TIME}  ${fhr} hours"`
 timestr2=`${DATE} +%Y-%m-%d_%H:%M:%S -d "${START_TIME}  ${fhr} hours"`
 
-# Save files for surface cycle
-targetsize=15870850680
-targetsize=16061363612
-if [ $fhr -lt 12 ]
-then
-  counter=1
-  while [[ $counter -lt 36 ]]; do
-  filesize=$(stat -c%s ${INPUT_DATA}/wrfout_d01_${timestr})
-  echo $filesize
-  if [ $filesize -eq $targetsize ]; then
-    cp ${INPUT_DATA}/wrfout_d01_${timestr} ${HRRRGES_SFC}/hrrr_${PDY}${cyc}f0${fhr}
-    break
-  else
-    sleep 5
-    counter=` expr $counter + 1 `
-  fi
-  done
-  if [ $counter -eq 36 ]; then
-    echo "WARNING: Forecast Hour f0${fhr} still short on node! Copy anyway."
-    cp ${INPUT_DATA}/wrfout_d01_${timestr} ${HRRRGES_SFC}/hrrr_${PDY}${cyc}f0${fhr}
-  fi
-fi
-
 cat > itag <<EOF
 ${INPUT_DATA}/wrfout_d01_${timestr}
 netcdf
@@ -225,6 +202,29 @@ ${WGRIB2} tmpfile3  -set_grib_type c3 -set_bitmap 1 -new_grid_winds grid -new_gr
 cat tmpfile2b tmpfile3a > hrrr.t${cyc}z.ndfdf${fhr}.grib2
 
 $USHhrrr/hrrr_mkawp.sh $fhr
+
+# Save files for surface cycle
+targetsize=15870850680
+targetsize=16061363612
+if [ $fhr -lt 12 ]
+then
+  counter=1
+  while [[ $counter -lt 36 ]]; do
+  filesize=$(stat -c%s ${INPUT_DATA}/wrfout_d01_${timestr})
+  echo $filesize
+  if [ $filesize -eq $targetsize ]; then
+    cp ${INPUT_DATA}/wrfout_d01_${timestr} ${HRRRGES_SFC}/hrrr_${PDY}${cyc}f0${fhr}
+    break
+  else
+    sleep 5
+    counter=` expr $counter + 1 `
+  fi
+  done
+  if [ $counter -eq 36 ]; then
+    echo "WARNING: Forecast Hour f0${fhr} still short on node! Copy anyway."
+    cp ${INPUT_DATA}/wrfout_d01_${timestr} ${HRRRGES_SFC}/hrrr_${PDY}${cyc}f0${fhr}
+  fi
+fi
 
 echo "HRRR fcst hour $fhr post completed at `${DATE}`"
 
