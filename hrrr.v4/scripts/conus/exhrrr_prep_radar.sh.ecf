@@ -217,13 +217,6 @@ runline="aprun -n 36 -N 24 ./hrrr_process_lightning"
 $runline > process_lightning.out
 export err=$?; err_chk
 
-if [ -s lightning.err]; then
- echo "Lightning Processing Error"
-    export subject="Lightning Processsing Error in ${cyc}z CONUS HRRR"
-    export maillist=${maillist:-'ncep.list.spa-helpdesk@noaa.gov,geoffrey.manikin@noaa.gov,benjamin.blake@noaa.gov,ming.hu@noaa.gov'}
-    echo "The ${cyc}z lightning processing ended due to a problem.   Please investigate. ">>mailmsg
-    cat mailmsg |mail.py -s "$subject" $maillist -v
-fi
 echo 'ending lightning processing'
 fi
 
