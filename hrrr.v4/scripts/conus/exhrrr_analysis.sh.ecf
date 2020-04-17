@@ -525,27 +525,28 @@ cat << EOF > fvcom.namelist
 EOF
 
 if [ -r "${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc" ]; then
-  echo "FVCOM update for fractional lake ice."
-  cp ${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc ./fvcom.nc
-  cp ${FIXhrrr}/hrrr_geo_em.d01.nc ./geo_em.d01.nc
-  cp ${EXEChrrr}/hrrr_process_fvcom .
-  runline="aprun -n 1 -N 1 ./hrrr_process_fvcom"
-  $runline < fvcom.namelist >> stdout_fvcomice
-  export err=$?; err_chk
+  fvcomfile=${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc
 elif [ -r "${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc" ]; then
-  echo "FVCOM update for fractional lake ice."
-  cp ${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc ./fvcom.nc
-  cp ${FIXhrrr}/hrrr_geo_em.d01.nc ./geo_em.d01.nc
-  cp ${EXEChrrr}/hrrr_process_fvcom .
-  runline="aprun -n 1 -N 1 ./hrrr_process_fvcom"
-  $runline < fvcom.namelist >> stdout_fvcomice
-  export err=$?; err_chk
+  fvcomfile=${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc
+elif [ -r "${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc" ]; then
+  fvcomfile=${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc
+elif [ -r "${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc" ]; then
+  fvcomfile=${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc
 else
-  echo "${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc does not exist!!"
+  echo "No FVCOM file in ${FVCOM}!!"
   echo "ERROR: No FVCOM update at ${PDY}${cyc}!!!!"
 fi
 
-mv fvcom.namelist fvcom.namelist.ice
+if [ -r "${fvcomfile}" ]; then
+  echo "FVCOM update for fractional lake ice."
+  cp ${fvcomfile} ./fvcom.nc
+  cp ${FIXhrrr}/hrrr_geo_em.d01.nc ./geo_em.d01.nc
+  cp ${EXEChrrr}/hrrr_process_fvcom .
+  runline="aprun -n 1 -N 1 ./hrrr_process_fvcom"
+  $runline < fvcom.namelist >> stdout_fvcomice
+  export err=$?; err_chk
+
+  mv fvcom.namelist fvcom.namelist.ice
 
 cat << EOF > fvcom.namelist
    &SETUP
@@ -554,21 +555,12 @@ cat << EOF > fvcom.namelist
    /
 EOF
 
-if [ -r "${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc" ]; then
   echo "FVCOM update for lake surface temperatures."
-  cp ${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc ./fvcom.nc
+  cp ${fvcomfile} ./fvcom.nc
   runline="aprun -n 1 -N 1 ./hrrr_process_fvcom"
   $runline < fvcom.namelist >> stdout_fvcomsst
   export err=$?; err_chk
-elif [ -r "${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc" ]; then
-  echo "FVCOM update for lake surface temperatures."
-  cp ${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc ./fvcom.nc
-  runline="aprun -n 1 -N 1 ./hrrr_process_fvcom"
-  $runline < fvcom.namelist >> stdout_fvcomsst
-  export err=$?; err_chk
-else
-  echo "${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc does not exist!!"
-  echo "ERROR: No FVCOM update at ${PDY}${cyc}!!!!"
+
 fi
 
 

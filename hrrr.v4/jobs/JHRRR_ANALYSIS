@@ -113,6 +113,7 @@ export COMRAP=${COMRAP:-${COMROOT}/rap/prod}
 export COMRAP_E=${COMRAP_E:-${COMROOT}/rap/prod}
 export PREPDIR2=${PREPDIR2:-${COMIN}}
 export FVCOM=${FVCOM:-/gpfs/dell1/nco/ops/dcom/dev/${PDY}/wgrdbul/glerl}
+export FVCOMm1=${FVCOMm1:-/gpfs/dell1/nco/ops/dcom/dev/${PDYm1}/wgrdbul/glerl}
 
 export gespath=${gespath:-$GESROOT/${envir}}
 export HRRRGES_ENKF=${HRRRGES_ENKF:-$gespath/${NET}/hrrrges_enkf/${dom}}
