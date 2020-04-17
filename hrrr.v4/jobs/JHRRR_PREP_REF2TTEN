@@ -94,10 +94,10 @@ fi
 ##############################################
 export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMOUTm1=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 if [ "$cyc" = 00 ]; then
-export COMOUTm1=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDYm1}/${dom}}
+export COMOUTm1=${COMOUTm1:-${COMROOT}/${NET}/${envir}/${RUN}.${PDYm1}/${dom}}
 fi
+export COMOUTm1=${COMOUTm1:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 
 mkdir -m 775 -p $COMOUT
 
