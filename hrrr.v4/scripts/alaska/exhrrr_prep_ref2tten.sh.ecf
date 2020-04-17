@@ -48,7 +48,7 @@ else
 START_TIME=$PDY$cycm1
 fi
 counter=2
-targetsize=9091753436
+targetsize=9096528560
 while [[ $counter -lt 48 ]]; do
   counterhr=$counter
   typeset -Z2 counterhr
