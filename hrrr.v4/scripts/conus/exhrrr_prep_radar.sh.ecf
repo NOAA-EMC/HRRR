@@ -175,11 +175,17 @@ do
   icnt=$((icnt + 1))
   if [ $icnt -gt 36 ]
   then
-    msg="FATAL ERROR: No bufr file found for lightning processing after 6 minutes waiting. Checking rap_dump jobs!"
-    err_exit $msg
+    echo "No bufr file found for lightning processing after 6 minutes waiting. Will skip lightning processing"
+    export subject="Lightning Data Missing for ${cyc}z RAP and HRRR"
+    export maillist=${maillist:-'ncep.list.spa-helpdesk@noaa.gov,geoffrey.manikin@noaa.gov,benjamin.blake@noaa.gov,ming.hu@noaa.gov'}
+    echo "No lightning data was available for the ${cyc}z cycle">>mailmsg
+    cat mailmsg |mail.py -s "$subject" $maillist -v
+    exit 0
   fi
 done
 
+if [ -s rap.t${cyc}z.lghtng.tm00.bufr_d ]
+ then
 ln -sf rap.t${cyc}z.lghtng.tm00.bufr_d lghtngbufr
 
 echo ${ymdh} > ./lightning_cycle_date
@@ -211,7 +217,15 @@ runline="aprun -n 36 -N 24 ./hrrr_process_lightning"
 $runline > process_lightning.out
 export err=$?; err_chk
 
+if [ -s lightning.err]; then
+ echo "Lightning Processing Error"
+    export subject="Lightning Processsing Error in ${cyc}z CONUS HRRR"
+    export maillist=${maillist:-'ncep.list.spa-helpdesk@noaa.gov,geoffrey.manikin@noaa.gov,benjamin.blake@noaa.gov,ming.hu@noaa.gov'}
+    echo "The ${cyc}z lightning processing ended due to a problem.   Please investigate. ">>mailmsg
+    cat mailmsg |mail.py -s "$subject" $maillist -v
+fi
 echo 'ending lightning processing'
+fi
 
 if [ $subhtime -eq 60 ]
 then
