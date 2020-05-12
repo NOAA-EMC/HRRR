@@ -1,19 +1,18 @@
-#BSUB -J %E%hrrr_%DOMAIN%_prep_radar_46_%CYC%
-#BSUB -oo /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_prep_radar_46_%CYC%.o%J
-#BSUB -eo /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_prep_radar_46_%CYC%.o%J
-#BSUB -cwd /tmpnwprd
-#BSUB -n 36 
-#BSUB -R span[ptile=24]
-#BSUB -R affinity[core]
+#BSUB -J %E%hrrr_prep_radar_46_%DOMAIN%_%CYC%
+#BSUB -o /%COM%/output/%ENVIR%/today/hrrr_prep_radar_46_%DOMAIN%_%CYC%.o%J
+#BSUB -e /%COM%/output/%ENVIR%/today/hrrr_prep_radar_46_%DOMAIN%_%CYC%.o%J
+#BSUB -cwd /tmp
 #BSUB -W 00:15
 #BSUB -P %PROJ%
 #BSUB -q %QUEUE% 
 #BSUB -L /bin/sh
-#BSUB -x
-#BSUB -a poe
+#BSUB -M 1800
+#BSUB -extsched 'CRAYLINUX[]' -R '1*{select[craylinux && !vnode]} + 36*{select[craylinux && vnode]span[ptile=24] cu[type=cabinet]}' rusage[mem=1800]
 
 %include <head.h>
-%include <envir-p2.h>
+%include <envir-xc40.h>
+export model=hrrr
+%include <model_ver.h>
 
 set -x
 
@@ -25,19 +24,11 @@ set -x
 export cyc=%CYC%
 export dom=%DOMAIN%
 export subhtime=46
-export job=hrrr_%DOMAIN%_prep_radar_46_%CYC%
 
-# versions file for Hi-Res Rapid Refresh model $mod_ver
-VERSION_FILE=$NWROOT/versions/hrrr.ver
-if [ -f $VERSION_FILE ]; then
-  . $VERSION_FILE
-else
-  ecflow_client --abort
-  exit
-fi
-
+export KMP_AFFINITY=disabled
+export OMP_NUM_THREADS=1
 # CALL executable job script here
-$NWROOT/hrrr.${hrrr_ver}/jobs/JHRRR_PREP_RADAR
+$HOMEhrrr/jobs/JHRRR_PREP_RADAR
 
 if [ $? -ne 0 ]; then
   ecflow_client --abort

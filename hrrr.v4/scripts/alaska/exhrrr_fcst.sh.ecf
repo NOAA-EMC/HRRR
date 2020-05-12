@@ -230,19 +230,6 @@ now=`${DATE} +%Y%m%d%H%M%S`
 
 cp ${EXEChrrr}/hrrr_wrfarw_fcst .
 
-module unload craype-hugepages2M
-module unload craype-hugepages4M
-module unload craype-hugepages8M
-module unload craype-hugepages16M
-module unload craype-hugepages32M
-module unload craype-hugepages64M
-module unload craype-hugepages128M
-module unload craype-hugepages512M
-
-set -e
-module load craype-hugepages256M
-set +e
-
 cat<<EOF > run_wrf_config
 omp_num_threads=2 # compute only; quilt is always 1
 hyperthreads=1    # compute only

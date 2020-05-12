@@ -1,15 +1,17 @@
-#BSUB -J %E%hrrr_%DOMAIN%_postsnd_%CYC%
-#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_postsnd_%CYC%.o%J
-#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_postsnd_%CYC%.o%J
-#BSUB -cwd /tmpnwprd
+#BSUB -J %E%hrrr_postsnd_%DOMAIN%_%CYC%
+#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_postsnd_%DOMAIN%_%CYC%.o%J
+#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_postsnd_%DOMAIN%_%CYC%.o%J
+#BSUB -cwd /tmp
 #BSUB -q %QUEUE%_shared
 #BSUB -L /bin/sh
 #BSUB -W 00:25
 #BSUB -P %PROJ%
-#BSUB -R "rusage[mem=2500]" -R "affinity[core]"
+#BSUB -M 1800
 
 %include <head.h>
-%include <envir-p2.h>
+%include <envir-xc40.h>
+export model=hrrr
+%include <model_ver.h>
 
 # EXPORT list here
 
@@ -17,19 +19,14 @@ set -x
 
 export cyc=%CYC%
 export dom=%DOMAIN%
-export job=hrrr_%DOMAIN%_postsnd_%CYC%
 
-# versions file for Hi-Res Rapid Refresh model $mod_ver
-VERSION_FILE=$NWROOT/versions/hrrr.ver
-if [ -f $VERSION_FILE ]; then
-  . $VERSION_FILE
-else
-  ecflow_client --abort
-  exit
-fi
+module load gempak/${gempak_ver}
+export KMP_AFFINITY=disabled
+export OMP_NUM_THREADS=1
+unset MPICH_RANK_REDORDER_METHOD
 
 # CALL executable job script here
-$NWROOT/hrrr.${hrrr_ver}/jobs/JHRRR_POSTSND
+$HOMEhrrr/jobs/JHRRR_POSTSND
 
 if [ $? -ne 0 ]; then
   ecflow_client --abort

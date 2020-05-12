@@ -1,18 +1,18 @@
-#BSUB -J %E%hrrr_%DOMAIN%_post_f23_%CYC%
-#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_post_f23_%CYC%.o%J
-#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_post_f23_%CYC%.o%J
-#BSUB -cwd /tmpnwprd
-#BSUB -n 48 
-#BSUB -R span[ptile=24]
+#BSUB -J %E%hrrr_post_f23_%DOMAIN%_%CYC%
+#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_post_f23_%DOMAIN%_%CYC%.o%J
+#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_post_f23_%DOMAIN%_%CYC%.o%J
+#BSUB -cwd /tmp
 #BSUB -q %QUEUE%
 #BSUB -L /bin/sh
 #BSUB -W 00:12
 #BSUB -P %PROJ%
-#BSUB -x
-#BSUB -a poe
+#BSUB -M 1800
+#BSUB -extsched 'CRAYLINUX[]' -R '1*{select[craylinux && !vnode]} + 48*{select[craylinux && vnode]span[ptile=24] cu[type=cabinet]}' rusage[mem=1800]
 
 %include <head.h>
-%include <envir-p2.h>
+%include <envir-xc40.h>
+export model=hrrr
+%include <model_ver.h>
 
 # EXPORT list here
 
@@ -21,19 +21,15 @@ set -x
 export cyc=%CYC%
 export fhr=23
 export dom=%DOMAIN%
-export job=hrrr_%DOMAIN%_post_f23_%CYC%
 
-# versions file for Hi-Res Rapid Refresh model $mod_ver
-VERSION_FILE=$NWROOT/versions/hrrr.ver
-if [ -f $VERSION_FILE ]; then
-  . $VERSION_FILE
-else
-  ecflow_client --abort
-  exit
-fi
+module load grib_util/${grib_util_ver}
+module load util_shared/${util_shared_ver}
+export KMP_AFFINITY=disabled
+export OMP_NUM_THREADS=1
+unset MPICH_RANK_REORDER_METHOD
 
 # CALL executable job script here
-$NWROOT/hrrr.${hrrr_ver}/jobs/JHRRR_POST
+$HOMEhrrr/jobs/JHRRR_POST
 
 if [ $? -ne 0 ]; then
   ecflow_client --abort

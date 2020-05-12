@@ -1,8 +1,8 @@
-#BSUB -J %E%hrrr_%DOMAIN%_forecast_restart_%CYC%
-#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_forecast_restart_%CYC%.o%J
-#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_forecast_restart_%CYC%.o%J
-#BSUB -cwd /tmpnwprd
-#BSUB -n 1872
+#BSUB -J %E%hrrr_forecast_restart_%DOMAIN%_%CYC%
+#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_forecast_restart_%DOMAIN%_%CYC%.o%J
+#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_forecast_restart_%DOMAIN%_%CYC%.o%J
+#BSUB -cwd /tmp
+#BSUB -n 2232
 #BSUB -R "span[ptile=24]"
 #BSUB -q %QUEUE%
 #BSUB -L /bin/sh
@@ -12,7 +12,7 @@
 #BSUB -x
 
 %include <head.h>
-%include <envir-p2.h>
+%include <envir-xc40.h>
 
 # EXPORT list here
 
@@ -22,8 +22,7 @@ export MP_SHARED_MEMORY=YES
 export MEMORY_AFFINITY=MCM
 
 export cyc=%CYC%
-exporrt dom=%DOMAIN%
-export job=hrrr_%DOMAIN%_forecast_restart_%CYC%
+export job=hrrr_forecast_restart_%DOMAIN%_%CYC%
 
 # versions file for Hi-Res Rapid Refresh model $mod_ver
 VERSION_FILE=$NWROOT/versions/hrrr.ver

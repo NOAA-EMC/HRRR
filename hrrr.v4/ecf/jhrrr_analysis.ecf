@@ -1,19 +1,19 @@
-#BSUB -J %E%hrrr_%DOMAIN%_analysis_%CYC%
-#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_analysis_%CYC%.o%J
-#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_analysis_%CYC%.o%J
-#BSUB -cwd /tmpnwprd
-#BSUB -R "span[ptile=24]"
-#BSUB -R affinity[core:distribute=balance]
-#BSUB -n 1440 
+#BSUB -J %E%hrrr_analysis_%DOMAIN%_%CYC%
+#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_analysis_%DOMAIN%_%CYC%.o%J
+#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_analysis_%DOMAIN%_%CYC%.o%J
+#BSUB -cwd /tmp
 #BSUB -q %QUEUE%
 #BSUB -L /bin/sh
-#BSUB -W 00:20
+#BSUB -W 00:25
 #BSUB -P %PROJ%
-#BSUB -x
-#BSUB -a poe
+#BSUB -M 1800
+#BSUB -extsched 'CRAYLINUX[]' -R '1*{select[craylinux && !vnode]} + %NTASKS%*{select[craylinux && vnode]span[ptile=%PTILE%] cu[type=cabinet]}' rusage[mem=1800]
+
 
 %include <head.h>
-%include <envir-p2.h>
+%include <envir-xc40.h>
+export model=hrrr
+%include <model_ver.h>
 
 # EXPORT list here
 
@@ -21,19 +21,13 @@ set -x
 
 export cyc=%CYC%
 export dom=%DOMAIN%
-export job=hrrr_%DOMAIN%_analysis_%CYC%
 
-# versions file for High-Resolution Rapid Refresh model $mod_ver
-VERSION_FILE=$NWROOT/versions/hrrr.ver
-if [ -f $VERSION_FILE ]; then
-  . $VERSION_FILE
-else
-  ecflow_client --abort
-  exit
-fi
+export KMP_AFFINITY=disabled
+export OMP_NUM_THREADS=2
+unset MPICH_RANK_REORDER_METHOD
 
 # CALL executable job script here
-$NWROOT/hrrr.${hrrr_ver}/jobs/JHRRR_ANALYSIS
+$HOMEhrrr/jobs/JHRRR_ANALYSIS
 
 if [ $? -ne 0 ]; then
   ecflow_client --abort

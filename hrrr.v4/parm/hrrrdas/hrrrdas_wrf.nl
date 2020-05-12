@@ -196,9 +196,9 @@
  /
 
  &bdy_control
- spec_bdy_width                      = 5,
+ spec_bdy_width                      = 10,
  spec_zone                           = 1,
- relax_zone                          = 4,
+ relax_zone                          = 9,
  specified                           = .true., .false.,
  nested                              = .false., .true.,
  /

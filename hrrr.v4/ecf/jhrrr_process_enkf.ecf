@@ -1,0 +1,47 @@
+#BSUB -J %E%hrrr_process_enkf_%DOMAIN%_%CYC%
+#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_process_enkf_%DOMAIN%_%CYC%.o%J
+#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_process_enkf_%DOMAIN%_%CYC%.o%J
+#BSUB -cwd /tmp
+#BSUB -L /bin/sh
+#BSUB -W 00:20
+#BSUB -q %QUEUE%
+#BSUB -P %PROJ%
+#BSUB -M 1800
+#BSUB -extsched 'CRAYLINUX[]' -R '1*{select[craylinux && !vnode]} + 96*{select[craylinux && vnode]span[ptile=24] cu[type=cabinet]}' rusage[mem=1800]
+
+%include <head.h>
+%include <envir-xc40.h>
+export model=hrrr
+%include <model_ver.h>
+
+# EXPORT list here
+
+export cyc=%CYC%
+export dom=%DOMAIN%
+
+export KMP_AFFINITY=disabled
+export OMP_NUM_THREADS=1
+
+# CALL executable job script here
+$HOMEhrrr/jobs/JHRRR_PROCESS_ENKF
+
+if [ $? -ne 0 ]; then
+  ecflow_client --abort
+  exit
+fi
+
+%include <tail.h>
+%manual
+##########################################################################
+# Purpose: to updatebcare the boundary conditions for the Rapid Refresh Model
+##########################################################################
+
+
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+
+# include manual page below
+%end

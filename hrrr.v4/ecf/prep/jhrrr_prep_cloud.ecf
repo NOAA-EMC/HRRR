@@ -1,41 +1,28 @@
-#BSUB -J %E%hrrr_%DOMAIN%_prep_cloud_%CYC%
-#BSUB -oo /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_prep_cloud_%CYC%.o%J
-#BSUB -eo /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_prep_cloud_%CYC%.o%J
-#BSUB -cwd /tmpnwprd
-#BSUB -n 4 
-#BSUB -R span[ptile=4]
-#BSUB -R affinity[core]
+#BSUB -J %E%hrrr_prep_cloud_%DOMAIN%_%CYC%
+#BSUB -o /%COM%/output/%ENVIR%/today/hrrr_prep_cloud_%DOMAIN%_%CYC%.o%J
+#BSUB -e /%COM%/output/%ENVIR%/today/hrrr_prep_cloud_%DOMAIN%_%CYC%.o%J
+#BSUB -cwd /tmp
 #BSUB -W 00:30
 #BSUB -P %PROJ%
 #BSUB -q %QUEUE%
 #BSUB -L /bin/sh
-#BSUB -x
-#BSUB -a poe
+#BSUB -M 1800
+#BSUB -extsched 'CRAYLINUX[]' -R '1*{select[craylinux && !vnode]} + 4*{select[craylinux && vnode]span[ptile=4] cu[type=cabinet]}' rusage[mem=1800]
 
 %include <head.h>
-%include <envir-p2.h>
-
+%include <envir-xc40.h>
+export model=hrrr
+%include <model_ver.h>
 set -x
 
 # EXPORT list here
-#export MP_SHARED_MEMORY=YES
-#export MEMORY_AFFINITY=MCM
-
 export cyc=%CYC%
 export dom=%DOMAIN%
-export job=hrrr_%DOMAIN%_prep_cloud_%CYC%
-
-# versions file for Hi-Res Rapid Refresh model $mod_ver
-VERSION_FILE=$NWROOT/versions/hrrr.ver
-if [ -f $VERSION_FILE ]; then
-  . $VERSION_FILE
-else
-  ecflow_client --abort
-  exit
-fi
+export KMP_AFFINITY=disabled
+export OMP_NUM_THREADS=1
 
 # CALL executable job script here
-$NWROOT/hrrr.${hrrr_ver}/jobs/JHRRR_PREP_CLOUD
+$HOMEhrrr/jobs/JHRRR_PREP_CLOUD
 
 if [ $? -ne 0 ]; then
   ecflow_client --abort

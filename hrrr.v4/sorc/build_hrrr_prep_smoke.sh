@@ -1,4 +1,7 @@
 ##############################
+#! /bin/sh
+
+set -u -e -x
 
 export BASE=`pwd`
 cd $BASE

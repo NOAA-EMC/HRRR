@@ -1,16 +1,17 @@
-#BSUB -J %E%hrrr_%DOMAIN%_post_manager_subh_%CYC%
-#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_post_manager_subh_%CYC%.o%J
-#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_%DOMAIN%_post_manager_subh_%CYC%.o%J
-#BSUB -cwd /tmpnwprd
-#BSUB -q %QUEUESERV%
+#BSUB -J %E%hrrr_post_manager_subh_%DOMAIN%_%CYC%
+#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_post_manager_subh_%DOMAIN%_%CYC%.o%J
+#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_post_manager_subh_%DOMAIN%_%CYC%.o%J
+#BSUB -cwd /tmp
+#BSUB -q %QUEUE%_shared
 #BSUB -L /bin/sh
 #BSUB -W 00:60
 #BSUB -P %PROJ%
-#BSUB -R rusage[mem=2500]
-#BSUB -R affinity[core]
+#BSUB -M 1000
 
 %include <head.h>
-%include <envir-p2.h>
+%include <envir-xc40.h>
+export model=hrrr
+%include <model_ver.h>
 
 # EXPORT list here
 
@@ -18,19 +19,9 @@ set -x
 
 export cyc=%CYC%
 export dom=%DOMAIN%
-export job=hrrr_%DOMAIN%_post_manager_subh_%CYC%
-
-# versions file for Hi-Res Rapid Refresh model $mod_ver
-VERSION_FILE=$NWROOT/versions/hrrr.ver
-if [ -f $VERSION_FILE ]; then
-  . $VERSION_FILE
-else
-  ecflow_client --abort
-  exit
-fi
 
 # CALL executable job script here
-$NWROOT/hrrr.${hrrr_ver}/jobs/JHRRR_POSTMGR_SUBH
+$HOMEhrrr/jobs/JHRRR_POSTMGR_SUBH
 
 if [ $? -ne 0 ]; then
   ecflow_client --abort

@@ -199,8 +199,15 @@ do
   icnt=$((icnt + 1))
   if [ $icnt -gt 36 ]
   then
-    msg="FATAL ERROR: No bufr file found for lightning processing after 6 minutes waiting. Checking rap_dump jobs!"
-    err_exit $msg
+#    msg="FATAL ERROR: No bufr file found for lightning processing after 6 minutes waiting. Checking rap_dump jobs!"
+#   err_exit $msg
+    echo "No bufr file found for lightning processing after 6 minutes waiting. Will skip lightning processing"
+    export subject="${cyc}z RAP Lightning Data Missing for ${cyc}z HRRRDAS"
+    export maillist=${maillist:-'ncep.list.spa-helpdesk@noaa.gov,geoffrey.manikin@noaa.gov,benjamin.blake@noaa.gov,ming.hu@noaa.gov'}
+    echo "No ${cyc}z RAP lightning data was available for the ${cyc}z HRRRDAS cycle">>mailmsg
+    cat mailmsg |mail.py -s "$subject" $maillist -v
+    exit 0
+
   fi
 done
 
