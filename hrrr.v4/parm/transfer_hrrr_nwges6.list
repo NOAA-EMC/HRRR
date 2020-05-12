@@ -23,35 +23,19 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-com/hrrr/_ENVIR_/hrrr._PDY_/
-+ /conus/
-+ /conus/hrrr.t??z.NSSLRefInGSI.bufr
-+ /conus/hrrr.t??z.NASALaRCCloudInGSI.bufr
-+ /conus/hrrr.t??z.wrfbdy
-+ /conus/hrrr.t??z.wrfhistory*
-+ /conus/hrrr.t??z.*grib2*
-+ /conus/hrrr.t??z.*fits*
-+ /conus/hrrr.t??z.*rsl*
-+ /conus/hrrr.t??z.class1.bufr.tm00
-+ /conus/gempak/
-+ /conus/gempak/*
+_GESROOT_/_ENVIR_/hrrr/
++ /hrrrdasges/
++ /hrrrdasges/hrrrdas_d02__PDY_????f??_mem00?[02468]
 - *
-W
-B 1040000
+B 543000
+# This directory is a good candidate for compression
+#Z
 
-com/hrrr/_ENVIR_/hrrr._PDYm1_/
-+ /conus/
-+ /conus/hrrr.t??z.NSSLRefInGSI.bufr
-+ /conus/hrrr.t??z.NASALaRCCloudInGSI.bufr
-+ /conus/hrrr.t??z.wrfbdy
-+ /conus/hrrr.t??z.wrfhistory*
-+ /conus/hrrr.t??z.*grib2*
-+ /conus/hrrr.t??z.*fits*
-+ /conus/hrrr.t??z.*rsl*
-+ /conus/hrrr.t??z.class1.bufr.tm00
-+ /conus/gempak/
-+ /conus/gempak/*
+_GESROOT_/_ENVIR_/hrrr/
++ /hrrrdasges/
++ /hrrrdasges/hrrrdas_d02__PDYm1_????f??_mem00?[02468]
 - *
-W
-B 1040000
+B 543000
+# This directory is a good candidate for compression
+#Z
 

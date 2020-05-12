@@ -23,22 +23,14 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-#_GESROOT_/_ENVIR_/hrrr/
-#+ /hrrrges_enkf/
-#+ /hrrrges_enkf/conus/***
-#+ /hrrrges_enkf/alaska/***
-#+ /hrrrges_enkf/hrrrdas/***
-
+_GESROOT_/_ENVIR_/hrrr/
 + /hrrrges_sfc/
 + /hrrrges_sfc/conus/
-+ /hrrrges_sfc/conus/hrrr__PDYm1_??f00[1]
-+ /hrrrges_sfc/conus/hrrr__PDY_??f00[1]
++ /hrrrges_sfc/conus/hrrr__PDYm1_??f00[0123]
++ /hrrrges_sfc/conus/hrrr__PDY_??f00[0123]
 + /hrrrges_sfc/alaska/
-+ /hrrrges_sfc/alaska/hrrrak__PDYm1_??f00[1]
-+ /hrrrges_sfc/alaska/hrrrak__PDY_??f00[1]
-+ /hrrrges_sfc/hrrrdas/
-+ /hrrrges_sfc/hrrrdas/hrrrdas__PDYm1_??f00[1]
-+ /hrrrges_sfc/hrrrdas/hrrrdas__PDY_??f00[1]
++ /hrrrges_sfc/alaska/hrrrak__PDYm1_??f00[0123]
++ /hrrrges_sfc/alaska/hrrrak__PDY_??f00[0123]
 - *
 B 543000
 # This directory is a good candidate for compression

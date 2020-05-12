@@ -24,18 +24,11 @@
 # transferred.
 
 _GESROOT_/_ENVIR_/hrrr/
-+ /hrrrges_sfc/
-+ /hrrrges_sfc/conus/
-+ /hrrrges_sfc/conus/hrrr__PDYm1_??f00[6]
-+ /hrrrges_sfc/conus/hrrr__PDY_??f00[6]
-+ /hrrrges_sfc/alaska/
-+ /hrrrges_sfc/alaska/hrrrak__PDYm1_??f00[6]
-+ /hrrrges_sfc/alaska/hrrrak__PDY_??f00[6]
-+ /hrrrges_sfc/hrrrdas/
-+ /hrrrges_sfc/hrrrdas/hrrrdas__PDYm1_??f00[6]
-+ /hrrrges_sfc/hrrrdas/hrrrdas__PDY_??f00[6]
++ /hrrrdasges/
++ /hrrrdasges/hrrrdas_small_d0?__PDY_????f??_mem00??
++ /hrrrdasges/hrrrdas_small_d0?__PDYm1_????f??_mem00??
 - *
-B 543000
+B 54300000
 # This directory is a good candidate for compression
 #Z
 

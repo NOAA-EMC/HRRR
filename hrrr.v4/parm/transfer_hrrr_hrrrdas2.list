@@ -24,33 +24,23 @@
 # transferred.
 
 com/hrrr/_ENVIR_/hrrr._PDY_/
-+ /conus/
-+ /conus/hrrr.t??z.NSSLRefInGSI.bufr
-+ /conus/hrrr.t??z.NASALaRCCloudInGSI.bufr
-+ /conus/hrrr.t??z.wrfbdy
-+ /conus/hrrr.t??z.wrfhistory*
-+ /conus/hrrr.t??z.*grib2*
-+ /conus/hrrr.t??z.*fits*
-+ /conus/hrrr.t??z.*rsl*
-+ /conus/hrrr.t??z.class1.bufr.tm00
-+ /conus/gempak/
-+ /conus/gempak/*
++ /hrrrdas/
++ /hrrrdas/hrrr.t??z.NSSLRefInGSI_d02.bufr
++ /hrrrdas/hrrr.t??z.NASALaRCCloudInGSI_d02.bufr
++ /hrrrdas/hrrr.t??z.obs_seq_mrms_d02.out
++ /hrrrdas/hrrr.t??z.Gridded_ref_d02.nc
++ /hrrrdas/hrrr.t??z.wrfguess_d02.mem00??
 - *
 W
 B 1040000
 
 com/hrrr/_ENVIR_/hrrr._PDYm1_/
-+ /conus/
-+ /conus/hrrr.t??z.NSSLRefInGSI.bufr
-+ /conus/hrrr.t??z.NASALaRCCloudInGSI.bufr
-+ /conus/hrrr.t??z.wrfbdy
-+ /conus/hrrr.t??z.wrfhistory*
-+ /conus/hrrr.t??z.*grib2*
-+ /conus/hrrr.t??z.*fits*
-+ /conus/hrrr.t??z.*rsl*
-+ /conus/hrrr.t??z.class1.bufr.tm00
-+ /conus/gempak/
-+ /conus/gempak/*
++ /hrrrdas/
++ /hrrrdas/hrrr.t??z.NSSLRefInGSI_d02.bufr
++ /hrrrdas/hrrr.t??z.NASALaRCCloudInGSI_d02.bufr
++ /hrrrdas/hrrr.t??z.obs_seq_mrms_d02.out
++ /hrrrdas/hrrr.t??z.Gridded_ref_d02.nc
++ /hrrrdas/hrrr.t??z.wrfguess_d02.mem00??
 - *
 W
 B 1040000

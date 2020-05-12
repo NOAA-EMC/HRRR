@@ -231,19 +231,6 @@ now=`${DATE} +%Y%m%d%H%M%S`
 
 cp ${EXEChrrr}/hrrr_wrfarw_fcst .
 
-module unload craype-hugepages2M
-module unload craype-hugepages4M
-module unload craype-hugepages8M
-module unload craype-hugepages16M
-module unload craype-hugepages32M
-module unload craype-hugepages64M
-module unload craype-hugepages128M
-module unload craype-hugepages512M
-
-set -e
-module load craype-hugepages256M
-set +e
-
 if [[ "${NODES:-0}" -lt 1 ]] ; then
     echo "WARNING: \$NODES variable is unset.  Will use \$LSB_MAX_NUM_PROCESSORS and assume WCOSS Cray."
     provided_nodes=$(( LSB_MAX_NUM_PROCESSORS / 24 ))

@@ -28,6 +28,10 @@ com/hrrr/_ENVIR_/hrrr._PDY_/
 + /conus/hrrr.t05z.wrfbdy
 + /conus/hrrr.t11z.wrfbdy
 + /conus/hrrr.t17z.wrfbdy
++ /alaska/
++ /alaska/hrrrak.t05z.wrfbdy
++ /alaska/hrrrak.t11z.wrfbdy
++ /alaska/hrrrak.t17z.wrfbdy
 - *
 
 B 1040000
@@ -35,22 +39,9 @@ B 1040000
 com/hrrr/_ENVIR_/hrrr._PDYm1_/
 + /conus/
 + /conus/hrrr.t23z.wrfbdy
-- *
-
-B 1040000
-
-com/hrrr/_ENVIR_/hrrr._PDY_/
-+ /alaska/
-+ /alaska/hrrrak.t05z.wrfbdy
-+ /alaska/hrrrak.t11z.wrfbdy
-+ /alaska/hrrrak.t17z.wrfbdy
-- *
-B 1040000
-
-com/hrrr/_ENVIR_/hrrr._PDYm1_/
 + /alaska/
 + /alaska/hrrrak.t23z.wrfbdy
-- * 
+- *
 
 B 1040000
 
@@ -61,6 +52,10 @@ _GESROOT_/_ENVIR_/hrrr/
 + /hrrrges_sfc/conus/hrrr__PDY_11f00[1]
 + /hrrrges_sfc/conus/hrrr__PDY_17f00[1]
 + /hrrrges_sfc/conus/hrrr__PDYm1_23f00[1]
++ /hrrrdasges/hrrrdas_d0?__PDY_1000f??_mem00??
++ /hrrrdasges/hrrrdas_small_d0?__PDY_1100f??_mem00??
++ /hrrrdasbc/wrfbdy_d0?._PDY_0600.mem00??
++ /hrrrdasbc/wrfinput*
 - *
 
 B 1040000

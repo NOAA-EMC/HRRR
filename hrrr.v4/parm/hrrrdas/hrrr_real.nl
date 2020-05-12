@@ -71,7 +71,7 @@
  parent_time_step_ratio              = 1,     3,
  feedback                            = 1,
  smooth_option                       = 1,
- p_top_requested                     = 2000
+ p_top_requested                     = 1500
  interp_type                         = 1
  rebalance                           = 1
  hypsometric_opt                     = 2
