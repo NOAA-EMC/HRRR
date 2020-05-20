@@ -27,6 +27,7 @@ export group_name=meso
 export ENSGRP=%ENSGRP:1%
 export ensmem=%ENSMEM%
 
+module load craype-hugepages256M
 module load perftools
 module list
 

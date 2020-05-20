@@ -27,7 +27,9 @@ export group_name=meso
 export ensmem=%ENSMEM%
 export ENSGRP=%ENSGRP:1%
 
+
 module load nco-gnu-sandybridge/${nco_gnu_sandybridge_ver}
+module load craype-hugepages256M
 module load perftools
 module list
 

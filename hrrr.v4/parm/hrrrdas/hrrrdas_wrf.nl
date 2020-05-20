@@ -38,6 +38,7 @@
  wind_int                            = 5
  nocolons                            = .true.
  ncd_nofill                          = .true.
+ adjust_output_times                 = .true.
  /
 
 &dfi_control
@@ -48,7 +49,7 @@
 /
 
  &domains
- time_step                           = 60,
+ time_step                           = 57,
  time_step_dfi                       = 60,
  time_step_fract_num                 = 0,
  time_step_fract_den                 = 1,
@@ -98,6 +99,7 @@
  &physics
  mp_physics                          = 28,    28,
  mp_tend_radar                       = 0,
+ mp_tend_lim                         = 0.07,
  do_radar_ref                        = 1,
  ra_lw_physics                       = 4,     4,
  ra_sw_physics                       = 4,     4,

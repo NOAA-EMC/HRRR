@@ -23,53 +23,25 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-com/hrrr/_ENVIR_/hrrr._PDY_/
-+ /hrrrdas/
-+ /hrrrdas/hrrr.t??z.NSSLRefInGSI_d0?.bufr
-+ /hrrrdas/hrrr.t??z.NASALaRCCloudInGSI_d0?.bufr
-+ /hrrrdas/hrrr.t??z.obs_seq_mrms_d0?.out
-+ /hrrrdas/hrrr.t??z.Gridded_ref_d0?.nc
-+ /hrrrdas/hrrrdas.t??z.makebc.tar
-+ /hrrrdas/hrrr.t??z.wrfguess_d0?.mem00??
-+ /hrrrdas/hrrr.t??z.wrfbdy
-+ /hrrrdas/hrrr.t??z.wrfhistory*
-+ /hrrrdas/hrrr.t??z.*grib2*
-+ /hrrrdas/hrrr.t??z.*fits*
-+ /hrrrdas/hrrr.t??z.*rsl*
-+ /hrrrdas/hrrr.t??z.class1.bufr.tm00
-+ /hrrrdas/hrrr.t??z.analysis_d0?.mean
-+ /hrrrdas/diag_conv_ges.*.d0?.mean
-+ /hrrrdas/diag_conv_ges.*.d0?.mem00??
-+ /hrrrdas/diag_radardbz_ges.*.d0?.mean
-+ /hrrrdas/diag_radardbz_ges.*.d0?.mem00??
-+ /hrrrdas/gempak/
-+ /hrrrdas/gempak/*
+_GESROOT_/_ENVIR_/hrrr/
++ /hrrrdasges/
++ /hrrrdasges/hrrrdas_d01__PDY_????f??_mem002[56789]
++ /hrrrdasges/hrrrdas_d01__PDY_????f??_mem003[0123456]
++ /hrrrdasges/hrrrdas_d02__PDY_????f??_mem002[56789]
++ /hrrrdasges/hrrrdas_d02__PDY_????f??_mem003[0123456]
 - *
-W
-B 1040000
+B 543000
+# This directory is a good candidate for compression
+#Z
 
-com/hrrr/_ENVIR_/hrrr._PDYm1_/
-+ /hrrrdas/
-+ /hrrrdas/hrrr.t??z.NSSLRefInGSI_d0?.bufr
-+ /hrrrdas/hrrr.t??z.NASALaRCCloudInGSI_d0?.bufr
-+ /hrrrdas/hrrr.t??z.obs_seq_mrms_d0?.out
-+ /hrrrdas/hrrr.t??z.Gridded_ref_d0?.nc
-+ /hrrrdas/hrrrdas.t??z.makebc.tar
-+ /hrrrdas/hrrr.t??z.wrfguess_d0?.mem00??
-+ /hrrrdas/hrrr.t??z.wrfbdy
-+ /hrrrdas/hrrr.t??z.wrfhistory*
-+ /hrrrdas/hrrr.t??z.*grib2*
-+ /hrrrdas/hrrr.t??z.*fits*
-+ /hrrrdas/hrrr.t??z.*rsl*
-+ /hrrrdas/hrrr.t??z.class1.bufr.tm00
-+ /hrrrdas/hrrr.t??z.analysis_d0?.mean
-+ /hrrrdas/diag_conv_ges.*.d0?.mean
-+ /hrrrdas/diag_conv_ges.*.d0?.mem00??
-+ /hrrrdas/diag_radardbz_ges.*.d0?.mean
-+ /hrrrdas/diag_radardbz_ges.*.d0?.mem00??
-+ /hrrrdas/gempak/
-+ /hrrrdas/gempak/*
+_GESROOT_/_ENVIR_/hrrr/
++ /hrrrdasges/
++ /hrrrdasges/hrrrdas_d01__PDY_????f??_mem002[56789]
++ /hrrrdasges/hrrrdas_d01__PDY_????f??_mem003[0123456]
++ /hrrrdasges/hrrrdas_d02__PDY_????f??_mem002[56789]
++ /hrrrdasges/hrrrdas_d02__PDY_????f??_mem003[0123456]
 - *
-W
-B 1040000
+B 543000
+# This directory is a good candidate for compression
+#Z
 

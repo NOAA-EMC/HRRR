@@ -18,6 +18,7 @@ set -x
 # Set paths to unix commands
 DATE=/bin/date
 AWK="/bin/awk --posix"
+ECHO="${ECHO:-/bin/echo}"
 
 # Set up some environment variables
 export ATP_ENABLED=0

@@ -26,6 +26,7 @@ export dom=%DOMAIN%
 
 module load craype-hugepages256M
 module load perftools
+module list
 
 export OMP_STACKSIZE=500M
 export KMP_AFFINITY=disabled

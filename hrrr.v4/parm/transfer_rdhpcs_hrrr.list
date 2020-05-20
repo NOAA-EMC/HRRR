@@ -23,15 +23,17 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-com/hrrr/_ENVIR_/hrrr._PDYm1_/ /scratch4/NCEPDEV/rstprod/com/hrrr/_ENVIR_/hrrr._PDYm1_/
+com/hrrr/_ENVIR_/hrrr._PDYm1_/ _REMOTEPATH_/com/hrrr/_ENVIR_/hrrr._PDYm1_/
 + /conus/
++ /conus/hrrr.t??z.wrfsfcf??.grib2*
 + /conus/gempak/
 + /conus/gempak/*
 - *
 E
 
-com/hrrr/_ENVIR_/hrrr._PDY_/ /scratch4/NCEPDEV/rstprod/com/hrrr/_ENVIR_/hrrr._PDY_/
+com/hrrr/_ENVIR_/hrrr._PDYm1_/ _REMOTEPATH_/com/hrrr/_ENVIR_/hrrr._PDY_/
 + /conus/
++ /conus/hrrr.t??z.wrfsfcf??.grib2*
 + /conus/gempak/
 + /conus/gempak/*
 - *

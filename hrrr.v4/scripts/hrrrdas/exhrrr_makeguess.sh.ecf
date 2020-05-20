@@ -346,7 +346,7 @@ echo "ungrib completed at `${DATE}`"
 ls -lrt ${DATA_OUT}
 
 # begin metgrid section
-export LSB_PJL_TASK_GEOMETRY="`/usrx/local/bin/mktjv 1/1 120/24`" 
+#export LSB_PJL_TASK_GEOMETRY="`/usrx/local/bin/mktjv 1/1 120/24`" 
 export MP_EUIDEVICE=sn_all
 export MP_EUILIB=us
 export SOURCE_PATH=$DATA/files
