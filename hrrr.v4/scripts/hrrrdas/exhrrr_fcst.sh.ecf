@@ -109,6 +109,32 @@ echo
 echo "MEMBER ID" = ensmemid
 echo
 
+# to deal with diag and EnKF failure only, directly link 
+if [ ${HRRRDAS_CONTINUE_FCST} = YES ]; then
+   timestr1=`${DATE} +%Y%m%d%H%M -d "${START_TIME} 1 hours ago"`
+   bkfile=${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem${ensmemid}
+   inputfile=${COMIN}/hrrr.t${cyc}z.wrfinput_d01.mem${ensmemid}
+   if [ -s ${inputfile} ]; then
+     mv ${inputfile} ${inputfile}.bk
+   fi
+   ln -s ${bkfile} ${inputfile}
+
+   bkfile=${HRRRDASGES}/hrrrdas_d02_${timestr1}f01_mem${ensmemid}
+   inputfile=${COMIN}/hrrr.t${cyc}z.wrfinput_d02.mem${ensmemid}
+   if [ -s ${inputfile} ]; then
+     mv ${inputfile} ${inputfile}.bk
+   fi
+   ln -s ${bkfile} ${inputfile}
+
+   echo "Warning: HRRRDAS_CONTINUE_FCST=YES, will move COMIN/hrrr.t${cyc}z.wrfinput_d01.mem${ensmemid} to ...bk" > mailmsg
+   echo "         and link to  previous cycle 1-h forecast as the current initial condition, HRRRDASGES/hrrrdas_d01_${timestr1}f01_mem${ensmemid}" >> mailmsg
+   echo "         same as d02 files" >> mailmsg
+   cat mailmsg
+   export subject="$PDY ${cyc}z mem${ensmemid} HRRRDAS FCST skip diag/Enkf data"
+   export maillist=${maillist:-'ncep.list.spa-helpdesk@noaa.gov,geoffrey.manikin@noaa.gov,benjamin.blake@noaa.gov,ming.hu@noaa.gov'}
+   cat mailmsg |mail.py -s "$subject" $maillist -v
+fi
+
 # Set up the work directory and cd into it
 cd ${DATA}/mem${ensmemid}
 #rm -fr mem${ensmemid}
@@ -399,7 +425,7 @@ fi
 
 ###############################################################
 err_chk
-cp rsl.out.0000 ${COMOUT}/hrrr.t${cyc}z.rslout
+cp rsl.out.0000 ${COMOUT}/hrrr.t${cyc}z.rslout_mem${ensmemid}
 
 timestr1=`${DATE} +%Y%m%d%H%M -d "${START_TIME}"`
 timestr2=`${DATE} +%Y-%m-%d_%H_%M_%S -d "${END_TIME}"`
@@ -417,9 +443,26 @@ echo "running ncks"
 
 ncks -d west_east,0,1798 -d west_east_stag,0,1799 -d south_north,0,1058 -d south_north_stag,0,1059 -v "T,QVAPOR,SMOIS,P_TOP,ZNU,ZNW,RDX,RDY,MAPFAC_M,XLAT,XLONG,MUB,MU,P,PH,PHB,U,V,XLAND,SEAICE,SST,IVGTYP,ISLTYP,VEGFRA,SNOW,U10,V10,TSLB,TSK,Q2,SOILT1,TH2,QCLOUD,QRAIN,QSNOW,QICE,QGRAUP,QNRAIN,QNICE,QNCLOUD,REFL_10CM,W,C3H,C4H,C3F,C4F,Times" wrfout_d02_${timestr2} ./wrfout_small_d02_${timestr2}
 
-cp -p wrfout_d01_${timestr2} ${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem${ensmemid}
+cp -p  wrfout_d01_${timestr2} ${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem${ensmemid}
+export err=$?;
+if [ $err != 0 ]; then
+  ls -ltrd wrfout_d01_${timestr2} ${HRRRDASGES} 
+  cpreq wrfout_d01_${timestr2} ${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem${ensmemid}
+fi
+
 cp -p wrfout_d02_${timestr2} ${HRRRDASGES}/hrrrdas_d02_${timestr1}f01_mem${ensmemid}
+export err=$?;
+if [ $err != 0 ]; then 
+  ls -ltrd wrfout_d02_${timestr2} ${HRRRDASGES}
+  cpreq wrfout_d02_${timestr2} ${HRRRDASGES}/hrrrdas_d02_${timestr1}f01_mem${ensmemid}
+fi
+
 cp -p wrfout_small_d02_${timestr2} ${HRRRDASGES}/hrrrdas_small_d02_${timestr1}f01_mem${ensmemid}
+export err=$?;
+if [ $err != 0 ]; then 
+  ls -ltrd  wrfout_small_d02_${timestr2} ${HRRRDASGES}
+  cpreq wrfout_small_d02_${timestr2} ${HRRRDASGES}/hrrrdas_small_d02_${timestr1}f01_mem${ensmemid}
+fi
 
 msg="JOB $job FOR HRRR_FORECAST HAS COMPLETED NORMALLY"
 postmsg "$jlogfile" "$msg"

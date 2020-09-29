@@ -44,10 +44,24 @@ else
    PDY2=$PDY
 fi
 
+if [ ! -r ${COMRAP}/rap.${PDY}/rap.t${cyc}z.wrfnatdf00.grib2.idx ]; then
+  icnt=1
+  while [ $icnt -lt 60 ]
+  do
+    if [ -r ${COMRAP}/rap.${PDY}/rap.t${cyc}z.wrfnatdf00.grib2.idx ]
+    then
+      break
+    else
+      icnt=$((icnt + 1))
+      sleep 5
+    fi
+  done
+fi
+
 if [ ! -r ${COMRAP}/rap.${PDY}/rap.t${cyc}z.wrfnatdf00.grib2 ]; then
- if [ -r ${COMRAP}/rap.${PDY1}/rap.t${cycm1}z.wrfnatf01.grib2 ]; then
+ if [ -r ${COMRAP}/rap.${PDY2}/rap.t${cycm1}z.wrfnatf01.grib2 ]; then
    export FORMAT=rap.t${cycm1}z.wrfnatf01.grib2
-   export SOURCE_PATH=${COMRAP}/rap.${PDY1}
+   export SOURCE_PATH=${COMRAP}/rap.${PDY2}
  else
    echo "FATAL ERROR: no background file available from RAP to make guess file"
    err_exit

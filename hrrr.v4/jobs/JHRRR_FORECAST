@@ -85,11 +85,11 @@ export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 
 if [ "${dom}" = hrrrdas ]; then
-   . $PARMhrrr/hrrrdas_para_config.fcst
+   . $PARMhrrr/hrrrdas_config.fcst
    ensmem=$ENSBEG
    echo "run forecast for member =$ensmem"
    ensmemid=`printf %4.4i $ensmem`
-
+   export PS4='HRRRDAS_FCST_${ensmemid} $SECONDS + ' 
    rm -rf $DATA/mem${ensmemid}
    mkdir $DATA/mem${ensmemid}
    cd $DATA/mem${ensmemid}
@@ -114,6 +114,8 @@ export HRRRDASGES=${HRRRDASGES:-$gespath/${NET}/hrrrdasges}
 
 mkdir -m 775 -p $HRRRDASGES
 
+export HRRRDAS_CONTINUE_FCST=${HRRRDAS_CONTINUE_FCST:-NO};
+
 env
 
 ########################################################
@@ -126,7 +128,7 @@ if [ "${dom}" = hrrrdas ]; then
    while [[ $ensmem -le $ENSEND ]]; do
      echo "run forecast for member =$ensmem"
      ensmemid=`printf %4.4i $ensmem`
-
+     export PS4='HRRDAS_FCST_${ensmemid} $SECONDS + ' 
      rm -rf $DATA/mem${ensmemid}
      mkdir $DATA/mem${ensmemid}
      cd $DATA/mem${ensmemid}

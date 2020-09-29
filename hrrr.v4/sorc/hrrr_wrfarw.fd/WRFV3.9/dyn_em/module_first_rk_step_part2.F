@@ -564,10 +564,6 @@ BENCH_END(deform_div_tim)
             ( ( config_flags%afwa_diag_opt .eq. 1 ) .AND. ( config_flags%afwa_severe_opt .EQ. 1 ) ) ) THEN
 BENCH_START(helicity_tim)
 
-       !$OMP PARALLEL DO   &
-       !$OMP PRIVATE ( ij )
-
-       DO ij = 1 , grid%num_tiles
           if(print_flag) &
                CALL wrf_debug ( 200 , ' call cal_helicity' )
           CALL cal_helicity ( config_flags,grid%itimestep,grid%dt,grid%u_2,grid%v_2,grid%w_2,  &
@@ -595,11 +591,8 @@ BENCH_START(helicity_tim)
                               grid%fnm,grid%fnp,grid%cf1,grid%cf2,grid%cf3,grid%zx,grid%zy, &
                               ids, ide, jds, jde, kds, kde,        &
                               ims, ime, jms, jme, kms, kme,        &
-                              grid%i_start(ij), grid%i_end(ij),    &
-                              grid%j_start(ij), grid%j_end(ij),    &
+                              ips, ipe, jps, jpe,   &
                               k_start    , k_end                  )
-       ENDDO
-       !$OMP END PARALLEL DO
 BENCH_END(helicity_tim)
        ENDIF
 

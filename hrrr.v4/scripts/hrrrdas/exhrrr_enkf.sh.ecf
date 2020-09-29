@@ -70,13 +70,13 @@ while [[ $ensmem -le $no_member ]];do
      echo "${inputfile} does not exist!!"
 
      if [ ${cyc} -eq 09 -o ${cyc} -eq 21 ]; then
-        echo "skip EnKF for cold start"
+        echo "Warning: skip EnKF for cold start"
         exit 0
      fi
 
      errmsg="FATAL ERROR: No background file for analysis at ${time_str}!!!!"
      echo $errmsg
-     echo " Cycle ${PDY}${cyc}: GSI failed because of no background" 
+     echo "FATAL ERROR: Cycle ${PDY}${cyc}: GSI failed because of no background" 
      err_exit $errmsg
   fi
 

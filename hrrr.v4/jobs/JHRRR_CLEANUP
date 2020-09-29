@@ -88,6 +88,9 @@ postmsg "$jlogfile" "$msg"
 cd $DATA_IN
 if [ ${KEEPDATA} = NO ] ; then
   rm -rf $DATA_IN/hrrr_${dom}_prep_radar_${envir}_${cyc}
+  rm -rf $DATA_IN/hrrr_${dom}_prep_smoke_${envir}_${cyc}
+  rm -rf $DATA_IN/hrrr_${dom}_ref2tten_${envir}_${cyc}
+  rm -rf $DATA_IN/hrrr_${dom}_anl_${envir}_${cyc}
   rm -rf $DATA_IN/hrrr_${dom}_fcst_${envir}_${cyc}
   rm -rf $DATA_IN/hrrr_${dom}_postmgr_subh_${envir}_${cyc}
   fhr=00

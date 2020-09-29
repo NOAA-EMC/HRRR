@@ -56,7 +56,6 @@ echo $cyc
 START_TIME=`echo "${START_TIME}" | sed 's/\([[:digit:]]\{2\}\)$/ \1/'`
 START_TIME=`${DATE} -d "${START_TIME}"`
 
-
 # produce binary date file, needed for radar diag files
 ANALYSIS_TIME=`${DATE} "+%Y%m%d%H" -d "${START_TIME}"`
 echo ${ANALYSIS_TIME} > idate.input
@@ -92,12 +91,12 @@ if [ -r ${bkfile} ]; then
 else
   echo "${bkfile} does not exist!!"
   if [ ${cyc} -eq 09 -o ${cyc} -eq 21 ]; then
-     echo "skip GSI for cold start" > ${COMOUT}/diagdone${cyc}00.${ensmemid}
+     echo "Wanring: skip GSI for cold start" > ${COMOUT}/diagdone${cyc}00.${ensmemid}
      exit 0
   fi
   errmsg="FATAL ERROR: No background file for analysis at ${time_run}!!!!"
   echo $errmsg
-  echo " Cycle ${PDY}${cyc}: GSI failed because of no background" 
+  echo " FATAL ERROR: Cycle ${PDY}${cyc}: GSI failed because of no background" 
   err_exit $errmsg
 fi
 # now check domain 2
@@ -117,7 +116,7 @@ else
   echo "${bkfile} does not exist!!"
   errmsg="FATAL ERROR: No background file for analysis at ${time_run}!!!!"
   echo $errmsg
-  echo " Cycle ${PDY}${cyc}: GSI failed because of no background" 
+  echo " FATAL ERROR: Cycle ${PDY}${cyc}: GSI failed because of no background" 
   err_exit $errmsg
 fi
 
@@ -269,6 +268,7 @@ else
    cp ${PARMhrrr}/hrrrdas_gsiparm.anl  gsiparm.anl
 fi
 
+ecflow_client --event ready2sub      #for next batch diag jobs to run
 export pgm=hrrr_gsi
 . prep_step
 
@@ -339,8 +339,8 @@ mv fort.209 fit_rw1
 mv fort.213 fit_sst1
 mv fort.238 fit_dbz1
 
-cat fit_p1 fit_w1 fit_t1 fit_q1 fit_pw1 fit_rad1 fit_rw1 fit_dbz1 > ${COMOUT}/hrrr_d01.t${cyc}z.fits.${tmmark}
-cat fort.210 fort.211 fort.212 fort.214 fort.215 fort.217 fort.220 > ${COMOUT}/hrrr_d01.t${cyc}z.fits2.${tmmark}
+cat fit_p1 fit_w1 fit_t1 fit_q1 fit_pw1 fit_rad1 fit_rw1 fit_dbz1 > ${COMOUT}/hrrr_d01.t${cyc}z.fits.${tmmark}.mem${ensmemid}
+cat fort.210 fort.211 fort.212 fort.214 fort.215 fort.217 fort.220 > ${COMOUT}/hrrr_d01.t${cyc}z.fits2.${tmmark}.mem${ensmemid}
 ls -l
 
 # now run gsi for d02
@@ -442,8 +442,8 @@ mv fort.209 fit_rw1
 mv fort.213 fit_sst1
 mv fort.238 fit_dbz1
 
-cat fit_p1 fit_w1 fit_t1 fit_q1 fit_pw1 fit_rad1 fit_rw1 fit_dbz1 > ${COMOUT}/hrrr_d02.t${cyc}z.fits.${tmmark}
-cat fort.210 fort.211 fort.212 fort.214 fort.215 fort.217 fort.220 > ${COMOUT}/hrrr_d02.t${cyc}z.fits2.${tmmark}
+cat fit_p1 fit_w1 fit_t1 fit_q1 fit_pw1 fit_rad1 fit_rw1 fit_dbz1 > ${COMOUT}/hrrr_d02.t${cyc}z.fits.${tmmark}.mem${ensmemid}
+cat fort.210 fort.211 fort.212 fort.214 fort.215 fort.217 fort.220 > ${COMOUT}/hrrr_d02.t${cyc}z.fits2.${tmmark}.mem${ensmemid}
 
 #cp wrf_inout ${COMOUT}/hrrr.t${cyc}z.wrf_inout
 

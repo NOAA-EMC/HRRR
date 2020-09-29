@@ -35,6 +35,7 @@ com/hrrr/_ENVIR_/hrrr._PDY_/
 + /hrrrdas/diag_conv_ges.*.d0?.mem00?[2468]
 + /hrrrdas/diag_radardbz_ges.*.d02.mean
 + /hrrrdas/diag_radardbz_ges.*.d0?.mem00?[2468]
++ /hrrrdas/hrrr.t??z.wrfinput_d0?.mem00?[013579]
 - *
 W
 B 1040000
@@ -51,6 +52,7 @@ com/hrrr/_ENVIR_/hrrr._PDYm1_/
 + /hrrrdas/diag_conv_ges.*.d0?.mem00?[2468]
 + /hrrrdas/diag_radardbz_ges.*.d02.mean
 + /hrrrdas/diag_radardbz_ges.*.d0?.mem00?[2468]
++ /hrrrdas/hrrr.t??z.wrfinput_d0?.mem00?[013579]
 - *
 W
 B 1040000

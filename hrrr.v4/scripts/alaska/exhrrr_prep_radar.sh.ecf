@@ -78,7 +78,7 @@ else
          cp ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mmm2}??.grib2.gz .
          ls MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}????.grib2.gz > filelist_mrms
       else
-         echo " No NSSL gribs data available, use NCEP 8 tiles binary"
+         echo " Warning: No NSSL gribs data available, use NCEP 8 tiles binary"
          if [ -s filelist_mrms ]; then
             rm -f filelist_mrms
          fi
@@ -170,11 +170,11 @@ do
     cpreq $COMINlight/rap_e.${PDY}/rap_e.t${cyc}z.lghtng.tm00.bufr_d ./rap.t${cyc}z.lghtng.tm00.bufr_d
     break
   fi
-  sleep 10
+  sleep 12
   icnt=$((icnt + 1))
   if [ $icnt -gt 36 ]
   then
-    echo "No bufr file found for lightning processing after 6 minutes waiting. Will skip lightning processing"
+    echo "Warning: No bufr file found for lightning processing after 6 minutes waiting. Will skip lightning processing"
     exit 0
   fi
 done
