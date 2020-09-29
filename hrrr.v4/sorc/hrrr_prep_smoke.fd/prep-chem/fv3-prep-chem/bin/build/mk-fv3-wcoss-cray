@@ -1,0 +1,8 @@
+#make OPT=pgi.fim CHEM=RADM_WRF_FIM AER=SIMPLE $1
+set -e
+module purge
+module load intel
+module load NetCDF-intel-haswell/4.2
+module load HDF5-serial-intel-haswell/1.8.9
+module list
+make OPT=intel.fv3 CHEM=RADM_FV3 $1

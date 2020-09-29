@@ -1,0 +1,109 @@
+#!/bin/ksh
+
+echo `date` $0 `date -u` begin
+
+set -xa
+export PS4='$SECONDS + '
+date
+
+export RUNMEM=${RUNMEM:-gec00}
+# Default RUNMEM assumes chemistry is running for GEFS control.
+# For other models (ie. GFS), the RUNMEM is irrelevant.
+export mem=`echo $RUNMEM|cut -c3-5`
+export ENS_NUM=1
+echo "ENS_NUM=$ENS_NUM"
+
+####################################
+# Enable error checking
+####################################
+set -ue # Do not remove this line!
+# Later code assumes -u and -e are enabled!
+
+####################################
+# obtain unique process id (pid) and make temp directory
+####################################
+export pid=$$
+export DATA=${DATA:-$DATAROOT/${job}.${pid}}
+mkdir -p $DATA
+cd $DATA
+
+############################
+# Set up cycle varaible
+############################
+export cycle=${cycle:-t${cyc}z}
+
+####################################
+# Specify NET and RUN Name and model
+####################################
+export NET=${NET:-gens}
+export RUN=${RUN:-gefs}
+
+####################################
+# File To Log Msgs
+####################################
+export jlogfile=${jlogfile:-$COMROOT/logs/jlogfiles/jlogfile.${job}.${pid}}
+
+####################################
+# When are we?
+####################################
+
+# Run setpdy and initialize PDY variables
+setpdy.sh
+. ./PDY
+
+####################################
+# Define locations of global chemistry code, scripts, etc.
+####################################
+
+# Specify Execution Areas
+export HOMEchem=${HOMEchem:-${HOMEgfs:-${NWROOT}/gfs.${gefs_ver}}}
+export PARMchem=${PARMchem:-$HOMEchem/parm}
+export EXchem=${EXchem:-$HOMEchem/scripts}
+export FIXchem=${FIXchem:-$HOMEchem/fix}
+export EXECchem=${EXECchem:-$HOMEchem/exec}
+
+# Input/output data location, likely same as gens/gefs COM.  We give
+# chem its own variable to allow EMC/NCO to more easily configure:
+export COMINchem=${COMINchem:-$COMROOT/${NET}/${envir}/${RUN}.${PDY}}
+export COMOUTchem=${COMOUTchem:-$COMINchem}
+
+# The CHEM_OUTPUT_FORMAT sets the filenames of chemistry outputs in
+# $COMOUTchem.  This filename pattern must match the logic in
+# global_link_chem.bash.  The %INPUT% will be automatically replaced
+# by the input emission variable name and %TILE% by the FV3 tile
+# number.
+export CHEM_OUTPUT_FORMAT=${CHEM_OUTPUT_FORMAT:-chem/gefs.$cycle.chem_%INPUT%.tile%TILE%.dat}
+
+#IMPLEMENTATION NOTE: These four variables should be set in this
+#script when their locations are known:
+
+#export BBEM_MODIS_DIR_TODAY=${BBEM_MODIS_DIR_TODAY:-$DCOMROOT/us003007/$PDY/path/to/modisfire}
+#export BBEM_MODIS_DIR_YESTERDAY=${BBEM_MODIS_DIR_YESTERDAY:-$DCOMROOT/us003007/$PDYm1/path/to/modisfire}
+#export BBEM_WFABBA_DIR_TODAY=${BBEM_WFABBA_DIR_TODAY:-$DCOMROOT/us003007/$PDY/path/to/wf_abba}
+#export BBEM_WFABBA_DIR_YESTERDAY=${BBEM_WFABBA_DIR_YESTERDAY:-$DCOMROOT/us003007/$PDYm1/path/to/wf_abba}
+#export GBBEPX_DATA_DIR=${GBBEPX_DATA_DIR:-$DCOMROOT/us00307/$PDYm1/path/to/gbbepx/data}
+
+# Set a variable to an invalid path (like /dev/null) to disable that
+# data source.
+
+# These three lines abort the job if dataset directories are invalid: 
+#test -d "$BBEM_MODIS_DIR_TODAY" -o -d "$BBEM_MODIS_DIR_YESTERDAY"
+#test -d "$BBEM_WFABBA_DIR_TODAY" -o -d "$BBEM_WFABBA_DIR_YESTERDAY"
+#test -d "$GBBEPX_DATA_DIR"
+
+##############################################
+# Decide what we're running and how
+##############################################
+
+export CASE=${CASE:-C384} # forecast model resolution
+
+export PREP_CHEM_SOURCES_EXE="$EXECchem/prep_chem_sources_RADM_FV3_SIMPLE.exe"
+if [[ -d /gpfs && -s /etc/SuSE-release ]] && ( which aprun ) ; then
+   # On CRAY in a batch job, the prep_chem_sources must be run via aprun:
+   PREP_CHEM_SOURCES_EXE="aprun -n 1 -j 1 $PREP_CHEM_SOURCES_EXE"
+fi
+
+##############################################
+# pass control to the ex-script
+##############################################
+$EXchem/exglobal_prep_chem.bash

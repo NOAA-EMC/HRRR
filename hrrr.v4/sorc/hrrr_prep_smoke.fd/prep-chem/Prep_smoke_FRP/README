@@ -1,0 +1,275 @@
+PREP-CHEM-SRC version 1.8.3
+=======================================================================
+-The reference for this code is:
+Freitas, S. R., Longo, K. M., Alonso, M. F., Pirre, M., Marecal, V., Grell, G.,
+Stockler, R., Mello, R. F., Sanchez Gacita, M.: PREP-CHEM-SRC 1.0: a preprocessor
+of trace gas and aerosol emission fields for regional and global atmospheric 
+chemistry models. Geoscientific Model Development, v. 4, p. 419-433, 2011.
+
+=======================================================================
+Please send any questions to: gmai@cptec.inpe.br
+
+Source Distribution Layout
+--------------------------
+ The top level of the source code distribution contains the following 
+ subdirectories:
+
+   bin    	-- Scripts for maintenance, execution, compilation.
+   src    	-- Source.
+   aux_src	-- Auxiliary codes. 
+   extra	-- Convert emiss for WRF and some dataset.
+ 
+
+This is the main directory for the PREP-CHEM-SRC source code release
+--------------------------------------------------------------------
+
+V1.8.3 Release Notes:
+--------------------
+
+- AeM_emission_factors.f90 contains updated emission factors based on studies conducted only in South America.
+  AeM_emission_factors_Global.f90 contains updated emission factors based on studies conducted over the world.
+  To use AeM_emission_factors_Global.f90 please rename this file to AeM_emission_factors.f90 (and rename the original file AeM_emission_factors.f90), before compile the code.
+
+V1.8.2 Release Notes:
+--------------------
+
+- SP Emission factors (by Fernanda)
+
+V1.8.1 Release Notes:
+--------------------
+
+- Version that unifies all previous versions
+
+V1.8 Release Notes:
+--------------------
+
+- Version that unifies all previous versions but the 1.5.1
+
+V1.7 Release Notes:
+--------------------
+
+- NU-WRF / NASA version
+
+V1.6 Release Notes:
+--------------------
+
+- FRE methodolgy
+
+V1.5.1 Release Notes:
+--------------------
+
+- Olimpic Games modifications, including RJ factors (by Angel)
+
+V1.5 Release Notes:
+--------------------
+
+- Include EDGAR_HTAP emission dataset (http://edgar.jrc.ec.europa.eu/national_reported_data/htap.php)
+  (option USE_EDGAR = 3 in prep_chem_src.inp file)
+- Emissions for MATRIX aerosol model
+
+V1.4 Release Notes:
+--------------------
+
+- Improvements for WRF: Mercator, polar and lambert projections.
+- New feature: Streets and SEAC4rS emission by Li Zhang <Li.Zhang@colorado.edu>
+
+--------------------
+V1.3.2 Release Notes:
+--------------------
+
+- bug fix: GOCART BG were not working properly with OH, H2O2 and NO3 emissions.
+
+--------------------
+V1.3.1 Release Notes:
+--------------------
+
+- bug fix: EDGAR and RETRO emissions were not working properly with more than one grid.
+- Improvement: Using Highways in RETRO emissions
+
+--------------------
+V1.3 Release Notes:
+--------------------
+
+- Improvement: Mercator projection
+- New feature: Full EDGARv4.1 with HDF5
+- Improvement: Convert OLSON HDF4 to HDF5
+- bug fix: biogenic CO emission is not included in WRF/FIM anthopogenic emission
+- bug fix: Volcanic
+
+--------------------
+V1.2 Release Notes:
+--------------------
+
+- Improvement: Correction of distribution of emissions per city
+- bug fix: Correction includes for gfortran, intel and pgi compilers
+
+V1.1.1 Release Notes:
+--------------------
+
+- New feature: Correction of distribution of emissions
+- No longer need the variable declaration "output_byte_size" in prep_chem_src.inp
+- bug fix: Initialized variables was being used without being defined
+- Bug fix on get_index subroutine 
+
+V1.1 Release Notes:
+--------------------
+
+- Edgar version 4.1 
+
+V1.0.0 Release Notes:
+--------------------
+
+- Bug fix issue #1000 (See issues's folder): Implementation of Todd's changes to fix the bug in Lambert projection.
+- Bug fix issue #1001 (See issues's folder): Implementation of Steven's changes to fix the bug in read_abba subroutine.
+- Bug fix issue #1002 (See issues's folder): Implementation of Todd's changes to fix the bug in global fire emissions.
+- Change many variables and subroutine names of houghton by fuel, ex: define_bas_fuel instead define_bas_houghton.
+- New value WRF for flag CHEM when compile source code for WRF users.
+
+For questions, send mail to gmai@cptec.inpe.br
+
+
+Third Party Software Requirements
+---------------------------------
+
+
+ 1. ZLIB 1.2.5(libz.a) or later  distribution.  You may download the software
+    from the http://www.zlib.net/ site.
+    
+ 2. HDF5-1.8.8(libhdf5_fortran.a, libhdf5hl_fortran.a) or later  distribution.  You may download the software
+    from http://www.hdfgroup.org/HDF5/release/obtain5.html.
+    
+ 3. NetCDF 4.1.1 (libnetcdf.a).  You may download the software
+    from http://www.unidata.ucar.edu/downloads/netcdf/netcdf-4_0_1/index.jsp
+    
+
+Configuring/Installing HDF 5
+------------------------------
+
+When compiling PREP-CHEM-SRC codes on a Linux system using the PGI (Intel)
+compiler, make sure the netCDF and HDF* library has been installed using the same PGI (Intel) compiler.
+
+FC=pgf90 CC=pgcc CXX=pgc++ ./configure  \
+	--prefix=/path_libs/hdf5-1.8.8 \
+	--with-zlib=/path_libs/zlib-1.2.5  \
+	--disable-shared \
+	--enable-fortran
+
+make
+make check
+make install
+make check-install
+
+
+INSTALL ZLIB
+
+FC=pgf90 CC=pgcc ./configure --prefix=/path-zlib-1.2.5
+
+make
+make check
+make install
+
+INSTALL NETCDF
+
+FC=pgf90 CC=pgcc CXX=pgc++ ./configure --prefix=/path-netcdf-4.1.1
+
+make
+make check
+make install
+
+Configuring/Installing PREP-CHEM-SRC 
+------------------------------
+
+Copy files from extra/UserData to your user_data_dir sets into prep_chem_src.inp
+
+cd bin/build
+make OPT=opt.pgi CHEM=RACM
+
+Using PREP-CHEM-SRC-1.4 with WRF-Chem V3.4.1
+------------------------------
+
+For additional information please consult the WRF-Chem Version 3.4 User's Guide, available at:
+http://ruc.noaa.gov/wrf/WG11/Users_guide.pdf
+
+PREP-CHEM-SRC-1.4 partitions anthropogenic and biomass burning NOx emissions into NO and NO2 as follows:
+
+Anthropogenic (EDGAR, RETRO):
+NO=0.7*NOx, NO2=0.3*NOx (by mass)
+Biomass burning (3BEM, GFEDv2)
+NO=0.4*NOx, NO2=0.6*NOx (by mass)
+
+These ratios are based on tests for South America, and you may want to modify them depending on your local emissions profile.
+
+(1) Compiling PREP-CHEM-SRC-1.4 for WRF-Chem (RADM/GOCART speciation)
+
+cd bin/build
+
+make OPT=gfortran.wrf CHEM=RADM_WRF_FIM
+or
+make OPT=intel.wrf CHEM=RADM_WRF_FIM
+or
+make OPT=pgi.wrf CHEM=RADM_WRF_FIM
+
+
+(2) Running PREP-CHEM-SRC-1.4
+
+Edit the input file: prep_chem_sources.inp. The following options should correspond to the Lambert map projection settings in namelist.wps: NINEST=i_parent_start, NJNEST=j_parent_start, POLELAT=ref_lat, POLELON=ref_lon, STDLAT1=truelat1 and STDLAT2=truelat2. CENTLAT and CENTLON are not used for WRF.
+Run PREP-CHEM-SRC-1.4 for each day to produce the anthropogenic+biogenic (-ab.bin), biomass burning (-bb.bin), and optional GOCART (-gocartBG.bin) emissions:
+./prep_chem_sources_RADM_WRF_FIM.exe
+
+(3) Convert emissions for use in WRF-Chem
+
+For WRFV3.3 only:
+The standard WRFV3.3 release reads RADM emissions of only NO, not NO2, and will not work as-is with PREP-CHEM-SRC-1.4. To use PREP-CHEM-SRC-1.4 emissions in WRF-Chem V3.3, please do the following:
+(a.1) Place the included files (./extra/WRFChemNO2) into the WRFV3.3/chem directory: module_plumerise1.F, module_add_emiss_burn.F, convert_emiss.F. Also, place the included registry.chem into the Registry directory. 
+(a.2) For WRFV3.4.1 don't need copy WRFChemNO2 folder.
+
+(b) In the WRFV3.4.1 directory, compile WRF-Chem and convert_emiss.exe:
+./compile em_real
+./compile emi_conv
+
+For each day ($year-$mo-$day-00): 
+Run real.exe with chem_opt=0 and start and end time set to $year-$mo-$day-00 to generate a wrfinput_d01 file with timestamp for that day.
+./real.exe
+
+Link PREP-CHEM-SRC-1.4 emissions to WRF run directory:
+ln -sf PREP-CHEM-SRC-1.4/bin/WRF-$year-$mo-$day-000000-g1-gocartBG.bin wrf_gocart_backg
+ln -sf PREP-CHEM-SRC-1.4/bin/WRF-$year-$mo-$day-000000-g1-ab.bin emissopt3_d01
+ln -sf PREP-CHEM-SRC-1.4/bin/WRF-$year-$mo-$day-000000-g1-bb.bin emissfire_d01
+
+Run convert_emiss:
+../chem/convert_emiss.exe
+
+Rename output to include the date:
+wrfchemi_d01 wrfchemi_d01_{$year}-$mo-${da}_00:00:00
+mv wrffirechemi_d01 wrffirechemi_d01_{$year}-$mo-${da}_00:00:00
+mv wrfchemi_gocart_bg_d01 wrfchemi_gocart_bg_d01_{$year}-$mo-${da}_00:00:00
+
+To generate emissions for more than one domain, repeat the above steps for each domain as if it were domain 1 (eg., change nx, ny, dx, dy in the d01 column in namelist.input to those for the subdomain), and rename the output files to include the domain number:
+mv wrfchemi_d01 wrfchemi_d<domain>_{$year}-$mo-${da}_00:00:00
+mv wrffirechemi_d01 wrffirechemi_d<domain>_{$year}-$mo-${da}_00:00:00
+mv wrfchemi_gocart_bg_d01 wrfchemi_gocart_bg_d<domain>_{$year}-$mo-${da}_00:00:00
+
+(4) Running WRF-Chem
+Run real.exe to generate wrfinput_d<domain> and wrfbdy_d01 with chemistry.
+
+First, double-check your namelist settings:
+
+&time_control
+ io_form_auxinput5                    = 2
+ io_form_auxinput7                    = 2
+ io_form_auxinput8                    = 2
+ auxinput5_interval_m                = 1440,1440
+ auxinput7_interval_m                = 1440,1440
+ auxinput8_interval_m                = 1440,1440
+ frames_per_auxinput7                = 1,1
+ frames_per_auxinput7                = 1,1
+ frames_per_auxinput8                = 1,1
+/
+&chem
+ kemit				     = 1,
+ io_style_emissions                  = 2,
+ emiss_inpt_opt                      = 1,        1,
+ emiss_opt                           = 5,        5,
+ biomass_burn_opt                    = 1,        1,
+ plumerisefire_frq                   = 120,      120,
+/

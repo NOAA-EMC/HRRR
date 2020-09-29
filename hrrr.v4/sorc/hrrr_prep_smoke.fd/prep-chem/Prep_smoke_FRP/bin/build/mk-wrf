@@ -1,0 +1,4 @@
+#make OPT=intel.wrf CHEM=RADM_WRF_FIM AER=SIMPLE $1
+module load intel
+env
+make OPT=intel.wrf CHEM=RADM_WRF_FIM $1
