@@ -510,12 +510,14 @@ do
      ensmemid=`printf %4.4i $ensmem`
 
      # get background for each member
-     cpreq ${DATA}/tar/wrfbdy_d01.${start_YYYYMMDDHHMM} ${HRRRDASBC}/wrfbdy_d01.${start_YYYYMMDDHHMM}.mem${ensmemid}
+     cpreq ${DATA}/tar/wrfbdy_d01.${start_YYYYMMDDHHMM} ./wrfbdy_d01.${start_YYYYMMDDHHMM}.mem${ensmemid}
 
      # next member
      (( ensmem += 1 ))
 
    done
+
+wait
 
    ln -sf ${HRRRDASBC}/wrfinput_d01_${syyyy}-${smm}-${sdd}_${shh}_00_00 wrfinput_d01
    cp ${EXEChrrrdas}/hrrr_cal_bcpert .
@@ -525,15 +527,31 @@ do
      print "\$ensmem is $ensmem"
      ensmemid=`printf %4.4i $ensmem`
 
-     ln -sf ${HRRRDASBC}/wrfbdy_d01.${start_YYYYMMDDHHMM}.mem${ensmemid} wrfbdy_d01_mem${ensmemid}
-     runline="aprun -n 1 -N 1 ./hrrr_cal_bcpert wrfbdy_d01_mem${ensmemid} wrfinput_d01 ${pert_bank_dir}"
+     runline="aprun -n 1 -N 1 ./hrrr_cal_bcpert wrfbdy_d01.${start_YYYYMMDDHHMM}.mem${ensmemid} wrfinput_d01 ${pert_bank_dir}"
      $runline
      export err=$?; err_chk
 
-  # next member
+     # next member
      (( ensmem += 1 ))
 
    done
+
+# copy perturbed members to HRRRDASBC directory
+   ensmem=1
+   while [[ $ensmem -le $no_member ]];do
+
+     print "\$ensmem is $ensmem"
+     ensmemid=`printf %4.4i $ensmem`
+
+     cpreq ./wrfbdy_d01.${start_YYYYMMDDHHMM}.mem${ensmemid} ${HRRRDASBC}/wrfbdy_d01.${start_YYYYMMDDHHMM}.mem${ensmemid}
+
+     # next member
+     (( ensmem += 1 ))
+
+   done
+
+# create a "ready" file indicating perturbed wrfbdy files are available
+   touch ${HRRRDASBC}/wrfbdy.ready.${start_YYYYMMDDHHMM}
 
 done
 

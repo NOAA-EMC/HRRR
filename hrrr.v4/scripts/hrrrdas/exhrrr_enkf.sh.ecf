@@ -179,19 +179,30 @@ else
    runline="aprun -j1 -cc depth -n 120 -N 2 -d 2 ./hrrr_enkf"
 fi
 
-$runline < enkf.nml >> $DATA/${pgmout}_conv_d${domainid} 2>errfile
-export err=$?; err_chk
-cp enkf.nml enkf.nml_conv
-ls -l  > filelist.d01
+count=`ls ${COMOUT}/diag_conv_ges.${PDY}${cyc}.d${domainid}* | wc -l`
+if [ $count -eq 37 ]; then
+  echo "All obsdiag conv_ges files are available (36 members + mean), run EnKF executable"
+  $runline < enkf.nml >> $DATA/${pgmout}_conv_d${domainid} 2>errfile
+  export err=$?; err_chk
+  cp enkf.nml enkf.nml_conv
+  ls -l  > filelist.d01
+else
+  echo "Warning: The obsdiag conv_ges files are unavailable, skipping EnKF"
+fi
 
 if [ $domainid -eq 01 ]; then
 
 # calculate ensemble mean
    startmsg
-   runlinemean="aprun -j1 -cc depth -n 60 -N 12 -d 2 ./hrrr_cal_ensmean ./ analysis.ensmean analysis.mem 36"
    cp ${EXEChrrr}/hrrr_cal_ensmean .
    cp analysis.mem001 analysis.ensmean
-   $runlinemean >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
+   # 1 node (24 ranks) to write and 4 nodes (36 ranks) to read
+   aprun -j1 -cc depth -n 24 -N 24 -d 1 \
+    /usr/bin/env OMP_NUM_THREADS=1 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
+    : \
+      -j1 -cc depth -n 36 -N 9 -d 2 \
+    /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
+       >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
 #   errmsg="FATAL ERROR: ${PDY}${cyc}: calculate ensemble mean post failed !!!!"
    export err=$?; err_chk
 
@@ -251,17 +262,28 @@ cat << EOF > enkf.nml
 
 EOF
 
-$runline < enkf.nml >> $DATA/${pgmout}_dbz_d${domainid} 2>errfile
-export err=$?; err_chk
-cp enkf.nml enkf.nml_dbz
-ls -l > filelist.d02
+count=`ls ${COMOUT}/diag_radardbz_ges.${PDY}${cyc}.d${domainid}* | wc -l`
+if [ $count -eq 37 ]; then
+  echo "All obsdiag radardbz_ges files are available (36 members + mean), run EnKF executable"
+  $runline < enkf.nml >> $DATA/${pgmout}_dbz_d${domainid} 2>errfile
+  export err=$?; err_chk
+  cp enkf.nml enkf.nml_dbz
+  ls -l > filelist.d02
+else
+  echo "Warning: The obsdiag radardbz_ges files are unavailable, skipping EnKF"
+fi
 
 # calculate ensemble mean
 startmsg
-runlinemean="aprun -j1 -cc depth -n 120 -N 2 -d 2 ./hrrr_cal_ensmean ./ analysis.ensmean analysis.mem 36"
 cp ${EXEChrrr}/hrrr_cal_ensmean .
 cp analysis.mem001 analysis.ensmean
-$runlinemean >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
+# 1 node (24 ranks) to write and 9 nodes (36 ranks) to read
+aprun -j1 -cc depth -n 24 -N 24 -d 1 \
+    /usr/bin/env OMP_NUM_THREADS=1 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
+    : \
+      -j1 -cc depth -n 36 -N 4 -d 6 \
+    /usr/bin/env OMP_NUM_THREADS=6 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
+      >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
 export err=$?; err_chk
 
 outputfile=${COMIN}/hrrr.t${cyc}z.analysis_d${domainid}.mean

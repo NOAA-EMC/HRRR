@@ -263,7 +263,8 @@ CONTAINS
    REAL,     INTENT(IN)        :: swrad_scat
 
    REAL,     DIMENSION( kms:kme ) , INTENT(IN) :: zfull, zhalf
-   REAL,     DIMENSION( ims:ime , jms:jme ) , INTENT(IN) :: TSK, XLAT, XLONG,xlong_u,xlat_v
+   REAL,     DIMENSION( ims:ime , jms:jme ) , INTENT(IN) :: XLAT, XLONG,xlong_u,xlat_v
+   REAL,     DIMENSION( ims:ime , jms:jme ) , INTENT(INOUT) :: TSK
    REAL,  DIMENSION(ims:ime,jms:jme), INTENT(IN) , OPTIONAL :: msftx,msfty
 
    INTEGER,      INTENT(IN   )    ::   levsiz, n_ozmixm
@@ -1128,10 +1129,11 @@ integer myproc
                 its=its, ite=ite, jts=jts, jte=jte, kts=kts, kte=kte                    )
 
    CALL wrf_debug ( 200 , 'module_start: phy_init: Before call to bl_init' )
-   CALL bl_init(STEPBL,BLDT,DT,RUBLTEN,RVBLTEN,RTHBLTEN,        &
+   CALL bl_init(id,STEPBL,BLDT,DT,RUBLTEN,RVBLTEN,RTHBLTEN,     &
                 RQVBLTEN,RQCBLTEN,RQIBLTEN,TSK,TMN,             &
                 config_flags,restart,UST,LOWLYR,TSLB,ZS,DZS,    &
-                num_soil_layers,TKE_PBL,mfshconv,               &
+                num_soil_layers,TKE_PBL,mfshconv,julday,        &
+                XLAT,XLONG,                          &
                 massflux_EDKF, entr_EDKF, detr_EDKF, & 
                 thl_up, thv_up, rt_up,       &
                 rv_up, rc_up, u_up, v_up,    &
@@ -2045,10 +2047,11 @@ integer myproc
 
    END SUBROUTINE ra_init
 
-   SUBROUTINE bl_init(STEPBL,BLDT,DT,RUBLTEN,RVBLTEN,RTHBLTEN,  &
+   SUBROUTINE bl_init(id,STEPBL,BLDT,DT,RUBLTEN,RVBLTEN,RTHBLTEN,  &
                 RQVBLTEN,RQCBLTEN,RQIBLTEN,TSK,TMN,             &
                 config_flags,restart,UST,LOWLYR,TSLB,ZS,DZS,    &
-                num_soil_layers,TKE_PBL,mfshconv,               &
+                num_soil_layers,TKE_PBL,mfshconv,julday,        &
+                xlat, xlong,                                    &
                 massflux_EDKF, entr_EDKF, detr_EDKF, & 
                 thl_up, thv_up, rt_up,       &
                 rv_up, rc_up, u_up, v_up,    &
@@ -2242,6 +2245,7 @@ integer myproc
    INTEGER , INTENT(IN)        ::     num_soil_layers
    INTEGER , INTENT(IN)        ::     SF_URBAN_PHYSICS 
    INTEGER , INTENT(IN)        ::     IOPT_RUN
+   INTEGER , INTENT(IN)        ::     id, julday
 
 !   INTEGER , INTENT(IN)        ::     LakeModel
    INTEGER         ::     LakeModel
@@ -2258,6 +2262,8 @@ integer myproc
 
    REAL,     DIMENSION( ims:ime , 1:num_soil_layers , jms:jme ),&
                    INTENT(INOUT) :: SMOIS,SH2O,TSLB
+
+   REAL,    DIMENSION( ims:ime , jms:jme ) , INTENT(IN) :: XLAT, XLONG
 
    REAL,    DIMENSION( ims:ime, jms:jme )                     , &
             INTENT(INOUT)    ::                           SNOW, &
@@ -2311,7 +2317,7 @@ integer myproc
 
    INTEGER, INTENT(IN)           ::  mfshconv ! WRF JP
 
-   REAL,  DIMENSION( ims:ime , jms:jme ) , INTENT(IN) ::     TSK
+   REAL,  DIMENSION( ims:ime , jms:jme ) , INTENT(INOUT) ::  TSK
    REAL,  DIMENSION( ims:ime , jms:jme ) , INTENT(INOUT) ::  TMN
    CHARACTER(LEN=*), INTENT(IN)   :: MMINLU
    LOGICAL,  INTENT(IN)           :: allowed_to_read
@@ -3048,8 +3054,8 @@ CALL lsm_mosaic_init(IVGTYP,config_flags%ISWATER,config_flags%ISURBAN,config_fla
 
      IF ( LakeModel == 1 ) THEN
  
-             call  lakeini(IVGTYP,         ISLTYP,          HT,              SNOW, SNOWH,         & !i
-                           lake_min_elev,     restart,         lakedepth_default, lake_depth,     &
+             call  lakeini(id, IVGTYP,    ISLTYP,      HT,      TMN,    SNOW, SNOWH,         & !i
+                           lake_min_elev,     restart,    lakedepth_default, lake_depth,     &
                            lakedepth2d,    savedtke12d,     snowdp2d,        h2osno2d,       & !o
                            snl2d,          t_grnd2d,        t_lake3d,        lake_icefrac3d, &
                            z_lake3d,       dz_lake3d,       t_soisno3d,      h2osoi_ice3d,   &
@@ -3060,7 +3066,7 @@ CALL lsm_mosaic_init(IVGTYP,config_flags%ISWATER,config_flags%ISURBAN,config_fla
 #if (EM_CORE == 1)
                            lakemask,  lakeflag,                                              &
 #endif
-                           lake_depth_flag, use_lakedepth,              &
+                           lake_depth_flag, use_lakedepth, julday, xlong, xlat,              &
                            tkdry3d,        tksatu3d,        lake2d,          its, ite, jts, jte, &
                            ims,ime, jms,jme)
      ENDIF

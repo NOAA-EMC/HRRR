@@ -269,12 +269,13 @@ typeset -Z2 bdhh
 let bdhh=${shh}/6*6
 bdytime=${yyyymmdd}${bdhh}00
 bdyfile=${HRRRDASBC}/wrfbdy_d01.${bdytime}.mem${ensmemid}
+readyfile=${HRRRDASBC}/wrfbdy.ready.${bdytime}
 if [ -s ${bdyfile} ]; then
    echo "check member boundary =",$bdyfile
 else
    bdyfile=${HRRRDASBC}/wrfbdy_d01.${bdytime}
 fi
-if [ -r ${bdyfile} ]; then
+if [[ -r ${bdyfile} && -r ${readyfile} ]]; then
   cp ${bdyfile} wrfbdy_d01
 else
 # Look for boundary conditions which are 6-h older
@@ -443,26 +444,36 @@ echo "running ncks"
 
 ncks -d west_east,0,1798 -d west_east_stag,0,1799 -d south_north,0,1058 -d south_north_stag,0,1059 -v "T,QVAPOR,SMOIS,P_TOP,ZNU,ZNW,RDX,RDY,MAPFAC_M,XLAT,XLONG,MUB,MU,P,PH,PHB,U,V,XLAND,SEAICE,SST,IVGTYP,ISLTYP,VEGFRA,SNOW,U10,V10,TSLB,TSK,Q2,SOILT1,TH2,QCLOUD,QRAIN,QSNOW,QICE,QGRAUP,QNRAIN,QNICE,QNCLOUD,REFL_10CM,W,C3H,C4H,C3F,C4F,Times" wrfout_d02_${timestr2} ./wrfout_small_d02_${timestr2}
 
-cp -p  wrfout_d01_${timestr2} ${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem${ensmemid}
-export err=$?;
-if [ $err != 0 ]; then
-  ls -ltrd wrfout_d01_${timestr2} ${HRRRDASGES} 
-  cpreq wrfout_d01_${timestr2} ${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem${ensmemid}
+# Get MPISERIAL; section this is copied from exhrrr_prep_smoke:
+# ----------------------------------------------------------------------
+# need this because have trouble load module now:
+MPISER=/gpfs/hps/nco/ops/nwprod/mpiserial.v3.0.0/exec/mpiserial
+#export MPISER=${MPISER:-${NWROOThps}/mpiserial.${mpiserial_ver}/exec/mpiserial}
+LSB_MAX_NUM_PROCESSORS="${LSB_MAX_NUM_PROCESSORS:-1}"
+if (( LSB_MAX_NUM_PROCESSORS > 1 )) ; then
+    # Command to run mpiserial:
+    np=$(( LSB_MAX_NUM_PROCESSORS - 1 )) # -1 for MAMU node processor
+    MPISERIAL="aprun -d 1 -n $np -N 24 -j 1 $MPISER -m"
+else
+    fake_mpiserial() {
+        chmod 755 "$1"
+        set -xue
+        source "$1"
+    }
+    MPISERIAL=fake_mpiserial
 fi
+# ----------------------------------------------------------------------
 
-cp -p wrfout_d02_${timestr2} ${HRRRDASGES}/hrrrdas_d02_${timestr1}f01_mem${ensmemid}
-export err=$?;
-if [ $err != 0 ]; then 
-  ls -ltrd wrfout_d02_${timestr2} ${HRRRDASGES}
-  cpreq wrfout_d02_${timestr2} ${HRRRDASGES}/hrrrdas_d02_${timestr1}f01_mem${ensmemid}
-fi
+CPREQ=$( which cpreq )
 
-cp -p wrfout_small_d02_${timestr2} ${HRRRDASGES}/hrrrdas_small_d02_${timestr1}f01_mem${ensmemid}
-export err=$?;
-if [ $err != 0 ]; then 
-  ls -ltrd  wrfout_small_d02_${timestr2} ${HRRRDASGES}
-  cpreq wrfout_small_d02_${timestr2} ${HRRRDASGES}/hrrrdas_small_d02_${timestr1}f01_mem${ensmemid}
-fi
+cat> command_file<<EOF
+$CPREQ wrfout_d01_${timestr2} ${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem${ensmemid}
+$CPREQ wrfout_d02_${timestr2} ${HRRRDASGES}/hrrrdas_d02_${timestr1}f01_mem${ensmemid}
+$CPREQ wrfout_small_d02_${timestr2} ${HRRRDASGES}/hrrrdas_small_d02_${timestr1}f01_mem${ensmemid}
+EOF
+
+$MPISERIAL -a ./command_file
+
 
 msg="JOB $job FOR HRRR_FORECAST HAS COMPLETED NORMALLY"
 postmsg "$jlogfile" "$msg"

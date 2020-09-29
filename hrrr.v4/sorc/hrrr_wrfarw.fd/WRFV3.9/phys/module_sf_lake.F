@@ -246,8 +246,6 @@ MODULE module_sf_lake
       real(r8)  :: lakedepth(1)       ! column lake depth (m)
       logical   :: do_capsnow(1)     ! true => do snow capping
       
-      real(r8)  :: tfrz_lake          ! tgs - lake freezing T
-
       !in&out
       real(r8)  :: h2osoi_vol(1,-nlevsnow+1:nlevsoil)  ! volumetric soil water (0<=h2osoi_vol<=watsat)[m3/m3]
       real(r8)  :: t_grnd(1)          ! ground temperature (Kelvin)
@@ -313,44 +311,59 @@ MODULE module_sf_lake
         if (ivgtyp(i,j)==iswater.and.ht(i,j)>= lake_min_elev ) THEN
 #endif
     
-!tgs  - 7nov19 - salinity effect on freezing point (Tanya, Stan, Trevor).
-! --- The Great Salt Lake (GSL), Utah lat/long (39.5-42.0,-111.5- -117.7).
-! --- THe GSL's salinity is 270 ppt above ~41.22 N with freezing point of -24 C, 
-! --- and 150 ppt south of ~41.22 N with freezing point -10 C (info from Trevor Alcott). 
-! --- The fresh-water Willard Bay should be excluded from the box around the Great Salt
-! --- Lake: lat/long 41.3539, -112.102, HRRR i,j = 494,667 (info from Stan and Trevor).
-                tfrz_lake = 273.16_r8
+           !tgs  - 7nov19 - salinity effect on freezing point (Tanya, Stan, Trevor).
+           ! --- The Great Salt Lake (GSL), Utah lat/long (39.5-42.0,-111.5- -117.7).
+           ! --- THe GSL's salinity is 270 ppt above ~41.22 N with freezing point of -24 C, 
+           ! --- and 150 ppt south of ~41.22 N with freezing point -10 C (info from Trevor Alcott). 
+           ! --- The fresh-water Willard Bay should be excluded from the box around the Great Salt
+           ! --- Lake: lat/long 41.3539, -112.102, HRRR i,j = 494,667 (info from Stan and Trevor).
+           ! ---
+           ! --- 1jun2020: reset the GSL freezing point to be -5 C,
+           ! --- and add a check (after call to LakeMain) to keep the lake ice free for the whole year.
            if ((xlong(i,j).gt.-117.7 .and. xlong(i,j).lt.-111.5) .and.    &
               ! excludes Willard Bay
               .not. (xlong(i,j).gt.-112.104 .and. xlong(i,j).lt.-112.100))then
 
              if(xlat(i,j).gt.39.5 .and. xlat(i,j).lt.41.22) then
-                tfrz_lake = 263.16_r8
-                !print *,'The Great Salt Lake south of 41.22 N, i,j',i,j,tfrz_lake
+                !print *,'The Great Salt Lake south of 41.22 N, i,j',i,j
                 salty(i,j) = .true.
+                !-- One-time stuff for 1 June 2020
+                !t_grnd2d(i,j) = max(293.,t_grnd2d(i,j))
+                !do k = 1,nlevlake
+                !  t_lake3d(i,k,j) = max(293.,t_lake3d(i,k,j))
+                !  t_soisno3d(i,k,j) = max(293.,t_soisno3d(i,k,j))
+                !enddo
+                !-- end
+
              elseif(( xlat(i,j).ge.41.22 .and. xlat(i,j).lt.42.) .and. .not. &
               ! excludes Willard Bay
                     (xlat(i,j).gt.41.352 .and. xlat(i,j).lt.41.354)) then
-                tfrz_lake = 249.16_r8
-                !print *,'The Great Salt Lake north of 41.22 N, i,j',i,j,tfrz_lake
+                !print *,'The Great Salt Lake north of 41.22 N, i,j',i,j
                 !print *,'Ice fraction on the GSL ', i,j,lake_icefrac3d(i,:,j)
                 salty(i,j) = .true.
+                !-- One-time stuff for 1 June 2020
+                !t_grnd2d(i,j) = max(294.,t_grnd2d(i,j))
+                !do k = 1,nlevlake
+                !  t_lake3d(i,k,j) = max(294.,t_lake3d(i,k,j))
+                !  t_soisno3d(i,k,j) = max(294.,t_soisno3d(i,k,j))
+                !enddo
+                !-- end
+
              endif ! xlat
 
            endif ! xlong
 
            !if(i==495.and.j==668) print *,'Willard Bay salty=',i,j,salty(i,j),xlat(i,j),xlong(i,j)
 
-! --- The Mono Lake in California, salinity is 75 ppt with freezing point at
-! --- -4.2 C (Stan). The Mono Lake lat/long (37.9-38.2, -119.3 - 118.8)
+           ! --- The Mono Lake in California, salinity is 75 ppt with freezing point at
+           ! --- -4.2 C (Stan). The Mono Lake lat/long (37.9-38.2, -119.3 - 118.8)
            if (xlong(i,j).gt.-119.3.and. xlong(i,j).lt.-118.8) then  
              if(xlat(i,j).gt.37.9 .and. xlat(i,j).lt.38.2) then
-                tfrz_lake = 268.96_r8
                 salty(i,j) = .true.
-                !print *,'Mono Lake, i,j',i,j,tfrz_lake
+                !print *,'Mono Lake, i,j',i,j
              endif ! xlat
            endif ! xlong
-!tgs --- end
+           !tgs --- end of special treatment for salty lakes
 
            do c = 1,column
      
@@ -378,13 +391,15 @@ MODULE module_sf_lake
             snl(c)                 = snl2d(i,j)
             t_grnd(c)              = t_grnd2d(i,j)
             !if (salty(i,j)) then
-            !if (i==1002.and.j==1006) then
-              !print *,'Start TSK(I,J),lake_icefrac3d(i,1,j)',i,j,tsk(i,j),lake_icefrac3d(i,1,j),t_lake3d(i,1,j)
+            !if (i==436.and.j==312) then
+            !  print *,'Start GSL -TSK(I,J),ALB,T_lake3d,',i,j,salty(i,j),tsk(i,j),albedo(i,j),t_lake3d(i,:,j)
+            !  print *,'LWDN, SOLNET,ZLVL,SFCTMP,Q2K,lakedepth,z_lake3d,dz_lake3d', &
+            !          i,j,lwdn,solnet,ZLVL,sfctmp,q2k,lakedepth2d(i,j),z_lake3d(i,:,j),dz_lake3d(i,:,j)
             !endif
             do k = 1,nlevlake
                t_lake(c,k)        = t_lake3d(i,k,j)
-              if(salty(i,j) .and. t_lake(c,k) > tfrz_lake .and.  lake_icefrac3d(i,k,j) > 0.) then
-               !print *,'Remove lake ice at from Salty Lakes i,j,lake_icefrac3d(i,k,j)',i,j,tfrz_lake,lake_icefrac3d(i,1,j)
+              !-- If T of salty lakes is above the freezing point, keep them ice free
+              if(salty(i,j) .and. t_lake(c,k) > tfrz .and.  lake_icefrac3d(i,k,j) > 0.) then
                lake_icefrac(c,k)  = 0.
               else
                lake_icefrac(c,k)  = lake_icefrac3d(i,k,j)
@@ -392,6 +407,7 @@ MODULE module_sf_lake
                z_lake(c,k)        = z_lake3d(i,k,j)
                dz_lake(c,k)       = dz_lake3d(i,k,j)
             enddo
+              !-- remove snow from unfrozen water
               if(lake_icefrac(c,1) == 0. .and. h2osno(c) > 0.) then
                !print *,'Remove snow i,j,lake_icefrac3d(i,k,j),snowdp(c),t_grnd(c)',i,j,lake_icefrac3d(i,1,j),snowdp(c),t_grnd(c),snl(c)
                snowdp(c)          = 0.
@@ -430,11 +446,34 @@ MODULE module_sf_lake
                           eflx_lwrad_net,eflx_gnet,                     & !O 
                           eflx_sh_tot,eflx_lh_tot,                      &
                           t_ref2m,q_ref2m,                              &
-                          tfrz_lake,                                    & !tgs
                           taux,tauy,ram1,z0mg,i,j)
 
 
            do c = 1,column
+
+           !-- Keep the Great Salt Lake ice-free and its surface T above 274 K.
+           if ((xlong(i,j).gt.-117.7 .and. xlong(i,j).lt.-111.5) .and.    &
+              ! excludes Willard Bay
+              .not. (xlong(i,j).gt.-112.104 .and. xlong(i,j).lt.-112.100))then
+
+             if(xlat(i,j).gt.39.5 .and. xlat(i,j).lt.41.22) then
+                t_grnd(c) = max(274.5,t_grnd(c))
+                do k = 1,nlevlake
+                  t_lake(c,k) = max(274.5,t_lake(c,k))
+                  lake_icefrac(c,k) = 0.
+                enddo
+
+             elseif(( xlat(i,j).ge.41.22 .and. xlat(i,j).lt.42.) .and. .not. &
+              ! excludes Willard Bay
+                    (xlat(i,j).gt.41.352 .and. xlat(i,j).lt.41.354)) then
+                t_grnd(c) = max(274.,t_grnd(c))
+                do k = 1,nlevlake
+                  t_lake(c,k) = max(274.,t_lake(c,k))
+                  lake_icefrac(c,k) = 0.
+                enddo
+             endif ! xlat
+           endif ! xlong
+
             HFX(I,J)          = eflx_sh_tot(c)            ![W/m/m]
             LH(I,J)           = eflx_lh_tot(c)            !W/m/m]
             GRDFLX(I,J)       = eflx_gnet(c)              !W/m/m]
@@ -444,26 +483,14 @@ MODULE module_sf_lake
             Q2(I,J)           = q_ref2m(c) 
             albedo(i,j)       = ( 0.6 * lake_icefrac(c,1) ) + ( (1.0-lake_icefrac(c,1)) * 0.08)  
 
-        ! tgs -- use different freezing T for snow/no snow situations
-        if(h2osno(c) == 0.) then
-        ! no snow
-            if( tsk(i,j) >= tfrz_lake ) then
-                qfx(i,j)      = eflx_lh_tot(c)/hvap
-            else
-                qfx(i,j)      = eflx_lh_tot(c)/hsub       ! heat flux (W/m^2)=>mass flux(kg/(sm^2))
-            endif
-        else
-        ! snow
             if( tsk(i,j) >= tfrz ) then
                 qfx(i,j)      = eflx_lh_tot(c)/hvap
             else
                 qfx(i,j)      = eflx_lh_tot(c)/hsub       ! heat flux (W/m^2)=>mass flux(kg/(sm^2))
             endif
-        endif
-
            enddo
 
-! Renew Lake State Varialbes:(14)
+           ! Renew Lake State Varialbes:(14)
            do c = 1,column
 
             savedtke12d(i,j)         = savedtke1(c)
@@ -490,17 +517,24 @@ MODULE module_sf_lake
            enddo
         
          enddo
+       
+        endif ! lakemask = 1
+        !ENDIF ! if xland > 1.5
 
-        endif
-!        ENDIF    ! if xland = 2
+          !if (salty(i,j)) then
+          !  print *,'END Lake TSK(I,J),lake_icefrac3d(i,1,j)',i,j,tsk(i,j),lake_icefrac3d(i,1,j),t_lake3d(i,1,j)
+          !endif
 
-            !if (salty(i,j)) then
-            !  print *,'END Lake TSK(I,J),lake_icefrac3d(i,1,j)',i,j,tsk(i,j),lake_icefrac3d(i,1,j),t_lake3d(i,1,j)
+          !if (i==1002.and.j==1006) then
+          !  print *,'END LAKE - TSK(I,J),t_soisno3d(i,1,j),lake_icefrac3d(i,1,j)',i,j,TSK(I,J),t_soisno3d(i,1,j),lake_icefrac3d(i,1,j)
+          !endif
+            !if (i==275.and.j==707 .or. i==435.and.j==314) then
+            !  print *,'End GSL -ALBEDO, lake_icefrac3d(i,:,j)',i,j,albedo(i,j),lake_icefrac3d(i,:,j)
+            !  print *,'End GSL -TSK(I,J),T_lake3d,t_soisno3d,',i,j,tsk(i,j),t_lake3d(i,:,j),t_soisno3d(i,:,j)
+            !  print *,'End GSL -HFX(i,j),LH(i,j)',i,j,hfx(i,j),lh(i,j)
+            !  print *,'T2,Q2,snowdp2d(i,j)', i,j,T2(i,j),q2(i,j), snowdp2d(i,j)
             !endif
 
-            !if (i==1002.and.j==1006) then
-            !  print *,'END LAKE - TSK(I,J),t_soisno3d(i,1,j),lake_icefrac3d(i,1,j)',i,j,TSK(I,J),t_soisno3d(i,1,j),lake_icefrac3d(i,1,j)
-            !endif
 
         ENDDO
         ENDDO
@@ -519,7 +553,6 @@ MODULE module_sf_lake
                           eflx_lwrad_net,eflx_gnet,                     & !O 
                           eflx_sh_tot,eflx_lh_tot,                      &
                           t_ref2m,q_ref2m,                              &
-                          tfrz_lake,                                    & !tgs
                           taux,tauy,ram1,z0mg,ii,jj)
     implicit none
 !in: 
@@ -539,7 +572,6 @@ MODULE module_sf_lake
     real(r8),intent(in) :: prec(1)               ! snow or rain rate [mm/s]
     real(r8),intent(in) :: sabg(1)            ! solar radiation absorbed by ground (W/m**2)
     real(r8),intent(in) :: lat(1)             ! latitude (radians)
-    real(r8),intent(in) :: tfrz_lake          ! tgs - lake freezing T
     real(r8),intent(in) :: z_lake(1,nlevlake)  ! layer depth for lake (m)
     real(r8),intent(in) :: dz_lake(1,nlevlake)                  ! layer thickness for lake (m)
 
@@ -662,7 +694,6 @@ MODULE module_sf_lake
                           eflx_sh_grnd,eflx_lwrad_out,eflx_lwrad_net,     &
                           eflx_soil_grnd,eflx_sh_tot,eflx_lh_tot,         &
                           eflx_lh_grnd,t_veg,t_ref2m,q_ref2m,taux,tauy,   &
-                          tfrz_lake,                                      & !tgs
                           ram1,ws,ks,eflx_gnet,z0mg)
  
 
@@ -672,14 +703,12 @@ MODULE module_sf_lake
                                  eflx_sh_grnd,eflx_sh_tot,eflx_soil_grnd,    & !o
                                  t_lake,t_soisno,h2osoi_liq,                 &
                                  h2osoi_ice,savedtke1,                       &
-                                 tfrz_lake,                                  & !tgs
                                  frac_iceold,qflx_snomelt,imelt,ii,jj)
 
 
 
     CALL ShalLakeHydrology(dz_lake,forc_rain,forc_snow,                          & !i
                                begwb,qflx_evap_tot,forc_t,do_capsnow,            &
-                               tfrz_lake,                                        & !tgs
                                t_grnd,qflx_evap_soi,                             &
                                qflx_snomelt,imelt,frac_iceold,                   & !i add by guhp
                                z,dz,zi,snl,h2osno,snowdp,lake_icefrac,t_lake,      & !i&o
@@ -711,7 +740,6 @@ SUBROUTINE ShalLakeFluxes(forc_t,forc_pbot,forc_psrf,forc_hgt,forc_hgt_q,       
                           eflx_sh_grnd,eflx_lwrad_out,eflx_lwrad_net,     &
                           eflx_soil_grnd,eflx_sh_tot,eflx_lh_tot,         &
                           eflx_lh_grnd,t_veg,t_ref2m,q_ref2m,taux,tauy,   &
-                          tfrz_lake,                                           & !tgs
                           ram1,ws,ks,eflx_gnet,z0mg)            
 !==============================================================================
 ! DESCRIPTION:
@@ -759,7 +787,6 @@ SUBROUTINE ShalLakeFluxes(forc_t,forc_pbot,forc_psrf,forc_hgt,forc_hgt_q,       
     real(r8),intent(in) :: h2osoi_liq(1,-nlevsnow+1:nlevsoil)    ! liquid water (kg/m2)
     real(r8),intent(in) :: h2osoi_ice(1,-nlevsnow+1:nlevsoil)    ! ice lens (kg/m2)
     real(r8),intent(in) :: savedtke1(1)       ! top level eddy conductivity from previous timestep (W/m.K)
-    real(r8),intent(in) :: tfrz_lake          ! tgs - lake freezing T
 
 !inout:
     real(r8),intent(inout) :: t_grnd(1)          ! ground temperature (Kelvin)
@@ -912,13 +939,7 @@ SUBROUTINE ShalLakeFluxes(forc_t,forc_pbot,forc_psrf,forc_hgt,forc_hgt_q,       
        ! Saturated vapor pressure, specific humidity and their derivatives
        ! at lake surface
 
-       if (snl(c) < 0) then
-       ! no snow
-         call QSat(t_grnd(c), forc_pbot(g), eg, degdT, qsatg(c), qsatgdT(c), tfrz_lake)
-       else
-       ! snow
-         call QSat(t_grnd(c), forc_pbot(g), eg, degdT, qsatg(c), qsatgdT(c), tfrz)
-       endif
+       call QSat(t_grnd(c), forc_pbot(g), eg, degdT, qsatg(c), qsatgdT(c))
 
        ! Potential, virtual potential temperature, and wind speed at the
        ! reference height
@@ -950,7 +971,7 @@ SUBROUTINE ShalLakeFluxes(forc_t,forc_pbot,forc_psrf,forc_hgt,forc_hgt_q,       
     !      z0mg(p) = 0.04_r8
     !   end if
  
-       if (t_grnd(c) >= tfrz_lake) then   ! for unfrozen lake
+       if (t_grnd(c) >= tfrz) then   ! for unfrozen lake
           z0mg(p) = 0.001_r8        !original 0.01
        else if(snl(c) == 0 ) then                         ! for frozen lake
        ! Is this okay even if it is snow covered?  What is the roughness over
@@ -985,21 +1006,11 @@ SUBROUTINE ShalLakeFluxes(forc_t,forc_pbot,forc_psrf,forc_hgt,forc_hgt_q,       
 #if (defined PERGRO)
        htvp(c) = hvap
 #else
-     if(snl(c) == 0) then
-     ! no snow
-       if (t_grnd(c) > tfrz_lake) then
-          htvp(c) = hvap
-       else
-          htvp(c) = hsub
-       end if
-     else
-     ! snow
        if (t_grnd(c) > tfrz) then
           htvp(c) = hvap
        else
           htvp(c) = hsub
        end if
-     endif
 #endif
        ! Zack Subin, 3/26/09: Shouldn't this be the ground temperature rather than the air temperature above?
        ! I'll change it for now.
@@ -1046,7 +1057,7 @@ SUBROUTINE ShalLakeFluxes(forc_t,forc_pbot,forc_psrf,forc_hgt,forc_hgt_q,       
           g = pgridcell(p)
 
           tgbef(c) = t_grnd(c)
-          if (t_grnd(c) > tfrz_lake .and. t_lake(c,1) > tfrz_lake .and. snl(c) == 0) then
+          if (t_grnd(c) > tfrz .and. t_lake(c,1) > tfrz .and. snl(c) == 0) then
              tksur = savedtke1(c)
              ! Set this to the eddy conductivity from the last
              ! timestep, as the molecular conductivity will be orders of magnitude too small.
@@ -1087,21 +1098,11 @@ SUBROUTINE ShalLakeFluxes(forc_t,forc_pbot,forc_psrf,forc_hgt,forc_hgt_q,       
 
           ! Update htvp
 #ifndef PERGRO 
-     if(snl(c) == 0) then
-     ! no snow
-       if (t_grnd(c) > tfrz_lake) then
-          htvp(c) = hvap
-       else
-          htvp(c) = hsub
-       end if
-     else
-     ! snow
        if (t_grnd(c) > tfrz) then
           htvp(c) = hvap
        else
           htvp(c) = hsub
        end if
-     endif
 #endif
 
           ! Surface fluxes of momentum, sensible and latent heat
@@ -1112,13 +1113,8 @@ SUBROUTINE ShalLakeFluxes(forc_t,forc_pbot,forc_psrf,forc_hgt,forc_hgt_q,       
 
           ! Re-calculate saturated vapor pressure, specific humidity and their
           ! derivatives at lake surface
-       if(snl(c) == 0) then
-       ! no snow
-          call QSat(t_grnd(c), forc_pbot(g), eg, degdT, qsatg(c), qsatgdT(c),tfrz_lake)
-       else
-       ! snow
-          call QSat(t_grnd(c), forc_pbot(g), eg, degdT, qsatg(c), qsatgdT(c),tfrz)
-       endif
+
+          call QSat(t_grnd(c), forc_pbot(g), eg, degdT, qsatg(c), qsatgdT(c))
 
           dth(p)=thm(c)-t_grnd(c)
           dqh(p)=forc_q(g)-qsatg(c)
@@ -1180,20 +1176,16 @@ SUBROUTINE ShalLakeFluxes(forc_t,forc_pbot,forc_psrf,forc_hgt,forc_hgt_q,       
        ! Also, allow convection if ground temp is colder than lake but warmer than 4C, or warmer than 
        !    lake which is warmer than freezing but less than 4C.
 !#ifndef SHLAKETEST
-       if ( (h2osno(c) > 0.5_r8 .or. t_lake(c,1) <= tfrz_lake) .and. t_grnd(c) > tfrz_lake) then
+       if ( (h2osno(c) > 0.5_r8 .or. t_lake(c,1) <= tfrz) .and. t_grnd(c) > tfrz) then
 !#else
 !       if ( t_lake(c,1) <= tfrz .and. t_grnd(c) > tfrz) then
 !#endif
           t_grnd_temp = t_grnd(c)
-         if(h2osno(c) > 0.5_r8) then
           t_grnd(c) = tfrz
-         else
-          t_grnd(c) = tfrz_lake
-         endif
           eflx_sh_grnd(p) = forc_rho(g)*cpair*(t_grnd(c)-thm(c))/rah(p)
           qflx_evap_soi(p) = forc_rho(g)*(qsatg(c)+qsatgdT(c)*(t_grnd(c)-t_grnd_temp) - forc_q(g))/raw(p)
        else if ( (t_lake(c,1) > t_grnd(c) .and. t_grnd(c) > tdmax) .or. &
-                 (t_lake(c,1) < t_grnd(c) .and. t_lake(c,1) > tfrz_lake .and. t_grnd(c) < tdmax) ) then
+                 (t_lake(c,1) < t_grnd(c) .and. t_lake(c,1) > tfrz .and. t_grnd(c) < tdmax) ) then
                  ! Convective mixing will occur at surface
           t_grnd_temp = t_grnd(c)
           t_grnd(c) = t_lake(c,1)
@@ -1203,21 +1195,11 @@ SUBROUTINE ShalLakeFluxes(forc_t,forc_pbot,forc_psrf,forc_hgt,forc_hgt_q,       
 
           ! Update htvp
 #ifndef PERGRO
-     if(snl(c) == 0) then
-     ! no snow
-       if (t_grnd(c) > tfrz_lake) then
-          htvp(c) = hvap
-       else
-          htvp(c) = hsub
-       end if
-     else
-     ! snow
        if (t_grnd(c) > tfrz) then
           htvp(c) = hvap
        else
           htvp(c) = hsub
        end if
-     endif
 #endif
 
        ! Net longwave from ground to atmosphere
@@ -1243,7 +1225,7 @@ SUBROUTINE ShalLakeFluxes(forc_t,forc_pbot,forc_psrf,forc_hgt,forc_hgt_q,       
        qflx_evap_tot(p) = qflx_evap_soi(p)
        eflx_lh_tot(p)   = htvp(c)*qflx_evap_soi(p)
        eflx_lh_grnd(p)  = htvp(c)*qflx_evap_soi(p)
-#if (defined(LAKEDEBUG))
+#if (defined LAKEDEBUG)
        write(message,*) 'c, sensible heat = ', c, eflx_sh_tot(p), 'latent heat = ', eflx_lh_tot(p) &
               , 'ground temp = ', t_grnd(c), 'h2osno = ', h2osno(c)
        CALL wrf_message(message)
@@ -1311,7 +1293,6 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
                                  eflx_sh_grnd,eflx_sh_tot,eflx_soil_grnd,    & !o
                                  t_lake,t_soisno,h2osoi_liq,                 &
                                  h2osoi_ice,savedtke1,                       &
-                                 tfrz_lake,                                  & !tgs
                                  frac_iceold,qflx_snomelt,imelt,ii,jj)
 !=======================================================================================================
 ! !DESCRIPTION:
@@ -1420,7 +1401,6 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
     
    ! real(r8), intent(in) :: watsat(1,nlevsoil)      ! volumetric soil water at saturation (porosity)
     real(r8), intent(inout) :: snowdp(1)        !snow height (m)
-    real(r8), intent(in) :: tfrz_lake           ! tgs - freezing T
 !out: 
 
     real(r8), intent(out) :: eflx_sh_grnd(1)    ! sensible heat flux from ground (W/m**2) [+ to atm]
@@ -1629,7 +1609,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
           num = 40._r8 * n2 * (vkc*z_lake(c,j))**2
           den = max( (ws(c)**2) * exp(-2._r8*ks(c)*z_lake(c,j)), 1.e-10_r8 )
           ri = ( -1._r8 + sqrt( max(1._r8+num/den, 0._r8) ) ) / 20._r8
-          if (t_grnd(c) > tfrz_lake .and. t_lake(c,1) > tfrz_lake .and. snl(c) == 0) then
+          if (t_grnd(c) > tfrz .and. t_lake(c,1) > tfrz .and. snl(c) == 0) then
             ! ke = vkc*ws(c)*z_lake(c,j)/p0 * exp(-ks(c)*z_lake(c,j)) / (1._r8+37._r8*ri*ri)
 
              if( t_lake(c,1) > 277.15_r8 ) then 
@@ -1672,7 +1652,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
        j = nlevlake
        kme(c,nlevlake) = kme(c,nlevlake-1)
 
-       if (t_grnd(c) > tfrz_lake .and. t_lake(c,1) > tfrz_lake .and. snl(c) == 0) then
+       if (t_grnd(c) > tfrz .and. t_lake(c,1) > tfrz .and. snl(c) == 0) then
           tk_lake(c,j) = tk_lake(c,j-1)
        else
           tk_lake(c,j) = tkwat*tkice_eff / ( (1._r8-lake_icefrac(c,j))*tkice_eff &
@@ -1710,7 +1690,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
           ! Let rsfout for bottom layer go into soil.
           ! This looks like it should be robust even for pathological cases,
             ! like lakes thinner than za.
-          if (t_grnd(c) > tfrz_lake .and. t_lake(c,1) > tfrz_lake .and. snl(c) == 0) then
+          if (t_grnd(c) > tfrz .and. t_lake(c,1) > tfrz .and. snl(c) == 0) then
              phidum = (rsfin-rsfout) * sabg(p) * (1._r8-beta(islak))
              if (j == nlevlake) then
                 phi_soil(c) = rsfout * sabg(p) * (1._r8-beta(islak))
@@ -1754,7 +1734,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
           c = filter_shlakec(fc)
 
 !          ocvts(c) = ocvts(c) + cv_lake(c,j)*t_lake(c,j) &
-          ocvts(c) = ocvts(c) + cv_lake(c,j)*(t_lake(c,j)-tfrz_lake) &
+          ocvts(c) = ocvts(c) + cv_lake(c,j)*(t_lake(c,j)-tfrz) &
                    + cfus*dz_lake(c,j)*(1._r8-lake_icefrac(c,j)) !&
 !                   + (cwat-cice_eff)*lake_icefrac(c)*tfrz*dz_lake(c,j) !enthalpy reconciliation term
           t_lake_bef(c,j) = t_lake(c,j)
@@ -1950,7 +1930,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
     ! 8!) Sum energy content and total energy into lake for energy check. Any errors will be from the
     !     Tridiagonal solution.
 
-#if (defined(LAKEDEBUG))
+#if (defined LAKEDEBUG)
     do j = 1, nlevlake
 !dir$ concurrent
 !cdir nodep
@@ -1958,7 +1938,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
           c = filter_shlakec(fc)
 
           esum1(c) = esum1(c) + (t_lake(c,j)-t_lake_bef(c,j))*cv_lake(c,j)
-          esum2(c) = esum2(c) + (t_lake(c,j)-tfrz_lake)*cv_lake(c,j)
+          esum2(c) = esum2(c) + (t_lake(c,j)-tfrz)*cv_lake(c,j)
        end do
     end do
 
@@ -2000,7 +1980,6 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
 
     ! 9!) Phase change
     call PhaseChange_Lake (snl,h2osno,dz,dz_lake,                            & !i
-                               tfrz_lake,                                    & !tgs
                                t_soisno,h2osoi_liq,h2osoi_ice,               & !i&o
                                lake_icefrac,t_lake, snowdp,                  & !i&o
                                qflx_snomelt,eflx_snomelt,imelt,              & !o  
@@ -2015,14 +1994,14 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
     !       and differences from tfrz only to avoid enthalpy correction for (cpliq-cpice)*melt*tfrz.
     !       Also check soil water sum.
 
-#if (defined(LAKEDEBUG))
+#if (defined LAKEDEBUG)
     do j = 1, nlevlake
 !dir$ concurrent
 !cdir nodep
        do fc = 1, num_shlakec
           c = filter_shlakec(fc)
 
-          esum2(c) = esum2(c) - (t_lake(c,j)-tfrz_lake)*cv_lake(c,j)
+          esum2(c) = esum2(c) - (t_lake(c,j)-tfrz)*cv_lake(c,j)
        end do
     end do
 
@@ -2108,13 +2087,13 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
              c = filter_shlakec(fc)
              if (rhow(c,j) > rhow(c,j+1) .or. &
                 (lake_icefrac(c,j) < 1._r8 .and. lake_icefrac(c,j+1) > 0._r8) ) then
-#if (defined(LAKEDEBUG))
+#if (defined LAKEDEBUG)
                 if (i==1)  then
                   write(message,*), 'Convective Mixing in column ', c, '.'
                   CALL wrf_message(message)
                 endif
 #endif
-                qav(c) = qav(c) + dz_lake(c,i)*(t_lake(c,i)-tfrz_lake) * & 
+                qav(c) = qav(c) + dz_lake(c,i)*(t_lake(c,i)-tfrz) * & 
                         ((1._r8 - lake_icefrac(c,i))*cwat + lake_icefrac(c,i)*cice_eff)
 !                tav(c) = tav(c) + t_lake(c,i)*dz_lake(c,i)
                 iceav(c) = iceav(c) + lake_icefrac(c,i)*dz_lake(c,i)
@@ -2164,18 +2143,18 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
                 if ((zsum(c)+dz_lake(c,i))/nav(c) <= iceav(c)) then
                    !tgs - 30jul19 - keep ice fraction unchanged, but do not reset it to 1.
                    !lake_icefrac(c,i) = 1._r8 
-                   t_lake(c,i) = tav_froz(c) + tfrz_lake
+                   t_lake(c,i) = tav_froz(c) + tfrz
                 else if (zsum(c)/nav(c) < iceav(c)) then
                    !tgs - change ice fraction
                    lake_icefrac(c,i) = (iceav(c)*nav(c) - zsum(c)) / dz_lake(c,i)
                    ! Find average value that preserves correct heat content.
                    t_lake(c,i) = ( lake_icefrac(c,i)*tav_froz(c)*cice_eff &
                                + (1._r8 - lake_icefrac(c,i))*tav_unfr(c)*cwat ) &
-                               / ( lake_icefrac(c,i)*cice_eff + (1-lake_icefrac(c,i))*cwat ) + tfrz_lake
+                               / ( lake_icefrac(c,i)*cice_eff + (1-lake_icefrac(c,i))*cwat ) + tfrz
                 else
                    !tgs - remove ice
                    lake_icefrac(c,i) = 0._r8
-                   t_lake(c,i) = tav_unfr(c) + tfrz_lake
+                   t_lake(c,i) = tav_unfr(c) + tfrz
                 end if
                 zsum(c) = zsum(c) + dz_lake(c,i)
 
@@ -2197,7 +2176,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
           c = filter_shlakec(fc)
 
           cv_lake(c,j) = dz_lake(c,j) * (cwat*(1._r8-lake_icefrac(c,j)) + cice_eff*lake_icefrac(c,j))
-#if (defined(LAKEDEBUG))
+#if (defined LAKEDEBUG)
           write(message,*)'Lake Ice Fraction, c, level:', c, j, lake_icefrac(c,j)
           CALL wrf_message(message)
 #endif
@@ -2217,7 +2196,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
           c = filter_shlakec(fc)
 
 !          ncvts(c) = ncvts(c) + cv_lake(c,j)*t_lake(c,j) &
-          ncvts(c) = ncvts(c) + cv_lake(c,j)*(t_lake(c,j)-tfrz_lake) &
+          ncvts(c) = ncvts(c) + cv_lake(c,j)*(t_lake(c,j)-tfrz) &
                    + cfus*dz_lake(c,j)*(1._r8-lake_icefrac(c,j)) !&
 !                   + (cwat-cice_eff)*lake_icefrac(c)*tfrz*dz_lake(c,j) !enthalpy reconciliation term
           fin(c) = fin(c) + phi(c,j)
@@ -2260,15 +2239,13 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
           eflx_sh_grnd(p) = eflx_sh_grnd(p) - errsoi(c)
           eflx_soil_grnd(p) = eflx_soil_grnd(p) + errsoi(c)
           eflx_gnet(p) = eflx_gnet(p) + errsoi(c)
-#if (defined(LAKEDEBUG))
 !          if (abs(errsoi(c)) > 1.e-3_r8) then
           if (abs(errsoi(c)) > 1.e-1_r8) then
              write(message,*)'errsoi incorporated into sensible heat in ShalLakeTemperature: c, (W/m^2):', c, errsoi(c)
              CALL wrf_message(message)
           end if
-#endif
           errsoi(c) = 0._r8
-#if (defined(LAKEDEBUG))
+#if (defined LAKEDEBUG)
        else
           write(message,*)'Soil Energy Balance Error at column, ', c, 'G, fintotal, column E tendency = ', &
              eflx_gnet(p), fin(c), (ncvts(c)-ocvts(c)) / dtime
@@ -2378,7 +2355,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
               ! This could be altered later for allowing this to be over glaciers.
 
           ! Soil should be saturated.
-#if (defined(LAKEDEBUG))
+#if (defined LAKEDEBUG)
                 satw = (h2osoi_liq(c,j)/denh2o + h2osoi_ice(c,j)/denice)/(dz(c,j)*watsat(c,j))
 !                satw = min(1._r8, satw)
                 if (satw < 0.999_r8) then
@@ -2485,7 +2462,6 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
 !
 ! !INTERFACE:
   subroutine PhaseChange_Lake (snl,h2osno,dz,dz_lake,                        & !i
-                               tfrz_lake,                                    & !tgs
                                t_soisno,h2osoi_liq,h2osoi_ice,               & !i&o
                                lake_icefrac,t_lake, snowdp,                  & !i&o
                                qflx_snomelt,eflx_snomelt,imelt,              & !o  
@@ -2525,7 +2501,6 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
     real(r8), intent(in) :: dz(1,-nlevsnow+1:nlevsoil)          !layer thickness (m)
     real(r8), intent(in) :: dz_lake(1,nlevlake)     !lake layer thickness (m)
     ! Needed in case snow height is less than critical value.
-    real(r8), intent(in) :: tfrz_lake        ! tgs - lake freezing T
 
 !inout: 
 
@@ -2589,12 +2564,12 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
     do fc = 1,num_shlakec
        c = filter_shlakec(fc)
 
-       if (snl(c) == 0 .and. h2osno(c) > 0._r8 .and. t_lake(c,1) > tfrz_lake) then
-          heatavail = (t_lake(c,1) - tfrz_lake) * cv_lake(c,1)
+       if (snl(c) == 0 .and. h2osno(c) > 0._r8 .and. t_lake(c,1) > tfrz) then
+          heatavail = (t_lake(c,1) - tfrz) * cv_lake(c,1)
           melt = min(h2osno(c), heatavail/hfus)
           heatrem = max(heatavail - melt*hfus, 0._r8)
                        !catch small negative value to keep t at tfrz
-          t_lake(c,1) = tfrz_lake + heatrem/(cv_lake(c,1))
+          t_lake(c,1) = tfrz + heatrem/(cv_lake(c,1))
           snowdp(c) = snowdp(c)*(1._r8 - melt/h2osno(c))
           h2osno(c) = h2osno(c) - melt
           lhabs(c) = lhabs(c) + melt*hfus
@@ -2602,7 +2577,6 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
           ! Prevent tiny residuals
           if (h2osno(c) < smallnumber) h2osno(c) = 0._r8
           if (snowdp(c) < smallnumber) snowdp(c) = 0._r8
-          if(h2osno(c) == 0.) snowdp(c) = 0.
        end if
     end do
 
@@ -2615,16 +2589,16 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
           c = filter_shlakec(fc)
 
           dophasechangeflag = .false.
-          if (t_lake(c,j) > tfrz_lake .and. lake_icefrac(c,j) > 0._r8) then ! melting
+          if (t_lake(c,j) > tfrz .and. lake_icefrac(c,j) > 0._r8) then ! melting
              dophasechangeflag = .true.
-             heatavail = (t_lake(c,j) - tfrz_lake) * cv_lake(c,j)
+             heatavail = (t_lake(c,j) - tfrz) * cv_lake(c,j)
              melt = min(lake_icefrac(c,j)*denh2o*dz_lake(c,j), heatavail/hfus)
                         !denh2o is used because layer thickness is not adjusted for freezing
              heatrem = max(heatavail - melt*hfus, 0._r8)
                        !catch small negative value to keep t at tfrz
-          else if (t_lake(c,j) < tfrz_lake .and. lake_icefrac(c,j) < 1._r8) then !freezing
+          else if (t_lake(c,j) < tfrz .and. lake_icefrac(c,j) < 1._r8) then !freezing
              dophasechangeflag = .true.
-             heatavail = (t_lake(c,j) - tfrz_lake) * cv_lake(c,j)
+             heatavail = (t_lake(c,j) - tfrz) * cv_lake(c,j)
              melt = max(-(1._r8-lake_icefrac(c,j))*denh2o*dz_lake(c,j), heatavail/hfus)
                         !denh2o is used because layer thickness is not adjusted for freezing
              heatrem = min(heatavail - melt*hfus, 0._r8)
@@ -2636,7 +2610,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
              lhabs(c) = lhabs(c) + melt*hfus
           ! Update heat capacity
              cv_lake(c,j) = cv_lake(c,j) + melt*(cpliq-cpice)
-             t_lake(c,j) = tfrz_lake + heatrem/cv_lake(c,j)
+             t_lake(c,j) = tfrz + heatrem/cv_lake(c,j)
              ! Prevent tiny residuals
              if (lake_icefrac(c,j) > 1._r8 - smallnumber) lake_icefrac(c,j) = 1._r8
              if (lake_icefrac(c,j) < smallnumber)         lake_icefrac(c,j) = 0._r8
@@ -2710,7 +2684,6 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
 
   subroutine ShalLakeHydrology(dz_lake,forc_rain,forc_snow,                      & !i
                                begwb,qflx_evap_tot,forc_t,do_capsnow,            &
-                               tfrz_lake,                                        & !tgs
                                t_grnd,qflx_evap_soi,                             &
                                qflx_snomelt,imelt,frac_iceold,                   & !i add by guhp
                                z,dz,zi,snl,h2osno,snowdp,lake_icefrac,t_lake,      & !i&o
@@ -2780,7 +2753,6 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
     real(r8), intent(in) :: t_grnd(1)          ! ground temperature (Kelvin)
     real(r8), intent(in) :: qflx_evap_soi(1)   ! soil evaporation (mm H2O/s) (+ = to atm)
     real(r8), intent(in) :: qflx_snomelt(1)     !snow melt (mm H2O /s)
-    real(r8), intent(in) :: tfrz_lake          !tgs - lake freezing T
     integer,  intent(in) :: imelt(1,-nlevsnow+1:nlevsoil)        !flag for melting (=1), freezing (=2), Not=0
 
 !inout:
@@ -2880,7 +2852,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
     real(r8) :: qflx_top_soil(1)     !net water input into soil from top (mm/s)
     character*256 :: message 
 
-#if (defined(LAKEDEBUG))
+#if (defined LAKEDEBUG)
     real(r8) :: snow_water(lbc:ubc)           ! temporary sum of snow water for Bal Check [kg/m^2]
 #endif
 !-----------------------------------------------------------------------
@@ -3063,7 +3035,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
              qflx_sub_snow(c) = min(qflx_evap_soi(p), h2osno(c)/dtime)
              qflx_evap_grnd(c) = qflx_evap_soi(p) - qflx_sub_snow(c)
           else
-             if (t_grnd(c) < tfrz_lake-0.1_r8) then
+             if (t_grnd(c) < tfrz-0.1_r8) then
                 qflx_dew_snow(c) = abs(qflx_evap_soi(p))
              else
                 qflx_dew_grnd(c) = abs(qflx_evap_soi(p))
@@ -3192,7 +3164,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
        do fc = 1, num_shlakec
           c = filter_shlakec(fc)
 
-          if (t_lake(c,1) > tfrz_lake .and. lake_icefrac(c,1) == 0._r8 .and. snl(c) < 0) then
+          if (t_lake(c,1) > tfrz .and. lake_icefrac(c,1) == 0._r8 .and. snl(c) < 0) then
              unfrozen(c) = .true.
           else
              unfrozen(c) = .false.
@@ -3226,14 +3198,14 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
 
           if (unfrozen(c)) then
              heatsum(c) = heatsum(c) + sumsnowice(c)*hfus
-             heatrem = (t_lake(c,1) - tfrz_lake)*cpliq*denh2o*dz_lake(c,1) - heatsum(c)
+             heatrem = (t_lake(c,1) - tfrz)*cpliq*denh2o*dz_lake(c,1) - heatsum(c)
 
              if (heatrem + denh2o*dz_lake(c,1)*hfus > 0._r8) then            
                 ! Remove snow and subtract the latent heat from the top layer.
                 h2osno(c) = 0._r8
                 snl(c) = 0
                 ! The rest of the bookkeeping for the removed snow will be done below.
-#if (defined(LAKEDEBUG))
+#if (defined LAKEDEBUG)
                 write(message,*)'Snow layers removed above unfrozen lake for column, snowice:', &
                           c, sumsnowice(c)
                 CALL wrf_message(message)
@@ -3241,7 +3213,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
                 if (heatrem > 0._r8) then ! simply subtract the heat from the layer
                    t_lake(c,1) = t_lake(c,1) - heatrem/(cpliq*denh2o*dz_lake(c,1))
                 else !freeze part of the layer
-                   t_lake(c,1) = tfrz_lake
+                   t_lake(c,1) = tfrz
                    lake_icefrac(c,1) = -heatrem/(denh2o*dz_lake(c,1)*hfus)
                 end if
              end if
@@ -3337,7 +3309,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
        end do
     end do
 
-#if (defined(LAKEDEBUG))
+#if (defined LAKEDEBUG)
     ! Check to make sure snow water adds up correctly.
     do j = -nlevsnow+1,0
 !dir$ concurrent
@@ -3380,7 +3352,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
 
        ! Insure water balance using qflx_qrgwl
        qflx_qrgwl(c)     = forc_rain(g) + forc_snow(g) - qflx_evap_tot(p) - (endwb(c)-begwb(c))/dtime
-#if (defined(LAKEDEBUG))
+#if (defined LAKEDEBUG)
     write(message,*)'c, rain, snow, evap, endwb, begwb, qflx_qrgwl:', &
        c, forc_rain(g), forc_snow(g), qflx_evap_tot(p), endwb(c), begwb(c), qflx_qrgwl(c)
     CALL wrf_message(message)
@@ -3475,7 +3447,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
 
   end subroutine ShalLakeHydrology
 
-  subroutine QSat (T, p, es, esdT, qs, qsdT, tfrz1)
+  subroutine QSat (T, p, es, esdT, qs, qsdT)
 !
 ! !DESCRIPTION:
 ! Computes saturation mixing ratio and the change in saturation
@@ -3490,7 +3462,6 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
     implicit none
     real(r8), intent(in)  :: T        ! temperature (K)
     real(r8), intent(in)  :: p        ! surface atmospheric pressure (pa)
-    real(r8), intent(in)  :: tfrz1    ! snow or lake freezing T
     real(r8), intent(out) :: es       ! vapor pressure (pa)
     real(r8), intent(out) :: esdT     ! d(es)/d(T)
     real(r8), intent(out) :: qs       ! humidity (kg/kg)
@@ -3561,7 +3532,7 @@ SUBROUTINE ShalLakeTemperature(t_grnd,h2osno,sabg,dz,dz_lake,z,zi,           & !
     real(r8), parameter :: d8 =  0.498070196e-16
 !-----------------------------------------------------------------------
 
-    T_limit = T - tfrz1
+    T_limit = T - tfrz
     if (T_limit > 100.0) T_limit=100.0
     if (T_limit < -75.0) T_limit=-75.0
 
@@ -5053,7 +5024,7 @@ subroutine LakeDebug( str )
  
 end subroutine LakeDebug
 
- SUBROUTINE lakeini(IVGTYP,         ISLTYP,          HT,              SNOW,SNOWH,     & !i
+ SUBROUTINE lakeini(id, IVGTYP,         ISLTYP,      HT,   T_soibot2d,  SNOW,SNOWH,   & !i
                     lake_min_elev,     restart,        lakedepth_default, lake_depth,     &
                     lakedepth2d,    savedtke12d,     snowdp2d,        h2osno2d,       & !o
                     snl2d,          t_grnd2d,        t_lake3d,        lake_icefrac3d, &
@@ -5065,9 +5036,9 @@ end subroutine LakeDebug
 #if (EM_CORE == 1)
                     lakemask,       lakeflag,                                         &
 #endif
-                    lake_depth_flag, use_lakedepth,                                   &
-                    tkdry3d,        tksatu3d,        lake,            its, ite, jts, jte, &
-                    ims,ime, jms,jme)
+                    lake_depth_flag, use_lakedepth, julday, xlong, xlat,              &
+                    tkdry3d,        tksatu3d,        lake,                            &
+                    its, ite, jts, jte, ims,ime, jms,jme)
 
 !==============================================================================
 ! This subroutine was first edited by Hongping Gu for coupling
@@ -5078,10 +5049,12 @@ end subroutine LakeDebug
   implicit none
 
   INTEGER , INTENT (IN) :: iswater
+  INTEGER , INTENT (IN) :: id, julday
   REAL,     INTENT(IN)  :: xice_threshold
-  REAL, DIMENSION( ims:ime , jms:jme ), INTENT(INOUT)::   XICE
-  REAL, DIMENSION( ims:ime , jms:jme ), INTENT(IN)::      TSK
-  REAL, DIMENSION( ims:ime, jms:jme )  ,INTENT(INOUT)  :: XLAND
+  REAL, DIMENSION( ims:ime , jms:jme ), INTENT(IN   )  ::   xlong, xlat
+  REAL, DIMENSION( ims:ime , jms:jme ), INTENT(INOUT)  ::   XICE
+  REAL, DIMENSION( ims:ime , jms:jme ), INTENT(INOUT)  ::   TSK
+  REAL, DIMENSION( ims:ime, jms:jme )  ,INTENT(INOUT)  ::   XLAND
 
 #if (EM_CORE == 1)
   REAL, DIMENSION( ims:ime , jms:jme ) ::   LAKEMASK
@@ -5095,7 +5068,7 @@ end subroutine LakeDebug
   INTEGER,  INTENT(IN   )   ::     its,ite, jts,jte
   INTEGER, DIMENSION( ims:ime, jms:jme ), INTENT(INOUT)       :: IVGTYP,       &
                                                               ISLTYP
-  REAL,    DIMENSION( ims:ime, jms:jme ), INTENT(IN)       :: HT
+  REAL,    DIMENSION( ims:ime, jms:jme ), INTENT(IN)       :: HT, t_soibot2d  
   REAL,    DIMENSION( ims:ime, jms:jme ), INTENT(INOUT)    :: SNOW,SNOWH
   real,    intent(in)                                      :: lakedepth_default,lake_min_elev
 
@@ -5158,13 +5131,53 @@ end subroutine LakeDebug
   REAL :: rhosn
   logical :: debug
 
+  !-- The Great Salt Lake temperature climatology
+  real :: wght1, wght2, TclimGSL
+  integer :: month, iday
+  integer :: day1, day2, mon, num1, num2, juld
+
+  REAL :: SaltLk_T(1:25)
+  real :: julm(1:13)
+
+  !-- bi-weekly climatology
+  data (SaltLk_T(i), i=1,25)/0.5, 0.,-0.5, 3., 4., 7., 8., 12., 13., 16., 19., 21., &
+                           23.5, 25.,26.,24.,23.,20.5,18.,15., 11.5, 8.,  4.,  1., 0.5/
+
+  data (julm(i),i=1,13)/0,31,59,90,120,151,181,212,243,273,304,334,365/
+
   debug = .false.
+
+  CALL nl_get_start_month(id,month)
+  CALL nl_get_start_day(id,iday)
+    if(debug) print *,'day,month',iday,month
+
+  !-- Compute weight for the current day
+  mon = month
+  if(iday > 15) mon=mon+1
+  if(mon == 1) mon=13
+
+  num2 = month * 2
+  if(iday > 15) num2=num2+1
+  if(num2 == 1) num2=25
+  num1 = num2 - 1
+
+  juld = julday
+  if (juld < 7) juld = juld + 365
+  day2 = julm(mon)+15
+  day1 = julm(mon)
+  wght1=(day2-julday)/float(day2-day1)
+  wght2=(julday-day1)/float(day2-day1)
+
+  if(debug) print *,'num1,num2,day1,day2,wght1,wght2',num1,num2,day1,day2,wght1,wght2
+
 
   IF ( RESTART ) RETURN 
 
   DO j = jts,jte
   DO i = its,ite
-! check it there are points with lake_depth=10.
+! check if there are points with lake_depth=10 - this is a filling value
+! in the lake depth data: could be land, ocean or small lakes with no info on
+! their depth.
     if(lake_depth(i,j) == 10.) then
      if( lakemask(i,j)==0) then
        if( ivgtyp(i,j)==iswater) then
@@ -5174,6 +5187,7 @@ end subroutine LakeDebug
        endif
      endif
     else
+      !-- if lake_depth = 10 - no info about actual depth
       lakedepth(i,j) = lake_depth(i,j)
     endif
       
@@ -5183,10 +5197,10 @@ end subroutine LakeDebug
       .or. (lakeflag == 0 .and. ht(i,j)>=lake_min_elev .and.     &
            lakedepth(i,j) > 0. ) ) then 
    if(t_lake3d(i,1,j) < 150. .or. t_lake3d(i,1,j) > 350.) then
-       print *,'WARNING - Uninitialized lake point at i,j ',  &
-                i,j,lake_min_elev,t_lake3d(i,1,j) 
-       print *,'cycling, lakeflag,lakemask(i,j),lake_depth_flag,lakedepth_default,ht(i,j),lake_depth(i,j)', &
-                cycling, lakeflag,lakemask(i,j),lake_depth_flag,lakedepth_default,ht(i,j),lake_depth(i,j)
+       !print *,'WARNING - Uninitialized lake point at i,j ',  &
+       !         i,j,lake_min_elev,t_lake3d(i,1,j) 
+       !print *,'cycling, lakeflag,lakemask(i,j),lake_depth_flag,lakedepth_default,ht(i,j),lake_depth(i,j)', &
+       !         cycling, lakeflag,lakemask(i,j),lake_depth_flag,lakedepth_default,ht(i,j),lake_depth(i,j)
      lakeinit(i,j) = 0 ! lake point needs to be initialized
      lake_depth_flag = 1
    else
@@ -5313,9 +5327,46 @@ end subroutine LakeDebug
 
      if ( lake(i,j) ) then
 
-!	t_soisno3d(i,:,j)      = tsk(i,j)
-!        t_lake3d(i,:,j)        = tsk(i,j)
-!        t_grnd2d(i,j)          = tsk(i,j)
+       if(lakeinit(i,j) /= 0) then
+           !-- Check on the Great Salt Lake (GSL) when the model is cycled
+           !-- Bound the GSL temperature with +/- 3 C from climatology
+           if ((xlong(i,j).gt.-117.7 .and. xlong(i,j).lt.-111.5) .and.    &
+              ! excludes Willard Bay
+              .not. (xlong(i,j).gt.-112.104 .and. xlong(i,j).lt.-112.100))then
+
+             if(xlat(i,j).gt.39.5 .and. xlat(i,j).lt.41.22) then
+             !print *,'The Great Salt Lake south of 41.22 N, i,j',i,j
+                TclimGSL = 273.15 + wght1*saltlk_t(num1)  &
+                                  + wght2*saltlk_t(num2)
+                if(debug) print *,'TclimGSL,TSK,t_lake3d',i,j,TclimGSL,TSK(i,j),t_lake3d(i,:,j),t_soisno3d(i,:,j)
+                tsk(i,j) = min(TclimGSL+3.,(max(tsk(i,j),TclimGSL-3.0)))
+                t_grnd2d(i,j) = tsk(i,j)
+                do k = 1,nlevlake
+                  t_lake3d(i,k,j) = min(TclimGSL+3.,(max(t_lake3d(i,k,j),TclimGSL-3.0)))
+                enddo
+                  t_soisno3d(i,1,j) = min(TclimGSL+3.,(max(t_soisno3d(i,1,j),TclimGSL-3.0)))
+                if(debug) print *,'After TclimGSL,TSK,t_lake3d',i,j,TclimGSL,TSK(i,j),t_lake3d(i,:,j),t_soisno3d(i,:,j)
+                !-- end
+             elseif(( xlat(i,j).ge.41.22 .and. xlat(i,j).lt.42.) .and. .not. &
+             !print *,'The Great Salt Lake north of 41.22 N,i,j',i,j
+             ! excludes Willard Bay
+                    (xlat(i,j).gt.41.352 .and. xlat(i,j).lt.41.354)) then
+                !-- Bound the GSL temperature with +/- 3 C from climatology
+                TclimGSL = 273.15 + wght1*saltlk_t(num1)  &
+                                  + wght2*saltlk_t(num2)
+                if(debug) print *,'TclimGSL,TSK,t_lake3d',i,j,TclimGSL,TSK(i,j),t_lake3d(i,:,j),t_soisno3d(i,:,j)
+                tsk(i,j) = min(TclimGSL+3.,(max(tsk(i,j),TclimGSL-3.0)))
+                t_grnd2d(i,j) = tsk(i,j)
+                do k = 1,nlevlake
+                  t_lake3d(i,k,j) = min(TclimGSL+3.0,(max(t_lake3d(i,k,j),TclimGSL-3.0)))
+                enddo
+                  t_soisno3d(i,1,j) = min(TclimGSL+3.,(max(t_soisno3d(i,1,j),TclimGSL-3.0)))
+                if(debug) print *,'After TclimGSL,TSK,t_lake3d',i,j,TclimGSL,TSK(i,j),t_lake3d(i,:,j),t_soisno3d(i,:,j)
+                !-- end
+
+             endif ! xlat
+           endif ! xlong
+        endif ! lakeinit/=0
 
         z3d(i,:,j)             = 0.0
         dz3d(i,:,j)            = 0.0
@@ -5508,26 +5559,9 @@ end subroutine LakeDebug
             z_lake3d(i,2:nlevlake,j) = zlak(2:nlevlake)*depthratio2d(i,j) + dz_lake3d(i,1,j)*(1._r8 - depthratio2d(i,j))
          end if
 
-! initialize t_lake3d, t_soisno3d and t_grnd2d here
-        t_soisno3d(i,1,j)      = tsk(i,j)
-        t_lake3d(i,1,j)        = tsk(i,j)
-        ! t_grnd2d(i,j)          = 277.0
-        t_grnd2d(i,j)          = tsk(i,j)
-
-      if(lakeinit(i,j) == 0) then
-      ! lake point needs to be initialized
-        do k = 2, nlevlake
-          if(z_lake3d(i,k,j).le.depth_c) then 
-           t_soisno3d(i,k,j)=tsk(i,j)+(277.0-tsk(i,j))/depth_c*z_lake3d(i,k,j)
-           t_lake3d(i,k,j)=tsk(i,j)+(277.0-tsk(i,j))/depth_c*z_lake3d(i,k,j)
-          else
-           ! bottom level in lake
-           t_soisno3d(i,k,j)      = 277.0
-           t_lake3d(i,k,j)        = 277.0
+         if(i==275.and.j==707 .or. i==435.and.j==314) then
+           print *,'z_lake3d(i,:,j)i,dz_lake3d(i,:,j)',i,j,z_lake3d(i,:,j),dz_lake3d(i,:,j)
           end if 
-        enddo
-      endif ! lakeinit
-!end initial t_lake3d here
 
          z3d(i,1:nlevsoil,j) = zsoi(1:nlevsoil)
          zi3d(i,0:nlevsoil,j) = zisoi(0:nlevsoil)
@@ -5599,11 +5633,49 @@ end subroutine LakeDebug
            zi3d(i,k-1,j) = zi3d(i,k,j) - dz3d(i,k,j)
         end do
 
-! 3:subroutine makearbinit
+        !-- bottom soil temperature
+        t_soisno3d(i,nlevsoil,j) = T_soibot2d(i,j)
+
+      if(lakeinit(i,j) == 0) then
+      ! initialize t_lake3d, t_grnd2d and t_soisno3d
+        t_grnd2d(i,j)                  = tsk(i,j)
+        t_lake3d(i,1,j)                = tsk(i,j)
+
+        if(snowdp2d(i,j) > 0.) then
+          do k = snl2d(i,j)+1, 0
+            t_soisno3d(i,k,j) =tsk(i,j)
+          enddo
+        endif
+
+        do k = 2, nlevlake
+          if(z_lake3d(i,k,j).le.depth_c) then 
+          !-- depth_c = 50 m
+           t_lake3d(i,k,j)=t_lake3d(i,1,j)+(277.0-t_lake3d(i,1,j))/depth_c*z_lake3d(i,k,j)
+          else
+           ! bottom levels in deep lakes (depth > 50 m)
+           t_lake3d(i,k,j)        = 277.0
+          end if 
+        enddo
+      !end initial t_lake3d here
+
+      !-- intilization of soil temperature
+          t_soisno3d(i,1,j) = t_lake3d(i,nlevlake,j)
+          !-- bottom soil temperature 
+          t_soisno3d(i,nlevsoil,j) = T_soibot2d(i,j)
+          do k = 2, nlevsoil-1
+           t_soisno3d(i,k,j)=t_soisno3d(i,1,j)+(T_soibot2d(i,j)-t_soisno3d(i,1,j))*dz3d(i,k,j)
+          enddo
+          if(debug) then
+          !if(i==275.and.j==707 .or. i==435.and.j==314) then
+            print *,'i,j,t_lake3d(i,:,j)',i,j,t_lake3d(i,:,j)
+            print *,'t_soibot2d(i,j),snl2d(i,j)', T_soibot2d(i,j),snl2d(i,j)
+            print *,'i,j,t_soisno3d(i,:,j)',i,j,T_soibot2d(i,j),t_soisno3d(i,:,j)
+          endif
+        endif ! lakeinit=0
 
         if (snl2d(i,j) < 0) then
+        !-- temperature check for snow layers
            do k = snl2d(i,j)+1, 0
-           ! snow layers
            !
            ! Be careful because there may be new snow layers with bad temperatures like 0 even if
            ! coming from init. con. file.
@@ -5618,6 +5690,11 @@ end subroutine LakeDebug
                   t_soisno3d(i,k,j) < 200) t_soisno3d(i,k,j) = tsk(i,j)
            enddo
         end if
+          if(debug) then
+          !if(i==275.and.j==707) then
+            print *,'i,j,T_soisno3d(i,:,j)',i,j,T_soibot2d(i,j),t_soisno3d(i,:,j)
+          endif
+
         !tgs - arbinit is not needed, and at this point t_soisno3d is already
         !initialized.
         !do k = 1, nlevsoil
@@ -5636,11 +5713,13 @@ end subroutine LakeDebug
         !   end if
         !  end do
         
+          !endif
+      if(lakeinit(i,j) == 0) then
         do k = 1,nlevsoil
         !tgs -  removed arbinit, and soil moisture is initilized below.
         !if(arbinit .or. h2osoi_vol3d(i,k,j) > 10._r8 .or. h2osoi_vol3d(i,k,j) < 0._r8) h2osoi_vol3d(i,k,j) = 1.0_r8
-           ! soil moisture in soil layers
-           if( lakeinit(i,j)==0) then
+
+          !-- initialize soil moisture in soil layers
                h2osoi_vol3d(i,k,j) = 1.0_r8
                h2osoi_vol3d(i,k,j) = min(h2osoi_vol3d(i,k,j),watsat3d(i,k,j))
              if (t_soisno3d(i,k,j) <= tfrz) then
@@ -5650,8 +5729,8 @@ end subroutine LakeDebug
                 h2osoi_ice3d(i,k,j) = 0._r8
                 h2osoi_liq3d(i,k,j) = dz3d(i,k,j)*denh2o*h2osoi_vol3d(i,k,j)
              endif
-           endif
         enddo
+        endif ! lakeinit=0
 
         !tgs - in RAP and HRRR applications with cycled snow depth and snow
         !water equivalent, the actual snow density could be computed. This is
@@ -5665,8 +5744,8 @@ end subroutine LakeDebug
         if(debug) print *,'rhosn=',rhosn,i,j
 
         do k = -nlevsnow+1, 0
+        !-- snow layers
            if (k > snl2d(i,j)) then
-           !tgs - snow water equivalent is computed from snow depth and snow density (bdsno=250.)
               h2osoi_ice3d(i,k,j) = dz3d(i,k,j)*bdsno
               !h2osoi_ice3d(i,k,j) = dz3d(i,k,j)*rhosn
               h2osoi_liq3d(i,k,j) = 0._r8

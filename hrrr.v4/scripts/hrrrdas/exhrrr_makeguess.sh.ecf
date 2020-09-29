@@ -792,19 +792,53 @@ echo "surface field synced with HRRR : ${hrrrsfcfile}"
 no_member=36
 echo $hrrrdas_num_ens
 ensmem=1
+
+# Get MPISERIAL; this section is copied from exhrrr_prep_smoke:
+# ----------------------------------------------------------------------
+# need this because have trouble load module now:
+MPISER=/gpfs/hps/nco/ops/nwprod/mpiserial.v3.0.0/exec/mpiserial
+#export MPISER=${MPISER:-${NWROOThps}/mpiserial.${mpiserial_ver}/exec/mpiserial}
+LSB_MAX_NUM_PROCESSORS="${LSB_MAX_NUM_PROCESSORS:-1}"
+if (( LSB_MAX_NUM_PROCESSORS > 1 )) ; then
+    # Command to run mpiserial:
+    np=$(( LSB_MAX_NUM_PROCESSORS - 1 )) # -1 for MAMU node processor
+    MPISERIAL="aprun -d 1 -n $np -N 24 -j 1 $MPISER -m"
+else
+    fake_mpiserial() {
+        chmod 755 "$1"
+        set -xue
+        source "$1"
+    }
+    MPISERIAL=fake_mpiserial
+fi
+# ----------------------------------------------------------------------
+
+CPREQ=$( which cpreq )
+
+# Make command file
+cat /dev/null > command_file
 while [[ $ensmem -le $no_member ]];do
 
   print "\$ensmem is $ensmem"
   ensmemid=`printf %4.4i $ensmem`
 
   # get background for each member
-  cpreq ${COMOUT}/hrrr.t${cyc}z.wrfguess_d01_rap ${COMOUT}/hrrr.t${cyc}z.wrfguess_d01.mem${ensmemid}
-  cpreq ${COMOUT}/hrrr.t${cyc}z.wrfguess_d02_rap ${COMOUT}/hrrr.t${cyc}z.wrfguess_d02.mem${ensmemid}
+  echo "$CPREQ ${COMOUT}/hrrr.t${cyc}z.wrfguess_d01_rap ${COMOUT}/hrrr.t${cyc}z.wrfguess_d01.mem${ensmemid}" >> command_file
+  echo "$CPREQ ${COMOUT}/hrrr.t${cyc}z.wrfguess_d02_rap ${COMOUT}/hrrr.t${cyc}z.wrfguess_d02.mem${ensmemid}" >> command_file
 
   # next member
   (( ensmem += 1 ))
 
 done
+
+set +x
+echo ==================== DUMP OF COMMAND FILE ====================
+cat ./command_file
+echo ==================== DUMP OF COMMAND FILE ====================
+set -x
+
+$MPISERIAL -a ./command_file
+
 
 ensmem=1
 while [[ $ensmem -le $no_member ]];do

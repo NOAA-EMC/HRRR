@@ -87,6 +87,13 @@ if [ -r ${bkfile} ]; then
   echo " GSI background run using ${bkfile}"
   cp -p ${bkfile} ${inputfile}
   ln -sf ${inputfile} ./wrf_inout_d01
+# calculate ensemble mean
+  if [ $ensmem -eq 00 ]; then
+     cp ${EXEChrrr}/hrrr_cal_ensmean . 
+     ln -sf ${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem00?? .
+     runline="aprun -j1 -cc depth -n 12 -N 12 -d 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d01 hrrrdas_d01_${timestr1}f01_mem0 36 : -j1 -cc depth -n 27 -N 9 -d 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d01 hrrrdas_d01_${timestr1}f01_mem0 36"
+     $runline
+  fi
 # No background available so abort
 else
   echo "${bkfile} does not exist!!"
@@ -111,6 +118,13 @@ if [ -r ${bkfile} ]; then
   echo " GSI background run using ${bkfile}"
   cp -p ${bkfile} ${inputfile}
   ln -sf ${inputfile} ./wrf_inout_d02
+# calculate ensemble mean
+  if [ $ensmem -eq 00 ]; then
+#     cp ${EXEChrrr}/hrrr_cal_ensmean . 
+     ln -sf ${HRRRDASGES}/hrrrdas_d02_${timestr1}f01_mem00?? .
+     runline="aprun -j1 -cc depth -n 24 -N 24 -d 1 /usr/bin/env OMP_NUM_THREADS=1 ./hrrr_cal_ensmean 2 ./ wrf_inout_d02 hrrrdas_d02_${timestr1}f01_mem0 36 : -j1 -cc depth -n 36 -N 12 -d 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d02 hrrrdas_d02_${timestr1}f01_mem0 36"
+     $runline
+  fi
 # No background available so abort
 else
   echo "${bkfile} does not exist!!"
