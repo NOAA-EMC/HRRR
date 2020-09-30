@@ -1,0 +1,54 @@
+Release Notes:  HRRR v4.0.4
+
+v4.0.4 - released September 30, 2020 following the completion of a successful 30-day EMC stability test
+* Final set of HRRRv4 code changes prior to operational implementation
+   * Great Salt Lake temperature fix, involves WRF source code changes
+   * Update GSI code for EUMETSAT BUFR format change
+   * Add mass density to gempak files
+   * Update BUFRLIB from version 11.0.1 to 11.3.0
+   * HRRRDAS changes
+      * Enhance ob qc by using the prior ensemble mean
+      * Skip EnKF step when observations aren't available
+      * Add a check for the completion of the perturbed boundary conditions
+      * Use faster copy commands and remove a redundant copy command
+
+
+* Repository Details
+   * After cloning the hrrr.v4.0.4 tag of the EMC_rap git repository using the command below, retrieve the new code from the hrrr.v4 directory.
+  	* git clone -b hrrr.v4.0.4 https://${USER}@vlab.ncep.noaa.gov/code-review/a/EMC_hrrr
+  	* git clone -b hrrr.v4.0.4 ssh://${USER}@vlab.ncep.noaa.gov:29418/EMC_hrrr
+
+
+* gempak files changed
+   * gempak/fix/hrrr_g2varswmo2.tbl
+
+* modulefiles changed
+   * modulefiles/HRRR/v4.0.0
+   * modulefiles/HRRR/v4.0.0.da
+
+* scripts files changed
+   * scripts/hrrrdas/exhrrr_analysis.sh.ecf
+   * scripts/hrrrdas/exhrrr_enkf.sh.ecf
+   * scripts/hrrrdas/exhrrr_fcst.sh.ecf
+   * scripts/hrrrdas/exhrrr_makeguess.sh.ecf
+   * scripts/hrrrdas/exhrrrdas_makebc.sh.ecf
+
+* sorc files changed
+   * sorc/build_hrrr_cal_ensemblemean.sh
+   * sorc/build_hrrr_gsi.sh
+   * sorc/hrrr_cal_ensemblemean.fd/average_netcdf_files_parallel.f90
+   * sorc/hrrr_cal_ensemblemean.fd/makefile
+   * sorc/hrrr_gsi.fd/src/gsi/read_obs.F90
+   * sorc/hrrr_gsi.fd/src/gsi/read_satwnd.f90
+   * sorc/hrrr_wrfarw.fd/WRFV3.9/phys/module_physics_init.F
+   * sorc/hrrr_wrfarw.fd/WRFV3.9/phys/module_sf_lake.F
+
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the updated sorc, modulefiles, scripts, and gempak files
+   * Re-build the GSI, cal_ensemblemean, process_cloud, process_lightning, process_mosaic, sndp, stnmlist, update_gvf, and WRF codes
+   * Will need to cold start the model with a surface guess file from GSL, please coordinate with Ming Hu
