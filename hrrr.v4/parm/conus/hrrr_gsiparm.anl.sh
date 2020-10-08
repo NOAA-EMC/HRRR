@@ -14,7 +14,8 @@ gsi_namelist="
    diag_light=.false.,print_obs_para=.true.,diag_radardbz=.true.,
    reset_bad_radbc=.true.,
    l4densvar=.false.,nhr_obsbin=3,
-   use_gfs_nemsio=.true.,
+   use_gfs_nemsio=.false.,
+   use_gfs_ncio=.true.,
  /     
  &GRIDOPTS
    JCAP=$JCAP,JCAP_B=$JCAP_B,NLAT=$NLAT,NLON=$LONA,nsig=$LEVS,

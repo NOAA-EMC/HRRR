@@ -19,7 +19,7 @@ PROGRAM gfsp2wrfg
   use mpeu_util, only: die
 !  use initial, only: miterrr
 !  use initial, only: init_namelist
-  use gridmod, only: wrf_mass_regional,diagnostic_reg,regional,use_gfs_nemsio
+  use gridmod, only: wrf_mass_regional,diagnostic_reg,regional,use_gfs_nemsio,use_gfs_ncio
   use gridmod, only: init_grid,init_reg_glob_ll,init_grid_vars,final_grid_vars
   use gridmod, only: grid_ratio_wrfmass
   use constants, only: init_constants,init_constants_derived
@@ -53,7 +53,7 @@ PROGRAM gfsp2wrfg
                   switch_on_derivatives,tendsflag,nfldsig,   &
                   grid_ratio_ens,n_ens,grid_ratio_ens,grid_ratio_wrfmass,&
                   enpert4arw,wrt_pert_sub,wrt_pert_mem,wrf_mass_hybridcord,&
-                  use_gfs_nemsio,jcap_ens
+                  use_gfs_nemsio,jcap_ens,use_gfs_ncio
 !
 !
 !
@@ -101,6 +101,8 @@ PROGRAM gfsp2wrfg
   wrt_pert_mem=.false.
   wrf_mass_hybridcord=.false.
   jcap_ens=574
+  use_gfs_ncio=.false.
+  use_gfs_nemsio=.false.
 
 !
 !  read in namelist

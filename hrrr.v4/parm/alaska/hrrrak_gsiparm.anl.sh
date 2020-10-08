@@ -12,7 +12,8 @@ gsi_namelist="
    passive_bc=.true.,use_edges=.false.,emiss_bc=.true.,
    diag_precon=.true.,step_start=1.e-3,
    l4densvar=.false.,nhr_obsbin=3,
-   use_gfs_nemsio=.true.,reset_bad_radbc=.true.,print_obs_para=.true.,
+   use_gfs_nemsio=.false.,reset_bad_radbc=.true.,print_obs_para=.true.,
+   use_gfs_ncio=.true.,
  /     
  &GRIDOPTS
    JCAP=$JCAP,JCAP_B=$JCAP_B,NLAT=$NLAT,NLON=$LONA,nsig=$LEVS,

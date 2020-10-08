@@ -416,7 +416,7 @@ stampcycle=`date -d "${CYCSTART_TIME}" +%s`
 minHourDiff=100
 loops="009"
 for loop in $loops; do
-  for timelist in `ls ${COMINgfs}/enkfgdas.*/*/mem080/gdas*.atmf${loop}s.nemsio`; do
+  for timelist in `ls ${COMINgfs}/enkfgdas.*/*/atmos/mem080/gdas*.atmf${loop}.nc`; do
     availtimeyyyymmdd=`echo ${timelist} | cut -d'/' -f9 | cut -c 10-17`
     availtimehh=`echo ${timelist} | cut -d'/' -f10`
     availtime=${availtimeyyyymmdd}${availtimehh}
@@ -432,13 +432,13 @@ for loop in $loops; do
 
     if [[ ${hourDiff} -lt ${minHourDiff} ]]; then
        minHourDiff=${hourDiff}
-       enkfcstname=gdas.t${availtimehh}z.atmf${loop}s
+       enkfcstname=gdas.t${availtimehh}z.atmf${loop}
        EYYYYMMDD=$(echo ${availtime} | cut -c1-8)
        EHH=$(echo ${availtime} | cut -c9-10)
     fi
   done
 done
-ls ${COMINgfs}/enkfgdas.${EYYYYMMDD}/${EHH}/mem???/${enkfcstname}.nemsio > filelist03
+ls ${COMINgfs}/enkfgdas.${EYYYYMMDD}/${EHH}/atmos/mem???/${enkfcstname}.nc > filelist03
 
 # Determine if hybrid option is available
 beta1_inv=1.0

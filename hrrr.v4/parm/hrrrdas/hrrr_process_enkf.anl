@@ -13,7 +13,8 @@
   enpert4arw=.true.,
   wrt_pert_sub=.false.,
   wrt_pert_mem=.false.,
-  use_gfs_nemsio=.true.,
+  use_gfs_nemsio=.false.,
+  use_gfs_ncio=.true.,
   jcap_ens=574,
  /
 
