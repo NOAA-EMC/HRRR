@@ -230,6 +230,15 @@ now=`${DATE} +%Y%m%d%H%M%S`
 
 cp ${EXEChrrr}/hrrr_wrfarw_fcst .
 
+if [[ "${NODES:-0}" -lt 1 ]] ; then
+    echo "WARNING: \$NODES variable is unset.  Will use \$LSB_MAX_NUM_PROCESSORS and assume WCOSS Cray."
+    provided_nodes=$(( LSB_MAX_NUM_PROCESSORS / 24 ))
+else
+    provided_nodes="$NODES"
+fi
+
+if [[ "$provided_nodes" == 78 ]] ; then
+    # This is the operational configuration for the 18-hour forecasts.
 cat<<EOF > run_wrf_config
 omp_num_threads=2 # compute only; quilt is always 1
 hyperthreads=1    # compute only
@@ -251,6 +260,31 @@ nio_tasks_per_group=60
 nio_groups=4
 nio_ppn=30
 EOF
+else
+    # Operational settings for 48-hour forecasts (138 nodes)
+    cat<<EOF > run_wrf_config
+omp_num_threads=2 # compute only; quilt is always 1
+hyperthreads=1    # compute only
+io_hyperthreads=2 # quilt only
+turbo_mode=YES    # compute only; YES or NO
+reorder_ranks=grid_order # grid_order or NO
+mpich_tuning=cb_nodes # cb_nodes or NO
+
+# Distribution of compute nodes in grid:
+nnode_x=8
+nnode_y=16
+
+# Distribution of MPI ranks within each compute node:
+nrank_x=2
+nrank_y=6
+
+# Quilt server configuration:
+nio_tasks_per_group=96
+nio_groups=5
+nio_ppn=48
+cb_nodes=32
+EOF
+fi
 
 if ( ! $USHhrrr/hrrr_run_wrf.sh hrrr_wrfarw_fcst run_wrf_config ) ; then
     err_exit "WRF-ARW execution wrapper script failed."

@@ -66,8 +66,8 @@ else
 START_TIME=$PDY$cycm1
 fi
 counter=1
-#targetsize=16053743048
 targetsize=16061363612
+targetsize2=16073946524  ## HRRRv4 working dir on dell2
 while [[ $counter -lt 36 ]]; do
   counterhr=$counter
   typeset -Z2 counterhr
@@ -75,7 +75,8 @@ while [[ $counter -lt 36 ]]; do
   if [ -r ${HRRRGES_SFC}/hrrr_${CYC_TIME}f0$counterhr ]; then
     filesize=$(stat -c%s ${HRRRGES_SFC}/hrrr_${CYC_TIME}f0$counterhr)
     echo $filesize
-    if [ $filesize -eq $targetsize ]; then
+#   if [ $filesize -eq $targetsize ]; then
+    if [[ $filesize -eq $targetsize || $filesize -eq $targetsize2 ]]; then
       echo " Cycle surface fields based on hrrr_${CYC_TIME}f0$counterhr"
       cp ${HRRRGES_SFC}/hrrr_${CYC_TIME}f0$counterhr ./wrfout_d01_save
       cp ${EXEChrrr}/hrrr_full_cycle_surface .

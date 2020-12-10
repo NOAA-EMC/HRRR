@@ -170,15 +170,16 @@ cp WRFTWO${fhr}.tm00 hrrrak.t${cyc}z.ndfdf${fhr}.grib2
 $USHhrrr/hrrrak_mkawp.sh $fhr
 
 # Save files for surface cycle
-targetsize=9903525684
 targetsize=9096528560
+targetsize2=9109111472   ## HRRRv4 working dir on dell2
 if [ $fhr -lt 18 ]
 then
   counter=1
   while [[ $counter -lt 48 ]]; do
   filesize=$(stat -c%s ${INPUT_DATA}/wrfout_d01_${timestr})
   echo $filesize
-  if [ $filesize -eq $targetsize ]; then
+# if [ $filesize -eq $targetsize ]; then
+  if [[ $filesize -eq $targetsize || $filesize -eq $targetsize2 ]]; then
     cp ${INPUT_DATA}/wrfout_d01_${timestr} ${HRRRGES_SFC}/hrrrak_${PDY}${cyc}f0${fhr}
       break
   else

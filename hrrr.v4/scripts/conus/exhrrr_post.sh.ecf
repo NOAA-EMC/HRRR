@@ -204,15 +204,16 @@ cat tmpfile2b tmpfile3a > hrrr.t${cyc}z.ndfdf${fhr}.grib2
 $USHhrrr/hrrr_mkawp.sh $fhr
 
 # Save files for surface cycle
-targetsize=15870850680
 targetsize=16061363612
+targetsize2=16073946524   ## HRRRv4 working dir on dell2
 if [ $fhr -lt 12 ]
 then
   counter=1
   while [[ $counter -lt 36 ]]; do
   filesize=$(stat -c%s ${INPUT_DATA}/wrfout_d01_${timestr})
   echo $filesize
-  if [ $filesize -eq $targetsize ]; then
+# if [ $filesize -eq $targetsize ]; then
+  if [[ $filesize -eq $targetsize || $filesize -eq $targetsize2 ]]; then
     cp ${INPUT_DATA}/wrfout_d01_${timestr} ${HRRRGES_SFC}/hrrr_${PDY}${cyc}f0${fhr}
     break
   else
