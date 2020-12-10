@@ -130,7 +130,7 @@ for back in $( seq "$minback" "$maxback" ) ; do
     fi
 done
 
-runline="aprun -n 576 -N 12 ./hrrr_process_enkf"
+runline="aprun -n 864 -N 12 ./hrrr_process_enkf"
 $runline
 export err=$?; err_chk
 mkdir d02

@@ -138,6 +138,16 @@ else
 fi
 
 # prepbufr section
+counter=1
+while [[ $counter -lt 20 ]]; do
+  if [ -r "${PREPBUFR}/${prepsuffix}.t${cyc}z.prepbufr.tm00" ]; then
+    break
+  else
+    sleep 5
+    counter=` expr $counter + 1 `
+  fi
+done
+
 if [ -r "${PREPBUFR}/${prepsuffix}.t${cyc}z.prepbufr.tm00" ]; then
  cp ${PREPBUFR}/${prepsuffix}.t${cyc}z.prepbufr.tm00 .
  mv ${prepsuffix}.t${cyc}z.prepbufr.tm00 newgblav.${PDY}.rap.t${cyc}z.prepbufr

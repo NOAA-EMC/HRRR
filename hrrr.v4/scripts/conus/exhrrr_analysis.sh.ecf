@@ -546,7 +546,7 @@ if [ -r "${fvcomfile}" ]; then
   cp ${FIXhrrr}/hrrr_geo_em.d01.nc ./geo_em.d01.nc
   cp ${EXEChrrr}/hrrr_process_fvcom .
   runline="aprun -n 1 -N 1 ./hrrr_process_fvcom"
-  $runline < fvcom.namelist >> stdout_fvcomice
+  $runline < fvcom.namelist
   export err=$?; err_chk
 
   mv fvcom.namelist fvcom.namelist.ice
@@ -561,7 +561,7 @@ EOF
   echo "FVCOM update for lake surface temperatures."
   cp ${fvcomfile} ./fvcom.nc
   runline="aprun -n 1 -N 1 ./hrrr_process_fvcom"
-  $runline < fvcom.namelist >> stdout_fvcomsst
+  $runline < fvcom.namelist
   export err=$?; err_chk
 
 fi
