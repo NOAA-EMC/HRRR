@@ -24,36 +24,22 @@
 # transferred.
 
 com/hrrr/_ENVIR_/hrrr._PDY_/
-+ /hrrrdas/
-+ /hrrrdas/hrrr.t??z.NSSLRefInGSI_d02.bufr
-+ /hrrrdas/hrrr.t??z.NASALaRCCloudInGSI_d02.bufr
-+ /hrrrdas/hrrr.t??z.obs_seq_mrms_d02.out
-+ /hrrrdas/hrrr.t??z.Gridded_ref_d02.nc
-+ /hrrrdas/hrrr.t??z.wrfguess_d0?.mem00?[2468]
-+ /hrrrdas/hrrr.t??z.analysis_d02.mean
-+ /hrrrdas/diag_conv_ges.*.d02.mean
-+ /hrrrdas/diag_conv_ges.*.d0?.mem00?[2468]
-+ /hrrrdas/diag_radardbz_ges.*.d02.mean
-+ /hrrrdas/diag_radardbz_ges.*.d0?.mem00?[2468]
-+ /hrrrdas/hrrr.t??z.wrfinput_d02.mem00?[458]
++ /conus/
++ /conus/hrrr.t11z.NSSLRefInGSI.bufr
++ /conus/hrrr.t11z.NASALaRCCloudInGSI.bufr
++ /conus/hrrr.t11z.wrfbdy
++ /conus/hrrr.t11z.wrfhistory*
++ /conus/hrrr.t11z.*grib2*
++ /conus/hrrr.t11z.*fits*
++ /conus/hrrr.t11z.*rsl*
++ /conus/hrrr.t11z.class1.bufr.tm00
 - *
 W
 B 1040000
 
-com/hrrr/_ENVIR_/hrrr._PDYm1_/
-+ /hrrrdas/
-+ /hrrrdas/hrrr.t??z.NSSLRefInGSI_d02.bufr
-+ /hrrrdas/hrrr.t??z.NASALaRCCloudInGSI_d02.bufr
-+ /hrrrdas/hrrr.t??z.obs_seq_mrms_d02.out
-+ /hrrrdas/hrrr.t??z.Gridded_ref_d02.nc
-+ /hrrrdas/hrrr.t??z.wrfguess_d0?.mem00?[2468]
-+ /hrrrdas/hrrr.t??z.analysis_d02.mean
-+ /hrrrdas/diag_conv_ges.*.d02.mean
-+ /hrrrdas/diag_conv_ges.*.d0?.mem00?[2468]
-+ /hrrrdas/diag_radardbz_ges.*.d02.mean
-+ /hrrrdas/diag_radardbz_ges.*.d0?.mem00?[2468]
-+ /hrrrdas/hrrr.t??z.wrfinput_d02.mem00?[458]
+_GESROOT_/_ENVIR_/hrrr/
++ /hrrrges_sfc/
++ /hrrrges_sfc/conus/
++ /hrrrges_sfc/conus/hrrr__PDY_11f00[0123]
 - *
-W
-B 1040000
-
+B 543000

@@ -86,7 +86,7 @@ while [[ $counter -lt 36 ]]; do
       break
     else
       export subject="Corrupt HRRR ${dom} guess suface file!"
-      export maillist=${maillist:-'ncep.list.spa-helpdesk@noaa.gov,geoffrey.manikin@noaa.gov,benjamin.blake@noaa.gov'}
+      export maillist=${maillist:-'nco.spa@noaa.gov,geoffrey.manikin@noaa.gov,benjamin.blake@noaa.gov'}
       echo "Filesize of ${HRRRGES_SFC}/hrrrak_${CYC_TIME}f0$counterhr $filesize is not right!">>mailmsg
       echo "Will check file from prefious cycles." >>mailmsg
       cat mailmsg |mail.py -s "$subject" $maillist -v

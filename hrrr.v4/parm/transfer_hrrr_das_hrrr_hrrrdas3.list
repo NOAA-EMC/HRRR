@@ -25,34 +25,16 @@
 
 com/hrrr/_ENVIR_/hrrr._PDY_/
 + /hrrrdas/
-+ /hrrrdas/hrrr.t??z.NSSLRefInGSI_d02.bufr
-+ /hrrrdas/hrrr.t??z.NASALaRCCloudInGSI_d02.bufr
-+ /hrrrdas/hrrr.t??z.obs_seq_mrms_d02.out
-+ /hrrrdas/hrrr.t??z.Gridded_ref_d02.nc
-+ /hrrrdas/hrrr.t??z.wrfguess_d0?.mem00?[2468]
-+ /hrrrdas/hrrr.t??z.analysis_d02.mean
-+ /hrrrdas/diag_conv_ges.*.d02.mean
-+ /hrrrdas/diag_conv_ges.*.d0?.mem00?[2468]
-+ /hrrrdas/diag_radardbz_ges.*.d02.mean
-+ /hrrrdas/diag_radardbz_ges.*.d0?.mem00?[2468]
-+ /hrrrdas/hrrr.t??z.wrfinput_d02.mem00?[458]
++ /hrrrdas/hrrr.t??z.wrfinput_d01.mem00??
++ /hrrrdas/hrrr.t??z.wrfinput_d02.mem00?[1236]
 - *
 W
 B 1040000
 
 com/hrrr/_ENVIR_/hrrr._PDYm1_/
 + /hrrrdas/
-+ /hrrrdas/hrrr.t??z.NSSLRefInGSI_d02.bufr
-+ /hrrrdas/hrrr.t??z.NASALaRCCloudInGSI_d02.bufr
-+ /hrrrdas/hrrr.t??z.obs_seq_mrms_d02.out
-+ /hrrrdas/hrrr.t??z.Gridded_ref_d02.nc
-+ /hrrrdas/hrrr.t??z.wrfguess_d0?.mem00?[2468]
-+ /hrrrdas/hrrr.t??z.analysis_d02.mean
-+ /hrrrdas/diag_conv_ges.*.d02.mean
-+ /hrrrdas/diag_conv_ges.*.d0?.mem00?[2468]
-+ /hrrrdas/diag_radardbz_ges.*.d02.mean
-+ /hrrrdas/diag_radardbz_ges.*.d0?.mem00?[2468]
-+ /hrrrdas/hrrr.t??z.wrfinput_d02.mem00?[458]
++ /hrrrdas/hrrr.t??z.wrfinput_d01.mem00??
++ /hrrrdas/hrrr.t??z.wrfinput_d02.mem00?[1236]
 - *
 W
 B 1040000

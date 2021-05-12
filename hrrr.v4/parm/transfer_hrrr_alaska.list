@@ -32,7 +32,7 @@ com/hrrr/_ENVIR_/hrrr._PDY_/
 + /alaska/*.t??z.*grib2*
 + /alaska/*.t??z.*fits*
 + /alaska/*.t??z.*rsl*
-+ /alaska/*.t??z.class1.bufr.tm00
++ /alaska/*.t??z.class1.bufr.ak.tm00
 + /alaska/gempak/
 + /alaska/gempak/*
 - *
@@ -47,7 +47,7 @@ com/hrrr/_ENVIR_/hrrr._PDYm1_/
 + /alaska/*.t??z.*grib2*
 + /alaska/*.t??z.*fits*
 + /alaska/*.t??z.*rsl*
-+ /alaska/*.t??z.class1.bufr.tm00
++ /alaska/*.t??z.class1.bufr.ak.tm00
 + /alaska/gempak/
 + /alaska/gempak/*
 - *
