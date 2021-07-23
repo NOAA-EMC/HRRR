@@ -212,6 +212,7 @@
       grid%diff_opt_dfi = grid%diff_opt
       CALL nl_set_km_opt( grid%id, 1) 
       CALL nl_set_diff_opt( grid%id, 0) 
+      CALL nl_set_zadvect_implicit(grid%id, 0)
       CALL nl_set_moist_adv_dfi_opt( grid%id, grid%moist_adv_dfi_opt)
       CALL nl_set_moist_adv_opt( grid%id,grid%moist_adv_dfi_opt)
 #endif
@@ -407,6 +408,7 @@
       grid%diff_opt = grid%diff_opt_dfi
       CALL nl_set_km_opt( grid%id, grid%km_opt_dfi)
       CALL nl_set_diff_opt( grid%id, grid%diff_opt_dfi)
+      CALL nl_set_zadvect_implicit(grid%id, grid%zadvect_implicit)
       CALL nl_set_moist_adv_opt( grid%id, grid%moist_adv_opt)
 #endif
 

@@ -1,0 +1,24 @@
+Release Notes:  HRRR v4.0.11
+
+v4.0.11 - released June 23, 2021
+* HRRRv4 WRF source code change to address an operational RAP on July 9th
+   * This change has no impact on the model forecast but it will be made to keep the WRF-ARW codes consistent between the RAP and HRRR
+
+
+* Repository Details
+   * After cloning the hrrr.v4.0.11 tag of the EMC_hrrr git repository using the command below, retrieve the new code from the hrrr.v4 directory.
+  	* git clone -b hrrr.v4.0.11 https://${USER}@vlab.noaa.gov/code-review/a/EMC_hrrr
+  	* git clone -b hrrr.v4.0.11 ssh://${USER}@vlab.noaa.gov:29418/EMC_hrrr
+
+
+* sorc files changed
+   * sorc/hrrr_wrfarw.fd/WRFV3.9/share/dfi.F
+
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the new sorc file and re-compile the rap_wrfarw source code
+
