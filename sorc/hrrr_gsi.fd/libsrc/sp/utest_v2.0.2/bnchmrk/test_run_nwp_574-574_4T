@@ -1,0 +1,57 @@
+
+
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     PROGRAM GLOBAL_CHGRES HAS BEGUN. COMPILED 1999253.56     ORG: NP23
+     STARTING DATE-TIME  NOV 13,2012  19:53:10.157  318  TUE   2456245
+
+
+ &NAMCHG
+ JCAP    =         574,
+ LEVS    =           0,
+ NTRAC   =           0,
+ LONB    =        1760,
+ LATB    =         880,
+ LONBI   =           0,
+ LATBI   =           0,
+ IDVC    =           0,
+ IDVM    =           0,
+ IDSL    =           0,
+ IGEN    =           0,
+ MGG     =           0,
+ MQUICK  =           0,
+ IDVT    =           0,
+ NCLDT   =           0,
+ LATCH   =           8,
+ LSOIL   =           2,
+ IVSSFC  =      200004,
+ IVSSIG  =           0,
+ NVCOORD =           0,
+ OUTTYP  =           2,
+ IDRT    =           4,
+ RI      = 21*0.000000000000000E+000  ,
+ CPI     = 21*0.000000000000000E+000  ,
+ IALB    =           0,
+ CHGQ0   =           0,
+ USE_UFO = F
+ /
+ CHGRES INPUT:  SPECTRAL SIGIO SIGMA FILE 
+ CHGRES OUTPUT: SIGIO SIGMA FILE
+  pdryinia=   98.26409    
+CHANGE SIGMA FILE RESOLUTION FROM  574 WAVES,   64 LEVELS, AND    3 TRACERS
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+                               TO  574 WAVES,   64 LEVELS, AND    3 TRACERS.
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+  USING A GAUSSIAN TRANSFORM GRID OF 1760 X  880
+  NEW OROGRAPHY READ IN
+  NEW MODEL LEVELS COPIED FROM OLD
+forrtl: severe (71): integer divide by zero
+Image              PC                Routine            Line        Source             
+global_chgres      0000000000744DA2  Unknown               Unknown  Unknown
+global_chgres      000000000074426F  Unknown               Unknown  Unknown
+global_chgres      0000000000735DE0  Unknown               Unknown  Unknown
+global_chgres      0000000000734A3F  Unknown               Unknown  Unknown
+global_chgres      00000000005802C1  trbsc_                   3007  chgres.f
+global_chgres      00000000004EC31E  MAIN__                    822  chgres.f
+global_chgres      000000000040400C  Unknown               Unknown  Unknown
+libc.so.6          0000003E3881ECDD  Unknown               Unknown  Unknown
+global_chgres      0000000000403F09  Unknown               Unknown  Unknown

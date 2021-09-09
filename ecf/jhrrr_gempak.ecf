@@ -1,0 +1,33 @@
+#BSUB -J %E%hrrr_gempak_%DOMAIN%_%CYC%
+#BSUB -o /%COM%/output/%ENVIR%/today/hrrr_gempak_%DOMAIN%_%CYC%.o%J
+#BSUB -e /%COM%/output/%ENVIR%/today/hrrr_gempak_%DOMAIN%_%CYC%.o%J
+#BSUB -L /bin/sh
+#BSUB -q %QUEUE%_shared   ##prod_serv
+#BSUB -W 02:00
+#BSUB -cwd /tmp
+#BSUB -P %PROJ%
+#BSUB -M 1800
+
+%include <head.h>
+%include <envir-xc40.h>
+
+export model=hrrr
+%include <model_ver.h>
+set -x
+export cyc=%CYC%
+export dom=%DOMAIN%
+
+module load gempak/${gempak_ver}
+$HOMEhrrr/jobs/JHRRR_GEMPAK
+
+if [ $? -ne 0 ]; then
+  ecflow_client --abort
+  exit
+fi
+
+%include <tail.h>
+%manual
+######################################################################
+# Purpose: To generate HRRR gempak files 
+######################################################################
+%end

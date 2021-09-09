@@ -1,0 +1,14 @@
+set -x
+
+MOD=../include/nemsio
+mkdir -p $MOD
+
+#build library
+make
+
+# move modules
+mv include/* $MOD/.
+
+# move library
+mv libnemsio.a ../.
+

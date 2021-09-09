@@ -1,0 +1,74 @@
+REFC:entire atmosphere:
+RETOP:cloud top:
+VIL:entire atmosphere:
+VIS:surface:
+REFD:1000 m above ground:
+HGT:500 mb:
+TMP:500 mb:
+DPT:500 mb:
+UGRD:500 mb:
+VGRD:500 mb:
+HGT:700 mb:
+TMP:700 mb:
+DPT:700 mb:
+UGRD:700 mb:
+VGRD:700 mb:
+HGT:850 mb:
+TMP:850 mb:
+DPT:850 mb:
+UGRD:850 mb:
+VGRD:850 mb:
+TMP:925 mb:
+DPT:925 mb:
+UGRD:925 mb:
+VGRD:925 mb:
+HGT:1000 mb:
+TMP:1000 mb:
+DPT:1000 mb:
+UGRD:1000 mb:
+VGRD:1000 mb:
+MAXUVV:400-1000 mb above ground:
+MAXDVV:400-1000 mb above ground:
+DZDT:0.5-0.8 sigma layer:
+PRMSL:mean sea level:
+MAXREF:1000 m above ground:
+MXUPHL:5000-2000 m above ground:
+TCOLG:entire atmosphere (considered as a single layer):
+LTNG:entire atmosphere
+SNOD:surface:
+VEG:surface:
+WIND:10 m above ground:
+CPOFP:surface:
+CSNOW:surface:
+CICEP:surface:
+CFRZR:surface:
+CRAIN:surface:
+LFTX:500-1000 mb:
+CAPE:surface:
+CIN:surface:
+PWAT:entire atmosphere (considered as a single layer):
+LCDC:low cloud layer:
+MCDC:middle cloud layer:
+HCDC:high cloud layer:
+TCDC:entire atmosphere:
+HGT:cloud ceiling:
+HGT:cloud top:
+HLCY:3000-0 m above ground:
+HLCY:1000-0 m above ground:
+USTM:0-6000 m above ground:
+VSTM:0-6000 m above ground:
+VUCSH:0-1000 m above ground:
+VVCSH:0-1000 m above ground:
+VUCSH:0-6000 m above ground:
+VVCSH:0-6000 m above ground:
+UGRD:80 m above ground:
+VGRD:80 m above ground:
+4LFTX:180-0 mb above ground:
+HPBL:surface:
+HGT:level of adiabatic condensation from sfc:
+CAPE:90-0 mb above ground:
+CIN:90-0 mb above ground:
+CAPE:255-0 mb above ground:
+CIN:255-0 mb above ground:
+PLPL:255-0 mb above ground:
+GUST:surface:

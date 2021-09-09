@@ -1,0 +1,64 @@
+Release Notes:  HRRR v4.0.5
+
+v4.0.5 - released October 8, 2020
+* HRRRv4 code changes required for GFSv16 implementation
+   * Update GSI code to handle switch from nemsio to netcdf ensemble files
+   * Update GSI namelist and ex-scripts to use GFSv16 data
+
+
+* Repository Details
+   * After cloning the hrrr.v4.0.5 tag of the EMC_hrrr git repository using the command below, retrieve the new code from the hrrr.v4 directory.
+  	* git clone -b hrrr.v4.0.5 https://${USER}@vlab.ncep.noaa.gov/code-review/a/EMC_hrrr
+  	* git clone -b hrrr.v4.0.5 ssh://${USER}@vlab.ncep.noaa.gov:29418/EMC_hrrr
+
+
+* parm files changed
+   * parm/alaska/hrrr_gsiparm.anl.sh
+   * parm/alaska/hrrrak_gsiparm.anl.sh
+   * parm/conus/hrrr_gsiparm.anl.sh
+   * parm/hrrrdas/hrrr_process_enkf.anl
+
+* sorc files changed or added
+   * sorc/build_hrrr_gsi.sh
+   * sorc/hrrr_gsi.fd/CMakeLists.txt
+   * sorc/hrrr_gsi.fd/cmake/Modules/FindGSICONTROL.cmake
+   * sorc/hrrr_gsi.fd/cmake/Modules/FindHDF5.cmake
+   * sorc/hrrr_gsi.fd/cmake/Modules/FindIP.cmake
+   * sorc/hrrr_gsi.fd/cmake/Modules/FindNetCDF.cmake
+   * sorc/hrrr_gsi.fd/cmake/Modules/platforms/Hera.cmake
+   * sorc/hrrr_gsi.fd/cmake/Modules/platforms/Jet.cmake
+   * sorc/hrrr_gsi.fd/cmake/Modules/platforms/Orion.cmake
+   * sorc/hrrr_gsi.fd/cmake/Modules/platforms/WCOSS-D.cmake
+   * sorc/hrrr_gsi.fd/cmake/Modules/setIntelFlags.cmake
+   * sorc/hrrr_gsi.fd/libsrc/ip/*
+   * sorc/hrrr_gsi.fd/src/fv3gfs_ncio/*
+   * sorc/hrrr_gsi.fd/src/gsi/CMakeLists.txt
+   * sorc/hrrr_gsi.fd/src/gsi/general_read_gfsatm.f90
+   * sorc/hrrr_gsi.fd/src/gsi/get_gefs_for_regional.f90
+   * sorc/hrrr_gsi.fd/src/gsi/gridmod.F90
+   * sorc/hrrr_gsi.fd/src/gsi/gsimod.F90
+   * sorc/hrrr_gsi.fd/src/gsi/guess_grids.F90
+   * sorc/hrrr_gsi.fd/src/gsi/ncepnems_io.f90
+   * sorc/hrrr_gsi.fd/src/gsi/netcdfgfs_io.f90
+   * sorc/hrrr_gsi.fd/src/gsi/read_guess.F90
+   * sorc/hrrr_gsi.fd/src/gsi/setupdbz.f90
+   * sorc/hrrr_gsi.fd/util/EnKF/arw/src/enspreproc_regional.fd/CMakeLists.txt
+   * sorc/hrrr_gsi.fd/util/EnKF/arw/src/enspreproc_regional.fd/get_gefs_for_regional_enspro.f90
+   * sorc/hrrr_gsi.fd/util/EnKF/arw/src/enspreproc_regional.fd/gfsp2wrfg.f90
+
+* scripts files changed
+   * scripts/alaska/exhrrr_analysis.sh.ecf
+   * scripts/conus/exhrrr_analysis.sh.ecf
+   * scripts/hrrrdas/exhrrrdas_makebc.sh.ecf
+   * scripts/hrrrdas/exhrrrdas_prep_enkf.sh.ecf
+
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the new and updated sorc, scripts, and parm files
+   * Re-build the GSI, enkf, process_enkf, and initialens codes with the build_hrrr_gsi.sh script
+   * These changes should be implemented alongside GFSv16
+   * Note that HRRRv4.0.4 has also been submitted and will be implemented in November, so any changes made to v4.0.4 must also be incorporated into v4.0.5

@@ -1,0 +1,498 @@
+Tue Nov 20 16:37:26 EST 2012 ============# EM:: of Threads Requested 16
+
+
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     PROGRAM GLOBAL_CHGRES HAS BEGUN. COMPILED 1999253.56     ORG: NP23
+     STARTING DATE-TIME  NOV 20,2012  16:37:26.586  325  TUE   2456252
+
+
+ &NAMCHG
+ JCAP    =         574,
+ LEVS    =           0,
+ NTRAC   =           0,
+ LONB    =        1760,
+ LATB    =         880,
+ LONBI   =           0,
+ LATBI   =           0,
+ IDVC    =           0,
+ IDVM    =           0,
+ IDSL    =           0,
+ IGEN    =           0,
+ MGG     =           0,
+ MQUICK  =           0,
+ IDVT    =           0,
+ NCLDT   =           0,
+ LATCH   =           8,
+ LSOIL   =           2,
+ IVSSFC  =      200004,
+ IVSSIG  =           0,
+ NVCOORD =           0,
+ OUTTYP  =           2,
+ IDRT    =           4,
+ RI      = 21*0.000000000000000E+000  ,
+ CPI     = 21*0.000000000000000E+000  ,
+ IALB    =           0,
+ CHGQ0   =           0,
+ USE_UFO = F
+ /
+ CHGRES INPUT:  SPECTRAL SIGIO SIGMA FILE 
+ CHGRES OUTPUT: SIGIO SIGMA FILE
+  pdryinia=   98.26409    
+CHANGE SIGMA FILE RESOLUTION FROM  574 WAVES,   64 LEVELS, AND    3 TRACERS
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+                               TO  574 WAVES,   64 LEVELS, AND    3 TRACERS.
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+  USING A GAUSSIAN TRANSFORM GRID OF 1760 X  880
+  NEW OROGRAPHY READ IN
+  NEW MODEL LEVELS COPIED FROM OLD
+ omega time=   26.0000000000000     
+  sigheado%pdryini2=  0.0000000E+00
+
+
+     ENDING DATE-TIME    NOV 20,2012  16:39:09.155  325  TUE   2456252
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     1     1       0.022       0.022       0.022
+     2     1       1.138       1.138       1.138
+     3     1       0.036       0.036       0.036
+     4     1       0.000       0.000       0.000
+     5    55      20.771       0.351       0.704
+     6    55       0.018       0.000       0.001
+     7    55      37.910       0.647       0.765
+     8    55      11.971       0.190       0.270
+     9    55      29.927       0.513       0.592
+    10     1       0.770       0.770       0.770
+    11     0       0.000       0.000       0.000
+    12     0       0.000       0.000       0.000
+    13     0       0.000       0.000       0.000
+    14     0       0.000       0.000       0.000
+    15     1       0.000       0.000       0.000
+    16     1       0.001       0.001       0.001
+    17     0       0.000       0.000       0.000
+    18     0       0.000       0.000       0.000
+    19     0       0.000       0.000       0.000
+    20     0       0.000       0.000       0.000
+    21     0       0.000       0.000       0.000
+    22     0       0.000       0.000       0.000
+    23     0       0.000       0.000       0.000
+    24     0       0.000       0.000       0.000
+    25     0       0.000       0.000       0.000
+    26     0       0.000       0.000       0.000
+    27     0       0.000       0.000       0.000
+    28     0       0.000       0.000       0.000
+    29     0       0.000       0.000       0.000
+    30     0       0.000       0.000       0.000
+Tue Nov 20 16:39:09 EST 2012 ============# EM:: of Threads Requested 12
+
+
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     PROGRAM GLOBAL_CHGRES HAS BEGUN. COMPILED 1999253.56     ORG: NP23
+     STARTING DATE-TIME  NOV 20,2012  16:39:09.234  325  TUE   2456252
+
+
+ &NAMCHG
+ JCAP    =         574,
+ LEVS    =           0,
+ NTRAC   =           0,
+ LONB    =        1760,
+ LATB    =         880,
+ LONBI   =           0,
+ LATBI   =           0,
+ IDVC    =           0,
+ IDVM    =           0,
+ IDSL    =           0,
+ IGEN    =           0,
+ MGG     =           0,
+ MQUICK  =           0,
+ IDVT    =           0,
+ NCLDT   =           0,
+ LATCH   =           8,
+ LSOIL   =           2,
+ IVSSFC  =      200004,
+ IVSSIG  =           0,
+ NVCOORD =           0,
+ OUTTYP  =           2,
+ IDRT    =           4,
+ RI      = 21*0.000000000000000E+000  ,
+ CPI     = 21*0.000000000000000E+000  ,
+ IALB    =           0,
+ CHGQ0   =           0,
+ USE_UFO = F
+ /
+ CHGRES INPUT:  SPECTRAL SIGIO SIGMA FILE 
+ CHGRES OUTPUT: SIGIO SIGMA FILE
+  pdryinia=   98.26409    
+CHANGE SIGMA FILE RESOLUTION FROM  574 WAVES,   64 LEVELS, AND    3 TRACERS
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+                               TO  574 WAVES,   64 LEVELS, AND    3 TRACERS.
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+  USING A GAUSSIAN TRANSFORM GRID OF 1760 X  880
+  NEW OROGRAPHY READ IN
+  NEW MODEL LEVELS COPIED FROM OLD
+ omega time=   24.0000000000000     
+  sigheado%pdryini2=  0.0000000E+00
+
+
+     ENDING DATE-TIME    NOV 20,2012  16:40:48.243  325  TUE   2456252
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     1     1       0.023       0.023       0.023
+     2     1       1.121       1.121       1.121
+     3     1       0.035       0.035       0.035
+     4     1       0.000       0.000       0.000
+     5    55      21.487       0.380       0.729
+     6    55       0.014       0.000       0.001
+     7    55      37.448       0.667       0.703
+     8    55      12.731       0.206       0.246
+     9    55      25.479       0.452       0.506
+    10     1       0.659       0.659       0.659
+    11     0       0.000       0.000       0.000
+    12     0       0.000       0.000       0.000
+    13     0       0.000       0.000       0.000
+    14     0       0.000       0.000       0.000
+    15     1       0.001       0.001       0.001
+    16     1       0.000       0.000       0.000
+    17     0       0.000       0.000       0.000
+    18     0       0.000       0.000       0.000
+    19     0       0.000       0.000       0.000
+    20     0       0.000       0.000       0.000
+    21     0       0.000       0.000       0.000
+    22     0       0.000       0.000       0.000
+    23     0       0.000       0.000       0.000
+    24     0       0.000       0.000       0.000
+    25     0       0.000       0.000       0.000
+    26     0       0.000       0.000       0.000
+    27     0       0.000       0.000       0.000
+    28     0       0.000       0.000       0.000
+    29     0       0.000       0.000       0.000
+    30     0       0.000       0.000       0.000
+Tue Nov 20 16:40:48 EST 2012 ============# EM:: of Threads Requested 8
+
+
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     PROGRAM GLOBAL_CHGRES HAS BEGUN. COMPILED 1999253.56     ORG: NP23
+     STARTING DATE-TIME  NOV 20,2012  16:40:48.468  325  TUE   2456252
+
+
+ &NAMCHG
+ JCAP    =         574,
+ LEVS    =           0,
+ NTRAC   =           0,
+ LONB    =        1760,
+ LATB    =         880,
+ LONBI   =           0,
+ LATBI   =           0,
+ IDVC    =           0,
+ IDVM    =           0,
+ IDSL    =           0,
+ IGEN    =           0,
+ MGG     =           0,
+ MQUICK  =           0,
+ IDVT    =           0,
+ NCLDT   =           0,
+ LATCH   =           8,
+ LSOIL   =           2,
+ IVSSFC  =      200004,
+ IVSSIG  =           0,
+ NVCOORD =           0,
+ OUTTYP  =           2,
+ IDRT    =           4,
+ RI      = 21*0.000000000000000E+000  ,
+ CPI     = 21*0.000000000000000E+000  ,
+ IALB    =           0,
+ CHGQ0   =           0,
+ USE_UFO = F
+ /
+ CHGRES INPUT:  SPECTRAL SIGIO SIGMA FILE 
+ CHGRES OUTPUT: SIGIO SIGMA FILE
+  pdryinia=   98.26409    
+CHANGE SIGMA FILE RESOLUTION FROM  574 WAVES,   64 LEVELS, AND    3 TRACERS
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+                               TO  574 WAVES,   64 LEVELS, AND    3 TRACERS.
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+  USING A GAUSSIAN TRANSFORM GRID OF 1760 X  880
+  NEW OROGRAPHY READ IN
+  NEW MODEL LEVELS COPIED FROM OLD
+ omega time=   28.0000000000000     
+  sigheado%pdryini2=  0.0000000E+00
+
+
+     ENDING DATE-TIME    NOV 20,2012  16:42:35.544  325  TUE   2456252
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     1     1       0.023       0.023       0.023
+     2     1       1.118       1.118       1.118
+     3     1       0.035       0.035       0.035
+     4     1       0.000       0.000       0.000
+     5    55      24.742       0.436       0.842
+     6    55       0.018       0.000       0.001
+     7    55      40.267       0.709       0.749
+     8    55      13.219       0.231       0.248
+     9    55      26.915       0.474       0.502
+    10     1       0.732       0.732       0.732
+    11     0       0.000       0.000       0.000
+    12     0       0.000       0.000       0.000
+    13     0       0.000       0.000       0.000
+    14     0       0.000       0.000       0.000
+    15     1       0.001       0.001       0.001
+    16     1       0.000       0.000       0.000
+    17     0       0.000       0.000       0.000
+    18     0       0.000       0.000       0.000
+    19     0       0.000       0.000       0.000
+    20     0       0.000       0.000       0.000
+    21     0       0.000       0.000       0.000
+    22     0       0.000       0.000       0.000
+    23     0       0.000       0.000       0.000
+    24     0       0.000       0.000       0.000
+    25     0       0.000       0.000       0.000
+    26     0       0.000       0.000       0.000
+    27     0       0.000       0.000       0.000
+    28     0       0.000       0.000       0.000
+    29     0       0.000       0.000       0.000
+    30     0       0.000       0.000       0.000
+Tue Nov 20 16:42:35 EST 2012 ============# EM:: of Threads Requested 4
+
+
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     PROGRAM GLOBAL_CHGRES HAS BEGUN. COMPILED 1999253.56     ORG: NP23
+     STARTING DATE-TIME  NOV 20,2012  16:42:35.693  325  TUE   2456252
+
+
+ &NAMCHG
+ JCAP    =         574,
+ LEVS    =           0,
+ NTRAC   =           0,
+ LONB    =        1760,
+ LATB    =         880,
+ LONBI   =           0,
+ LATBI   =           0,
+ IDVC    =           0,
+ IDVM    =           0,
+ IDSL    =           0,
+ IGEN    =           0,
+ MGG     =           0,
+ MQUICK  =           0,
+ IDVT    =           0,
+ NCLDT   =           0,
+ LATCH   =           8,
+ LSOIL   =           2,
+ IVSSFC  =      200004,
+ IVSSIG  =           0,
+ NVCOORD =           0,
+ OUTTYP  =           2,
+ IDRT    =           4,
+ RI      = 21*0.000000000000000E+000  ,
+ CPI     = 21*0.000000000000000E+000  ,
+ IALB    =           0,
+ CHGQ0   =           0,
+ USE_UFO = F
+ /
+ CHGRES INPUT:  SPECTRAL SIGIO SIGMA FILE 
+ CHGRES OUTPUT: SIGIO SIGMA FILE
+  pdryinia=   98.26409    
+CHANGE SIGMA FILE RESOLUTION FROM  574 WAVES,   64 LEVELS, AND    3 TRACERS
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+                               TO  574 WAVES,   64 LEVELS, AND    3 TRACERS.
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+  USING A GAUSSIAN TRANSFORM GRID OF 1760 X  880
+  NEW OROGRAPHY READ IN
+  NEW MODEL LEVELS COPIED FROM OLD
+ omega time=   42.0000000000000     
+  sigheado%pdryini2=  0.0000000E+00
+
+
+     ENDING DATE-TIME    NOV 20,2012  16:45:02.174  325  TUE   2456252
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     1     1       0.022       0.022       0.022
+     2     1       1.114       1.114       1.114
+     3     1       0.036       0.036       0.036
+     4     1       0.000       0.000       0.000
+     5    55      38.062       0.672       1.009
+     6    55       0.015       0.000       0.001
+     7    55      52.925       0.916       1.017
+     8    55      18.673       0.311       0.373
+     9    55      34.956       0.615       0.858
+    10     1       0.676       0.676       0.676
+    11     0       0.000       0.000       0.000
+    12     0       0.000       0.000       0.000
+    13     0       0.000       0.000       0.000
+    14     0       0.000       0.000       0.000
+    15     1       0.000       0.000       0.000
+    16     1       0.000       0.000       0.000
+    17     0       0.000       0.000       0.000
+    18     0       0.000       0.000       0.000
+    19     0       0.000       0.000       0.000
+    20     0       0.000       0.000       0.000
+    21     0       0.000       0.000       0.000
+    22     0       0.000       0.000       0.000
+    23     0       0.000       0.000       0.000
+    24     0       0.000       0.000       0.000
+    25     0       0.000       0.000       0.000
+    26     0       0.000       0.000       0.000
+    27     0       0.000       0.000       0.000
+    28     0       0.000       0.000       0.000
+    29     0       0.000       0.000       0.000
+    30     0       0.000       0.000       0.000
+Tue Nov 20 16:45:02 EST 2012 ============# EM:: of Threads Requested 2
+
+
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     PROGRAM GLOBAL_CHGRES HAS BEGUN. COMPILED 1999253.56     ORG: NP23
+     STARTING DATE-TIME  NOV 20,2012  16:45:02.355  325  TUE   2456252
+
+
+ &NAMCHG
+ JCAP    =         574,
+ LEVS    =           0,
+ NTRAC   =           0,
+ LONB    =        1760,
+ LATB    =         880,
+ LONBI   =           0,
+ LATBI   =           0,
+ IDVC    =           0,
+ IDVM    =           0,
+ IDSL    =           0,
+ IGEN    =           0,
+ MGG     =           0,
+ MQUICK  =           0,
+ IDVT    =           0,
+ NCLDT   =           0,
+ LATCH   =           8,
+ LSOIL   =           2,
+ IVSSFC  =      200004,
+ IVSSIG  =           0,
+ NVCOORD =           0,
+ OUTTYP  =           2,
+ IDRT    =           4,
+ RI      = 21*0.000000000000000E+000  ,
+ CPI     = 21*0.000000000000000E+000  ,
+ IALB    =           0,
+ CHGQ0   =           0,
+ USE_UFO = F
+ /
+ CHGRES INPUT:  SPECTRAL SIGIO SIGMA FILE 
+ CHGRES OUTPUT: SIGIO SIGMA FILE
+  pdryinia=   98.26409    
+CHANGE SIGMA FILE RESOLUTION FROM  574 WAVES,   64 LEVELS, AND    3 TRACERS
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+                               TO  574 WAVES,   64 LEVELS, AND    3 TRACERS.
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+  USING A GAUSSIAN TRANSFORM GRID OF 1760 X  880
+  NEW OROGRAPHY READ IN
+  NEW MODEL LEVELS COPIED FROM OLD
+ omega time=   67.0000000000000     
+  sigheado%pdryini2=  0.0000000E+00
+
+
+     ENDING DATE-TIME    NOV 20,2012  16:49:01.804  325  TUE   2456252
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     1     1       0.022       0.022       0.022
+     2     1       1.134       1.134       1.134
+     3     1       0.035       0.035       0.035
+     4     1       0.000       0.000       0.000
+     5    55      66.864       1.160       1.511
+     6    55       0.013       0.000       0.001
+     7    55      81.672       1.334       1.507
+     8    55      31.793       0.483       0.606
+     9    55      57.125       0.993       1.053
+    10     1       0.782       0.782       0.782
+    11     0       0.000       0.000       0.000
+    12     0       0.000       0.000       0.000
+    13     0       0.000       0.000       0.000
+    14     0       0.000       0.000       0.000
+    15     1       0.000       0.000       0.000
+    16     1       0.000       0.000       0.000
+    17     0       0.000       0.000       0.000
+    18     0       0.000       0.000       0.000
+    19     0       0.000       0.000       0.000
+    20     0       0.000       0.000       0.000
+    21     0       0.000       0.000       0.000
+    22     0       0.000       0.000       0.000
+    23     0       0.000       0.000       0.000
+    24     0       0.000       0.000       0.000
+    25     0       0.000       0.000       0.000
+    26     0       0.000       0.000       0.000
+    27     0       0.000       0.000       0.000
+    28     0       0.000       0.000       0.000
+    29     0       0.000       0.000       0.000
+    30     0       0.000       0.000       0.000
+Tue Nov 20 16:49:02 EST 2012 ============# EM:: of Threads Requested 1
+
+
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     PROGRAM GLOBAL_CHGRES HAS BEGUN. COMPILED 1999253.56     ORG: NP23
+     STARTING DATE-TIME  NOV 20,2012  16:49:02.051  325  TUE   2456252
+
+
+ &NAMCHG
+ JCAP    =         574,
+ LEVS    =           0,
+ NTRAC   =           0,
+ LONB    =        1760,
+ LATB    =         880,
+ LONBI   =           0,
+ LATBI   =           0,
+ IDVC    =           0,
+ IDVM    =           0,
+ IDSL    =           0,
+ IGEN    =           0,
+ MGG     =           0,
+ MQUICK  =           0,
+ IDVT    =           0,
+ NCLDT   =           0,
+ LATCH   =           8,
+ LSOIL   =           2,
+ IVSSFC  =      200004,
+ IVSSIG  =           0,
+ NVCOORD =           0,
+ OUTTYP  =           2,
+ IDRT    =           4,
+ RI      = 21*0.000000000000000E+000  ,
+ CPI     = 21*0.000000000000000E+000  ,
+ IALB    =           0,
+ CHGQ0   =           0,
+ USE_UFO = F
+ /
+ CHGRES INPUT:  SPECTRAL SIGIO SIGMA FILE 
+ CHGRES OUTPUT: SIGIO SIGMA FILE
+  pdryinia=   98.26409    
+CHANGE SIGMA FILE RESOLUTION FROM  574 WAVES,   64 LEVELS, AND    3 TRACERS
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+                               TO  574 WAVES,   64 LEVELS, AND    3 TRACERS.
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+  USING A GAUSSIAN TRANSFORM GRID OF 1760 X  880
+  NEW OROGRAPHY READ IN
+  NEW MODEL LEVELS COPIED FROM OLD
+ omega time=   115.000000000000     
+  sigheado%pdryini2=  0.0000000E+00
+
+
+     ENDING DATE-TIME    NOV 20,2012  16:55:40.301  325  TUE   2456252
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     1     1       0.022       0.022       0.022
+     2     1       1.120       1.120       1.120
+     3     1       0.036       0.036       0.036
+     4     1       0.000       0.000       0.000
+     5    55     120.220       2.169       2.516
+     6    55       0.012       0.000       0.001
+     7    55     129.849       2.213       2.418
+     8    55      47.112       0.850       0.865
+     9    55      99.017       1.792       1.810
+    10     1       0.852       0.852       0.852
+    11     0       0.000       0.000       0.000
+    12     0       0.000       0.000       0.000
+    13     0       0.000       0.000       0.000
+    14     0       0.000       0.000       0.000
+    15     1       0.000       0.000       0.000
+    16     1       0.000       0.000       0.000
+    17     0       0.000       0.000       0.000
+    18     0       0.000       0.000       0.000
+    19     0       0.000       0.000       0.000
+    20     0       0.000       0.000       0.000
+    21     0       0.000       0.000       0.000
+    22     0       0.000       0.000       0.000
+    23     0       0.000       0.000       0.000
+    24     0       0.000       0.000       0.000
+    25     0       0.000       0.000       0.000
+    26     0       0.000       0.000       0.000
+    27     0       0.000       0.000       0.000
+    28     0       0.000       0.000       0.000
+    29     0       0.000       0.000       0.000
+    30     0       0.000       0.000       0.000

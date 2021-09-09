@@ -1,0 +1,60 @@
+#!/bin/ksh
+#--------------------------------------------------------------------
+# Example #1: convert a t384 file with 4 soil layers and noah lsm
+# physics and NO landice, to a 384 file with 2 soil layers and
+# osu lsm physics (and no landice).
+#--------------------------------------------------------------------
+export CLIMO_FIELDS_OPT=3
+export LANDICE_OPT=3
+export IVSSFC=200004
+export LSOIL=2
+export SIGINP=/gpfs/td1/global/noscrub/Shrinivas.Moorthi/data/siganl.gfs.2012102300
+export SFCOUT=sfc.out
+export DATA=/gpfs/td1/meso/save/Eugene.Mirvis/SP_debug/WCOSS/utest/global_chgres_lst
+export MYTHREADS=16
+/meso/save/Eugene.Mirvis/SP_debug/WCOSS/utest/global_chgres_lst/global_chgres.sh  /gpfs/td1/global/noscrub/Shrinivas.Moorthi/data/siganl.gfs.2012102300 \
+                   ./t384.sfc.input.file \
+                    out_one_384-384 \
+                   ./t384.sfc.output.file  \
+                    384 0 768 384 
+export MYTHREADS=12
+/meso/save/Eugene.Mirvis/SP_debug/WCOSS/utest/global_chgres_lst/global_chgres.sh  /gpfs/td1/global/noscrub/Shrinivas.Moorthi/data/siganl.gfs.2012102300 \
+                   ./t384.sfc.input.file \
+                    out_one_384-384 \
+                   ./t384.sfc.output.file  \
+                      384 0 768 384 
+export MYTHREADS=8
+/meso/save/Eugene.Mirvis/SP_debug/WCOSS/utest/global_chgres_lst/global_chgres.sh  /gpfs/td1/global/noscrub/Shrinivas.Moorthi/data/siganl.gfs.2012102300 \
+                   ./t384.sfc.input.file \
+                    out_one_384-384 \
+                   ./t384.sfc.output.file  \
+                      384 0 768 384 
+export MYTHREADS=4
+/meso/save/Eugene.Mirvis/SP_debug/WCOSS/utest/global_chgres_lst/global_chgres.sh  /gpfs/td1/global/noscrub/Shrinivas.Moorthi/data/siganl.gfs.2012102300 \
+                   ./t384.sfc.input.file \
+                    out_one_384-384 \
+                   ./t384.sfc.output.file  \
+                      384 0 768 384
+export MYTHREADS=2
+/meso/save/Eugene.Mirvis/SP_debug/WCOSS/utest/global_chgres_lst/global_chgres.sh  /gpfs/td1/global/noscrub/Shrinivas.Moorthi/data/siganl.gfs.2012102300 \
+                   ./t384.sfc.input.file \
+                    out_one_384-384 \
+                   ./t384.sfc.output.file  \
+                      384 0 768 384 
+export MYTHREADS=1
+/meso/save/Eugene.Mirvis/SP_debug/WCOSS/utest/global_chgres_lst/global_chgres.sh  /gpfs/td1/global/noscrub/Shrinivas.Moorthi/data/siganl.gfs.2012102300 \
+                   ./t384.sfc.input.file \
+                    out_one_384_384 \
+                   ./t384.sfc.output.file  \
+                      384 0 768 384
+#			384 0 1152 576
+#                      384 0 768 384
+#                       384 0 768 384
+#                         384 0 768 384
+#                       384 0 1152 576
+#                        384 0 384 384
+#                        384 0 1800 384
+# 			384 0 1152 576
+#			384 0 768 384
+#			384 0 768 384
+

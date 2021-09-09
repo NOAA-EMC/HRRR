@@ -1,0 +1,28 @@
+#!/bin/sh
+set -x
+export LIBDIR=/nwprod/lib
+export FCMP=${1:-ifort}
+export FCMP95=${2:-${FCMP}}
+
+  export INCS="-I $LIBDIR/incmod/sfcio_4"
+
+export LIBS="-L/nwprod/lib -lsigio_4 -L$LIBDIR -lsfcio_4 -llandsfcutil_d -lip_d -lgfsio_4 -lbacio_4 -lw3emc_d -lw3nco_d -lnemsio /gpfs/td1/meso/save/Eugene.Mirvis/SP_debug/WCOSS/lib_nwprod/libsp_d.a"
+if [ $FCMP = xlf_r ] ; then
+ export FFLAGSM=" -qnodbg -qrealsize=8 -qnosave -qsmp=noauto:omp -O3 -qmaxmem=-1"
+ export FFLAGS2M=" -qnodbg -qrealsize=8 -qnosave -qsmp=noauto:omp -O3 -qmaxmem=-1"
+ export LIBFLAGSM="-lessl "
+ export OMPFLAGM=
+ export RECURS=
+else
+
+ export FFLAGSM=" -g -debug -i4 -O3 -r8 -xHOST -convert big_endian -traceback"
+ export FFLAGS2M=" -g -debug -i4 -O3 -r8 -xHOST -convert big_endian -traceback -FR"
+
+ export RECURS=
+
+ export LIBFLAGSM=" "
+ export LDFLAGSM="-openmp"
+ export OMPFLAGM="-openmp -auto"
+fi
+make -f Makefile
+#make -f Makefile2

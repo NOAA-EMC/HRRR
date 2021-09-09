@@ -1,0 +1,14 @@
+Geogrid for RAP:
+1. Run geogrid.exe with the namelist.wps.rap
+2. Joe runs topography smoother.
+3. Stan runs the Great Lake removal.
+4. Add extra fields for GSD's GWD (Mike Toy) to the ready geo_em.d01.xxx.nc file:
+ncks -A -v CON,VAR,OA1,OA2,OA3,OA4,OL1,OL2,OL3,OL4,CONSS,VARSS,OA1SS,OA2SS,OA3SS,OA4SS,OL1SS,OL2SS,OL3SS,OL4SS GWD_mdt_10newfields.RAP.nc geo_em.d01.xxx.nc
+
+Geogrid for HRRR:
+1. Run geogrid.exe with the namelist.wps.rap
+2. Tanya runs correction for the Great Salt Lake.
+3. Stan runs the Great Lake removal.
+4. Add extra fields for GSD's GWD (Mike Toy) to the ready geo_em.d01.xxx.nc file:
+   ncks -A -v CON,VAR,OA1,OA2,OA3,OA4,OL1,OL2,OL3,OL4,CONSS,VARSS,OA1SS,OA2SS,OA3SS,OA4SS,OL1SS,OL2SS,OL3SS,OL4SS GWD_mdt_10newfields.HRRR.nc geo_em.d01.xxx.nc
+

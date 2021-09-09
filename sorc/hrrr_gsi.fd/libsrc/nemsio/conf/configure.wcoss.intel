@@ -1,0 +1,9 @@
+SHELL       = /bin/sh
+
+FC          = mpiifort
+FFLAGS      = -O -g 
+
+AR          = ar
+ARFLAGS     = -rvu
+
+RM          = rm

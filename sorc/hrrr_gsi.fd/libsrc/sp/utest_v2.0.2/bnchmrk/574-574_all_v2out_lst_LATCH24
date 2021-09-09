@@ -1,0 +1,442 @@
+Wed Nov 28 18:10:55 EST 2012 ============# EM:: of Threads Requested 16
+
+
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     PROGRAM GLOBAL_CHGRES HAS BEGUN. COMPILED 1999253.56     ORG: NP23
+     STARTING DATE-TIME  NOV 28,2012  18:10:55.327  333  WEN   2456260
+
+
+ &NAMCHG
+ JCAP    =         574,
+ LEVS    =           0,
+ NTRAC   =           0,
+ LONB    =        1760,
+ LATB    =         880,
+ LONBI   =           0,
+ LATBI   =           0,
+ IDVC    =           0,
+ IDVM    =           0,
+ IDSL    =           0,
+ IGEN    =           0,
+ MGG     =           0,
+ MQUICK  =           0,
+ IDVT    =           0,
+ NCLDT   =           0,
+ LATCH   =          24,
+ LSOIL   =           2,
+ IVSSFC  =      200004,
+ IVSSIG  =           0,
+ NVCOORD =           0,
+ OUTTYP  =           2,
+ IDRT    =           4,
+ RI      = 21*0.000000000000000E+000  ,
+ CPI     = 21*0.000000000000000E+000  ,
+ IALB    =           0,
+ CHGQ0   =           0,
+ USE_UFO = F
+ /
+ CHGRES INPUT:  SPECTRAL SIGIO SIGMA FILE 
+ CHGRES OUTPUT: SIGIO SIGMA FILE
+  pdryinia=   98.26409    
+CHANGE SIGMA FILE RESOLUTION FROM  574 WAVES,   64 LEVELS, AND    3 TRACERS
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+                               TO  574 WAVES,   64 LEVELS, AND    3 TRACERS.
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+  USING A GAUSSIAN TRANSFORM GRID OF 1760 X  880
+  NEW OROGRAPHY READ IN
+  NEW MODEL LEVELS COPIED FROM OLD
+ omega time=   23.0000000000000     
+  sigheado%pdryini2=  0.0000000E+00
+
+
+     ENDING DATE-TIME    NOV 28,2012  18:12:35.848  333  WEN   2456260
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     1     1       0.070       0.070       0.070
+     2     1       1.211       1.211       1.211
+     3     1       0.067       0.067       0.067
+     4     1       0.000       0.000       0.000
+     5    19      20.128       0.475       1.590
+     6    19       0.015       0.000       0.001
+     7    19      36.854       0.750       2.081
+     8    19      15.597       0.280       0.929
+     9    19      25.776       0.583       1.536
+    10     1       0.760       0.760       0.760
+    11     0       0.000       0.000       0.000
+    12     0       0.000       0.000       0.000
+    13     0       0.000       0.000       0.000
+    14     0       0.000       0.000       0.000
+    15     1       0.040       0.040       0.040
+    16     1       0.000       0.000       0.000
+    17     0       0.000       0.000       0.000
+    18     0       0.000       0.000       0.000
+    19     0       0.000       0.000       0.000
+    20     0       0.000       0.000       0.000
+    21     0       0.000       0.000       0.000
+    22     0       0.000       0.000       0.000
+    23     0       0.000       0.000       0.000
+    24     0       0.000       0.000       0.000
+    25     0       0.000       0.000       0.000
+    26     0       0.000       0.000       0.000
+    27     0       0.000       0.000       0.000
+    28     0       0.000       0.000       0.000
+    29     0       0.000       0.000       0.000
+    30     0       0.000       0.000       0.000
+*****************RESOURCE STATISTICS*******************************
+The total amount of wall time                        = 100.521391
+The total amount of time in user mode                = 1045.608043
+The total amount of time in sys mode                 = 21.282764
+The maximum resident set size (KB)                   = 4439056
+Number of page faults without I/O activity           = 15605
+Number of page faults with I/O activity              = 0
+Number of times filesystem performed INPUT           = 0
+Number of times filesystem performed OUTPUT          = 0
+Number of Voluntary Context Switches                 = 5280
+Number of InVoluntary Context Switches               = 278854
+*****************END OF RESOURCE STATISTICS*************************
+
+Wed Nov 28 18:12:36 EST 2012 ====AFTER========# EM:: of Threads Requested 16
+Wed Nov 28 18:12:36 EST 2012 ============# EM:: of Threads Requested 12
+
+
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     PROGRAM GLOBAL_CHGRES HAS BEGUN. COMPILED 1999253.56     ORG: NP23
+     STARTING DATE-TIME  NOV 28,2012  18:12:36.135  333  WEN   2456260
+
+
+ &NAMCHG
+ JCAP    =         574,
+ LEVS    =           0,
+ NTRAC   =           0,
+ LONB    =        1760,
+ LATB    =         880,
+ LONBI   =           0,
+ LATBI   =           0,
+ IDVC    =           0,
+ IDVM    =           0,
+ IDSL    =           0,
+ IGEN    =           0,
+ MGG     =           0,
+ MQUICK  =           0,
+ IDVT    =           0,
+ NCLDT   =           0,
+ LATCH   =          24,
+ LSOIL   =           2,
+ IVSSFC  =      200004,
+ IVSSIG  =           0,
+ NVCOORD =           0,
+ OUTTYP  =           2,
+ IDRT    =           4,
+ RI      = 21*0.000000000000000E+000  ,
+ CPI     = 21*0.000000000000000E+000  ,
+ IALB    =           0,
+ CHGQ0   =           0,
+ USE_UFO = F
+ /
+ CHGRES INPUT:  SPECTRAL SIGIO SIGMA FILE 
+ CHGRES OUTPUT: SIGIO SIGMA FILE
+  pdryinia=   98.26409    
+CHANGE SIGMA FILE RESOLUTION FROM  574 WAVES,   64 LEVELS, AND    3 TRACERS
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+                               TO  574 WAVES,   64 LEVELS, AND    3 TRACERS.
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+  USING A GAUSSIAN TRANSFORM GRID OF 1760 X  880
+  NEW OROGRAPHY READ IN
+  NEW MODEL LEVELS COPIED FROM OLD
+ omega time=   28.0000000000000     
+  sigheado%pdryini2=  0.0000000E+00
+
+
+     ENDING DATE-TIME    NOV 28,2012  18:14:37.414  333  WEN   2456260
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     1     1       0.022       0.022       0.022
+     2     1       1.142       1.142       1.142
+     3     1       0.037       0.037       0.037
+     4     1       0.000       0.000       0.000
+     5    19      26.264       0.613       1.648
+     6    19       0.018       0.000       0.002
+     7    19      40.535       0.862       2.388
+     8    19      16.996       0.278       1.102
+     9    19      35.461       0.873       2.431
+    10     1       0.784       0.784       0.784
+    11     0       0.000       0.000       0.000
+    12     0       0.000       0.000       0.000
+    13     0       0.000       0.000       0.000
+    14     0       0.000       0.000       0.000
+    15     1       0.016       0.016       0.016
+    16     1       0.000       0.000       0.000
+    17     0       0.000       0.000       0.000
+    18     0       0.000       0.000       0.000
+    19     0       0.000       0.000       0.000
+    20     0       0.000       0.000       0.000
+    21     0       0.000       0.000       0.000
+    22     0       0.000       0.000       0.000
+    23     0       0.000       0.000       0.000
+    24     0       0.000       0.000       0.000
+    25     0       0.000       0.000       0.000
+    26     0       0.000       0.000       0.000
+    27     0       0.000       0.000       0.000
+    28     0       0.000       0.000       0.000
+    29     0       0.000       0.000       0.000
+    30     0       0.000       0.000       0.000
+*****************RESOURCE STATISTICS*******************************
+The total amount of wall time                        = 121.278532
+The total amount of time in user mode                = 961.786786
+The total amount of time in sys mode                 = 12.860044
+The maximum resident set size (KB)                   = 4281008
+Number of page faults without I/O activity           = 14861
+Number of page faults with I/O activity              = 0
+Number of times filesystem performed INPUT           = 0
+Number of times filesystem performed OUTPUT          = 0
+Number of Voluntary Context Switches                 = 3176
+Number of InVoluntary Context Switches               = 75686
+*****************END OF RESOURCE STATISTICS*************************
+
+Wed Nov 28 18:14:37 EST 2012 ====AFTER========# EM:: of Threads Requested 12
+Wed Nov 28 18:14:37 EST 2012 ============# EM:: of Threads Requested 10
+
+
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     PROGRAM GLOBAL_CHGRES HAS BEGUN. COMPILED 1999253.56     ORG: NP23
+     STARTING DATE-TIME  NOV 28,2012  18:14:37.767  333  WEN   2456260
+
+
+ &NAMCHG
+ JCAP    =         574,
+ LEVS    =           0,
+ NTRAC   =           0,
+ LONB    =        1760,
+ LATB    =         880,
+ LONBI   =           0,
+ LATBI   =           0,
+ IDVC    =           0,
+ IDVM    =           0,
+ IDSL    =           0,
+ IGEN    =           0,
+ MGG     =           0,
+ MQUICK  =           0,
+ IDVT    =           0,
+ NCLDT   =           0,
+ LATCH   =          24,
+ LSOIL   =           2,
+ IVSSFC  =      200004,
+ IVSSIG  =           0,
+ NVCOORD =           0,
+ OUTTYP  =           2,
+ IDRT    =           4,
+ RI      = 21*0.000000000000000E+000  ,
+ CPI     = 21*0.000000000000000E+000  ,
+ IALB    =           0,
+ CHGQ0   =           0,
+ USE_UFO = F
+ /
+ CHGRES INPUT:  SPECTRAL SIGIO SIGMA FILE 
+ CHGRES OUTPUT: SIGIO SIGMA FILE
+  pdryinia=   98.26409    
+CHANGE SIGMA FILE RESOLUTION FROM  574 WAVES,   64 LEVELS, AND    3 TRACERS
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+                               TO  574 WAVES,   64 LEVELS, AND    3 TRACERS.
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+  USING A GAUSSIAN TRANSFORM GRID OF 1760 X  880
+  NEW OROGRAPHY READ IN
+  NEW MODEL LEVELS COPIED FROM OLD
+ omega time=   23.0000000000000     
+  sigheado%pdryini2=  0.0000000E+00
+
+
+     ENDING DATE-TIME    NOV 28,2012  18:16:32.589  333  WEN   2456260
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     1     1       0.022       0.022       0.022
+     2     1       1.143       1.143       1.143
+     3     1       0.038       0.038       0.038
+     4     1       0.000       0.000       0.000
+     5    19      24.421       0.466       1.601
+     6    19       0.019       0.000       0.002
+     7    19      40.981       0.796       2.651
+     8    19      17.492       0.281       1.140
+     9    19      29.891       0.575       1.944
+    10     1       0.775       0.775       0.775
+    11     0       0.000       0.000       0.000
+    12     0       0.000       0.000       0.000
+    13     0       0.000       0.000       0.000
+    14     0       0.000       0.000       0.000
+    15     1       0.035       0.035       0.035
+    16     1       0.000       0.000       0.000
+    17     0       0.000       0.000       0.000
+    18     0       0.000       0.000       0.000
+    19     0       0.000       0.000       0.000
+    20     0       0.000       0.000       0.000
+    21     0       0.000       0.000       0.000
+    22     0       0.000       0.000       0.000
+    23     0       0.000       0.000       0.000
+    24     0       0.000       0.000       0.000
+    25     0       0.000       0.000       0.000
+    26     0       0.000       0.000       0.000
+    27     0       0.000       0.000       0.000
+    28     0       0.000       0.000       0.000
+    29     0       0.000       0.000       0.000
+    30     0       0.000       0.000       0.000
+*****************RESOURCE STATISTICS*******************************
+The total amount of wall time                        = 114.821594
+The total amount of time in user mode                = 769.439027
+The total amount of time in sys mode                 = 10.987329
+The maximum resident set size (KB)                   = 4201652
+Number of page faults without I/O activity           = 12239
+Number of page faults with I/O activity              = 0
+Number of times filesystem performed INPUT           = 0
+Number of times filesystem performed OUTPUT          = 0
+Number of Voluntary Context Switches                 = 2855
+Number of InVoluntary Context Switches               = 82162
+*****************END OF RESOURCE STATISTICS*************************
+
+Wed Nov 28 18:16:32 EST 2012 ====AFTER========# EM:: of Threads Requested 10
+Wed Nov 28 18:16:32 EST 2012 ============# EM:: of Threads Requested 8
+
+
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     PROGRAM GLOBAL_CHGRES HAS BEGUN. COMPILED 1999253.56     ORG: NP23
+     STARTING DATE-TIME  NOV 28,2012  18:16:32.986  333  WEN   2456260
+
+
+ &NAMCHG
+ JCAP    =         574,
+ LEVS    =           0,
+ NTRAC   =           0,
+ LONB    =        1760,
+ LATB    =         880,
+ LONBI   =           0,
+ LATBI   =           0,
+ IDVC    =           0,
+ IDVM    =           0,
+ IDSL    =           0,
+ IGEN    =           0,
+ MGG     =           0,
+ MQUICK  =           0,
+ IDVT    =           0,
+ NCLDT   =           0,
+ LATCH   =          24,
+ LSOIL   =           2,
+ IVSSFC  =      200004,
+ IVSSIG  =           0,
+ NVCOORD =           0,
+ OUTTYP  =           2,
+ IDRT    =           4,
+ RI      = 21*0.000000000000000E+000  ,
+ CPI     = 21*0.000000000000000E+000  ,
+ IALB    =           0,
+ CHGQ0   =           0,
+ USE_UFO = F
+ /
+ CHGRES INPUT:  SPECTRAL SIGIO SIGMA FILE 
+ CHGRES OUTPUT: SIGIO SIGMA FILE
+  pdryinia=   98.26409    
+CHANGE SIGMA FILE RESOLUTION FROM  574 WAVES,   64 LEVELS, AND    3 TRACERS
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+                               TO  574 WAVES,   64 LEVELS, AND    3 TRACERS.
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+  USING A GAUSSIAN TRANSFORM GRID OF 1760 X  880
+  NEW OROGRAPHY READ IN
+  NEW MODEL LEVELS COPIED FROM OLD
+ omega time=   29.0000000000000     
+  sigheado%pdryini2=  0.0000000E+00
+
+
+     ENDING DATE-TIME    NOV 28,2012  18:18:30.076  333  WEN   2456260
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     1     1       0.023       0.023       0.023
+     2     1       1.124       1.124       1.124
+     3     1       0.036       0.036       0.036
+     4     1       0.000       0.000       0.000
+     5    19      26.679       0.688       2.002
+     6    19       0.016       0.000       0.002
+     7    19      40.188       0.949       2.538
+     8    19      16.921       0.370       1.041
+     9    19      31.302       1.081       2.811
+    10     1       0.786       0.786       0.786
+    11     0       0.000       0.000       0.000
+    12     0       0.000       0.000       0.000
+    13     0       0.000       0.000       0.000
+    14     0       0.000       0.000       0.000
+    15     1       0.015       0.015       0.015
+    16     1       0.000       0.000       0.000
+    17     0       0.000       0.000       0.000
+    18     0       0.000       0.000       0.000
+    19     0       0.000       0.000       0.000
+    20     0       0.000       0.000       0.000
+    21     0       0.000       0.000       0.000
+    22     0       0.000       0.000       0.000
+    23     0       0.000       0.000       0.000
+    24     0       0.000       0.000       0.000
+    25     0       0.000       0.000       0.000
+    26     0       0.000       0.000       0.000
+    27     0       0.000       0.000       0.000
+    28     0       0.000       0.000       0.000
+    29     0       0.000       0.000       0.000
+    30     0       0.000       0.000       0.000
+*****************RESOURCE STATISTICS*******************************
+The total amount of wall time                        = 117.089859
+The total amount of time in user mode                = 684.501939
+The total amount of time in sys mode                 = 7.679832
+The maximum resident set size (KB)                   = 4120584
+Number of page faults without I/O activity           = 12905
+Number of page faults with I/O activity              = 0
+Number of times filesystem performed INPUT           = 0
+Number of times filesystem performed OUTPUT          = 0
+Number of Voluntary Context Switches                 = 2140
+Number of InVoluntary Context Switches               = 17065
+*****************END OF RESOURCE STATISTICS*************************
+
+Wed Nov 28 18:18:30 EST 2012 ====AFTER========# EM:: of Threads Requested 8
+Wed Nov 28 18:18:30 EST 2012 ============# EM:: of Threads Requested 6
+
+
+* . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . * . 
+     PROGRAM GLOBAL_CHGRES HAS BEGUN. COMPILED 1999253.56     ORG: NP23
+     STARTING DATE-TIME  NOV 28,2012  18:18:30.611  333  WEN   2456260
+
+
+ &NAMCHG
+ JCAP    =         574,
+ LEVS    =           0,
+ NTRAC   =           0,
+ LONB    =        1760,
+ LATB    =         880,
+ LONBI   =           0,
+ LATBI   =           0,
+ IDVC    =           0,
+ IDVM    =           0,
+ IDSL    =           0,
+ IGEN    =           0,
+ MGG     =           0,
+ MQUICK  =           0,
+ IDVT    =           0,
+ NCLDT   =           0,
+ LATCH   =          24,
+ LSOIL   =           2,
+ IVSSFC  =      200004,
+ IVSSIG  =           0,
+ NVCOORD =           0,
+ OUTTYP  =           2,
+ IDRT    =           4,
+ RI      = 21*0.000000000000000E+000  ,
+ CPI     = 21*0.000000000000000E+000  ,
+ IALB    =           0,
+ CHGQ0   =           0,
+ USE_UFO = F
+ /
+ CHGRES INPUT:  SPECTRAL SIGIO SIGMA FILE 
+ CHGRES OUTPUT: SIGIO SIGMA FILE
+  pdryinia=   98.26409    
+CHANGE SIGMA FILE RESOLUTION FROM  574 WAVES,   64 LEVELS, AND    3 TRACERS
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+                               TO  574 WAVES,   64 LEVELS, AND    3 TRACERS.
+                                   IVS=198410 IDVC= 2 NVCOORD= 2  IDVM= 0
+  USING A GAUSSIAN TRANSFORM GRID OF 1760 X  880
+  NEW OROGRAPHY READ IN
+  NEW MODEL LEVELS COPIED FROM OLD
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+global_chgres      0000000000676C93  Unknown               Unknown  Unknown
+global_chgres      0000000000674598  Unknown               Unknown  Unknown
+global_chgres      0000000000663365  Unknown               Unknown  Unknown
+libiomp5.so        00002BA77717B0D3  Unknown               Unknown  Unknown
+====AFTER========# EM:: of Threads Requested 

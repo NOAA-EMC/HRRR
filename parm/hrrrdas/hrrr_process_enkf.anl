@@ -1,0 +1,20 @@
+
+ &SETUP
+  regional=.true. ,
+  wrf_mass_regional=.true. ,
+  wrf_mass_hybridcord = .true. ,
+  diagnostic_reg=.true. ,
+  switch_on_derivatives=.false. ,
+  tendsflag=.false. ,
+  nfldsig=1 ,
+  grid_ratio_ens=1,
+  n_ens=36,
+  grid_ratio_wrfmass=1,
+  enpert4arw=.true.,
+  wrt_pert_sub=.false.,
+  wrt_pert_mem=.false.,
+  use_gfs_nemsio=.false.,
+  use_gfs_ncio=.true.,
+  jcap_ens=574,
+ /
+

@@ -1,0 +1,7 @@
+export hrrr_ver=v4.0.1
+export crtm_ver_analysis=2.2.3
+export crtm_ver_post=v2.0.6
+export prod_util_ver=v1.0.25
+export grib_util_ver=1.0.5
+export obsproc_shared_bufr_cword_ver=v1.0.0
+export hrrrdas_num_ens=36

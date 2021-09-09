@@ -1,0 +1,14 @@
+#! /bin/sh
+set -e
+
+module purge
+module load intel
+module load NetCDF-intel-haswell/4.2
+module load HDF5-serial-intel-haswell/1.8.9
+
+make \
+  'FC=ifort' \
+  'FFLAGS=-g -C -free -I$(NETCDF)/include -I. -convert big_endian -traceback' \
+  'LDFLAGS=-convert big_endian' \
+  'LIBS=-L$(NETCDF)/lib -lnetcdff -L$(NETCDF)/lib -L$(HDF5)/lib -L$(ZLIB)/lib -lnetcdf -lnetcdf -lhdf5_hl -lhdf5 -lz' \
+  clean all

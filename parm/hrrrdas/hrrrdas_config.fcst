@@ -1,0 +1,43 @@
+
+# Set beginning and ending ensemble member on EnKF group.
+if [[ $ENSGRP -eq 1 ]]; then
+   export ENSBEG=${ENSBEG:-1}
+   export ENSEND=${ENSEND:-3}
+elif [[ $ENSGRP -eq 2 ]]; then
+   export ENSBEG=${ENSBEG:-4}
+   export ENSEND=${ENSEND:-6}
+elif [[ $ENSGRP -eq 3 ]]; then
+   export ENSBEG=${ENSBEG:-7}
+   export ENSEND=${ENSEND:-9}
+elif [[ $ENSGRP -eq 4 ]]; then
+   export ENSBEG=${ENSBEG:-10}
+   export ENSEND=${ENSEND:-12}
+elif [[ $ENSGRP -eq 5 ]]; then
+   export ENSBEG=${ENSBEG:-13}
+   export ENSEND=${ENSEND:-15}
+elif [[ $ENSGRP -eq 6 ]]; then
+   export ENSBEG=${ENSBEG:-16}
+   export ENSEND=${ENSEND:-18}
+elif [[ $ENSGRP -eq 7 ]]; then
+   export ENSBEG=${ENSBEG:-19}
+   export ENSEND=${ENSEND:-21}
+elif [[ $ENSGRP -eq 8 ]]; then
+   export ENSBEG=${ENSBEG:-22}
+   export ENSEND=${ENSEND:-24}
+elif [[ $ENSGRP -eq 9 ]]; then
+   export ENSBEG=${ENSBEG:-25}
+   export ENSEND=${ENSEND:-27}
+elif [[ $ENSGRP -eq 10 ]]; then
+   export ENSBEG=${ENSBEG:-28}
+   export ENSEND=${ENSEND:-30}
+elif [[ $ENSGRP -eq 11 ]]; then
+   export ENSBEG=${ENSBEG:-31}
+   export ENSEND=${ENSEND:-33}
+elif [[ $ENSGRP -eq 12 ]]; then
+   export ENSBEG=${ENSBEG:-34}
+   export ENSEND=${ENSEND:-36}
+else
+   echo "***ERROR*** INVALID ENSGRP=$ENSGRP"
+   exit
+fi
+

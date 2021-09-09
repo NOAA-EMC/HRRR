@@ -1,0 +1,131 @@
+#!/bin/ksh
+set -xa
+export MP_IOAGENT_CNT=all
+#
+# Specify whether the run is production or development
+#
+export RUN_ENVIR=${RUN_ENVIR:-prod}
+
+#####################################################################################
+# Run config file to get input parameters
+# This config file should define the following variables
+# DATA_IN: Location of working directory, default to ${DATAROOT}
+# DEV_ECF: If the job is to be running using ECF, default to YES
+# SENDDBN: Set to NO for developers, default to YES
+# COM_IN:  Directory for input files, default to ${COMROOT}/$NET/${envir}
+# COM_OUT: Directory for output file, default to ${COMROOT}/$NET/${envir}
+# gespath: Directory for the guess or restart files, default to ${GESROOT}/${envir}
+#####################################################################################
+if [ "$RUN_ENVIR" != prod ]      ### For Developers
+then
+  hrrr_ver=${hrrr_ver:-v4.0.0}
+  PARA_CONFIG=${hrrr_para_config:-/meso/save/${LOGNAME}/hrrr.${hrrr_ver}/user/hrrr_para_config}
+  if [ -s $PARA_CONFIG ] ; then . $PARA_CONFIG ; fi
+  export userid=$LOGNAME
+fi
+
+###################################
+# Specify NET and RUN Name and model
+####################################
+export NET=${NET:-hrrr}
+export RUN=${RUN:-hrrr}
+export model=${model:-hrrr}
+
+export PS4='$SECONDS + '
+date
+
+########################################################
+# obtain unique process id (pid) and make temp directory
+########################################################
+export DATA=${DATAROOT}/hrrr_${dom}_ref2tten_${envir}_${cyc}
+mkdir -p $DATA
+cd $DATA
+
+export cycle=t${cyc}z
+export tmmark=tm00
+
+export pgmout="OUTPUT.$$"
+
+####################################
+# SENDECF  - Flag Events on ECF
+# SENDCOM  - Copy Files From TMPDIR to $COMOUT
+# SENDDBN  - Issue DBNet Client Calls
+# GET_IOPROFILE - Run I/O statistics
+####################################
+export SENDECF=${SENDECF:-YES}
+export SENDCOM=${SENDCOM:-YES}
+export SENDDBN=${SENDDBN:-YES}
+
+####################################
+# Specify Execution Areas
+####################################
+export HOMEhrrr=${HOMEhrrr:-${NWROOT}/${NET}.${hrrr_ver}}
+export SCRIPTShrrr=${SCRIPTShrrr:-$HOMEhrrr/scripts}
+export FIXhrrr=${FIXhrrr:-$HOMEhrrr/fix/${dom}}
+export PARMhrrr=${PARMhrrr:-$HOMEhrrr/parm/${dom}}
+export EXEChrrr=${EXEChrrr:-$HOMEhrrr/exec}
+export USHhrrr=${USHhrrr:-$HOMEhrrr/ush/${dom}}
+
+##############################
+# Run setpdy and initialize PDY variables
+##############################
+setpdy.sh
+. PDY
+
+########################################
+# Define Input Data Directories
+########################################
+# Hourly Radar Data
+export COM_RAD=${COM_RAD:-${COMROOTp3}/hourly/prod}
+
+# VIIRS Greenness Fraction Data
+export GVF=${GVF:-${DCOMROOT}/prod/viirs}
+
+# Define cycm1 since we need land-sfc fields for previous hour
+export cycm1=`expr $cyc - 1`
+if [ "$cyc" = 00 ]; then
+cycm1=23
+else
+cycm1=$(printf "%02d" $cycm1)
+fi
+
+#############################################
+# Define COM directories
+##############################################
+export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
+export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
+if [ "$cyc" = 00 ]; then
+export COMOUTm1=${COMOUTm1:-${COMROOT}/${NET}/${envir}/${RUN}.${PDYm1}/${dom}}
+fi
+export COMOUTm1=${COMOUTm1:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
+
+mkdir -m 775 -p $COMOUT
+
+##############################################
+# Define GES directories
+##############################################
+export gespath=${gespath:-${GESROOT}/${envir}}
+export HRRRGES_SFC=$gespath/${RUN}/hrrrges_sfc/${dom}
+
+mkdir -m 775 -p $HRRRGES_SFC
+env
+
+export DATA_RADAR=${DATA_RADAR:-${DATAROOT}/hrrr_${dom}_prep_radar_${envir}_${cyc}}
+
+########################################################
+# Execute the script.
+${HRRR_PREPREF2TTENSH:-$HOMEhrrr/scripts/${dom}/exhrrr_prep_ref2tten.sh.ecf}
+########################################################
+cat $pgmout
+
+msg="ENDED NORMALLY."
+postmsg "$jlogfile" "$msg"
+
+export KEEPDATA=YES
+##############################
+# Remove the Temporary working directory
+##############################
+cd $DATA
+if [ ${KEEPDATA} = NO ] ; then rm -rf $DATA ; fi
+
+date

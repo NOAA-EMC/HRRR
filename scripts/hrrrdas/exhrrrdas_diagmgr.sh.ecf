@@ -1,0 +1,43 @@
+#! /bin/ksh -l
+#################################################
+#  UNIX Script Documentation Block
+#
+# Script name:         exhrrrdas_diagmgr.sh.sms
+# Script description:  manager for obsdiag jobs
+#
+# 2019-11-29  B Blake - new script
+#################################################
+
+set -x
+
+cd $DATA
+
+#
+# Wait for all obsdiag jobs to finish 
+#
+icnt=1
+while [ $icnt -lt 1000 ]
+do
+  count=`ls ${COMOUT}/diagdone${cyc}00* | wc -l`
+  if [ $count -eq 37 ]; then
+    echo "All obsdiag jobs have completed (36 members + mean), launch EnKF jobs"
+    ecflow_client --event release_enkf_d01
+    ecflow_client --event release_enkf_d02
+#    bsub < ${HOMEhrrr}/sms/hrrrdas/jhrrrdas_enkf_d01_${cyc}.bsub
+#    bsub < ${HOMEhrrr}/sms/hrrrdas/jhrrrdas_enkf_d02_${cyc}.bsub
+    break
+  else
+    echo "Some obsdiag jobs have not completed yet"
+    sleep 10
+    icnt=$((icnt + 1))
+    if [ $icnt -ge 180 ]
+      then
+      msg="FATAL ERROR: ABORTING after 30 minutes of waiting for HRRRDAS obsdiag jobs"
+      err_exit $msg
+    fi
+  fi
+done
+
+echo Exiting $0
+
+exit

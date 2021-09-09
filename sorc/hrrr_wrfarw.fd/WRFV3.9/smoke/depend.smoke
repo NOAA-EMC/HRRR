@@ -1,0 +1,21 @@
+# DEPENDENCIES : only dependencies after this line (don't remove the word DEPENDENCIES)
+
+module_gocart_aerosols.o: module_data_gocartchem.o
+
+module_wetdep_ls.o:
+
+module_smoke_plumerise.o: module_zero_plumegen_coms.o
+
+module_plumerise1.o: module_zero_plumegen_coms.o module_smoke_plumerise.o
+
+module_add_emiss_burn.o:
+
+module_zero_plumegen_coms.o:
+
+module_vertmx_wrf.o:
+
+smoke_init.o: module_dep_simple.o module_input_smoke_data.o
+
+chem_driver.o: ../dyn_em/module_convtrans_prep.o module_vertmx_wrf.o dry_dep_driver.o emissions_driver.o
+
+emissions_driver.o: module_add_emiss_burn.o module_plumerise1.o

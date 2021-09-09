@@ -1,0 +1,8 @@
+&FPE_parameters
+ISFPE    = .TRUE.            ! FPE is active or not
+ISSWE    = .TRUE.            ! PDF is snow depth or SWE based
+dsnow    = 0.001               ! snow step
+nsnow    = 1000                ! total number of snow step
+scheme   = 2                  ! which scheme is used, 1 for upwind, 2 for MUSCL, and 3 for Lax-Wendroof
+CFL      = 0.5                ! CFL number
+/

@@ -1,0 +1,25 @@
+Release Notes:  HRRR v4.0.10
+
+v4.0.10 - released May 13, 2021
+* HRRRv4 smartinit changes associated with the RTMA/URMA v2.8.7 upgrade
+   * The RTMA CONUS land/sea mask and terrain around the Great Salt Lake are updated to better match the lake's current shape
+
+
+* Repository Details
+   * After cloning the hrrr.v4.0.10 tag of the EMC_hrrr git repository using the command below, retrieve the new code from the hrrr.v4 directory.
+  	* git clone -b hrrr.v4.0.10 https://${USER}@vlab.ncep.noaa.gov/code-review/a/EMC_hrrr
+  	* git clone -b hrrr.v4.0.10 ssh://${USER}@vlab.ncep.noaa.gov:29418/EMC_hrrr
+
+
+* fix files changed
+   * fix/conus/hrrr_smartmask_consensus.gb2
+   * fix/conus/hrrr_terrain_consensus.gb2
+
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the new fix files from the following directory on Luna/Surge (cannot store fix files in repository): /gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod_final/hrrr.v4.0.10/fix/conus
+   * These changes should be implemented alongside RTMA/URMA v2.8.7

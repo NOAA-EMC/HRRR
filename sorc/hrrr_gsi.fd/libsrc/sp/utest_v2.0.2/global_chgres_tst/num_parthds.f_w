@@ -1,0 +1,16 @@
+        integer function num_parthds()
+	use omp_lib
+	implicit none	
+!	integer  omp_get_num_threads	
+!$OMP PARALLEL
+!$OMP MASTER
+!	num_parthds = 6
+      num_parthds = omp_get_num_threads()
+!$OMP END MASTER
+!     num_parthds = 6
+!     num_parthds = 4
+!$OMP END PARALLEL
+      return
+      end
+
+ 

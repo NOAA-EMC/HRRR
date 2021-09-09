@@ -1,0 +1,1 @@
+make OPT=pgi.wrf CHEM=RADM_WRF_FIM AER=SIMPLE $1

@@ -1,0 +1,39 @@
+Release Notes:  HRRR v4.0.2
+
+v4.0.2 - released May 12, 2020
+* Changes to the HRRRDAS boundary updating and boundary zone to avoid members crashing due to large discrepancies
+* Change to the ecflow script for the forecast job to remove a module load from the run script
+
+
+* Repository Details
+   * After cloning the hrrr.v4.0.2 tag of the EMC_hrrr git repository using the command below, retrieve the new code from the hrrr.v4 directory.
+  	* git clone -b hrrr.v4.0.2 https://${USER}@vlab.ncep.noaa.gov/code-review/a/EMC_hrrr
+  	* git clone -b hrrr.v4.0.2 ssh://${USER}@vlab.ncep.noaa.gov:29418/EMC_hrrr
+
+
+* ecf files changed
+   * ecf/jhrrr_forecast.ecf
+* parm files changed
+   * parm/hrrrdas/hrrr_update_bc_parame.in
+   * parm/hrrrdas/hrrr_real.nl
+   * parm/hrrrdas/hrrrdas_wrfbc.nl
+   * parm/hrrrdas/hrrrdas_wrf.nl
+* scripts files changed
+   * scripts/alaska/exhrrr_fcst.sh.ecf
+   * scripts/conus/exhrrr_fcst.sh.ecf
+   * scripts/hrrrdas/exhrrr_fcst.sh.ecf
+
+
+* resource changes
+   * Disk usage increase of ~50 GB/day (might be smaller depending on how long LBC files are kept on disk)
+   * Runtime of HRRRDAS forecasts will increase by ~20 seconds
+
+
+* implementation instructions
+   * Retrieve the ecflow script and the new parm files following the steps outlined in Ming Hu's email (included here):
+      * Replace hrrr_update_bc.parame.in for any cycle before the HRRRDAS starts
+      * Before a HRRRDAS makebc job runs, replace hrrr_real.nl and hrrrdas_wrfbc.nl
+      * Run the makebc job to generate boundary files with a boundary zone width of 10
+      * When the makebc job starts, replace hrrrdas_wrf.nl
+      * Run the HRRRDAS forecasts and wait for makebc to finish if it does not complete in time
+

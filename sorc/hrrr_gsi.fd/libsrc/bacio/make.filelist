@@ -1,0 +1,18 @@
+# The list of C source files
+CSRC_FILES = \
+ bacio.c \
+ byteswap.c
+ 
+# The list of Fortran source files
+FSRC_FILES = \
+ baciof.f \
+ bafrio.f \
+ chk_endianc.f
+
+# The complete list of source files
+SRC_FILES = $(CSRC_FILES) \
+            $(FSRC_FILES)
+
+# The list of object files
+OBJ_FILES = ${CSRC_FILES:.c=.o} \
+            ${FSRC_FILES:.f=.o}

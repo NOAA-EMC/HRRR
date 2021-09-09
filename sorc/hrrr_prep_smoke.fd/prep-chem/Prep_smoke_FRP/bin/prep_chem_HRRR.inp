@@ -1,0 +1,257 @@
+ $RP_INPUT
+!#######################################################################!
+!  BRAMS/BAM - CPTEC/INPE - WRF-Chem - FIM-Chem emission models         ! 
+!  version 1.8.3: Sep 2017                                              !
+!  brams support: brams_help@cptec.inpe.br - http://brams.cptec.inpe.br !
+!#######################################################################!
+
+ 
+!---------------- grid_type of the grid output
+   grid_type= 'lat-lon',	
+                    !'fv3' = FV3 - six sided sphere - 6 tiles (currently C96_grid)
+                    !'fim' = NOAA-GSD icosahedral FIM model (unstructured grid)
+                    !'rams' = rams grid 
+                    ! 'polar'  = polar sterog. grid output
+                    ! 'gg'  = gaussian grid output
+                    ! 'll'  = lat/lon grid output
+                    ! 'lambert'  = lambert grid output
+                    ! 'mercator' = mercator grid output
+                    ! 'rotated_ll' = rotated lat/lon output
+                    ! 'lat-lon' = WPS Cassini grid
+
+ 
+!---------------- if the output data is for use in CATT-BRAMS model, provide at least one analysis file 
+!---------------- of this model
+    rams_anal_prefix = '../ANL/OPQUE',
+
+!---------------- output file prefix (may include directory other than the current)
+!  chem_out_prefix = 'C96',
+!  chem_out_prefix = 'FIMc6',
+!  chem_out_prefix = 'FRE-HTAP',
+   chem_out_prefix = 'RAP-BBM',
+   chem_out_format = 'vfm',
+
+!---------------- date of emission  
+    ihour=00,
+    iday=05,
+    imon=06,
+    iyear=2018,
+
+
+!---------------- select the sources datasets to be used   
+   use_retro =0,  ! 1 = yes, 0 = not
+!  retro_data_dir ='./datain/EMISSION_DATA/RETRO/anthro',
+   retro_data_dir='/scratch3/BMC/wrf-chem/Emission_data/RETRO/anthro',
+
+   use_edgar =0,  ! 0 - not, 1 - Version 3, 2 - Version 4 for some species, 3 -Version HTAP
+!  edgar_data_dir ='./datain/EMISSION_DATA/EDGAR/hdf/edgar-htap',
+   edgar_data_dir='/scratch3/BMC/wrf-chem/Emission_data/EDGAR-HTAP',
+
+     use_ceds =0, ! 0 - not,
+!    use_ceds =1, ! 0 - not,
+                  ! 1 - Version (CMIP_CEDS-2017-05-18_gn_200001-201412)
+     ceds_data_dir='/scratch3/BMC/neaqs/stu/ceds_emis/All_try',
+
+!  fim_data_dir='.'  ! FIM grid data in current directory
+   fim_data_dir='/scratch4/BMC/fim/fimdata_chem/fimdata_chem_G6_Li'  ! FIM G6 grid data
+!  fv3_data_dir='/scratch3/BMC/fim/lzhang/fv3_grid/C96_grid'  ! FV3 C96_grid data (6 tiles) super-grid (192x192)
+   fv3_data_dir='/scratch3/BMC/fim/lzhang/fv3_grid/C96_grid_spec'  ! FV3 C96_grid data (6 tiles) model-grid (96x96)
+
+   use_gocart =0,
+!  gocart_data_dir ='./datain/EMISSION_DATA/GOCART/emissions',
+   gocart_data_dir='/scratch3/BMC/wrf-chem/Emission_data/GOCART/emissions',
+
+   use_streets =0,
+!  streets_data_dir='./datain/BRAMS_5.2/EMISSION_DATA/STREETS',
+   streets_data_dir='/scratch3/BMC/wrf-chem/Emission_data/STREETS',
+
+   use_seac4rs =0,
+!  seac4rs_data_dir='./datain/EMISSION_DATA/SEAC4RS',
+   seac4rs_data_dir='/scratch3/BMC/wrf-chem/Emission_data/SEAC4RS',
+
+   use_fwbawb =0,
+!  fwbawb_data_dir ='./datain/EMISSION_DATA/Emissions_Yevich_Logan',
+   fwbawb_data_dir ='/scratch3/BMC/wrf-chem/Emission_data/Emissions_Yevich_Logan',
+
+   use_bioge =0, ! 1 - geia, 2 - megan 
+   ! ###### 
+   ! # BIOGENIC = 1
+   !bioge_data_dir ='./datain/EMISSION_DATA/biogenic_emissions',
+   ! # MEGAN = 2
+   ! ######   
+   !bioge_data_dir='./datain/EMISSION_DATA/MEGAN/2000',   
+    bioge_data_dir='/scratch4/BMC/fim/fimdata_chem/EMISSION_DATA/MEGAN/2000',
+   ! ######
+
+   use_gfedv2 =0,
+   gfedv2_data_dir ='./datain/EMISSION_DATA/GFEDv2-8days',
+
+   use_bbem =2,
+!  use_bbem=0,  ! 1=traditional methodology ; 2 = FRE methodology
+!  use_bbem_plumerise=0,  ! 0=no plumerise; 1=include plumerise
+!  use_bbem=1,  ! 1=traditional methodology ; 2 = FRE methodology
+   use_bbem_plumerise=1,  ! 0=no plumerise; 1=include plumerise
+   
+!---------------- if  the merging of gfedv2 with bbem is desired (=1, yes, 0 = no)  
+   merge_GFEDv2_bbem =0,
+
+
+!---------------- Fire product for BBBEM/BBBEM-plumerise emission models
+!  bbem_wfabba_data_dir   ='./datain/Emission_data/fires_data/GOES/f',
+!  bbem_modis_data_dir    ='./datain/Emission_data/fires_data/MODIS/Fires',
+!  bbem_inpe_data_dir     ='./datain/Emission_data/fires_data/DSA/Focos',
+!  bbem_fre_data_dir      ='./datain/Emission_data/Fre/f',
+!  bbem_fre_data_dir      ='/scratch3/BMC/rcm1/Megan.Bela/FIRE/data/FRP/processed/2017283/f',
+   bbem_fre_data_dir      ='/scratch3/BMC/wrf-chem/Ravan/Prep_chem_new/bin/f',
+!  bbem_fre_data_dir      ='/scratch3/BMC/det/KaYee/project_smoke/prep_chem_smoke/bin/f',
+!  bbem_extra_data_dir    ='NONE',
+! Following are links  to current data on 10/19/17
+!  bbem_wfabba_data_dir   ='/scratch4/BMC/public/data/sat/nesdis/wf_abba/f',
+!  bbem_modis_data_dir    ='/scratch4/BMC/public/data/sat/firms/global/MODIS_C6_Global_MCD14DL_NRT_',
+   bbem_wfabba_data_dir   ='/scratch3/BMC/rcm1/Megan.Bela/FIRE/data/FRP/raw/WF_ABBA/f',
+   bbem_modis_data_dir    ='/scratch3/BMC/rcm1/Megan.Bela/FIRE/data/FRP/raw/MODIS/MODIS',
+   bbem_inpe_data_dir     ='/scratch3/BMC/wrf-chem/Emission_data/fires_data/DSA/Focos',
+   bbem_extra_data_dir    ='/scratch3/BMC/wrf-chem/Emission_data/fires_data/BLMALASKA/current.dat',
+
+!---------------- veg type data set (dir + prefix)
+! veg_type_data_dir      ='./datain/surface_data/GL_IGBP_MODIS_INPE/MODIS',	
+!  veg_type_data_dir      ='/scratch3/BMC/wrf-chem/Emission_data/surface_data/GL_IGBP_MODIS_INPE/MODIS',
+!  veg_type_data_dir = /scratch3/BMC/ap-fc/Ravan/HRRR_smoke/Input/LU_data/
+
+! New land use map from MODIS for emission factors
+ veg_type_data_dir = '/scratch3/BMC/ap-fc/Megan.Bela/data/LULC/2012/IGBP' 
+!veg_type_data_dir      ='/scratch3/BMC/wrf-chem/Emission_data/SURFACE_DATA/GL_IGBP_MODIS_INPE/MODIS',
+
+  
+!---------------- vcf type data set (dir + prefix)
+  use_vcf = 0,
+  vcf_type_data_dir      ='./datain/surface_data/VCF/data_out/2005/VCF',	       
+       
+!----------------  Carbon density data  ----------------
+!----------------  New Olson''s data set (dir + prefix)
+! olson_data_dir      ='./datain/Emission_data/OLSON2/OLSON',   
+  olson_data_dir= '/scratch3/BMC/wrf-chem/Emission_data/OLSON2/OLSON',
+
+     
+!----------------  Old Olson''s data set
+!  carbon_density_data_dir='./datain/surface_data/GL_OGE_INPE/OGE',
+   carbon_density_data_dir='/scratch3/BMC/wrf-chem/Emission_data/surface_data/GL_OGE_INPE/OGE',
+
+ 
+!---------------- carbon density data set for Amazon (dir + prefix)
+!  fuel_data_dir      ='./datain/Emission_data/Carbon_density_Saatchi/amazon_biomass_final.gra',
+
+ 
+!---------------- gocart background
+   use_gocart_bg =0,
+!  gocart_bg_data_dir='./datain/Emission_data/GOCART',
+   gocart_bg_data_dir='/scratch3/BMC/wrf-chem/Emission_data/GOCART'
+
+!---------------- afwa erodability parameters - only good with FIM grid 10/29/17
+   use_afwa_erod=0,
+   afwa_erod_data_dir='/scratch3/BMC/fim/lzhang/sandclay'
+
+!---------------- volcanoes emissions
+   use_volcanoes =0,
+!  volcano_index =1143, ! 1143 is POPOCATEPETL
+   volcano_index =0,     ! Do all volcanoes if use_volcanoes=1
+
+   use_these_values='NONE',
+! define a text file for using external values for INJ_HEIGHT, DURATION,
+! MASS ASH (units are meters - seconds - kilograms) and the format for
+! a file 'values.txt' is like this:
+! 11000. 10800. 1.5e10
+! use_these_values='values.txt', 
+   begin_eruption='201303280000',  !begin time UTC of eruption YYYYMMDDhhmm  
+
+
+!---------------- degassing volcanoes emissions
+   use_degass_volcanoes =0,
+!  degass_volc_data_dir ='./datain/Emission_data/VOLC_SO2', 
+   degass_volc_data_dir ='/scratch4/BMC/fim/fimdata_chem/EMISSION_DATA/VOLC_SO2',
+
+
+!---------------- User specific emissions section below ----------------------------------------------
+!-----------------------------------------------------------------------------------------------------
+
+!---------------- Update for South America megacities
+   ! (set 'NONE' if you do not want to use )
+!  user_data_dir='../extra/UserData/',
+   user_data_dir='NONE',
+
+!---------------- Urban emissions file name 
+   ! ".asc" file in user_data_dir (set 'NONE' if you do not want to use )
+!  cites_mobile_urban_emissions_file = 'SA_citiesMobileUrbanEmissions.asc',
+   cites_mobile_urban_emissions_file = 'NONE',
+
+!---------------- Streets Inventory
+   ! Enables Local inventory information for streets
+   ! Use 'NONE' or leave it blank to not use streets inventory
+   ! Cities implemented: "RJ" - Rio Olympic Games update
+!  streets_inventory_region = 'RJ',
+   streets_inventory_region = 'NONE',
+
+!---------------- User specific emissions section end ----------------------------------------------
+!-----------------------------------------------------------------------------------------------------
+
+
+!--------------------------------------------------------------------------------------------------
+   pond=1,   ! mad/mfa  0 -> molar mass weighted 
+             !          1 -> Reactivity weighted   
+
+
+!---------------- for grid type 'll' or 'gg' only
+   grid_resolucao_lon=0.2,
+   grid_resolucao_lat=0.2,
+
+   nlat=320,          ! if gg (only global grid)
+   lon_beg   = -180., ! (-180.:+180.) long-begin of the output file
+   lat_beg   =  -90., ! ( -90.:+90. ) lat -begin of the output file
+   delta_lon =  360, ! total long extension of the domain (360 for global)
+   delta_lat =  180, ! total lat  extension of the domain (180 for global)
+
+!---------------- For regional grids (polar or lambert)
+
+   NGRIDS   = 1,            ! Number of grids to run
+
+   NNXP     = 953,436,601,46,       ! Number of x gridpoints
+   NNYP     = 834,355,421,46,       ! Number of y gridpoints
+   NXTNEST  = 0,1,2,1,          ! Grid number which is the next coarser grid
+!  DELTAX   = 12183.3,
+!  DELTAY   = 12183.3,         ! X and Y grid spacing
+   DELTAX   = .12183,         ! lat-lon grid_type
+   DELTAY   = .12183,         ! lat-lon grid_type
+
+   ! Nest ratios between this grid and the next coarser grid.
+   NSTRATX  = 1,2,3,4,           ! x-direction
+   NSTRATY  = 1,2,3,4,           ! y-direction
+
+   NINEST = 1,10,0,0,        ! Grid point on the next coarser
+   NJNEST = 1,10,0,0,        !  nest where the lower southwest
+                             !  corner of this nest will start.
+                             !  If NINEST or NJNEST = 0, use CENTLAT/LON
+   POLELAT  =  36.0, !-89.99,          ! If polar, latitude/longitude of pole point   
+   POLELON  = 180.0,               ! If lambert, not used.
+
+   STDLAT1  = 33.,           ! If polar for BRAMS, use 90.0 in STDLAT2
+   STDLAT2  = 45.,         ! If lambert, standard latitudes of projection
+                            !(truelat2/truelat1 from namelist.wps, STDLAT1 < STDLAT2)
+                            ! If mercator STDLAT1 = 1st true latitude
+   CENTLAT  =  54.0, -89.99,  -23., 27.5,  27.5, ! If lambert, lat/lon of grid center. 
+   CENTLON  = -106.00,  -46.,-80.5, -80.5,
+   STDLON = 106.
+
+!---------------- model output domain for each grid (only set up for rams)
+   lati =  -90.,  -90.,   -90., 
+   latf =  +90.,  +90.,   +90.,  
+   loni = -180., -180.,  -180., 
+   lonf =  180.,  180.,   180., 
+
+!---------------- project rams grid (polar sterogr) to lat/lon: 'YES' or 'NOT'
+   proj_to_ll='NO', 
+
+!---------------- convert to WRF/CHEM (yes,not)
+  special_output_to_wrf = 'yes',
+   
+$END 
+

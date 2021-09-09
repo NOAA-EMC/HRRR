@@ -1,0 +1,8 @@
+ &SETUP
+  analysis_time = 2017090617,
+  minute=50,
+  trange_start=-10.0,
+  trange_end=10.0,
+ /
+EOF
+
