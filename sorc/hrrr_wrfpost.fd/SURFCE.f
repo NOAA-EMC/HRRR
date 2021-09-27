@@ -2256,7 +2256,7 @@
          IF (IGET(739).GT.0) THEN
            DO J=JSTA,JEND
              DO I=1,IM
-               GRID1(I,J) = (1./RD)*(PMID(I,J,LM)/T(I,J,LM))*SMOKE(I,J,LM,1)
+               GRID1(I,J) = (1./RD)*(PMID(I,J,LM)/T(I,J,LM))*SMOKE(I,J,LM,1)*(1.0E-9)
              ENDDO
            ENDDO
            if(grib=='grib1') then
