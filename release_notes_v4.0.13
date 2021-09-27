@@ -2,8 +2,8 @@ Release Notes:  HRRR v4.0.13
 
 v4.0.13 - released September 27, 2021
 * HRRRv4 post source code changes to address two issues related to smoke fields and LFC height
-   * All smoke fields are now using the correct units of kg/m^3
-   * The definition of the LFC height vertical coordinate is fixed
+   * All smoke mass density concentration fields will now output the correct units of kg/m^3
+   * The vertical coordinate for the LFC height is fixed so that it is no longer listed as “missing”
 
 
 * Repository Details
