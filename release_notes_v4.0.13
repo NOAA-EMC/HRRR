@@ -17,9 +17,15 @@ v4.0.13 - released September 27, 2021
    * sorc/hrrr_wrfpost.fd/MDLFLD.f
    * sorc/hrrr_wrfpost.fd/SURFCE.f
 
+
+* parm files changed
+   * parm/alaska/hrrrak_remove_duplicates
+   * parm/conus/hrrr_remove_duplicates
+
+
 * resource changes
    * N/A
 
 
 * implementation instructions
-   * Retrieve the new sorc files and re-compile the hrrr_wrfpost source code
+   * Retrieve the new sorc and parm files and re-compile the hrrr_wrfpost source code
