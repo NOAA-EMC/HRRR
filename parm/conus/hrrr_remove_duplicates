@@ -123,7 +123,7 @@ HGT:equilibrium level:
 PLPL:255-0 mb above ground:
 CAPE:0-3000 m above ground:
 CIN:0-3000 m above ground:
-HGT:level of free convection:
+HGT:reserved:
 HLCY:255-0 mb above ground:
 var discipline=0 center=7 local_table=1 parmcat=7 parm=204:surface:
 var discipline=0 center=7 local_table=1 parmcat=7 parm=206:0-500 m above ground:
