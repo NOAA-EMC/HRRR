@@ -1,0 +1,40 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -o /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrconus/hrrr_makeguess.out08z
+#PBS -e /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrconus/hrrr_makeguess.out08z
+#PBS -N hrrr_makeguess_08
+#PBS -l walltime=00:15:00
+#PBS -q "dev"
+#PBS -A HRRR-DEV
+#PBS -l select=1:ncpus=128
+
+set -x
+
+# Set MPI options
+export OMP_NUM_THREADS=1
+export MP_TASK_AFFINITY=core:1
+export KMP_AFFINITY=disabled
+export MP_MPILIB=mpich2
+
+export envir=prod
+export RUN_ENVIR=prod
+export cyc=08
+export job=hrrr_makeguess_08
+export group_name=meso
+
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/driver/hrrrwcoss2.env
+
+module use ${NWROOT}/hrrr.${hrrr_ver}/modulefiles
+module load HRRR/v4.0.0
+
+# CALL executable job script here
+${NWROOT}/hrrr.${hrrr_ver}/jobs/JHRRR_MAKEGUESS
+
+qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/sms/prep/jhrrr_prep_radar_0816.qsub
+qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/sms/prep/jhrrr_prep_radar_0830.qsub
+qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/sms/prep/jhrrr_prep_radar_0846.qsub
+sleep 60
+qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/sms/prep/jhrrr_prep_radar_0860.qsub
+qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/sms/prep/jhrrr_prep_cloud_08.qsub
+qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/sms/prep/jhrrr_prep_smoke_08.qsub

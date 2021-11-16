@@ -6,7 +6,7 @@ proc_MODIS_FRP_HRRR_v3.exe \
 proc_NPP_FRP_HRRR_v3.exe
 
 # These four will be replaced by the caller:
-FC=ifort
+FC=ftn
 FFLAGS=-traceback -g
 LDFLAGS=
 LIBS=

@@ -6,7 +6,7 @@ macro (setWCOSS)
 
   #if ibmpe module is not loaded last, CMake tries to use intel mpi. Force use of ibmhpc
   set(HOST_FLAG "-xHOST" CACHE INTERNAL "Host Flag")
-  set( MKL_FLAG "-mkl"  CACHE INTERNAL "MKL Flag")
+  set( MKL_FLAG ""  CACHE INTERNAL "MKL Flag")
   set(GSI_Intel_Platform_FLAGS "-DPOUND_FOR_STRINGIFY -traceback -O3 -fp-model source -convert big_endian -assume byterecl -implicitnone -D_REAL8_ ${OpenMP_Fortran_FLAGS} ${MPI_Fortran_COMPILE_FLAGS}" CACHE INTERNAL "")
   set(ENKF_Platform_FLAGS "-O3 -fp-model source -convert big_endian -assume byterecl -implicitnone  -DGFS -D_REAL8_ ${OpenMP_Fortran_FLAGS} ${HOST_FLAG} " CACHE INTERNAL "")
 

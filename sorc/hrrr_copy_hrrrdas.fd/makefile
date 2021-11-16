@@ -7,10 +7,11 @@ FC       = ftn
 CPP      = /lib/cpp -P
 ARCH     =
 CPPFLAGS =  -DLINUX -Dfunder -DFortranByte=char -DFortranInt=int -DFortranLlong='long long' -D_UNDERSCORE
+HDF5 = /apps/prod/hdf5-parallel/1.10.6/intel/19.1.3.304/cray-mpich/8.1.4
 
 INCLD = -I${NETCDF}/include
 LIBS =  ${NETCDF}/lib/libnetcdff.a ${NETCDF}/lib/libnetcdf.a  \
-        ${HDF5}/lib/libhdf5hl_fortran.a ${HDF5}/lib/libhdf5_hl.a ${HDF5}/lib/libhdf5_fortran.a ${HDF5}/lib/libhdf5.a /usr/lib64/libz.a
+        -L${HDF5}/lib -lhdf5_hl -lhdf5 -lz ${Z_LIB}
 
 OBJS = 
 

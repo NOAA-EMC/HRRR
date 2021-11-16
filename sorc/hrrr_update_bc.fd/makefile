@@ -24,7 +24,7 @@ WRFPATH          = ${BASE}/hrrr_wrfarw.fd/WRFV3.9
 
 INCLD = -I${NETCDF}/include
 
-NETCDF_LIB = -L${NETCDF}/lib -lnetcdf
+NETCDF_LIB = -L${NETCDF}/lib -lnetcdf -lnetcdff
 
 LIBS =  ${NETCDF_LIB} \
         $(WRFPATH)/external/io_netcdf/libwrfio_nf.a

@@ -37,7 +37,7 @@ TARGET = ../../exec/hrrr_wrfbufr_alaska
 # CPP, Compiler, and Linker Options
 #
 
-NETCDF_LIB = ${NETCDF}/lib/libnetcdf.a
+NETCDF_LIB = -L ${NETCDF}/lib -lnetcdf -lnetcdff
 
 FC       = ftn 
 CPP      = /lib/cpp -P
@@ -72,7 +72,7 @@ LDFLAGS  = $(MEM) $(MAP) $(SMP) $(PROFILE)
 LIBS     = $(WRFLIB) \
            $(NEMSIO_LIB) \
            ${W3EMC_LIB4} ${W3NCO_LIB4} ${BACIO_LIB4} \
-           ${NETCDF_LDFLAGS}
+           ${NETCDF_LIB}
 
 #
 #

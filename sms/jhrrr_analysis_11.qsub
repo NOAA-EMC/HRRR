@@ -1,0 +1,34 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -o /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrconus/hrrr_analysis.out11z
+#PBS -e /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrconus/hrrr_analysis.out11z
+#PBS -N hrrr_analysis_11
+#PBS -l walltime=00:30:00
+#PBS -q "dev"
+#PBS -A HRRR-DEV
+#PBS -l place=vscatter,select=12:ncpus=120:mem=500GB
+
+set -x
+
+export FI_OFI_RXM_SAR_LIMIT=3145728
+export OMP_NUM_THREADS=4
+export OMP_STACKSIZE=500M
+
+export envir=prod
+export RUN_ENVIR=prod
+export cyc=11
+export job=hrrr_analysis_11
+export group_name=meso
+
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/driver/hrrrwcoss2.env
+
+module use ${NWROOT}/hrrr.${hrrr_ver}/modulefiles
+module load HRRR/v4.0.0
+
+# CALL executable job script here
+${NWROOT}/hrrr.${hrrr_ver}/jobs/JHRRR_ANALYSIS
+
+qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/sms/jhrrr_fcst_11.qsub
+qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/sms/post/jhrrr_postmgr_11.qsub
+qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/sms/post/jhrrr_postmgr_subh_11.qsub
