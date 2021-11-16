@@ -144,7 +144,7 @@ EOF
 
 # Run Process_mosaic
 cp ${EXEChrrr}/hrrr_process_mosaic .
-runline="aprun -n 36 -N 24 ./hrrr_process_mosaic"
+runline="mpiexec -n 36 -ppn 36 ./hrrr_process_mosaic"
 $runline
 export err=$?; err_chk
 
@@ -208,7 +208,7 @@ EOF
 
 # Run process lightning
 cp ${EXEChrrr}/hrrr_process_lightning .
-runline="aprun -n 36 -N 24 ./hrrr_process_lightning"
+runline="mpiexec -n 36 -ppn 36 ./hrrr_process_lightning"
 $runline > process_lightning.out
 export err=$?; err_chk
 

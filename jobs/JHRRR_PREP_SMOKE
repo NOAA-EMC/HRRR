@@ -74,6 +74,7 @@ export MPISER=${MPISER:-${NWROOThps}/mpiserial.${mpiserial_ver}/exec/mpiserial}
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
+export PDY=20210824
 setpdy.sh
 . ./PDY
 
@@ -89,9 +90,12 @@ mkdir -m 775 -p $COMOUT
 #######################################
 # Define observation source directories
 #######################################
-export DCOM_MODIS="$DCOMROOT/prod/"
-export DCOM_VIIRS_NPP="$DCOMROOT/prod/"
-export DCOM_VIIRS_J01="$DCOMROOT/prod/"
+#export DCOM_MODIS="$DCOMROOT/prod/"
+#export DCOM_VIIRS_NPP="$DCOMROOT/prod/"
+#export DCOM_VIIRS_J01="$DCOMROOT/prod/"
+export DCOM_MODIS="$DCOMROOT/"
+export DCOM_VIIRS_NPP="$DCOMROOT/"
+export DCOM_VIIRS_J01="$DCOMROOT/"
 export VEG_TYPE_DATA="$FIXhrrr/smoke/SURFACE_DATA/2013_PREP"
 
 env

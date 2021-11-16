@@ -539,7 +539,8 @@ ls -l
 # Run metgrid
 startmsg
 cp ${EXEChrrr}/hrrr_wps_metgrid .
-runline="aprun -n 144 -N 24 ./hrrr_wps_metgrid"
+#runline="aprun -n 144 -N 24 ./hrrr_wps_metgrid"
+runline="mpiexec -n 128 -ppn 128 ./hrrr_wps_metgrid"
 $runline
 export err=$?; err_chk
 
@@ -758,7 +759,8 @@ now=`${DATE} +%Y%m%d%H%M%S`
 # Run real
 startmsg
 cp ${EXEChrrr}/hrrr_wrfarw_real .
-runline="aprun -n 144 -N 24 ./hrrr_wrfarw_real"
+#runline="aprun -n 144 -N 24 ./hrrr_wrfarw_real"
+runline="mpiexec -n 128 -ppn 128 ./hrrr_wrfarw_real"
 $runline
 export err=$?; err_chk
 

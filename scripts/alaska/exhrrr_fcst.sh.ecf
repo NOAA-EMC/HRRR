@@ -22,8 +22,10 @@ DATE=/bin/date
 export FCST_INTERVAL=3
 if [ $cyc -eq 00 -o $cyc -eq 06 -o $cyc -eq 12 -o $cyc -eq 18 ]; then
   export FCST_LENGTH=48
+  export NODES=36
 else
   export FCST_LENGTH=18
+  export NODES=18
 fi
 
 export OMP_NUM_THREADS=2
@@ -218,7 +220,7 @@ mv ${WRF_NAMELIST}.new ${WRF_NAMELIST}
 cp ${PARMhrrr}/hrrrak_update_bc_parame.in parame.in
 startmsg
 cp ${EXEChrrr}/hrrr_update_bc .
-runline="aprun -n 1 -N 1 ./hrrr_update_bc"
+runline="mpiexec -n 1 -ppn 1 ./hrrr_update_bc"
 $runline >> $DATA/$pgmout 2>errfile
 export err=$?; err_chk
 
@@ -237,7 +239,7 @@ else
     provided_nodes="$NODES"
 fi
 
-if [[ "$provided_nodes" == 78 ]] ; then
+if [[ "$provided_nodes" == 18 ]] ; then
     # This is the operational configuration for the 18-hour forecasts.
 cat<<EOF > run_wrf_config
 omp_num_threads=2 # compute only; quilt is always 1
@@ -248,16 +250,22 @@ reorder_ranks=grid_order # grid_order or NO
 mpich_tuning=cb_nodes # cb_nodes or NO
 
 # Distribution of compute nodes in grid:
-nnode_x=7
-nnode_y=10
+#nnode_x=7
+#nnode_y=10
+nnode_x=8
+nnode_y=8
 
 # Distribution of MPI ranks within each compute node:
+#nrank_x=2
+#nrank_y=6
 nrank_x=2
-nrank_y=6
+nrank_y=8
 
 # Quilt server configuration:
-nio_tasks_per_group=60
-nio_groups=4
+#nio_tasks_per_group=60
+#nio_groups=4
+nio_tasks_per_group=64
+nio_groups=2
 nio_ppn=30
 EOF
 else
@@ -276,11 +284,11 @@ nnode_y=16
 
 # Distribution of MPI ranks within each compute node:
 nrank_x=2
-nrank_y=6
+nrank_y=8
 
 # Quilt server configuration:
-nio_tasks_per_group=96
-nio_groups=5
+nio_tasks_per_group=128
+nio_groups=2
 nio_ppn=48
 cb_nodes=32
 EOF

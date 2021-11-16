@@ -229,7 +229,7 @@ mv ${WRF_NAMELIST}.new ${WRF_NAMELIST}
 cp ${PARMhrrr}/hrrrak_update_bc_parame.in parame.in
 startmsg
 cp ${EXEChrrr}/hrrr_update_bc .
-runline="aprun -n 1 -N 1 ./hrrr_update_bc"
+runline="mpiexec -n 1 -ppn 1 ./hrrr_update_bc"
 $runline >> $DATA/$pgmout 2>errfile
 export err=$?; err_chk
 
@@ -239,7 +239,8 @@ now=`${DATE} +%Y%m%d%H%M%S`
 # Run wrf
 startmsg
 cp ${EXEChrrr}/hrrr_wrfarw_fcst . 
-runline="aprun -n 1200 -N 24 ./hrrr_wrfarw_fcst"
+#runline="aprun -n 1200 -N 24 ./hrrr_wrfarw_fcst"
+runline="mpiexec -n 1200 -ppn 128 --cpu-bind core ./hrrr_wrfarw_fcst"
 $runline
 export err=$?; err_chk
 

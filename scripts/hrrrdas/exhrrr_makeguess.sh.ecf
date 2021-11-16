@@ -332,7 +332,7 @@ done
 # Run ungrib
 startmsg
 # ${EXEChrrr}/hrrr_wps_ungrib >> $DATA/$pgmout 2>errfile
-aprun -n 1 -N 1 ${EXEChrrr}/hrrr_wps_ungrib
+mpiexec -n 1 -ppn 1 ${EXEChrrr}/hrrr_wps_ungrib
 export err=$?; err_chk
 
 echo 'just finished ungrib'
@@ -536,7 +536,8 @@ ls -l
 # Run metgrid
 startmsg
 cp ${EXEChrrr}/hrrr_wps_metgrid .
-runline="aprun -n 144 -N 24 ./hrrr_wps_metgrid"
+#runline="aprun -n 144 -N 24 ./hrrr_wps_metgrid"
+runline="mpiexec -n 128 -ppn 128 ./hrrr_wps_metgrid"
 $runline
 export err=$?; err_chk
 
@@ -764,7 +765,8 @@ now=`${DATE} +%Y%m%d%H%M%S`
 # Run real
 startmsg
 cp ${EXEChrrr}/hrrrdas_wrfarw_real .
-runline="aprun -n 144 -N 24 ./hrrrdas_wrfarw_real"
+#runline="aprun -n 144 -N 24 ./hrrrdas_wrfarw_real"
+runline="mpiexec -n 128 -ppn 128 ./hrrrdas_wrfarw_real"
 $runline
 export err=$?; err_chk
 
@@ -780,7 +782,7 @@ hrrrsfcfile=${HRRRGESSFC}/hrrr_${YYYYMMDDHH}f001
 ln -sf ${hrrrsfcfile} wrfout_d01_save
 startmsg
 cp ${EXEChrrr}/hrrr_full_cycle_surface_enkf .
-runline="aprun -n 1 -N 1 ./hrrr_full_cycle_surface_enkf 1"
+runline="mpiexec -n 1 -ppn 1 ./hrrr_full_cycle_surface_enkf 1"
 $runline
 export err=$?; err_chk
 
@@ -796,13 +798,13 @@ ensmem=1
 # Get MPISERIAL; this section is copied from exhrrr_prep_smoke:
 # ----------------------------------------------------------------------
 # need this because have trouble load module now:
-MPISER=/gpfs/hps/nco/ops/nwprod/mpiserial.v3.0.0/exec/mpiserial
-#export MPISER=${MPISER:-${NWROOThps}/mpiserial.${mpiserial_ver}/exec/mpiserial}
+#MPISER=/gpfs/hps/nco/ops/nwprod/mpiserial.v3.0.0/exec/mpiserial
+export MPISER=${MPISER:-${NWROOThps}/mpiserial.${mpiserial_ver}/exec/mpiserial}
 LSB_MAX_NUM_PROCESSORS="${LSB_MAX_NUM_PROCESSORS:-1}"
 if (( LSB_MAX_NUM_PROCESSORS > 1 )) ; then
     # Command to run mpiserial:
     np=$(( LSB_MAX_NUM_PROCESSORS - 1 )) # -1 for MAMU node processor
-    MPISERIAL="aprun -d 1 -n $np -N 24 -j 1 $MPISER -m"
+    MPISERIAL="mpiexec -n $np -ppn 24 $MPISER -m"
 else
     fake_mpiserial() {
         chmod 755 "$1"
@@ -928,7 +930,8 @@ EOF2
 # Run initialens to add perturbations
 startmsg
 cp ${EXEChrrr}/hrrr_initialens .
-runline="aprun -n 72 -N 12 ./hrrr_initialens"
+#runline="aprun -n 72 -N 12 ./hrrr_initialens"
+runline="mpiexec -n 128 -ppn 128 ./hrrr_initialens"
 $runline
 export err=$?; err_chk
 

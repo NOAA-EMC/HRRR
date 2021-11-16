@@ -112,7 +112,7 @@ $OLDOUTFIL
 EOF
 
 ln -sf itag              fort.11
-ln -sf $DATA/hrrr_profdat  fort.18
+ln -sf $DATA/hrrr_profdat  fort.19
 ln -sf $DATA/profilm.c1.tm00 fort.79
 
 datestr=`date`
@@ -120,7 +120,7 @@ echo about to run program at $datestr
 
 #startmsg
 cp ${EXEChrrr}/hrrr_wrfbufr_${dom} hrrr_wrfbufr
-runline="aprun -n 1 -N 1 ./hrrr_wrfbufr"
+runline="mpiexec -n 1 -ppn 1 ./hrrr_wrfbufr"
 $runline
 export err=$?; err_chk
 

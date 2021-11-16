@@ -479,7 +479,8 @@ fi
 
 # Run metgrid
 cp ${EXEChrrrdas}/hrrr_wps_metgrid .
-runline="aprun -n 24 -N 24 ./hrrr_wps_metgrid"
+#runline="aprun -n 24 -N 24 ./hrrr_wps_metgrid"
+runline="mpiexec -n 24 -ppn 24 ./hrrr_wps_metgrid"
 $runline
 export err=$?; err_chk
 
@@ -527,7 +528,7 @@ wait
      print "\$ensmem is $ensmem"
      ensmemid=`printf %4.4i $ensmem`
 
-     runline="aprun -n 1 -N 1 ./hrrr_cal_bcpert wrfbdy_d01.${start_YYYYMMDDHHMM}.mem${ensmemid} wrfinput_d01 ${pert_bank_dir}"
+     runline="mpiexec -n 1 -ppn 1 ./hrrr_cal_bcpert wrfbdy_d01.${start_YYYYMMDDHHMM}.mem${ensmemid} wrfinput_d01 ${pert_bank_dir}"
      $runline
      export err=$?; err_chk
 
@@ -556,7 +557,7 @@ wait
 done
 
 cd $DATA/tar
-aprun tar -cvf hrrrdas.t${cyc}z.makebc.tar *
+mpiexec tar -cvf hrrrdas.t${cyc}z.makebc.tar *
 cp hrrrdas.t${cyc}z.makebc.tar $COMOUT/.
 
 msg="JOB $job FOR RAP_MAKEBC HAS COMPLETED NORMALLY"

@@ -20,11 +20,11 @@ export MPISER=${MPISER:-${NWROOThps}/mpiserial.${mpiserial_ver}/exec/mpiserial}
 LSB_MAX_NUM_PROCESSORS="${LSB_MAX_NUM_PROCESSORS:-1}"
 if (( LSB_MAX_NUM_PROCESSORS > 1 )) ; then
     # Wrapper to start prep-chem-sources.  Use aprun if this is a MAMU node:
-    RUNSERIAL='aprun -d 1 -n 1 -N 1 -j 1'
+    RUNSERIAL='mpiexec -n 1 -ppn 1'
 
     # Command to run mpiserial:
     np=$(( LSB_MAX_NUM_PROCESSORS - 1 )) # -1 for MAMU node processor
-    MPISERIAL="aprun -d 1 -n $np -N 24 -j 1 $MPISER -m"
+    MPISERIAL="mpiexec -n $np -ppn 24 $MPISER -m"
 else
     fake_mpiserial() {
         chmod 755 "$1"
@@ -503,4 +503,4 @@ if [[ "$SENDCOM" == YES ]] ; then
         $COMOUT/hrrrak.t${cyc}z.smoke.sources.bin
 fi
 
-${ECHO} "exrap_prep_smoke.sh.ecf completed at `${DATE}`"
+${ECHO} "exhrrr_prep_smoke.sh.ecf completed at `${DATE}`"

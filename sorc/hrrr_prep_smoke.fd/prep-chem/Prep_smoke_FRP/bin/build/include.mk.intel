@@ -63,10 +63,10 @@ LIBNCARG=$(BASE)/libncarg-$(UTILS_VERSION)-$(OPT).a
 
 #-----------------  LINUX Portland Group pgf77/gcc ---------------
 CMACH=PC_LINUX1
-F_COMP=ifort
-C_COMP=gcc
-LOADER=ifort
-C_LOADER=gcc
+F_COMP=ftn
+C_COMP=cc
+LOADER=ftn
+C_LOADER=cc
 LIBS=
 MOD_EXT=mod
 

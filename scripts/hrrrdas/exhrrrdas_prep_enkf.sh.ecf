@@ -108,7 +108,8 @@ done
 export pgm=hrrr_process_enkf
 startmsg
 cp ${EXEChrrr}/hrrr_process_enkf .
-runline="aprun -n 576 -N 12 ./hrrr_process_enkf"
+#runline="aprun -n 576 -N 12 ./hrrr_process_enkf"
+runline="mpiexec -n 640 -ppn 128 ./hrrr_process_enkf"
 $runline
 export err=$?; err_chk
 
@@ -131,7 +132,8 @@ for back in $( seq "$minback" "$maxback" ) ; do
 done
 
 #runline="aprun -n 864 -N 12 ./hrrr_process_enkf"
-runline="aprun -n 576 -N 12 ./hrrr_process_enkf"
+#runline="aprun -n 576 -N 12 ./hrrr_process_enkf"
+runline="mpiexec -n 640 -ppn 128 ./hrrr_process_enkf"
 $runline
 export err=$?; err_chk
 mkdir d02

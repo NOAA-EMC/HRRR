@@ -24,18 +24,18 @@ ECHO="${ECHO:-/bin/echo}"
 cd ${DATA}
 
 # Set up some environment variables
-export ATP_ENABLED=0
-export MALLOC_MMAP_MAX=0
-export MALLOC_TRIM_THRESHOLD_=134217728
-export OMP_STACKSIZE=300M
-export KMP_STACKSIZE=1024m
+#export ATP_ENABLED=0
+#export MALLOC_MMAP_MAX=0
+#export MALLOC_TRIM_THRESHOLD_=134217728
+export OMP_STACKSIZE=500M
+#export KMP_STACKSIZE=1024m
 export OMP_NUM_THREADS=4
-export FORT_BUFFERED=false
+#export FORT_BUFFERED=false
 
 # Set to yes for faster collective ops (mpi reduce)
 # but may not yield bitwise identical results from
 # run to run when yes.
-export MP_COLLECTIVE_OFFLOAD=yes
+#export MP_COLLECTIVE_OFFLOAD=yes
 
 # Make sure START_TIME is in the correct format
 START_TIME=${PDY}' '${cyc}
@@ -80,7 +80,7 @@ while [[ $counter -lt 36 ]]; do
       echo " Cycle surface fields based on hrrr_${CYC_TIME}f0$counterhr"
       cp ${HRRRGES_SFC}/hrrr_${CYC_TIME}f0$counterhr ./wrfout_d01_save
       cp ${EXEChrrr}/hrrr_full_cycle_surface .
-      runline="aprun -n 4 -N 4 ./hrrr_full_cycle_surface"
+      runline="mpiexec -n 4 -ppn 4 ./hrrr_full_cycle_surface"
       $runline >> full_cycle_surface.out
       export err=$?; err_chk
       break
@@ -109,14 +109,14 @@ if [ ${cyc} -eq ${time_updateSST} ]; then
     cp ${COMINsst}/sst.${PDY}/rtgssthr_grb_0.083.grib2 SSTRTG
     cp ${EXEChrrr}/hrrr_process_sst .
     ln -sf SSTRTG latest.SST
-    runline="aprun -n 1 -N 1 ./hrrr_process_sst"
+    runline="mpiexec -n 1 -ppn 1 ./hrrr_process_sst"
     $runline >> process_sst.out
     export err=$?; err_chk
  elif [ -r "${COMINsst}/sst.${PDYm1}/rtgssthr_grb_0.083.grib2" ]; then
     cp ${COMINsst}/sst.${PDYm1}/rtgssthr_grb_0.083.grib2 SSTRTG
     cp ${EXEChrrr}/hrrr_process_sst .
     ln -sf SSTRTG latest.SST
-    runline="aprun -n 1 -N 1 ./hrrr_process_sst"
+    runline="mpiexec -n 1 -ppn 1 ./hrrr_process_sst"
     $runline >> process_sst.out
     export err=$?; err_chk
   else
@@ -200,17 +200,17 @@ BERROR=${FIXhrrr}/hrrr_berror_stats_global
 # SATANGL=${FIXhrrr}/hrrr_global_satangbias.txt
 SATINFO=${FIXhrrr}/hrrr_global_satinfo.txt
 
-RTMAERO=${FIXcrtm_anal}/AerosolCoeff.bin
-RTMCLDS=${FIXcrtm_anal}/CloudCoeff.bin
-RTMEMIS_IRwater=${FIXcrtm_anal}/Nalli.IRwater.EmisCoeff.bin
-RTMEMIS_IRice=${FIXcrtm_anal}/NPOESS.IRice.EmisCoeff.bin
-RTMEMIS_IRland=${FIXcrtm_anal}/NPOESS.IRland.EmisCoeff.bin
-RTMEMIS_IRsnow=${FIXcrtm_anal}/NPOESS.IRsnow.EmisCoeff.bin
-RTMEMIS_VISice=${FIXcrtm_anal}/NPOESS.VISice.EmisCoeff.bin
-RTMEMIS_VISland=${FIXcrtm_anal}/NPOESS.VISland.EmisCoeff.bin
-RTMEMIS_VISsnow=${FIXcrtm_anal}/NPOESS.VISsnow.EmisCoeff.bin
-RTMEMIS_VISwater=${FIXcrtm_anal}/NPOESS.VISwater.EmisCoeff.bin
-RTMEMIS_MWwater=${FIXcrtm_anal}/FASTEM5.MWwater.EmisCoeff.bin
+RTMAERO=${FIXcrtm}/AerosolCoeff.bin
+RTMCLDS=${FIXcrtm}/CloudCoeff.bin
+RTMEMIS_IRwater=${FIXcrtm}/Nalli.IRwater.EmisCoeff.bin
+RTMEMIS_IRice=${FIXcrtm}/NPOESS.IRice.EmisCoeff.bin
+RTMEMIS_IRland=${FIXcrtm}/NPOESS.IRland.EmisCoeff.bin
+RTMEMIS_IRsnow=${FIXcrtm}/NPOESS.IRsnow.EmisCoeff.bin
+RTMEMIS_VISice=${FIXcrtm}/NPOESS.VISice.EmisCoeff.bin
+RTMEMIS_VISland=${FIXcrtm}/NPOESS.VISland.EmisCoeff.bin
+RTMEMIS_VISsnow=${FIXcrtm}/NPOESS.VISsnow.EmisCoeff.bin
+RTMEMIS_VISwater=${FIXcrtm}/NPOESS.VISwater.EmisCoeff.bin
+RTMEMIS_MWwater=${FIXcrtm}/FASTEM5.MWwater.EmisCoeff.bin
 
 CONVINFO=${FIXhrrr}/hrrr_nam_regional_convinfo
 OZINFO=${FIXhrrr}/hrrr_global_ozinfo.txt    
@@ -249,8 +249,8 @@ ln -sf $RTMEMIS_MWwater ./FASTEM5.MWwater.EmisCoeff.bin
 
 # Copy CRTM coefficient files based on entries in satinfo file
 for file in `awk '{if($1!~"!"){print $1}}' ./satinfo | sort | uniq` ;do 
-   ln -sf ${FIXcrtm_anal}/${file}.SpcCoeff.bin ./
-   ln -sf ${FIXcrtm_anal}/${file}.TauCoeff.bin ./
+   ln -sf ${FIXcrtm}/${file}.SpcCoeff.bin ./
+   ln -sf ${FIXcrtm}/${file}.TauCoeff.bin ./
 done
 
 # Only need this file for single obs test
@@ -368,7 +368,7 @@ export pgm=hrrr_gsi
 
 startmsg
 cp ${EXEChrrr}/hrrr_gsi .
-runline="aprun -j1 -cc depth -n 360 -N 6 -d 4 ./hrrr_gsi"
+runline="mpiexec -n 360 -ppn 30 --cpu-bind core --depth 4 ./hrrr_gsi"
 $runline < gsiparm.anl >> $DATA/$pgmout 2>errfile
 export err=$?; err_chk
 
@@ -436,7 +436,7 @@ EOF
 
 export pgm=hrrr_gsi
 startmsg
-runline="aprun -j1 -cc depth -n 360 -N 6 -d 4 ./hrrr_gsi"
+runline="mpiexec -n 360 -ppn 30 --cpu-bind core --depth 4 ./hrrr_gsi"
 $runline < gsiparm.anl >> $DATA/$pgmout 2>errfile
 export err=$?; err_chk
 
@@ -452,7 +452,7 @@ if [ ${cyc} -eq ${trim_snow} ]; then
      cp ${PREPBUFR}/rap_e.t${cyc}z.imssnow.grib2 ./imssnow2
      cp ${FIXhrrr}/hrrr_geo_em.d01.nc ./geo_em.d01.nc
      cp ${EXEChrrr}/hrrr_process_imssnow .
-     runline="aprun -n 1 -N 1 ./hrrr_process_imssnow"
+     runline="mpiexec -n 1 -ppn 1 ./hrrr_process_imssnow"
      $runline
      export err=$?; err_chk
   else
@@ -545,7 +545,7 @@ if [ -r "${fvcomfile}" ]; then
   cp ${fvcomfile} ./fvcom.nc
   cp ${FIXhrrr}/hrrr_geo_em.d01.nc ./geo_em.d01.nc
   cp ${EXEChrrr}/hrrr_process_fvcom .
-  runline="aprun -n 1 -N 1 ./hrrr_process_fvcom"
+  runline="mpiexec -n 1 -ppn 1 ./hrrr_process_fvcom"
   $runline < fvcom.namelist
   export err=$?; err_chk
 
@@ -560,7 +560,7 @@ EOF
 
   echo "FVCOM update for lake surface temperatures."
   cp ${fvcomfile} ./fvcom.nc
-  runline="aprun -n 1 -N 1 ./hrrr_process_fvcom"
+  runline="mpiexec -n 1 -ppn 1 ./hrrr_process_fvcom"
   $runline < fvcom.namelist
   export err=$?; err_chk
 

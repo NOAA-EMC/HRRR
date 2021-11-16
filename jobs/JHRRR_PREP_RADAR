@@ -84,6 +84,7 @@ export USHhrrr=${USHhrrr:-$HOMEhrrr/ush/${dom}}
 ##############################
 # Run setpdy and initialize PDY variables
 ##############################
+export PDY=20210824
 setpdy.sh
 . PDY
 
@@ -94,10 +95,11 @@ setpdy.sh
 export COMINradar=${COMINradar:-$(compath.py hourly/prod)}
 
 # Hourly Lightning Data
-export COMINlight=${COMINlight:-$(compath.py rap/prod)}
+#export COMINlight=${COMINlight:-$(compath.py rap/prod)}
+export COMINlight=${COMINlight:-${COMRAP}}
 
 # NSSL Mosaic Data
-export COMINmosaic=${COMINmosaic:-${DCOMROOT}/prod/ldmdata/obs/upperair/mrms}
+export COMINmosaic=${COMINmosaic:-${DCOMROOT}/ldmdata/obs/upperair/mrms}
 
 ##############################################
 # Define COM directories

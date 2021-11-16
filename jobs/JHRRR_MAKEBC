@@ -37,7 +37,7 @@ if [ "$RUN_ENVIR" != nco ]      ### For Developers, "group_name" is passed from 
 then
   group_name=${group_name:-meso}
   package_name=${package_name:-hrrr}
-  . /${group_name}/save/${LOGNAME}/${package_name}${NWROOT}/parm/${package_name}_para_config
+#  . /${group_name}/save/${LOGNAME}/${package_name}${NWROOT}/parm/${package_name}_para_config
   export userid=${userid:-$LOGNAME}
 fi
 
@@ -101,6 +101,7 @@ export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
+export PDY=20210824
 setpdy.sh
 . PDY
 
@@ -110,7 +111,8 @@ setpdy.sh
 export COM=${COM:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}}
 export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMRAP=${COMRAP:-${COMROOT}/rap/${envir}}
+#export COMRAP=${COMRAP:-${COMROOT}/rap/${envir}}
+export COMRAP=${COMRAP:-}
 
 mkdir -m 775 -p $COM $COMOUT
 env

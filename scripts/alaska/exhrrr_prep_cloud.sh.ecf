@@ -63,7 +63,7 @@ EOF
 
 #  Run obs pre-processor
 cp ${EXEChrrr}/hrrr_process_cloud .
-runline="aprun -n 4 -N 4 ./hrrr_process_cloud"
+runline="mpiexec -n 4 -ppn 4 ./hrrr_process_cloud"
 $runline
 export err=$?; err_chk
 

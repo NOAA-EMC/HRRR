@@ -45,7 +45,7 @@ if [ -r ${COMIN}/"hrrr.t${cyc}z.wrfguess_rap" ]; then
     fi
 
     cp ${EXEChrrr}/hrrr_copy_hrrrdas .
-    runline="aprun -n 4 -N 4 ./hrrr_copy_hrrrdas ${HRRRDAS_MEAN} ./wrf_inout"
+    runline="mpiexec -n 4 -ppn 4 ./hrrr_copy_hrrrdas ${HRRRDAS_MEAN} ./wrf_inout"
     $runline >> copy_hrrrdas.out
     export err=$?; err_chk
     echo " Cycle ${PDY}${cyc}: TTEN background is from HRRRDAS: ${HRRRDAS_MEAN}"
@@ -80,7 +80,7 @@ while [[ $counter -lt 36 ]]; do
       echo " Cycle surface fields based on hrrr_${CYC_TIME}f0$counterhr"
       cp ${HRRRGES_SFC}/hrrr_${CYC_TIME}f0$counterhr ./wrfout_d01_save
       cp ${EXEChrrr}/hrrr_full_cycle_surface .
-      runline="aprun -n 4 -N 4 ./hrrr_full_cycle_surface"
+      runline="mpiexec -n 4 -ppn 4 ./hrrr_full_cycle_surface"
       $runline >> full_cycle_surface.out
       export err=$?; err_chk
       break
@@ -101,14 +101,14 @@ if [ -r "$latestGVF" ]; then
    cp ${FIXhrrr}/hrrr_gvf_VIIRS_4KM.MIN.1gd4r.new gvf_VIIRS_4KM.MIN.1gd4r.new
    cp ${FIXhrrr}/hrrr_gvf_VIIRS_4KM.MAX.1gd4r.new gvf_VIIRS_4KM.MAX.1gd4r.new
    cp $latestGVF GVF-WKL-GLB.grib2
-   runline="aprun -n 4 -N 4 ./hrrr_update_gvf"
+   runline="mpiexec -n 4 -ppn 4 ./hrrr_update_gvf"
    $runline >> update_gvf.out
 elif [ -r "$latestGVF2" ]; then
    cp ${EXEChrrr}/hrrr_update_gvf .
    cp ${FIXhrrr}/hrrr_gvf_VIIRS_4KM.MIN.1gd4r.new gvf_VIIRS_4KM.MIN.1gd4r.new 
    cp ${FIXhrrr}/hrrr_gvf_VIIRS_4KM.MAX.1gd4r.new gvf_VIIRS_4KM.MAX.1gd4r.new 
    cp $latestGVF2 GVF-WKL-GLB.grib2
-   runline="aprun -n 4 -N 4 ./hrrr_update_gvf"
+   runline="mpiexec -n 4 -ppn 4 ./hrrr_update_gvf"
    $runline >> update_gvf.out
 else
    echo "$latestGVF and $latestGVF2 do not exist!!"
@@ -144,7 +144,7 @@ done
 
 # Run radar to tten
 cp ${EXEChrrr}/hrrr_ref2tten .
-runline="aprun -n 4 -N 4 ./hrrr_ref2tten"
+runline="mpiexec -n 4 -ppn 4 ./hrrr_ref2tten"
 $runline
 export err=$?; err_chk
 

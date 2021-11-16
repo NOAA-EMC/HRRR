@@ -16,7 +16,7 @@ OBJS=	BFRHDR.o BFRIZE.o CALHEL.o CALWXT.o SMIX.o SNDPST_EM.o VAP.o \
 # CMD		Name of the executable
 # PROFLIB	Library needed for profiling
 #
-FC =            ftn -openmp -convert big_endian -g -traceback
+FC =            ftn -qopenmp -convert big_endian -g -traceback
 LDFLAGS = 
 CMD = ../../exec/hrrr_sndp
 LIBS = ${BUFR_LIB4}

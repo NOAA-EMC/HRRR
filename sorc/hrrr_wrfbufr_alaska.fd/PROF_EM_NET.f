@@ -63,6 +63,7 @@ C------------------------------------------------------------------------
                              P A R A M E T E R
      & (A2=17.2693882,A3=273.16,A4=35.86,PQ0=379.90516,DTR=1.74532925E-2
      &, G=9.81,GI=1./G,RD=287.04,CP=1004.6,CAPA=RD/CP,RHCRIT=0.9999)
+
       PARAMETER (GAMMA=6.5/1000.,ZSL=0.0,D608=0.608)
       PARAMETER (TAUCR=RD*GI*290.66,CONST=0.005*G/RD)
 
@@ -70,6 +71,7 @@ C------------------------------------------------------------------------
                              R E A L
      & STNLAT(NSTAT),STNLON(NSTAT)
 !                             R E A L
+!     & DETA(LM),RDETA(LM),AETA(LM),UL(2*LM)
 C
        REAL, ALLOCATABLE::
      & RES(:),FIS(:),THS(:),HBOT(:)
@@ -85,7 +87,7 @@ C
      &,TLMIN(:),TLMAX(:)
      &,SMC(:,:),CMC(:),STC(:,:),SH2O(:,:)
      &,VEGFRC(:),POTFLX(:),PSLP(:),PDSL1(:)
-     &,EGRID2(:),SM(:),SICE(:)
+     &,EGRID2(:),SM(:),SICE(:),TSK(:)
      &,HBM2(:),FACTR(:)
      &,PTBL(:,:),TTBL(:,:)
      &,STATPR(:),STACPR(:),STAEVP(:)
@@ -97,29 +99,27 @@ C
      &,SFCSHX0(:),SUBSHX0(:),SNOPCX0(:),ASWIN0(:)
      &,ASWOUT0(:),ALWIN0(:),ALWOUT0(:),ALWTOA0(:)
      &,ASWTOA0(:),ACSNOW0(:),ACSNOM0(:),SSROFF0(:)
-     &,BGROFF0(:),PVAPOR(:),CANOPY(:),LH(:)
+     &,BGROFF0(:),CANOPY(:)
 
 C
 !                             R E A L
 !     & T(NSTAT,LM),Q(NSTAT,LM),U(NSTAT,LM),V(NSTAT,LM),Q2(NSTAT,LM)
 !     &,OMGALF(NSTAT,LM),CWM(NSTAT,LM),TRAIN(NSTAT,LM),TCUCN(NSTAT,LM)
 !     &,RSWTT(NSTAT,LM),RLWTT(NSTAT,LM),CCR(NSTAT,LM),RTOP(NSTAT,LM)
-!     &,HTM(NSTAT,LM),OMGA(NSTAT,LM),QRAIN(NSTAT,LM)
+!     &,HTM(NSTAT,LM),OMGA(NSTAT,LM)
 
       REAL, ALLOCATABLE:: T(:,:),Q(:,:),U(:,:),V(:,:),Q2(:,:)
      &,                   OMGALF(:,:),CWM(:,:),TRAIN(:,:),TCUCN(:,:)
      &,                   RSWTT(:,:),RLWTT(:,:),CCR(:,:),RTOP(:,:)
      &,                   HTM(:,:),OMGA(:,:),p_hold(:,:),t_hold(:,:)
-     &,                   PINT(:,:),UL(:),ZINT(:,:),QRAIN(:,:)
-     &,                   QICE(:,:)
+     &,                   PINT(:,:),UL(:),CLDFRA_BL(:,:)
 C  
 
       REAL, ALLOCATABLE:: DHCNVC(:,:),DHRAIN(:,:),STADHC(:),STADHR(:),
-     &                      TCUCN0(:,:),TRAIN0(:,:),CLDFRA_BL(:,:)
+     &                      TCUCN0(:,:),TRAIN0(:,:)
 
-      REAL,ALLOCATABLE:: DUM(:,:,:),DUMMY(:,:),DUMMY2(:,:),
-     &  DUMMY3(:,:),DUM3D(:,:,:),DUM3D2(:,:,:),DUM3D3(:,:,:),
-     &  GDLAT(:,:),GDLON(:,:)
+      REAL,ALLOCATABLE:: DUM(:,:,:),DUMMY(:,:),DUMMY2(:,:),DUMMY3(:,:),
+     &  DUM3D(:,:,:),DUM3D2(:,:,:),DUM3D3(:,:,:),GDLAT(:,:),GDLON(:,:)
 
       REAL, ALLOCATABLE:: PRODAT(:),FPACK(:)
 
@@ -158,6 +158,8 @@ C	new stuff
 
 	real:: rinc(5)
 	integer:: IDATE(8),JDATE(8)
+        character :: SysDepInfo*80
+        real :: truelat1, truelat2
 
 C------------------------------------------------------------------------
       DATA BLANK/'    '/
@@ -166,16 +168,22 @@ C***
 C***  READ IN THE INFORMATION FILE ABOUT THE SOUNDINGS
 C***
 
+c	write(6,*) 'filename= ', filename
+c	write(6,*) 'startedate= ', startdate
+
+!	datestr=startdate
+
       print *, 'into netcdf PROF_EM'
-      REWIND 18
+      print *,  'DateStr: ', DateStr
+      REWIND 19
 C
-      READ(18)NUMSTA,IDSTN,STNLAT,STNLON
+      READ(19)NUMSTA,IDSTN,STNLAT,STNLON
      1,       IHINDX,JHINDX,IVINDX,JVINDX,CIDSTN
-        print *, 'NUMSTA IDSTN ', NUMSTA,IDSTN,IHINDX,JHINDX
+        print *, 'NUMSTA IDSTN ', NUMSTA,IDSTN,STNLAT,IHINDX,JHINDX
 	
-	print *, 'STNLAT(1), STNLON(1): ', STNLAT(1), STNLON(1)
-	print *, 'IHINDX(1),JHINDX(1): ', IHINDX(1),JHINDX(1)
-	print *, 'IVINDX(1),JVINDX(1): ', IVINDX(1),JVINDX(1)
+	write(6,*) 'STNLAT(1), STNLON(1): ', STNLAT(1), STNLON(1)
+	write(6,*) 'IHINDX(1),JHINDX(1): ', IHINDX(1),JHINDX(1)
+	write(6,*) 'IVINDX(1),JVINDX(1): ', IVINDX(1),JVINDX(1)
       WRITE(6,20)NUMSTA
    20 FORMAT('INIT:  NUMBER OF PROFILE STATIONS ',I5)
 
@@ -212,10 +220,13 @@ c	endif
 
        if ( frst ) then
          frst = .false.
-         CALL ext_ncd_ioinit(Status)
+         CALL ext_ncd_ioinit(SysDepInfo,Status)
+          print*,'CALLed ioinit', Status
 	write(6,*) 'filename early in PROF= ', filename
          CALL ext_ncd_open_for_read( trim(fileName), 0, 0, " ",
      &  DataHandle, Status)
+          print*,'CALLed open for read', Status
+	  print*,'associated DataHandle: ', DataHandle
        else
            Status = 0
        endif
@@ -241,10 +252,8 @@ C Getting start time
  15   format(i4,1x,i2,1x,i2,1x,i2)
       print*,'start yr mo day hr =',iyear,imn,iday,ihrst
 
-
-
       ifhr=ITAG
-      print*,' in PROF ifhr fileName=',ifhr,fileName
+      print*,' in INITPOST ifhr fileName=',ifhr,fileName
 
         call ext_ncd_get_dom_ti_integer(DataHandle,
      &   'WEST-EAST_GRID_DIMENSION',itmp
@@ -311,8 +320,9 @@ C Getting start time
        ALLOCATE(ASWIN0(NUMSTA),ASWOUT0(NUMSTA),ALWIN0(NUMSTA))
        ALLOCATE(ALWOUT0(NUMSTA),ALWTOA0(NUMSTA),ASWTOA0(NUMSTA))
        ALLOCATE(ACSNOW0(NUMSTA),ACSNOM0(NUMSTA),SSROFF0(NUMSTA))
-       ALLOCATE(BGROFF0(NUMSTA),CANOPY(NUMSTA),LH(NUMSTA))
-       ALLOCATE(SWEM(NUMSTA))
+       ALLOCATE(BGROFF0(NUMSTA),TSK(NUMSTA),SWEM(NUMSTA))
+       ALLOCATE(CANOPY(NUMSTA))
+
 
 	ALLOCATE(T(NUMSTA,LM))
 	ALLOCATE(Q(NUMSTA,LM))
@@ -323,7 +333,6 @@ C Getting start time
 	ALLOCATE(CWM(NUMSTA,LM))
 	ALLOCATE(TRAIN(NUMSTA,LM))
 	ALLOCATE(TCUCN(NUMSTA,LM))
-        ALLOCATE(CLDFRA_BL(NUMSTA,LM))
 	ALLOCATE(RSWTT(NUMSTA,LM))
 	ALLOCATE(RLWTT(NUMSTA,LM))
 	ALLOCATE(CCR(NUMSTA,LM))
@@ -336,8 +345,7 @@ C Getting start time
         ALLOCATE(W(NUMSTA,LM+1))
         ALLOCATE(WH(NUMSTA,LM))
         ALLOCATE(IW(NUMSTA,LM))
-        ALLOCATE(QRAIN(NUMSTA,LM))
-        ALLOCATE(QICE(NUMSTA,LM))
+        ALLOCATE(CLDFRA_BL(NUMSTA,LM))
 
         ALLOCATE(STADHC(LM))
         ALLOCATE(STADHR(LM))
@@ -380,9 +388,6 @@ C Getting start time
 
 !!!!!
 
-
-
-
         call ext_ncd_get_dom_ti_real(DataHandle,'DX',tmp
      + ,1,ioutcount,istatus)
         dxval=nint(tmp)
@@ -401,11 +406,11 @@ C Getting start time
         write(6,*) 'cenlon= ', cenlon
         call ext_ncd_get_dom_ti_real(DataHandle,'TRUELAT1',tmp
      + ,1,ioutcount,istatus)
-        truelat1=nint(1000.*tmp)
+        truelat1=tmp*1000.0
         write(6,*) 'truelat1= ', truelat1
         call ext_ncd_get_dom_ti_real(DataHandle,'TRUELAT2',tmp
      + ,1,ioutcount,istatus)
-        truelat2=nint(1000.*tmp)
+        truelat2=tmp*1000.0
         write(6,*) 'truelat2= ', truelat2
         call ext_ncd_get_dom_ti_integer(DataHandle,'MAP_PROJ',itmp
      + ,1,ioutcount,istatus)
@@ -435,6 +440,7 @@ c
 
 	write(6,*) 'V: ', DUM3D2(20,20,20)
 
+        print *, 'u v loop'
         DO L = 1, LM
 	DO N=1,NUMSTA
 	  U(N,L)=DUM3D(IHINDX(N),JHINDX(N),L)
@@ -442,7 +448,7 @@ c
 	ENDDO
 	ENDDO
 
-
+        print *, 'past u v loop'
 	write(6,*) 'U,V defined: '
 
       VarName='W'
@@ -486,26 +492,16 @@ c
         ALWIN(N)=DUMMY2(I,J)
         ASWOUT(N)=DUMMY3(I,J)-DUMMY(I,J)
       ENDDO
-        
+
       VarName='PH'
-      call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D2,
+      call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D,
      &  IM+1,1,JM+1,LM+1,IM,JS,JE,LM+1)
 	write(6,*) 'PH: ', DUM3D(20,20,20)
 
       VarName='PHB'
-      call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D3,
+      call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D,
      &  IM+1,1,JM+1,LM+1,IM,JS,JE,LM+1)
 	write(6,*) 'PHB: ', DUM3D(20,20,20)
-
-      allocate(ZINT(NUMSTA,LM+1))
-
-      DO L=1,LM+1
-      DO N=1,NUMSTA
-         I=IHINDX(N)
-         J=JHINDX(N)
-         ZINT(N,L)=(DUM3D2(I,J,L)+DUM3D3(I,J,L))/G
-       ENDDO
-      ENDDO
 
       VarName='T'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D,
@@ -519,11 +515,11 @@ c
              t_hold ( N , L ) = dum3d ( i, j, l ) + 300.
         end do
        end do
- 
+
       VarName='MU'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
-   
+
       VarName='MUB'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY2,
      &  IM,1,JM,1,IM,JS,JE,1)
@@ -531,6 +527,7 @@ c
   633	format(15(f6.0,1x))
 
 !	write(6,*) 'past MU, MUB'
+
         if (allocated(pint_part)) deallocate(pint_part)
         allocate(pint_part(NUMSTA))
 
@@ -538,11 +535,13 @@ c
         allocate(PDS(NUMSTA))
         allocate(SFCP(NUMSTA))
 
+
 	DO N=1,NUMSTA
          I=IHINDX(N)
          J=JHINDX(N)
   	 pint_part(N)=DUMMY(I,J)+DUMMY2(I,J)
 	ENDDO
+
 
 !      VarName='MU0'
 !      call getVariable(fileName,DateStr,DataHandle,VarName,DUM0D,
@@ -572,57 +571,24 @@ c
 	ENDDO
 	ENDDO
 
-      VarName='QRAIN'
-      call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D,
-     &  IM+1,1,JM+1,LM+1,IM,JS,JE,LM)
-
-c        DO L=1,LM
-c        DO N=1,NUMSTA
-c         I=IHINDX(N)
-c         J=JHINDX(N)
-c         QRAIN(N,L)=DUM3D(I,J,L)/(1.0+DUM3D(I,J,L))
-c        ENDDO
-c        ENDDO
-
-      VarName='QICE'
-      call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D,
-     &  IM+1,1,JM+1,LM+1,IM,JS,JE,LM)
-
-        DO L=1,LM
-        DO N=1,NUMSTA
-         I=IHINDX(N)
-         J=JHINDX(N)
-         QICE(N,L)=DUM3D(I,J,L)/(1.0+DUM3D(I,J,L))
-        ENDDO
-        ENDDO
-
       VarName='QCLOUD'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D,
      &  IM+1,1,JM+1,LM+1,IM,JS,JE,LM)
 
         DO L = 1, LM
         DO N=1,NUMSTA
+          Q2(N,L)=0.
           CWM(N,L)=DUM3D(IHINDX(N),JHINDX(N),L)
         ENDDO
         ENDDO
 
       VarName='CLDFRA_BL'
-      call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D,
+      call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D,     
      &  IM+1,1,JM+1,LM+1,IM,JS,JE,LM)
 
         DO L = 1, LM
         DO N=1,NUMSTA
           CLDFRA_BL(N,L)=DUM3D(IHINDX(N),JHINDX(N),L)
-        ENDDO
-        ENDDO
-
-      VarName='QKE'
-      call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D,
-     &  IM+1,1,JM+1,LM+1,IM,JS,JE,LM)
-
-        DO L = 1, LM
-        DO N=1,NUMSTA
-          Q2(N,L)=DUM3D(IHINDX(N),JHINDX(N),L)
         ENDDO
         ENDDO
 
@@ -641,21 +607,17 @@ c        ENDDO
         END DO
       END DO
 
-
-      call getVariable(fileName,DateStr,DataHandle,'ZS',SLDPTH2,
-     & NSOIL,1,1,1,NSOIL,1,1,1)
-
-      call getVariable(fileName,DateStr,DataHandle,'DZS',SLDPTH2,
-     & NSOIL,1,1,1,NSOIL,1,1,1)
-
       VarName='Q2'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
 
       DO N=1,NUMSTA
 !!! conversion needed for QSHLTR?  (spec hum, mix ratio, what??)
+!!! conversion needed for QSHLTR?  (spec hum, mix ratio, what??)
+!!! conversion needed for QSHLTR?  (spec hum, mix ratio, what??)
         QSHLTR(N)=DUMMY(IHINDX(N),JHINDX(N))
       ENDDO
+
 
       VarName='T2'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
@@ -713,6 +675,7 @@ c        ENDDO
         END DO
       END DO
 
+
 c
 c reading SMSTAV
       VarName='SMOIS'
@@ -736,15 +699,6 @@ c reading SMSTAV
       VarName='ISLTYP'
       call getIVariable(fileName,DateStr,DataHandle,VarName,IDUM
      &  ,IM,1,JM,1,IM,JS,JE,1)
-
-      VarName='SR'
-      call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
-     &  IM,1,JM,1,IM,JS,JE,1)
-      DO N=1,NUMSTA
-        I=IHINDX(N)
-        J=JHINDX(N)
-        SR(N)=DUMMY(I,J)
-      ENDDO
 
       VarName='VEGFRA'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
@@ -801,16 +755,6 @@ c reading SMSTAV
         CANOPY(N)=DUMMY(I,J)
       ENDDO
 
-      VarName='FLHC'
-      call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
-     &  IM,1,JM,1,IM,JS,JE,1)
-
-      DO N=1,NUMSTA
-        I=IHINDX(N)
-        J=JHINDX(N)
-        SFCEXC(N)=DUMMY(I,J)
-      ENDDO
-
       VarName='SST'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
@@ -826,6 +770,17 @@ c reading SMSTAV
       VarName='VZ0'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
+
+      VarName='Z0'
+      call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
+     &  IM,1,JM,1,IM,JS,JE,1)
+
+      DO N=1,NUMSTA
+        I=IHINDX(N)
+        J=JHINDX(N)
+        Z0(N)=DUMMY(I,J)
+        print *, 'Z0 ', Z0(N)
+      ENDDO
 
       VarName='QSFC'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
@@ -871,62 +826,6 @@ c reading SMSTAV
 	ENDDO
 	ENDDO
 
-!!!! need to do the qvapor fix - integrated contribution of
-!!!! moisture to the surface pressure
-
-        allocate(PVAPOR(NUMSTA))
-
-c       DO N=1,NUMSTA
-c         I=IHINDX(N)
-c         J=JHINDX(N)
-c         PVAPOR(N)=0.
-c       do L=1,LM
-c       dz=ZINT(N,L)-ZINT(N,L+1)
-c       rho=PMID(N,L)/(RD*T(N,L))
-c       print *, 'vapor check ', N, L, dz, rho, PMID(N,L), T(N,L),
-c     x      Q(N,L), Q(N,L+1)
-c 
-c        if (L .le. LM-1) then
-c        QMEAN=0.5*(Q(N,L)+Q(N,L+1))
-c        else
-c        QMEAN=Q(N,L)
-c        endif
-c       if (mod(L,5) .eq. 0 .and. mod(N,20) .eq. 0) then
-c        write(6,*) 'N, L, dz, rho, qmean, increm: ',
-c     &        N, L, dz, rho, qmean, G*rho*dz*QMEAN
-c       endif
-c
-c       pvapor(N)=pvapor(N)+G*rho*dz*QMEAN
-c       enddo
-c       ENDDO
-
-      VarName='P_TOP'
-      call getVariable(fileName,DateStr,DataHandle,VarName,PT,
-     &  1,1,1,1,1,1,1,1)
-
-        write(6,*) 'returned P_TOP into PT as : ', PT
-
-      VarName='PSFC'
-      call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
-     &  IM,1,JM,1,IM,JS,JE,1)
-
-      DO N=1,NUMSTA
-        I=IHINDX(N)
-        J=JHINDX(N)
-        SFCP(N)=DUMMY(I,J)
-      ENDDO
- 
-c       DO N=1,NUMSTA
-c         I=IHINDX(N)
-c         J=JHINDX(N)
-c         PINT (N,1)=PT
-c         PINT(N,LM+1)=pint_part(N)+PT+PVAPOR(N)
-c         PDS(N)=pint_part(N)+PT+PVAPOR(N)
-c         print *, 'setting PDS ', PDS(N), pint_part(N), PT, QMEAN, 
-c     x      PVAPOR(N), SFCP(N)
-c       ENDDO
-!!!! end vapor fix
-
       VarName='MAPFAC_M'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
@@ -971,11 +870,26 @@ c       ENDDO
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
 
-!      VarName='P_TOP'
-!     call getVariable(fileName,DateStr,DataHandle,VarName,PT,
-!     &  1,1,1,1,1,1,1,1)
+      DO N=1,NUMSTA
+        I=IHINDX(N)
+        J=JHINDX(N)
+        TSK(N)=DUMMY(I,J)
+      ENDDO
 
-!	write(6,*) 'returned P_TOP into PT as : ', PT
+      VarName='P_TOP'
+      call getVariable(fileName,DateStr,DataHandle,VarName,PT,
+     &  1,1,1,1,1,1,1,1)
+
+	write(6,*) 'returned P_TOP into PT as : ', PT
+      VarName='PSFC'
+      call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
+     &  IM,1,JM,1,IM,JS,JE,1)
+
+      DO N=1,NUMSTA
+        I=IHINDX(N)
+        J=JHINDX(N)
+        SFCP(N)=DUMMY(I,J)
+      ENDDO
 
         DO N=1,NUMSTA
          I=IHINDX(N)
@@ -988,8 +902,6 @@ c       ENDDO
         TSHLTR(N)=TH2_hold(N)*(PINT(N,LM+1)/100000.)**CAPA
 	THS(N)=DUMMY(I,J)*(100000./PINT(N,LM+1))**CAPA
 
-        HBOT(N)=-9999.
-
 !!! constrain surface RH
 
            QC=(PQ0/PINT(N,LM+1))*EXP(A2*(TSHLTR(N)-A3)/(TSHLTR(N)-A4))
@@ -998,6 +910,8 @@ c       ENDDO
            write(6,*) 'reducing surface RH from: ', RH, ' at N: ', N
            QSHLTR(N)=0.999*RHCRIT*QC
            ENDIF
+
+
         ENDDO
 
 
@@ -1069,7 +983,6 @@ CC RAINNC is "ACCUMULATED TOTAL GRID SCALE PRECIPITATION"
      &  IM,1,JM,1,IM,JS,JE,1)
 
       DO N=1,NUMSTA
-!  no convective precip in HRRR
         CUPREC(N)=DUM(IHINDX(N),JHINDX(N),1)*.001
         ACPREC(N)=( DUM(IHINDX(N),JHINDX(N),1)+
      &                  DUM(IHINDX(N),JHINDX(N),2) )*.001
@@ -1078,32 +991,7 @@ CC RAINNC is "ACCUMULATED TOTAL GRID SCALE PRECIPITATION"
       VarName='GSW'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
-
       VarName='GLW'
-      call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
-     &  IM,1,JM,1,IM,JS,JE,1)
-
-      VarName='XLAT'
-      call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
-     &  IM,1,JM,1,IM,JS,JE,1)
-
-      do j = 1, jm
-        do i = 1, im
-            GDLAT ( i, j ) = DUMMY ( i, j )
-        end do
-       end do
-
-      VarName='XLONG'
-      call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
-     &  IM,1,JM,1,IM,JS,JE,1)
-
-      do j = 1, jm
-        do i = 1, im
-            GDLON ( i, j ) = DUMMY ( i, j )
-        end do
-       end do
-
-      VarName='LU_INDEX'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
 
@@ -1132,28 +1020,37 @@ CC RAINNC is "ACCUMULATED TOTAL GRID SCALE PRECIPITATION"
         J=JHINDX(N)
         SFCSHX(N)=DUMMY(I,J)
       ENDDO
-
+ 
       VarName='QFX'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
 
-       VarName='LH'
-       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
-     &   IM,1,JM,1,IM,JS,JE,1)
-       DO N=1,NUMSTA
+      DO N=1,NUMSTA
         I=IHINDX(N)
         J=JHINDX(N)
-        SFCLHX(N)=DUMMY(I,J)
+        SFCLHX(N)=DUMMY(I,J)/(2.5E-06)
       ENDDO
 
-      print*,'LH ',LH(100:110)
+      VarName='LH'
+      call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
+     &   IM,1,JM,1,IM,JS,JE,1)
 
       VarName='SNOWC'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
 
-c        call ext_ncd_ioclose(DataHandle)
-        print *, 'closed file'
+      VarName='FLHC'
+      call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
+     &  IM,1,JM,1,IM,JS,JE,1)
+
+       DO N=1,NUMSTA
+        I=IHINDX(N)
+        J=JHINDX(N)
+        SFCEXC(N)=DUMMY(I,J)
+      ENDDO
+
+!        call ext_ncd_ioclose(DataHandle)
+
 
 
 !!!!!!!!!!!!!!!!! END INSERT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
@@ -1192,7 +1089,6 @@ C
 
 C
 C       Define a GDS, then use GDSWIZ to find N.N. point
-
 
         GDS=-1
         if(maptype .eq. 1)THEN  ! Lambert conformal
@@ -1260,12 +1156,45 @@ C
 	
         CALL GDSWIZ(GDS,-1,1,-9999.,xout,yout,
      &                  RLONX,RLATX,NRET,1,CROT(N),SROT(N))
+        print *, 'gdswiz ', N, RLATX, RLONX, CROT(N), SROT(N)
 
 	ENDDO
 
       NTSPH=INT(3600./DT+0.50)
 
+      DO N=1,NUMSTA
+       PSFC = SFCP(N)
+       ZSFC = FIS(N)*GI
+       PSLP(N) = PSFC
 
+!       write(0,*) 'N, ZSFC, PSFC: ', N, ZSFC, PSFC
+C
+C    COMPUTE LAYER TAU (VIRTUAL TEMP*RD/G).
+Cwrong       TVRT = T(N,1)*(1.0+D608*Q(N,1))
+       TVRT = T(N,LM)*(1.0+D608*Q(N,LM))
+       TAU  = TVRT*RD*GI
+C
+C    COMPUTE TAU AT THE GROUND (Z=ZSFC) AND SEA LEVEL (Z=0)
+C    ASSUMING A CONSTANT LAPSE RATE OF GAMMA=6.5DEG/KM.
+       TVRSFC = TVRT + (ZSFC- ZSL)*GAMMA
+       TAUSFC = TVRSFC*RD*GI
+       TVRSL  = TVRT + (ZSFC- ZSL)*GAMMA
+       TAUSL  = TVRSL*RD*GI
+C
+C     IF NEED BE APPLY SHEULL CORRECTION.
+        IF ((TAUSL.GT.TAUCR).AND.(TAUSFC.LE.TAUCR)) THEN
+           TAUSL=TAUCR
+        ELSEIF ((TAUSL.GT.TAUCR).AND.(TAUSFC.GT.TAUCR)) THEN
+           TAUSL = TAUCR-CONST*(TAUSFC-TAUCR)**2
+        ENDIF
+C
+C    COMPUTE MEAN TAU.
+       TAUAVG = 0.5*(TAUSL+TAUSFC)
+C
+C    COMPUTE SEA LEVEL PRESSURE.
+       IF (FIS(N).GT.1.0) PSLP(N) = PSFC*EXP(ZSFC/TAUAVG)
+c      print *,n,idstn(n),sfcp(n),pslp(n),zsfc,tauavg, gamma
+      ENDDO
 
 C
 C------------------------------------------------------------------------
@@ -1279,85 +1208,41 @@ C
         ENDDO
 
       DO N=1,NUMSTA
-	Z0(N)=-9999.
+c	Z0(N)=-9999.
         HBOT(N)=-9999.
         CFRACL(N)=0.
         CFRACM(N)=0.
         CFRACH(N)=0.
-	CZEN(N)=-9999.
+        CZEN(N)=0.
 
         DO L=1,17
-           IF (CLDFRA_BL(N,L).GT.CFRACH(N)) THEN
-             CFRACH(N)=CLDFRA_BL(N,L)
-             print*,'CFRACH ',CFRACH(N)
-           ENDIF
+         IF (CLDFRA_BL(N,L).GT.CFRACH(N)) THEN
+           CFRACH(N)=CLDFRA_BL(N,L)
+         ENDIF 
         ENDDO
 
         DO L=18,35
-           IF (CLDFRA_BL(N,L).GT.CFRACM(N)) THEN
-             CFRACM(N)=CLDFRA_BL(N,L)
-!             print*,'CFRACM ',CFRACM(N)
-           ENDIF
+         IF (CLDFRA_BL(N,L).GT.CFRACM(N)) THEN
+           CFRACM(N)=CLDFRA_BL(N,L)
+         ENDIF
         ENDDO
 
         DO L=36,50
-           IF (CLDFRA_BL(N,L).GT.CFRACL(N)) THEN
-             CFRACL(N)=CLDFRA_BL(N,L)
-!             print*,'CFRACL ',CFRACL(N)
-           ENDIF
+         IF (CLDFRA_BL(N,L).GT.CFRACL(N)) THEN
+           CFRACL(N)=CLDFRA_BL(N,L)
+         ENDIF
         ENDDO
-
+	CZEN(N)=-9999.
       ENDDO
-      print*,'CFRACH ',CFRACH(10:100)
-!      print*,'CFRACM ',CFRACM(10:100)
-!      print*,'CFRACL ',CFRACL(10:100)
 
-      DO N=1,NUMSTA
-       PSFC = SFCP(N)
-       ZSFC = FIS(N)*GI
-       PSLP(N) = PSFC
 
-!       write(0,*) 'N, ZSFC, PSFC: ', N, ZSFC, PSFC
-C
-C    COMPUTE LAYER TAU (VIRTUAL TEMP*RD/G).
-Cwrong       TVRT = T(N,1)*(1.0+D608*Q(N,1))
-       TVRT = T(N,LM)*(1.0+D608*Q(N,LM))
-       if (mod(N,50) .eq. 0) then
-       write(0,*) 'N, T(N,LM), Q(N,LM), TVRT: ',
-     &          N, T(N,LM), Q(N,LM), TVRT
-       endif
-
-       TAU  = TVRT*RD*GI
-C
-C    COMPUTE TAU AT THE GROUND (Z=ZSFC) AND SEA LEVEL (Z=0)
-C    ASSUMING A CONSTANT LAPSE RATE OF GAMMA=6.5DEG/KM.
-       TVRSFC = TVRT + (ZSFC- ZSL)*GAMMA
-       TAUSFC = TVRSFC*RD*GI
-       TVRSL  = TVRT + (ZSFC- ZSL)*GAMMA
-       TAUSL  = TVRSL*RD*GI
-C
-C    IF NEED BE APPLY SHEULL CORRECTION.
-       IF ((TAUSL.GT.TAUCR).AND.(TAUSFC.LE.TAUCR)) THEN
-          TAUSL=TAUCR
-       ELSEIF ((TAUSL.GT.TAUCR).AND.(TAUSFC.GT.TAUCR)) THEN
-          TAUSL = TAUCR-CONST*(TAUSFC-TAUCR)**2
-       ENDIF
-C
-C    COMPUTE MEAN TAU.
-       TAUAVG = 0.5*(TAUSL+TAUSFC)
-C
-C    COMPUTE SEA LEVEL PRESSURE.
-       IF (FIS(N).GT.1.0) PSLP(N) = PSFC*EXP(ZSFC/TAUAVG)
-c      print *,n,idstn(n),pslp(n),tvrt
-      ENDDO
       DO N=1,NUMSTA
         SNO(N)=-9999. ! many "sno" type variables...which do we need here?
-c	PSLP(N)=-9999.
 	SMSTOT(N)=-9999.
 c	SFCEXC(N)=-9999.
 	CZMEAN(N)=-9999.
 	U00(N)=-9999.
-c	SR(N)=-9999.
+	SR(N)=-9999.
       ENDDO
 
       DO N=1,NUMSTA
@@ -1425,7 +1310,6 @@ C***
  301  format(i4,'-',i2.2,'-',i2.2,'_',i2.2,'_00_00')
  302  format(i4,'-',i2.2,'-',i2.2,'_',i2.2,':00:00')
 
-
 	write(6,*) 'filename later in PROF: ', filename, '_END'
         len=index(filename,' ')-1
 	write(6,*) 'LEN= ', LEN
@@ -1433,6 +1317,7 @@ C***
 
 !	write(6,*) 'old filename is ', trim(filename)
 	write(6,*) 'date for old file is: ', datestrold
+
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1442,6 +1327,8 @@ C***
 
          CALL ext_ncd_open_for_read( trim(fileName), 0, 0, " ",
      &  DataHandle, Status)
+          print*,'CALLed open for read', Status
+	  print*,'associated DataHandle: ', DataHandle
 
        if ( Status /= 0 ) then
          print*,'error opening ',fileName, ' Status = ', Status ; stop
@@ -1453,7 +1340,7 @@ C Getting start time
         print*,'startdate= ',startdate
 
 !      ifhr=nint(rinc(2))
-!      print*,' in PROF ifhr fileName=',ifhr,fileName
+!      print*,' in INITPOST ifhr fileName=',ifhr,fileName
 
 
         call ext_ncd_get_dom_ti_real(DataHandle,'DX',tmp
@@ -1474,11 +1361,11 @@ C Getting start time
         write(6,*) 'cenlon= ', cenlon
         call ext_ncd_get_dom_ti_real(DataHandle,'TRUELAT1',tmp
      + ,1,ioutcount,istatus)
-        truelat1=nint(1000.*tmp)
+        truelat1=1000.*tmp
         write(6,*) 'truelat1= ', truelat1
         call ext_ncd_get_dom_ti_real(DataHandle,'TRUELAT2',tmp
      + ,1,ioutcount,istatus)
-        truelat2=nint(1000.*tmp)
+        truelat2=1000.*tmp
         write(6,*) 'truelat2= ', truelat2
         call ext_ncd_get_dom_ti_integer(DataHandle,'MAP_PROJ',itmp
      + ,1,ioutcount,istatus)
@@ -1515,7 +1402,6 @@ c
       VarName='PHB'
       call getVariable(fileName,DateStrold,DataHandle,VarName,DUM3D,
      &  IM+1,1,JM+1,LM+1,IM,JS,JE,LM+1)
-      print*,'finish reading geopotential'
 
       VarName='T'
       call getVariable(fileName,DateStrold,DataHandle,VarName,DUM3D,
@@ -1543,15 +1429,13 @@ c
       call getVariable(fileName,DateStrold,DataHandle,VarName,DUM3D,
      &  IM+1,1,JM+1,LM+1,IM,JS,JE,LM)
 
+      VarName='QCLOUD'
+      call getVariable(fileName,DateStrold,DataHandle,VarName,DUM3D,
+     &  IM+1,1,JM+1,LM+1,IM,JS,JE,LM)
+
       VarName='TSLB'
       call getVariable(fileName,DateStrold,DataHandle,VarName,DUM3D,
      &  IM+1,1,JM+1,LM+1,IM,JS,JE,NSOIL)
-
-      call getVariable(fileName,DateStrold,DataHandle,'ZS',SLDPTH2,
-     & NSOIL,1,1,1,NSOIL,1,1,1)
-
-      call getVariable(fileName,DateStrold,DataHandle,'DZS',SLDPTH2,
-     & NSOIL,1,1,1,NSOIL,1,1,1)
 
       VarName='Q2'
       call getVariable(fileName,DateStrold,DataHandle,VarName,DUMMY,
@@ -1809,34 +1693,31 @@ CC RAINNC is "ACCUMULATED TOTAL GRID SCALE PRECIPITATION"
 
         DO N=1,NUMSTA
           SFCSHX0(N)=DUMMY(IHINDX(N),JHINDX(N))
-!           print *, 'SENSIBLE0 ', SFCSHX(N), SFCSHX0(N)
         ENDDO
 
       VarName='QFX'
       call getVariable(fileName,DateStrold,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
 
-       VarName='LH'
-       call getVariable(fileName,DateStrold,DataHandle,VarName,DUMMY,
-     &   IM,1,JM,1,IM,JS,JE,1)
         DO N=1,NUMSTA
-          SFCLHX0(N)=DUMMY(IHINDX(N),JHINDX(N))
-           print *, 'LATENT0 ', SFCLHX(N), SFCLHX0(N)
+         SFCLHX0(N)=DUMMY(IHINDX(N),JHINDX(N))/(2.5E-06)
         ENDDO
 
-       print*,'LH ',LH(100:110)
+      VarName='LH'
+      call getVariable(fileName,DateStrold,DataHandle,VarName,DUMMY,
+     &   IM,1,JM,1,IM,JS,JE,1)
 
       VarName='SWDOWN'
       call getVariable(fileName,DateStrold,DataHandle,VarName,DUMMY,
-     +  IM,1,JM,1,IM,JS,JE,1)
+     &   IM,1,JM,1,IM,JS,JE,1)
 
       VarName='GLW'
       call getVariable(fileName,DateStrold,DataHandle,VarName,DUMMY2,
-     +  IM,1,JM,1,IM,JS,JE,1)
+     &   IM,1,JM,1,IM,JS,JE,1)
 
       VarName='GSW'
       call getVariable(fileName,DateStrold,DataHandle,VarName,DUMMY3,
-     +  IM,1,JM,1,IM,JS,JE,1)
+     &   IM,1,JM,1,IM,JS,JE,1)
 
       DO N=1,NUMSTA
         I=IHINDX(N)
@@ -1844,6 +1725,7 @@ CC RAINNC is "ACCUMULATED TOTAL GRID SCALE PRECIPITATION"
         ASWIN0(N)=DUMMY(I,J)
         ALWIN0(N)=DUMMY2(I,J)
         ASWOUT0(N)=DUMMY3(I,J)-DUMMY(I,J)
+        print *, 'ASWIN ', ASWIN(N), ASWIN0(N)
         print *, 'ALWIN ', ALWIN(N), ALWIN0(N)
         print *, 'ASWOUT ', ASWOUT(N), ASWOUT0(N)
       ENDDO
@@ -1863,12 +1745,12 @@ CC RAINNC is "ACCUMULATED TOTAL GRID SCALE PRECIPITATION"
 
 
 C
-          DO N=1,NUMSTA
+c          DO N=1,NUMSTA
 c           TRAIN0(N,L)=DUM(IHINDX(N),JHINDX(N),1)
 c           TCUCN0(N,L)=DUM(IHINDX(N),JHINDX(N),2)
 c	TRAIN0(N,L)=-9999.
 c	TCUCN0(N,L)=-9999.
-          ENDDO
+c          ENDDO
 C
 c       ENDDO      
 C
@@ -1898,7 +1780,7 @@ c        ASWOUT0(N)=-9999.
 c        ALWIN0(N)=-9999.
         ALWOUT0(N)=-9999.
         ALWTOA0(N)=-9999.
-          POTFLX0(N)=-9999.
+        POTFLX0(N)=-9999.
         ENDDO
 C
 C
@@ -1927,7 +1809,7 @@ C-----------------------------------------------------------------------
 !$OMP parallel do 
       DO N=1,NUMSTA
         IW(N,1)=-9999
-        CCR(N,1)=-999999.
+        CCR(N,1)=-9999.
 !        PDSL1(N)=PD(IHINDX(N),JHINDX(N))*RES(N)
         PDSL1(N)=pint_part(N)*RES(N)
       ENDDO
@@ -1948,7 +1830,7 @@ C
 !$OMP*                    rqkl,tkl,tmt0,tmt15,u00kl)
       DO 210 N=1,NUMSTA
 	IW(N,L)=-9999
-        CCR(N,L)=-999999.
+        CCR(N,L)=-9999.
 
 !      LML=LM-LMH(IHINDX(N),JHINDX(N))
 !	write(6,*) 'LML, IHINDX,JHINDX,LMH: ', IHINDX(N), 
@@ -2040,7 +1922,7 @@ C***  USE ZERO IN ACCUMULATION ARRAYS AT APPROPRIATE TIMES
 C***
        IF(ITAG .eq. 0) THEN
 
-       print *, 'profile posting code'
+!	write(6,*) 'here (2)'
 C
 C
 C what would appropriate if test be here?
@@ -2195,7 +2077,6 @@ c     ENDIF
  
 C------------------------------------------------------------------
   300 CONTINUE
-      print *, 'past 300'
 C------------------------------------------------------------------
 C
 C***  FOR ROTATION OF WINDS FROM E-GRID TO GEODETIC ORIENTATION
@@ -2245,7 +2126,6 @@ C
 !	J=JHINDX(N)
 !        PDS(N)=PD(I,J)+PT
         PDS(N)=pint_part(N)+PT
-        print *, 'computed PDS ', N, PDS(N), PT
 
 
 	ENDDO
@@ -2292,13 +2172,12 @@ C***  VARIOUS PHYSICS ROUTINES HAVE BEEN
 C***  CALLED SINCE LAST OUTPUT OF PROFILER DATA.  NECESSARY FOR
 C***  CORRECT AVERAGING OF VARIABLES.
 C
-	write(6,*) 'APHTIM, ACUTIM, ARATIM were: ', 
-     &                APHTIM, ACUTIM, ARATIM
-      
 	APHTIM=0.
 	ACUTIM=0.
 	ARATIM=0.
 
+	write(6,*) 'APHTIM, ACUTIM, ARATIM were: ', 
+     &                APHTIM, ACUTIM, ARATIM
       IF(APHTIM.GT.0.)THEN
         RTSPH=1./APHTIM
       ELSE
@@ -2382,17 +2261,24 @@ C
 C
 C***  WIND ROTATION SINES AND COSINES
 C
-c     DLM    = STNLON(N)+TLM0D*DTR
-c     XX     = COSPH0*COS(STNLAT(N))*COS(DLM)
-c    1        +SINPH0*SIN(STNLAT(N))
-c     YY     = -COS(STNLAT(N))*SIN(DLM)
-c     TLON   = ATAN(YY/XX)
-c     ALPHA  = ASIN(SINPH0*SIN(TLON)/COS(STNLAT(N)))
-C      SINALP = SIN(ALPHA)
-C      COSALP = COS(ALPHA)
+      TLM0D=0.0
+      COSPH0=0.0
+      SINPH0=0.0
+      DLM    = STNLON(N)+TLM0D*DTR
+      XX     = COSPH0*COS(STNLAT(N))*COS(DLM)
+     1        +SINPH0*SIN(STNLAT(N))
+      YY     = -COS(STNLAT(N))*SIN(DLM)
+      if(abs(XX) > 1.0e-10) then
+        TLON   = ATAN(YY/XX)
+      else
+        TLON = 1.570796
+      endif
+      ALPHA  = ASIN(SINPH0*SIN(TLON)/COS(STNLAT(N)))
+       SINALP = SIN(ALPHA)
+       COSALP = COS(ALPHA)
 
-      SINALP = SROT(N)
-      COSALP = CROT(N)
+c      SINALP = SROT(N)
+c      COSALP = CROT(N)
 C
 C------------------------------------------------------------------
 C***  EXTRACT PRESSURE AND TEMPERATURE PROFILES.
@@ -2444,8 +2330,8 @@ Cmp     1   PRODAT(NWORD5+LVL) = OMGALF(N,LV)*CP/(RTOP(N,LV)*DT)
         ELSE
           PRODAT(NWORD6+LVL) = CWM(N,LV)
         ENDIF
-C GSM  really need to sort out cloud data in HRRR data.  set to missing for now.
-        PRODAT(NWORD6+LVL) = 999999.
+
+C
         PRODAT(NWORD7+LVL) = TCUCN(N,LV)
         PRODAT(NWORD8+LVL) = TRAIN(N,LV)
         PRODAT(NWORD9+LVL) = RSWTT(N,LV)
@@ -2486,16 +2372,14 @@ C
 C***  EXTRACT SINGLE LEVEL DATA.   EGRID2 IS SURFACE TEMPERATURE.
 C
       PRODAT(NWORD13+1)  = PSLP  (N)
-c      PRODAT(NWORD13+2)  = PDS   (N)
-      PRODAT(NWORD13+2)  = SFCP  (N)
-      PRODAT(NWORD13+3)  = EGRID2(N)
+      PRODAT(NWORD13+2)  = SFCP   (N)
+c      PRODAT(NWORD13+3)  = EGRID2(N)
+      PRODAT(NWORD13+3)  = TSK   (N) 
       PRODAT(NWORD13+4)  = TLMIN (N)
       PRODAT(NWORD13+5)  = TLMAX (N)
       PRODAT(NWORD13+6)  = SMSTAV(N)*100.
       PRODAT(NWORD13+7)  = ACPREC(N)*1000.
-c no convective precip in HRRR
-c      PRODAT(NWORD13+8)  = CUPREC(N)*1000.
-      PRODAT(NWORD13+8)  = -9999.
+      PRODAT(NWORD13+8)  = CUPREC(N)*1000.
       PRODAT(NWORD13+27) = Z0    (N)
 C
       STAPRX=PRODAT(NWORD13+7)-STATPR(N)
@@ -2511,7 +2395,6 @@ C
       VT     = V10(N)
       PRODAT(NWORD13+28) = UT*COSALP+VT*SINALP
       PRODAT(NWORD13+29) = VT*COSALP-UT*SINALP
-C
       PRODAT(NWORD13+30) = TH10  (N)
       PRODAT(NWORD13+31) = Q10   (N)
       PRODAT(NWORD13+32) = TSHLTR(N)
@@ -2597,17 +2480,29 @@ C
       FPACK(9+NWORD13+7)  = STAPRX
 !	write(6,*) 'precip written to FPACK element: ', 9+NWORD13+7
       FPACK(9+NWORD13+8)  = STACRX
-!      FPACK(9+NWORD13+9)  = PSFCEVP * RTSPH
-!      FPACK(9+NWORD13+10) = PPOTEVP * RTSPH
+      FPACK(9+NWORD13+9)  = PSFCEVP * RTSPH
+c      FPACK(9+NWORD13+10) = PPOTEVP * RTSPH
       FPACK(9+NWORD13+11) = PSFCSHX * RTSPH
-!      FPACK(9+NWORD13+12) = PSFCSUB * RTSPH
-!      FPACK(9+NWORD13+13) = PSNOPCX * RTSPH
-!      FPACK(9+NWORD13+14) = PRSWIN  * RTSPH
-!      FPACK(9+NWORD13+15) = PRSWOUT * RTSPH
-!      FPACK(9+NWORD13+16) = PRLWIN  * RTSPH
-!      FPACK(9+NWORD13+17) = PRLWOUT * RTSPH
-!      FPACK(9+NWORD13+18) = PRLWTOA * RTSPH
-!      FPACK(9+NWORD13+19) = PRSWTOA * RTSPH
+c      FPACK(9+NWORD13+12) = PSFCSUB * RTSPH
+c      FPACK(9+NWORD13+13) = PSNOPCX * RTSPH
+c      FPACK(9+NWORD13+14) = PRSWIN  * RTSPH
+c      FPACK(9+NWORD13+15) = PRSWOUT * RTSPH
+c      FPACK(9+NWORD13+16) = PRLWIN  * RTSPH
+c      FPACK(9+NWORD13+17) = PRLWOUT * RTSPH
+c      FPACK(9+NWORD13+18) = PRLWTOA * RTSPH
+c      FPACK(9+NWORD13+19) = PRSWTOA * RTSPH
+c      FPACK(9+NWORD13+9)  = -9999. 
+      FPACK(9+NWORD13+10) = -9999. 
+c      FPACK(9+NWORD13+11) = -9999. 
+      FPACK(9+NWORD13+12) = -9999. 
+      FPACK(9+NWORD13+13) = -9999. 
+      FPACK(9+NWORD13+14) = -9999. 
+      FPACK(9+NWORD13+15) = -9999. 
+      FPACK(9+NWORD13+16) = -9999.
+      FPACK(9+NWORD13+17) = -9999. 
+      FPACK(9+NWORD13+18) = -9999. 
+      FPACK(9+NWORD13+19) = -9999. 
+
       FPACK(9+NWORD13+20) = PACSNOW
       FPACK(9+NWORD13+23) = PACSNOM
       FPACK(9+NWORD13+24) = PSSROFF
@@ -2661,13 +2556,12 @@ C***
       WRITE(LCLAS1,REC=NREC)IHRST,IDAT,IFCST,ISTAT,CISTAT
      1,                    (FPACK(NL),NL=1,NLEN)
 
-
 C---------------------------------------------------------------------
  1000 CONTINUE
       CLOSE(LCLAS1)
 	DEALLOCATE(T,Q,U,V,Q2,OMGALF,CWM,TRAIN,TCUCN)
 	DEALLOCATE(RSWTT,RLWTT,CCR,RTOP,HTM,OMGA,p_hold)
-	DEALLOCATE(t_hold,PINT,QRAIN,QICE)
+	DEALLOCATE(t_hold,PINT,CLDFRA_BL)
 
        DEALLOCATE(DHCNVC,DHRAIN,STADHC,STADHR,TCUCN0,TRAIN0)
         DEALLOCATE(DUM,DUMMY,DUMMY2,DUM3D,DUM3D2,DUM3D3,GDLAT)
@@ -2699,7 +2593,7 @@ C---------------------------------------------------------------------
      &,SFCSHX0,SUBSHX0,SNOPCX0,ASWIN0
      &,ASWOUT0,ALWIN0,ALWOUT0,ALWTOA0
      &,ASWTOA0,ACSNOW0,ACSNOM0,SSROFF0
-     &,BGROFF0,CANOPY,LH,SWEM)
+     &,BGROFF0,TSK,SWEM,CANOPY)
 
 
 C

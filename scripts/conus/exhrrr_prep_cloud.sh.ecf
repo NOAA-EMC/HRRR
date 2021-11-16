@@ -61,7 +61,8 @@ EOF
 
 #  Run Process Cloud
 cp ${EXEChrrr}/hrrr_process_cloud .
-runline="aprun -n 4 -N 4 ./hrrr_process_cloud"
+#runline="aprun -n 4 -N 4 ./hrrr_process_cloud"
+runline="mpiexec -n 4 -ppn 4 ./hrrr_process_cloud"
 $runline > process_cloud.out
 export err=$?; err_chk
 
