@@ -1,0 +1,19 @@
+#!/bin/ksh --login
+
+set -x
+
+cyc=$1
+ymd=20210824
+
+#cd /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.0/sms
+#cd /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.0/smsak
+cd /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.0/sms/hrrrdas
+
+#qsub jhrrr_fcst_${cyc}.qsub
+#qsub prep/jhrrr_ref2tten_${cyc}.qsub
+#qsub jhrrr_makebc_17.qsub
+#qsub jhrrr_makebc_${cyc}.qsub
+#qsub jhrrr_sndp_${cyc}.qsub
+qsub jhrrrdas_makeguess_${cyc}.qsub
+
+exit

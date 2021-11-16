@@ -1,0 +1,31 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -o /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrak/hrrr_post_f0645.out12z
+#PBS -e /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrak/hrrr_post_f0645.out12z
+#PBS -N hrrr_post_f0645_12
+#PBS -l walltime=00:15:00
+#PBS -q "dev"
+#PBS -A HRRR-DEV
+#PBS -l select=1:ncpus=128
+
+set -x
+
+# EXPORT list here
+export OMP_NUM_THREADS=1
+
+export envir=prod
+export RUN_ENVIR=prod
+export cyc=12
+export fhr=06
+export fmin=45
+export job=hrrr_post_f0645_12
+export group_name=meso
+
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/driver/hrrrakwcoss2.env
+
+module use ${NWROOT}/hrrr.${hrrr_ver}/modulefiles
+module load HRRR/v4.0.0
+
+# CALL executable job script here
+${NWROOT}/hrrr.${hrrr_ver}/jobs/JHRRR_POST_SUBH

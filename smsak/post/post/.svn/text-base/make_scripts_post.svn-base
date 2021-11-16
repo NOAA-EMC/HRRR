@@ -1,0 +1,24 @@
+#!/bin/sh 
+#
+
+mkdir /stmpp1/Benjamin.Blake/work
+cd /stmpp1/Benjamin.Blake/work
+. /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+
+cp /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/hrrr.${model_ver}/sms/post/post/jhrrr_post_fXX_HH.bsub .
+hours="00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18"
+cycles="12"
+for cyc in $cycles;do
+echo $cyc $cyc
+for fhr in $hours; do
+ echo $fhr
+ cp jhrrr_post_fXX_HH.bsub jhrrr_post_f${fhr}_${cyc}.bsub
+ vi jhrrr_post_f${fhr}_${cyc}.bsub << EOF 
+   :1,\$ s/XX/${fhr}
+   :1,\$ s/HH/${cyc}
+   :wq
+EOF
+mv jhrrr_post_f${fhr}_${cyc}.bsub /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/hrrr.${model_ver}/sms/post/post/.
+done
+done
+exit

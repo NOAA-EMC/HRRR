@@ -1,0 +1,45 @@
+#BSUB -oo /gpfs/hps/ptmp/Benjamin.Blake/outputhrrr/hrrr_analysis.out12z
+#BSUB -eo /gpfs/hps/ptmp/Benjamin.Blake/outputhrrr/hrrr_analysis.out12z
+#BSUB -cwd /gpfs/hps/ptmp/Benjamin.Blake
+#BSUB -J hrrr_analysis_12
+#BSUB -W 00:15
+#BSUB -P HRRR-T2O
+#BSUB -q "dev"
+#BSUB -M 1800
+#BSUB -extsched 'CRAYLINUX[]' -R '1*{select[craylinux && !vnode]} + 240*{select[craylinux && vnode]span[ptile=24] cu[type=cabinet]}' rusage[mem=1800]
+#BSUB -x
+#BSUB -a poe
+
+#
+# EXPORT list here
+set -x
+
+module load prod_util
+module load prod_envir
+module load grib_util/1.0.3
+module load util_shared/1.0.3
+
+module list
+
+export KMP_AFFINITY=disabled
+export OMP_NUM_THREADS=2
+unset MPICH_RANK_REORDER_METHOD
+export FORT_BUFFERED=true
+
+export envir=prod
+export RUN_ENVIR=prod
+export cyc=12
+export job=hrrr_analysis_12
+export group_name=meso
+export COMDATEROOT=/gpfs/hps/nco/ops/com
+DATE=`cat ${COMDATEROOT}/date/t${cyc}z | cut -c7-14`
+
+. /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+
+# CALL executable job script here
+/gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/hrrr.${model_ver}/jobs/JHRRR_ANALYSIS.sms.$envir
+
+bsub < /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/hrrr.${model_ver}/sms/jhrrr_fcst_12.bsub
+bsub < /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/hrrr.${model_ver}/sms/post/jhrrr_postmgr_12.bsub
+bsub < /gpfs/hps/emc/meso/noscrub/Benjamin.Blake/nwprod/hrrr.${model_ver}/sms/post/jhrrr_postmgr_subh_12.bsub
+

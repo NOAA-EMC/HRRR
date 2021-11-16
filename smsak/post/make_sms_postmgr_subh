@@ -1,0 +1,18 @@
+#!/bin/sh 
+#
+
+mkdir /lfs/h2/emc/ptmp/Benjamin.Blake
+mkdir /lfs/h2/emc/ptmp/Benjamin.Blake/work
+cd /lfs/h2/emc/ptmp/Benjamin.Blake/work
+cp /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.0/smsak/post/jhrrr_postmgr_subh_XX.qsub .
+#cycles="00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23"
+cycles="00 03 06 09 12 15 18 21"
+for cyc in $cycles; do
+ cp jhrrr_postmgr_subh_XX.qsub jhrrr_postmgr_subh_${cyc}.qsub
+ vi jhrrr_postmgr_subh_${cyc}.qsub << EOF 
+   :1,\$ s/XX/${cyc}
+   :wq
+EOF
+mv jhrrr_postmgr_subh_${cyc}.qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.0/smsak/post/.
+done
+exit

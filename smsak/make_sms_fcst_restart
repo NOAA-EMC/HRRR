@@ -1,0 +1,19 @@
+#!/bin/sh 
+#
+
+mkdir /stmpp1/Benjamin.Blake
+mkdir /stmpp1/Benjamin.Blake/work
+cd /stmpp1/Benjamin.Blake/work
+
+. /meso/save/Benjamin.Blake/nwprod/versions/hrrr.ver
+cp /meso/save/Benjamin.Blake/nwprod/hrrr.${model_ver}/sms/jhrrr_fcst_restart_XX.bsub .
+cycles="00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23"
+for cyc in $cycles; do
+ cp jhrrr_fcst_restart_XX.bsub jhrrr_fcst_restart_${cyc}.bsub
+ vi jhrrr_fcst_restart_${cyc}.bsub << EOF 
+   :1,\$ s/XX/${cyc}
+   :wq
+EOF
+mv jhrrr_fcst_restart_${cyc}.bsub /meso/save/Benjamin.Blake/nwprod/hrrr.${model_ver}/sms/.
+done
+exit
