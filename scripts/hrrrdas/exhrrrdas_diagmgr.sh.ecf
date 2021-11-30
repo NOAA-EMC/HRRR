@@ -21,10 +21,10 @@ do
   count=`ls ${COMOUT}/diagdone${cyc}00* | wc -l`
   if [ $count -eq 37 ]; then
     echo "All obsdiag jobs have completed (36 members + mean), launch EnKF jobs"
-    ecflow_client --event release_enkf_d01
-    ecflow_client --event release_enkf_d02
-#    bsub < ${HOMEhrrr}/sms/hrrrdas/jhrrrdas_enkf_d01_${cyc}.bsub
-#    bsub < ${HOMEhrrr}/sms/hrrrdas/jhrrrdas_enkf_d02_${cyc}.bsub
+#    ecflow_client --event release_enkf_d01
+#    ecflow_client --event release_enkf_d02
+    qsub ${HOMEhrrr}/sms/hrrrdas/jhrrrdas_enkf_d01_${cyc}.qsub
+    qsub ${HOMEhrrr}/sms/hrrrdas/jhrrrdas_enkf_d02_${cyc}.qsub
     break
   else
     echo "Some obsdiag jobs have not completed yet"

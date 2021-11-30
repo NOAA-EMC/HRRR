@@ -1,0 +1,34 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -o /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_prepradar.outHHMMz
+#PBS -e /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_prepradar.outHHMMz
+#PBS -N hrrrdas_prepradar_00
+#PBS -l walltime=00:15:00
+#PBS -q "dev"
+#PBS -A HRRR-DEV
+#PBS -l select=1:ncpus=36
+
+set -x
+
+# Set MPI options
+export OMP_NUM_THREADS=1
+export MP_TASK_AFFINITY=core:1
+export KMP_AFFINITY=disabled
+export MP_MPILIB=mpich2
+
+export envir=prod
+export RUN_ENVIR=prod
+export cyc=00
+export subhtime=00
+export job=hrrrdas_prepradar_00
+export group_name=meso
+
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/driver/hrrrdaswcoss2.env
+
+module use ${NWROOT}/hrrr.${hrrr_ver}/modulefiles
+module load HRRR/v4.0.0
+
+# CALL executable job script here
+${NWROOT}/hrrr.${hrrr_ver}/jobs/JHRRR_PREP_RADAR
+

@@ -151,7 +151,8 @@ EOF
 
 # Run Process_mosaic for domain 1
 cp ${EXEChrrr}/hrrr_process_mosaic_enkf .
-runline="aprun -n 36 -N 24 ./hrrr_process_mosaic_enkf"
+#runline="aprun -n 36 -N 24 ./hrrr_process_mosaic_enkf"
+runline="mpiexec -n 36 -ppn 36 ./hrrr_process_mosaic_enkf"
 $runline
 export err=$?; err_chk
 
@@ -241,7 +242,8 @@ rm geo_em.d01.nc
 ln -sf ${FIXhrrr}/hrrrdas_geo_em.d01.nc geo_em.d01.nc 
 # Run process lightning
 cp ${EXEChrrr}/hrrr_process_lightning .
-runline="aprun -n 36 -N 24 ./hrrr_process_lightning"
+#runline="aprun -n 36 -N 24 ./hrrr_process_lightning"
+runline="mpiexec -n 36 -ppn 36 ./hrrr_process_lightning"
 $runline > process_lightning.out
 export err=$?; err_chk
 cp ${DATA}/${subhtime}/LightningInGSI.bufr ${COMOUT}/hrrr.t${cyc}z.LightningInGSI_d01.bufr

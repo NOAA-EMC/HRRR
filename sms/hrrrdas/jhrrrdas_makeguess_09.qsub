@@ -32,6 +32,6 @@ echo "forecast group number = $NUM_ENSGRP"
 iensgrp=1
 while [[ $iensgrp -le $NUM_ENSGRP ]]; do
     export ENSGRP=$iensgrp
-    qsub ${NWROOT}/hrrr.${hrrr_ver}/sms/hrrrdas/jhrrrdas_fcst_09.qsub
+    qsub -v ENSGRP="$iensgrp" ${NWROOT}/hrrr.${hrrr_ver}/sms/hrrrdas/jhrrrdas_fcst_09.qsub
     (( iensgrp = $iensgrp + 1 ))
 done

@@ -25,6 +25,7 @@ AWK="/bin/gawk --posix"
 DATE=/bin/date
 export FCST_INTERVAL=3
 export FCST_LENGTH=1
+export NODES=5
 export OMP_NUM_THREADS=2
 
 echo "run forecst for member =",$ensmem
@@ -406,10 +407,14 @@ turbo_mode=YES # YES or NO
 reorder_ranks=grid_order # LSF, MPICH, or NO
 
 # Distribution of compute nodes in grid:
-nnode_x=6
+#nnode_x=6
+#nnode_y=2
+nnode_x=7
 nnode_y=2
 
 # Distribution of MPI ranks within each compute node:
+#nrank_x=2
+#nrank_y=12
 nrank_x=2
 nrank_y=12
 
@@ -447,13 +452,13 @@ ncks -d west_east,0,1798 -d west_east_stag,0,1799 -d south_north,0,1058 -d south
 # Get MPISERIAL; section this is copied from exhrrr_prep_smoke:
 # ----------------------------------------------------------------------
 # need this because have trouble load module now:
-MPISER=/gpfs/hps/nco/ops/nwprod/mpiserial.v3.0.0/exec/mpiserial
-#export MPISER=${MPISER:-${NWROOThps}/mpiserial.${mpiserial_ver}/exec/mpiserial}
+#MPISER=/gpfs/hps/nco/ops/nwprod/mpiserial.v3.0.0/exec/mpiserial
+export MPISER=${MPISER:-${NWROOThps}/mpiserial.${mpiserial_ver}/exec/mpiserial}
 LSB_MAX_NUM_PROCESSORS="${LSB_MAX_NUM_PROCESSORS:-1}"
 if (( LSB_MAX_NUM_PROCESSORS > 1 )) ; then
     # Command to run mpiserial:
     np=$(( LSB_MAX_NUM_PROCESSORS - 1 )) # -1 for MAMU node processor
-    MPISERIAL="aprun -d 1 -n $np -N 24 -j 1 $MPISER -m"
+    MPISERIAL="mpiexec -n $np -ppn 24 $MPISER -m"
 else
     fake_mpiserial() {
         chmod 755 "$1"
@@ -467,12 +472,15 @@ fi
 CPREQ=$( which cpreq )
 
 cat> command_file<<EOF
+#!/bin/bash
 $CPREQ wrfout_d01_${timestr2} ${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem${ensmemid}
 $CPREQ wrfout_d02_${timestr2} ${HRRRDASGES}/hrrrdas_d02_${timestr1}f01_mem${ensmemid}
 $CPREQ wrfout_small_d02_${timestr2} ${HRRRDASGES}/hrrrdas_small_d02_${timestr1}f01_mem${ensmemid}
 EOF
 
-$MPISERIAL -a ./command_file
+#$MPISERIAL -a ./command_file
+chmod 755 command_file
+mpiexec -n 1 -ppn 1 command_file
 
 
 msg="JOB $job FOR HRRR_FORECAST HAS COMPLETED NORMALLY"

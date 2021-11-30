@@ -65,7 +65,7 @@ if [ ! -x "${WRITE_IDATE}" ]; then
   err_exit $errmsg
 fi
 cp ${WRITE_IDATE} hrrr_write_idate
-runline="aprun -n 1 -N 1 ./hrrr_write_idate"
+runline="mpiexec -n 1 -ppn 1 ./hrrr_write_idate"
 $runline >> $DATA/${pgmout}_date 2>errfile
 export err=$?; err_chk
 
@@ -91,7 +91,8 @@ if [ -r ${bkfile} ]; then
   if [ $ensmem -eq 00 ]; then
      cp ${EXEChrrr}/hrrr_cal_ensmean . 
      ln -sf ${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem00?? .
-     runline="aprun -j1 -cc depth -n 12 -N 12 -d 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d01 hrrrdas_d01_${timestr1}f01_mem0 36 : -j1 -cc depth -n 27 -N 9 -d 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d01 hrrrdas_d01_${timestr1}f01_mem0 36"
+#     runline="aprun -j1 -cc depth -n 12 -N 12 -d 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d01 hrrrdas_d01_${timestr1}f01_mem0 36 : -j1 -cc depth -n 27 -N 9 -d 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d01 hrrrdas_d01_${timestr1}f01_mem0 36"
+     runline="mpiexec -n 48 -ppn 48 --cpu-bind core -depth 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d01 hrrrdas_d01_${timestr1}f01_mem0 36"
      $runline
   fi
 # No background available so abort
@@ -122,7 +123,8 @@ if [ -r ${bkfile} ]; then
   if [ $ensmem -eq 00 ]; then
 #     cp ${EXEChrrr}/hrrr_cal_ensmean . 
      ln -sf ${HRRRDASGES}/hrrrdas_d02_${timestr1}f01_mem00?? .
-     runline="aprun -j1 -cc depth -n 24 -N 24 -d 1 /usr/bin/env OMP_NUM_THREADS=1 ./hrrr_cal_ensmean 2 ./ wrf_inout_d02 hrrrdas_d02_${timestr1}f01_mem0 36 : -j1 -cc depth -n 36 -N 12 -d 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d02 hrrrdas_d02_${timestr1}f01_mem0 36"
+#     runline="aprun -j1 -cc depth -n 24 -N 24 -d 1 /usr/bin/env OMP_NUM_THREADS=1 ./hrrr_cal_ensmean 2 ./ wrf_inout_d02 hrrrdas_d02_${timestr1}f01_mem0 36 : -j1 -cc depth -n 36 -N 12 -d 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d02 hrrrdas_d02_${timestr1}f01_mem0 36"
+     runline="mpiexec -n 48 -ppn 48 --cpu-bind core -depth 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d02 hrrrdas_d02_${timestr1}f01_mem0 36"
      $runline
   fi
 # No background available so abort
@@ -212,17 +214,17 @@ BERROR=${FIXhrrr}/hrrr_berror_stats_global
 # SATANGL=${FIXhrrr}/hrrr_global_satangbias.txt
 SATINFO=${FIXhrrr}/hrrr_global_satinfo.txt
 
-RTMAERO=${FIXcrtm_anal}/AerosolCoeff.bin
-RTMCLDS=${FIXcrtm_anal}/CloudCoeff.bin
-RTMEMIS_IRwater=${FIXcrtm_anal}/Nalli.IRwater.EmisCoeff.bin
-RTMEMIS_IRice=${FIXcrtm_anal}/NPOESS.IRice.EmisCoeff.bin
-RTMEMIS_IRland=${FIXcrtm_anal}/NPOESS.IRland.EmisCoeff.bin
-RTMEMIS_IRsnow=${FIXcrtm_anal}/NPOESS.IRsnow.EmisCoeff.bin
-RTMEMIS_VISice=${FIXcrtm_anal}/NPOESS.VISice.EmisCoeff.bin
-RTMEMIS_VISland=${FIXcrtm_anal}/NPOESS.VISland.EmisCoeff.bin
-RTMEMIS_VISsnow=${FIXcrtm_anal}/NPOESS.VISsnow.EmisCoeff.bin
-RTMEMIS_VISwater=${FIXcrtm_anal}/NPOESS.VISwater.EmisCoeff.bin
-RTMEMIS_MWwater=${FIXcrtm_anal}/FASTEM5.MWwater.EmisCoeff.bin
+RTMAERO=${FIXcrtm}/AerosolCoeff.bin
+RTMCLDS=${FIXcrtm}/CloudCoeff.bin
+RTMEMIS_IRwater=${FIXcrtm}/Nalli.IRwater.EmisCoeff.bin
+RTMEMIS_IRice=${FIXcrtm}/NPOESS.IRice.EmisCoeff.bin
+RTMEMIS_IRland=${FIXcrtm}/NPOESS.IRland.EmisCoeff.bin
+RTMEMIS_IRsnow=${FIXcrtm}/NPOESS.IRsnow.EmisCoeff.bin
+RTMEMIS_VISice=${FIXcrtm}/NPOESS.VISice.EmisCoeff.bin
+RTMEMIS_VISland=${FIXcrtm}/NPOESS.VISland.EmisCoeff.bin
+RTMEMIS_VISsnow=${FIXcrtm}/NPOESS.VISsnow.EmisCoeff.bin
+RTMEMIS_VISwater=${FIXcrtm}/NPOESS.VISwater.EmisCoeff.bin
+RTMEMIS_MWwater=${FIXcrtm}/FASTEM5.MWwater.EmisCoeff.bin
 
 CONVINFO=${FIXhrrr}/hrrrdas_regional_convinfo.15km.txt
 #CONVINFO=${FIXhrrr}/hrrr_nam_regional_convinfo
@@ -262,8 +264,8 @@ ln -sf $RTMEMIS_MWwater ./FASTEM5.MWwater.EmisCoeff.bin
 
 # Copy CRTM coefficient files based on entries in satinfo file
 for file in `awk '{if($1!~"!"){print $1}}' ./satinfo | sort | uniq` ;do 
-   ln -sf ${FIXcrtm_anal}/${file}.SpcCoeff.bin ./
-   ln -sf ${FIXcrtm_anal}/${file}.TauCoeff.bin ./
+   ln -sf ${FIXcrtm}/${file}.SpcCoeff.bin ./
+   ln -sf ${FIXcrtm}/${file}.TauCoeff.bin ./
 done
 
 # Only need this file for single obs test
@@ -292,7 +294,8 @@ if [ $ensmem -gt 00 ]; then
 fi
 ln -sf wrf_inout_d01 wrf_inout
 cp ${EXEChrrr}/hrrr_gsi .
-runline="aprun -j1 -cc depth -n 48 -N 12 -d 2 ./hrrr_gsi"
+#runline="aprun -j1 -cc depth -n 48 -N 12 -d 2 ./hrrr_gsi"
+runline="mpiexec -n 48 -ppn 48 --cpu-bind core -depth 2 ./hrrr_gsi"
 $runline < gsiparm.anl >> $DATA/${pgmout}_d01 2>errfile
 export err=$?; err_chk
 
@@ -396,7 +399,8 @@ CONVINFO=${FIXhrrr}/hrrrdas_regional_convinfo.3km.txt
 cp $CONVINFO convinfo
 
 cp ${EXEChrrr}/hrrr_gsi .
-runline="aprun -j1 -cc depth -n 48 -N 12 -d 2 ./hrrr_gsi"
+#runline="aprun -j1 -cc depth -n 48 -N 12 -d 2 ./hrrr_gsi"
+runline="mpiexec -n 48 -ppn 48 --cpu-bind core -depth 2 ./hrrr_gsi"
 $runline < gsiparm.anl >> $DATA/${pgmout}_d02 2>errfile
 export err=$?; err_chk
 

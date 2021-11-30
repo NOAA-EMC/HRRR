@@ -819,6 +819,8 @@ CPREQ=$( which cpreq )
 
 # Make command file
 cat /dev/null > command_file
+echo "#!/bin/bash" >> command_file
+
 while [[ $ensmem -le $no_member ]];do
 
   print "\$ensmem is $ensmem"
@@ -839,7 +841,9 @@ cat ./command_file
 echo ==================== DUMP OF COMMAND FILE ====================
 set -x
 
-$MPISERIAL -a ./command_file
+#$MPISERIAL -a ./command_file
+chmod 755 command_file
+mpiexec -n 1 -ppn 1 command_file
 
 
 ensmem=1

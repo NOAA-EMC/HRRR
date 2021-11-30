@@ -1,0 +1,44 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -o /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_obsdiag.out04z
+#PBS -e /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_obsdiag.out04z
+#PBS -N hrrrdas_obsdiag_04
+#PBS -l walltime=00:30:00
+#PBS -q "dev"
+#PBS -A HRRR-DEV
+#PBS -l select=1:ncpus=96
+
+set -x
+
+# EXPORT list here
+export OMP_NUM_THREADS=2
+
+export envir=prod
+export RUN_ENVIR=prod
+export cyc=04
+export job=hrrrdas_obsdiag_04
+export group_name=meso
+
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/driver/hrrrdaswcoss2.env
+
+module use ${NWROOT}/hrrr.${hrrr_ver}/modulefiles
+module load HRRR/v4.0.0
+
+# CALL executable job script here
+echo "PROCESS EnKF ensemble group $ENSGRP from member $ENSBEG to $ENSEND"
+imem=$ENSBEG
+while [[ $imem -le $ENSEND ]]; do
+
+  export ensmem=$imem
+  ${NWROOT}/hrrr.${hrrr_ver}/jobs/JHRRR_ANALYSIS
+
+  if [[ $ensmem -eq 36 ]]; then
+    echo "Submit diag manager job which checks to see if all GSI jobs have completed"
+    qsub ${NWROOT}/hrrr.${hrrr_ver}/sms/hrrrdas/jhrrrdas_diagmgr_04.qsub
+
+  fi
+
+  (( imem = $imem + 1 ))
+
+done

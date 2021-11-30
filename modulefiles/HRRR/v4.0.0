@@ -62,3 +62,6 @@ module load libjpeg grib_util/1.2.3
 module load util_shared/1.4.0
 module load gempak/7.14.1
 module load cfp/2.0.4
+
+# Needed for ncks command
+module load udunits/2.2.24

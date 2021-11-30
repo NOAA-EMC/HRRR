@@ -1,0 +1,33 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -o /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_fcst.out09z
+#PBS -e /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_fcst.out09z
+#PBS -N hrrrdas_fcst_09
+#PBS -l walltime=01:10:00
+#PBS -q "dev"
+#PBS -A HRRR-DEV
+#PBS -l place=vscatter,select=6:ncpus=128:mem=500GB
+
+set -x
+
+echo $ENSGRP
+
+# EXPORT list here
+export OMP_NUM_THREADS=2
+export OMP_STACKSIZE=500M
+
+export envir=prod
+export RUN_ENVIR=prod
+export cyc=09
+export job=hrrrdas_fcst_09
+export group_name=meso
+
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/driver/hrrrdaswcoss2.env
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/hrrrdas_para_config.fcst
+
+module use ${NWROOT}/hrrr.${hrrr_ver}/modulefiles
+module load HRRR/v4.0.0
+
+# CALL executable job script here
+${NWROOT}/hrrr.${hrrr_ver}/jobs/JHRRR_FORECAST 

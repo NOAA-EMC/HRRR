@@ -23,12 +23,12 @@ AWK="/bin/awk --posix"
 cd ${DATA}
 
 # Set up some environment variables
-export ATP_ENABLED=0
-export MALLOC_MMAP_MAX=0
-export MALLOC_TRIM_THRESHOLD_=134217728
+#export ATP_ENABLED=0
+#export MALLOC_MMAP_MAX=0
+#export MALLOC_TRIM_THRESHOLD_=134217728
 export OMP_STACKSIZE=500M
-export KMP_STACKSIZE=1024m
-export OMP_NUM_THREADS=2
+#export KMP_STACKSIZE=1024m
+#export OMP_NUM_THREADS=2
 
 # Set to yes for faster collective ops (mpi reduce)
 # but may not yield bitwise identical results from
@@ -173,10 +173,12 @@ export pgm=hrrr_enkf
 startmsg
 cp ${EXEChrrr}/hrrr_enkf .
 if [ $domainid -eq 01 ]; then
-   runline="aprun -j1 -cc depth -n 60 -N 12 -d 2 ./hrrr_enkf"
+#   runline="aprun -j1 -cc depth -n 60 -N 12 -d 2 ./hrrr_enkf"
+   runline="mpiexec -n 64 -ppn 64 --cpu-bind core -depth 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_enkf"
 else
-   runline="aprun -j1 -cc depth -n 120 -N 2 ./hrrr_enkf"
-   runline="aprun -j1 -cc depth -n 120 -N 2 -d 2 ./hrrr_enkf"
+#   runline="aprun -j1 -cc depth -n 120 -N 2 ./hrrr_enkf"
+#   runline="aprun -j1 -cc depth -n 120 -N 2 -d 2 ./hrrr_enkf"
+   runline="mpiexec -n 128 -ppn 16 --cpu-bind core -depth 4 /usr/bin/env OMP_NUM_THREADS=4 ./hrrr_enkf"
 fi
 
 count=`ls ${COMOUT}/diag_conv_ges.${PDY}${cyc}.d${domainid}* | wc -l`
@@ -197,12 +199,17 @@ if [ $domainid -eq 01 ]; then
    cp ${EXEChrrr}/hrrr_cal_ensmean .
    cp analysis.mem001 analysis.ensmean
    # 1 node (24 ranks) to write and 4 nodes (36 ranks) to read
-   aprun -j1 -cc depth -n 24 -N 24 -d 1 \
-    /usr/bin/env OMP_NUM_THREADS=1 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
-    : \
-      -j1 -cc depth -n 36 -N 9 -d 2 \
+#   aprun -j1 -cc depth -n 24 -N 24 -d 1 \
+#    /usr/bin/env OMP_NUM_THREADS=1 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
+#    : \
+#      -j1 -cc depth -n 36 -N 9 -d 2 \
+#    /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
+#       >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
+
+   mpiexec -n 64 -ppn 64 --cpu-bind core -depth 2 \
     /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
-       >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
+    >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
+
 #   errmsg="FATAL ERROR: ${PDY}${cyc}: calculate ensemble mean post failed !!!!"
    export err=$?; err_chk
 
@@ -278,12 +285,17 @@ startmsg
 cp ${EXEChrrr}/hrrr_cal_ensmean .
 cp analysis.mem001 analysis.ensmean
 # 1 node (24 ranks) to write and 9 nodes (36 ranks) to read
-aprun -j1 -cc depth -n 24 -N 24 -d 1 \
-    /usr/bin/env OMP_NUM_THREADS=1 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
-    : \
-      -j1 -cc depth -n 36 -N 4 -d 6 \
-    /usr/bin/env OMP_NUM_THREADS=6 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
-      >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
+#aprun -j1 -cc depth -n 24 -N 24 -d 1 \
+#    /usr/bin/env OMP_NUM_THREADS=1 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
+#    : \
+#      -j1 -cc depth -n 36 -N 4 -d 6 \
+#    /usr/bin/env OMP_NUM_THREADS=6 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
+#      >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
+
+mpiexec -n 64 -ppn 64 --cpu-bind core -depth 2 \
+    /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
+    >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
+
 export err=$?; err_chk
 
 outputfile=${COMIN}/hrrr.t${cyc}z.analysis_d${domainid}.mean
