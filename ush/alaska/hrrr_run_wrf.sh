@@ -5,15 +5,7 @@ set -xue
 wrf_exe=${1:-hrrr_wrfarw_fcst} # name of wrf executable in local directory
 override_file=${2:-/dev/null} # file that overrides some variables
 
-# $PERFTOOLS_GRID_ORDER: The perftools module does not load reliably
-# due to errors in the modulefile, so we have an explicit path to
-# grid_order here.  The calling script can override this variable if
-# preferred.
-PERFTOOLS_GRID_ORDER=${PERFTOOLS_GRID_ORDER:-/opt/cray/perftools/6.2.3/bin/grid_order}
 WRF_NAMELIST="${WRF_NAMELIST:-namelist.input}"
-
-#test -x "$PERFTOOLS_GRID_ORDER"
-#test -s "$PERFTOOLS_GRID_ORDER"
 
 test -x "$wrf_exe"
 test -s "$wrf_exe"
@@ -25,10 +17,7 @@ io_hyperthreads=2
 turbo_mode=NO # YES or NO
 reorder_ranks=grid_order # grid_order or NO
 mpich_tuning=cb_nodes # cb_config_list, cb_nodes, or NO
-#unset OMP_NUM_THREADS # will be set in aprun -e
-#unset MKL_NUM_THREADS # will be set in aprun -e
 export OMP_STACKSIZE=500M
-#export KMP_AFFINITY=disabled
 
 # Distribution of compute nodes in grid:
 nnode_x=8
@@ -77,41 +66,6 @@ echo "Nodes required:   $nodes_required"
 echo "Nodes provided:   $provided_nodes"
 set -x
 
-#if (( nodes_required > provided_nodes )) ; then
-#    err_exit "Have only ${provided_nodes} of ${nodes_required} required nodes.  Check task geometry, job card, and \$NODES variable."
-#    exit 1 # should not get here
-#fi
-#if (( provided_nodes > nodes_required )) ; then
-#    postmsg "WARNING: Job has more nodes than required; will run anyway: ${provided_nodes} > ${nodes_required}"
-#fi
-
-# Set task geometry
-#if [[ "$reorder_ranks" == grid_order ]] ; then
-#    export MPICH_RANK_REORDER_METHOD=3
-#    $PERFTOOLS_GRID_ORDER \
-#	-C -c "$nrank_x,$nrank_y" \
-#        -g "$nproc_x,$nproc_y" > MPICH_RANK_ORDER
-#    irank=$npes_compute
-#    for inode in $( seq 1 $nodes_io ) ; do
-#	first_rank=$irank
-#	irank=$(( irank + $nio_ppn ))
-#	last_rank=$(( irank - 1 ))
-#	echo $( seq $first_rank $last_rank ) \
-#	    | sed 's: :,:g' >> MPICH_RANK_ORDER
-#    done
-#fi
-
-#if [[ "$mpich_tuning" == "cb_nodes" ]] ; then
-#    export MPICH_MPIIO_HINTS="wrfinput*:cb_nodes=$cb_nodes,wrfrst*:cb_nodes=$cb_nodes,wrfout*:cb_nodes=$cb_nodes"
-#fi
-
-# Disable log messages that slow down the model; use defaults:
-#unset MPICH_MPIIO_AGGREGATOR_PLACEMENT_DISPLAY
-#unset MPICH_ENV_DISPLAY
-#unset MPICH_VERSION_DISPLAY
-#unset MPICH_ABORT_ON_ERROR
-#unset MPICH_MPIIO_STATS
-
 global_options="-b" # /usr/bin/env is on the compute nodes already
 
 # Specify task geometry and affinity for compute:
@@ -132,24 +86,6 @@ geo_io="$geo_io -cc depth"
 geo_compute="$geo_compute -j $hyperthreads"
 geo_io="$geo_io -j $io_hyperthreads"
 
-# Enable maximum sustained clock speed or turbo mode if we can.  Only
-# do this on the WRF ranks, since those are compute-heavy.  There is a
-# special number for a fake clock speed that indicates turbo mode; it
-# is always greater than the actual clock speeds, so we find that
-# number:
-#if [[ "$turbo_mode" == YES ]] ; then
-#    scaling_frequencies=/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
-#    aprun -n 1 cat "$scaling_frequencies" > scaling_frequencies
-#    grep -E '^[0-9 	]' < scaling_frequencies > scaling_frequencies_numbers
-#    sed 's, ,\n,g' < scaling_frequencies_numbers > scaling_frequencies_eoln
-#    sort -nu scaling_frequencies_eoln > scaling_frequencies_sorted
-#    tail -1 scaling_frequencies_sorted
-#    p_state=$( tail -1 scaling_frequencies_sorted )
-#    if [ "$p_state" -gt 0 ] ; then
-#	geo_compute="$geo_compute --p-state $p_state"
-#    fi
-#fi
-
 cat ${WRF_NAMELIST} | sed \
   -e 's,\(nproc_x.*=\).*,\1 '$nproc_x',g' \
   -e 's,\(nproc_y.*=\).*,\1 '$nproc_y',g' \
@@ -166,7 +102,10 @@ mv ${WRF_NAMELIST}.new ${WRF_NAMELIST}
 startmsg
 # quilting with nio_groups = 4 and 72 tasks per group - 108 nodes
 #runline="aprun $global_options $geo_compute $wrf_compute : $geo_io $wrf_io"
-#runline="mpiexec -n 1152 -ppn 64 --cpu-bind core -depth 2 ./hrrr_wrfarw_fcst"
-runline="mpiexec -n 2304 -ppn 64 --cpu-bind core -depth 2 ./hrrr_wrfarw_fcst"
+if [ $cyc -eq 00 -o $cyc -eq 06 -o $cyc -eq 12 -o $cyc -eq 18 ]; then
+  runline="mpiexec -n 2304 -ppn 64 --cpu-bind core -depth 2 ./hrrr_wrfarw_fcst"
+else
+  runline="mpiexec -n 1152 -ppn 64 --cpu-bind core -depth 2 ./hrrr_wrfarw_fcst"
+fi
 $runline
 export err=$?; err_chk

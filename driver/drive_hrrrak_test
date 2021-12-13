@@ -5,18 +5,19 @@ set -x
 cyc=$1
 ymd=20210824
 
-cd /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.0/sms
+cd /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.0/smsak
 
 qsub jhrrr_makeguess_${cyc}.qsub
 #qsub jhrrr_analysis_${cyc}.qsub
 #qsub jhrrr_fcst_${cyc}.qsub
+#qsub jhrrr_fcstpre_${cyc}.qsub
 #qsub post/jhrrr_postmgr_${cyc}.qsub
 #qsub post/jhrrr_postmgr_subh_${cyc}.qsub
 #qsub prep/jhrrr_ref2tten_${cyc}.qsub
+#qsub jhrrr_makebc_17.qsub
 #qsub jhrrr_makebc_${cyc}.qsub
-#qsub jhrrr_makebc_03.qsub
-#qsub jhrrr_makebc_04.qsub
-#qsub jhrrr_makebc_18.qsub
+#qsub jhrrr_makebc_14.qsub
+#qsub jhrrr_makebc_15.qsub
 #qsub jhrrr_sndp_${cyc}.qsub
 
 exit

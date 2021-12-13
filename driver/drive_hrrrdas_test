@@ -1,0 +1,27 @@
+#!/bin/ksh --login
+
+set -x
+
+cyc=$1
+ymd=20210824
+
+cd /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.0/sms/hrrrdas
+
+#qsub jhrrrdas_makebc_12.qsub
+#qsub jhrrrdas_makebc_18.qsub
+#qsub jhrrr_process_enkf_${cyc}.qsub
+#qsub jhrrrdas_makeguess_09.qsub
+#qsub -v ENSGRP="1" jhrrrdas_fcst_${cyc}.qsub
+qsub jhrrr_prep_radar_15.qsub
+qsub jhrrr_prep_radar_16.qsub
+qsub jhrrr_prep_radar_17.qsub
+qsub jhrrr_prep_radar_18.qsub
+qsub jhrrr_prep_radar_19.qsub
+qsub jhrrr_prep_radar_20.qsub
+qsub jhrrr_prep_radar_${cyc}.qsub
+#qsub jhrrr_prep_cloud_${cyc}.qsub
+#qsub jhrrrdas_obsdiagmean_${cyc}.qsub
+#qsub jhrrrdas_enkf_d01_${cyc}.qsub
+#qsub jhrrrdas_enkf_d02_${cyc}.qsub
+
+exit

@@ -28,11 +28,3 @@ module load HRRR/v4.0.0
 # CALL executable job script here
 export DOMAIN=2
 ${NWROOT}/hrrr.${hrrr_ver}/jobs/JHRRRDAS_ENKF
-
-echo "forecast group number = $NUM_ENSGRP"
-iensgrp=1
-while [[ $iensgrp -le $NUM_ENSGRP ]]; do
-    export ENSGRP=$iensgrp
-    qsub -v ENSGRP="$iensgrp" ${NWROOT}/hrrr.${hrrr_ver}/sms/hrrrdas/jhrrrdas_fcst_09.qsub
-    (( iensgrp = $iensgrp + 1 ))
-done

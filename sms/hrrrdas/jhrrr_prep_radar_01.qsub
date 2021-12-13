@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -j oe
-#PBS -o /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_prepradar.outHHMMz
-#PBS -e /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_prepradar.outHHMMz
+#PBS -o /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_prepradar.out01z
+#PBS -e /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_prepradar.out01z
 #PBS -N hrrrdas_prepradar_01
 #PBS -l walltime=00:15:00
 #PBS -q "dev"

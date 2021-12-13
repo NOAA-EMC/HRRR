@@ -66,6 +66,7 @@ fi
 # Insert land surface variables into the wrf_inout file
 targetsize=9096528560
 targetsize2=9109111472   ## HRRRv4 working on dell2
+targetsize3=9092419248   ## HRRRv4 on WCOSS2
 START_TIME=$PDY$cyc
 counter=3
 while [[ $counter -lt 36 ]]; do
@@ -76,7 +77,7 @@ while [[ $counter -lt 36 ]]; do
     filesize=$(stat -c%s ${HRRRGES_SFC}/hrrrak_${CYC_TIME}f0$counterhr)
     echo $filesize
 #   if [ $filesize -eq $targetsize ]; then
-    if [[ $filesize -eq $targetsize || $filesize -eq $targetsize2 ]]; then
+    if [[ $filesize -eq $targetsize || $filesize -eq $targetsize2 || $filesize -eq $targetsize3 ]]; then
       echo " Cycle surface fields based on hrrr_${CYC_TIME}f0$counterhr"
       cp ${HRRRGES_SFC}/hrrrak_${CYC_TIME}f0$counterhr ./wrfout_d01_save
       cp ${EXEChrrr}/hrrr_full_cycle_surface .
