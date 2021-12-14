@@ -70,7 +70,6 @@ export USHhrrr=${USHhrrr:-$HOMEhrrr/ush/${dom}}
 ##############################
 # Run setpdy and initialize PDY variables
 ##############################
-export PDY=20210824
 setpdy.sh
 . PDY
 
@@ -98,7 +97,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_PREPCLOUDSSH:-$HOMEhrrr/scripts/${dom}/exhrrr_prep_cloud.sh.ecf}
+${HRRR_PREPCLOUDSSH:-$HOMEhrrr/scripts/${dom}/exhrrr_prep_cloud.sh}
 ########################################################
 cat $pgmout
 

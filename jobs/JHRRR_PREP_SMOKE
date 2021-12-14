@@ -74,7 +74,6 @@ export MPISER=${MPISER:-${NWROOThps}/mpiserial.${mpiserial_ver}/exec/mpiserial}
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
-export PDY=20210824
 setpdy.sh
 . ./PDY
 
@@ -103,7 +102,7 @@ env
 ########################################################
 # Execute the script.
 set -e
-${HRRR_SMOKESH:-$HOMEhrrr/scripts/$dom/exhrrr_prep_smoke.sh.ecf}
+${HRRR_SMOKESH:-$HOMEhrrr/scripts/$dom/exhrrr_prep_smoke.sh}
 ########################################################
 
 msg="ENDED NORMALLY."

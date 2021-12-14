@@ -69,7 +69,6 @@ export USHhrrr=${USHhrrr:-$HOMEhrrr/ush/${dom}}
 ##############################
 # Run setpdy and initialize PDY variables
 ##############################
-export PDY=20210824
 setpdy.sh
 . PDY
 
@@ -115,7 +114,7 @@ export DATA_RADAR=${DATA_RADAR:-${DATAROOT}/hrrr_${dom}_prep_radar_${envir}_${cy
 
 ########################################################
 # Execute the script.
-${HRRR_PREPREF2TTENSH:-$HOMEhrrr/scripts/${dom}/exhrrr_prep_ref2tten.sh.ecf}
+${HRRR_PREPREF2TTENSH:-$HOMEhrrr/scripts/${dom}/exhrrr_prep_ref2tten.sh}
 ########################################################
 cat $pgmout
 

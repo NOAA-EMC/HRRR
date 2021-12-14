@@ -100,7 +100,6 @@ export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
-export PDY=20210824
 setpdy.sh
 . PDY
 
@@ -123,7 +122,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_FCSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_fcstpre.sh.ecf}
+${HRRR_FCSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_fcstpre.sh}
 ########################################################
 
 cat $pgmout

@@ -83,7 +83,6 @@ export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
-export PDY=20210824
 setpdy.sh
 . PDY
 
@@ -106,7 +105,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_PREP_ENKF:-$HOMEhrrr/scripts/${dom}/exhrrrdas_prep_enkf.sh.ecf}
+${HRRR_PREP_ENKF:-$HOMEhrrr/scripts/${dom}/exhrrrdas_prep_enkf.sh}
 ########################################################
 
 cat $pgmout
