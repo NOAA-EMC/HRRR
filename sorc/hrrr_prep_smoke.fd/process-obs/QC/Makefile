@@ -2,7 +2,7 @@ SHELL=/bin/sh
 EXES=qc_modis.exe qc_viirs.exe
 
 # These four will be replaced by the caller:
-FC=ifort
+FC=ftn
 FFLAGS=-traceback -g
 LDFLAGS=
 LIBS=

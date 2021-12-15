@@ -1,0 +1,260 @@
+#!/bin/ksh --login
+############################################################################
+####  UNIX Script Documentation Block
+#                      .                                             .
+# Script name:         exhrrr_prep_radar.sh.ecf
+# Script description:  This script processes the Radar and Lightning Data 
+#                      for 16,30,46 and 60 minutes past the hour
+#
+#                      Variable "subhtime" has to be set in the ecflow script
+# Author:  Curtis Alexander / Geoffrey.Manikin   Org: EMC     Date: 2011-08-24
+#
+# Script history log:
+# 2014-08-01  C Alexander - HRRRv1
+# 2016-02-05  C Alexander - HRRRv2
+# 2018-01-24  B Blake / G Manikin / C Alexander - HRRRv3
+
+set -x
+DATE=/bin/date
+
+export MV2_ON_DEMAND_THRESHOLD=256
+export MOSAICTILENUM=4
+AWK="/bin/gawk --posix"
+
+echo $START_TIME
+numtiles=${MOSAICTILENUM}
+
+START_TIME=${PDY}' '${cyc}
+
+echo "${START_TIME}"
+echo `echo "${START_TIME}" | ${AWK} '/^[[:digit:]]{10}$/'`
+ if [ `echo "${START_TIME}" | ${AWK} '/^[[:digit:]]{10}$/'` ]; then
+   START_TIME=`echo "${START_TIME}" | sed 's/\([[:digit:]]\{2\}\)$/ \1/'`
+ elif [ ! "`echo "${START_TIME}" | ${AWK} '/^[[:digit:]]{8}[[:blank:]]{1}[[:digit:]]{2}$/'`" ]; then
+   echo "FATAL ERROR: start time, '${START_TIME}', is not in 'yyyymmddhh' or 'yyyymmdd hh' format"
+   err_exit 1
+ fi
+ START_TIME=`${DATE} -d "${START_TIME} ${subhtime} minutes"`
+echo $START_TIME
+
+# Compute date & time components for the analysis time
+YYYYMMDDHH=`${DATE} +"%Y%m%d%H" -d "${START_TIME}"`
+echo $YYYYMMDDHH
+YYYY=`${DATE} +"%Y" -d "${START_TIME}"`
+MM=`${DATE} +"%m" -d "${START_TIME}"`
+DD=`${DATE} +"%d" -d "${START_TIME}"`
+HH=`${DATE} +"%H" -d "${START_TIME}"`
+mm=`${DATE} +"%M" -d "${START_TIME}"`
+
+ymdh=$YYYYMMDDHH
+hh=$HH
+
+cp ${PARMhrrr}/hrrr_prepobs_prep.bufrtable  ./prepobs_prep.bufrtable
+ln -sf ${FIXhrrr}/hrrrdas_geo_em.d01.nc geo_em.d01.nc 
+
+# find NSSL grib2 mosaic files
+COM_MOSAIC_GRIB2=${COMINmosaic}/conus/MergedReflectivityQC
+mmm1=$((mm - 1))
+mmm2=$((mm - 2))
+if [ $mmm1 -lt 0 ]; then let mmm1=mmm1+60; fi
+if [ $mmm2 -lt 0 ]; then let mmm2=mmm2+60; fi
+
+numgrib2_00=`ls ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mm}??.grib2.gz | wc -l`
+numgrib2_01=`ls ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mmm1}??.grib2.gz | wc -l`
+numgrib2_02=`ls ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mmm2}??.grib2.gz | wc -l`
+if [ ${numgrib2_00} -eq 33 ]; then
+   cp ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mm}??.grib2.gz .
+   ls MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}????.grib2.gz > filelist_mrms
+else
+   if [ ${numgrib2_01} -eq 33 ]; then
+      cp ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mmm1}??.grib2.gz .
+      ls MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}????.grib2.gz > filelist_mrms
+   else
+      if [ ${numgrib2_02} -eq 33 ]; then
+         cp ${COM_MOSAIC_GRIB2}/MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}${mmm2}??.grib2.gz .
+         ls MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}????.grib2.gz > filelist_mrms
+      else
+         echo "Warning: No NSSL gribs data available, use NCEP 8 tiles binary"
+         if [ -s filelist_mrms ]; then
+            rm -f filelist_mrms
+         fi
+      fi
+   fi
+fi
+
+if [ -s filelist_mrms ]; then
+   numgrib2=`more filelist_mrms | wc -l`
+   echo "NSSL grib2 file level number = $numgrib2"
+else
+   numgrib2=0
+fi
+
+# the backup tiles are at 00,15,30,45 past the hour
+if [ ${mm} -eq 16 -o ${mm} -eq 46 ];then
+  mmmm1=$((mm - 1))
+else
+  mmmm1=${mm}
+fi
+
+# Link to the radar data
+if [ $numgrib2 -eq 36 ]; then
+   gzip -d *.gz
+   numtiles=1
+   rm -f filelist_mrms
+   ls MergedReflectivityQC_*_${YYYY}${MM}${DD}-${HH}????.grib2 > filelist_mrms
+else
+   if [ -s ${COMINmosaic}/tile1/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ] && \
+      [ -s ${COMINmosaic}/tile2/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ] && \
+      [ -s ${COMINmosaic}/tile3/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ] && \
+      [ -s ${COMINmosaic}/tile4/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ]; then
+      numtiles=4
+      cp ${COMINmosaic}/tile1/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ./mosaic_t1.gz
+      cp ${COMINmosaic}/tile2/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ./mosaic_t2.gz
+      cp ${COMINmosaic}/tile3/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ./mosaic_t3.gz
+      cp ${COMINmosaic}/tile4/mrefl/MREF3D33L.${YYYY}${MM}${DD}.${HH}${mm}00.gz ./mosaic_t4.gz
+      gzip -d *.gz
+   else
+      numtiles=81
+      export MOSAICdir=$COMINradar/radar.${ymdh}
+      ln -sf ${MOSAICdir}/tile1/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t1
+      ln -sf ${MOSAICdir}/tile2/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t2
+      ln -sf ${MOSAICdir}/tile3/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t3
+      ln -sf ${MOSAICdir}/tile4/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t4
+      ln -sf ${MOSAICdir}/tile5/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t5
+      ln -sf ${MOSAICdir}/tile6/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t6
+      ln -sf ${MOSAICdir}/tile7/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t7
+      ln -sf ${MOSAICdir}/tile8/${PDY}_${hh}${mmmm1}.mosaic ./mosaic_t8
+   fi
+fi
+
+echo ${ymdh} > ./mosaic_cycle_date
+
+cat << EOF > mosaic.namelist
+ &setup
+  tversion=${numtiles},
+  analysis_time = ${YYYYMMDDHH},
+  dataPath = './',
+  output_dart = .true.,
+  dart_output_file_name = 'obs_seq_mrms.${YYYY}_${MM}_${DD}_${HH}_${mm}_00.out',
+  dbz_error_sd = 5.0,
+  max_height = 11001.0,
+  use_clear_air_type = .true.,
+  precip_dbz_thresh = 10.0,
+  clear_air_dbz_thresh = 0.0, 
+  clear_air_dbz_value = -10.0,
+  precip_dbz_horiz_skip = 1,
+  precip_dbz_vert_skip = 2,
+  clear_air_dbz_horiz_skip = 5,
+  clear_air_dbz_vert_skip = -1,
+ /
+EOF
+
+# Run Process_mosaic for domain 1
+cp ${EXEChrrr}/hrrr_process_mosaic_enkf .
+#runline="aprun -n 36 -N 24 ./hrrr_process_mosaic_enkf"
+runline="mpiexec -n 36 -ppn 36 ./hrrr_process_mosaic_enkf"
+$runline
+export err=$?; err_chk
+
+echo 'ending mosaic processing'
+
+if [ $subhtime -eq 00 ]
+then
+  cp ${DATA}/${subhtime}/NSSLRefInGSI.bufr ${COMOUT}/hrrr.t${cyc}z.NSSLRefInGSI_d01.bufr
+  cp ${DATA}/${subhtime}/obs_seq_mrms.${YYYY}_${MM}_${DD}_${HH}_${mm}_00.out ${COMOUT}/hrrr.t${cyc}z.obs_seq_mrms_d01.out
+  cp ${DATA}/${subhtime}/Gridded_ref.nc ${COMOUT}/hrrr.t${cyc}z.Gridded_ref_d01.nc
+fi
+
+# Run Process_mosaic domain 2
+rm geo_em.d01.nc
+ln -sf ${FIXhrrr}/hrrrdas_geo_em.d02.nc geo_em.d01.nc 
+$runline
+export err=$?; err_chk
+
+echo 'ending mosaic processing'
+
+if [ $subhtime -eq 00 ]
+then
+  cp ${DATA}/${subhtime}/NSSLRefInGSI.bufr ${COMOUT}/hrrr.t${cyc}z.NSSLRefInGSI_d02.bufr
+  cp ${DATA}/${subhtime}/obs_seq_mrms.${YYYY}_${MM}_${DD}_${HH}_${mm}_00.out ${COMOUT}/hrrr.t${cyc}z.obs_seq_mrms_d02.out
+  cp ${DATA}/${subhtime}/Gridded_ref.nc ${COMOUT}/hrrr.t${cyc}z.Gridded_ref_d02.nc
+fi
+
+
+# find lightning bufr file
+icnt=1
+while [ $icnt -lt 40 ]
+do
+  if [ -s $COMINlight/rap.${PDY}/rap.t${cyc}z.lghtng.tm00.bufr_d ]
+  then
+    sleep 3
+    cpreq $COMINlight/rap.${PDY}/rap.t${cyc}z.lghtng.tm00.bufr_d ./rap.t${cyc}z.lghtng.tm00.bufr_d
+    break
+  elif [ -s $COMINlight/rap_e.${PDY}/rap_e.t${cyc}z.lghtng.tm00.bufr_d ]
+  then
+    sleep 3
+    cpreq $COMINlight/rap_e.${PDY}/rap_e.t${cyc}z.lghtng.tm00.bufr_d ./rap.t${cyc}z.lghtng.tm00.bufr_d
+    break
+  fi
+  sleep 12
+  icnt=$((icnt + 1))
+  if [ $icnt -gt 36 ]
+  then
+#    msg="FATAL ERROR: No bufr file found for lightning processing after 6 minutes waiting. Checking rap_dump jobs!"
+#   err_exit $msg
+    echo "Warning: No bufr file found for lightning processing after 6 minutes waiting. Will skip lightning processing"
+    export subject="${cyc}z RAP Lightning Data Missing for ${cyc}z HRRRDAS"
+    export maillist=${maillist:-'nco.spa@noaa.gov,geoffrey.manikin@noaa.gov,benjamin.blake@noaa.gov,ming.hu@noaa.gov'}
+    echo "Warning: No ${cyc}z RAP lightning data was available for the ${cyc}z HRRRDAS cycle">>mailmsg
+    cat mailmsg |mail.py -s "$subject" $maillist -v
+    exit 0
+
+  fi
+done
+
+ln -sf rap.t${cyc}z.lghtng.tm00.bufr_d lghtngbufr
+
+echo ${ymdh} > ./lightning_cycle_date
+
+if [ $subhtime -eq 16 -o $subhtime -eq 46 ]; then
+  minutetime=$(($subhtime-1))
+elif [ $subhtime -eq 60 -a $cyc -eq 00 ]; then
+  YYYYMMDDHH=${PDYm1}${cycm1}
+  minutetime=$subhtime
+elif [ $subhtime -eq 60 -a $cyc -ne 00 ]; then
+  YYYYMMDDHH=${PDY}${cycm1}
+  minutetime=$subhtime
+else
+  minutetime=$subhtime
+fi
+
+cat << EOF > lightning_bufr.namelist
+ &SETUP
+  analysis_time = ${YYYYMMDDHH},
+  minute=${minutetime},
+  trange_start=-15.0,
+  trange_end=0.0,
+ /
+EOF
+
+# run for domain 1
+rm geo_em.d01.nc
+ln -sf ${FIXhrrr}/hrrrdas_geo_em.d01.nc geo_em.d01.nc 
+# Run process lightning
+cp ${EXEChrrr}/hrrr_process_lightning .
+#runline="aprun -n 36 -N 24 ./hrrr_process_lightning"
+runline="mpiexec -n 36 -ppn 36 ./hrrr_process_lightning"
+$runline > process_lightning.out
+export err=$?; err_chk
+cp ${DATA}/${subhtime}/LightningInGSI.bufr ${COMOUT}/hrrr.t${cyc}z.LightningInGSI_d01.bufr
+
+# run for domain 2
+rm geo_em.d01.nc
+ln -sf ${FIXhrrr}/hrrrdas_geo_em.d02.nc geo_em.d01.nc 
+$runline > process_lightning.out
+export err=$?; err_chk
+cp ${DATA}/${subhtime}/LightningInGSI.bufr ${COMOUT}/hrrr.t${cyc}z.LightningInGSI_d02.bufr
+
+echo 'ending lightning processing'
+
+exit 0

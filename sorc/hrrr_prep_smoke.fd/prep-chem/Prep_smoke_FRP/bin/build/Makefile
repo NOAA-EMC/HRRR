@@ -5,8 +5,9 @@ include paths.mk
 
 # Compiler commands.
 
-INCLUDES   = -I$(LIB_RAMS_PATH)/include $(NETCDF_INC) $(HDF5_INC)
-LIBS       = $(NETCDF_LIBS) $(HDF5_LIB)
+INCLUDES   = -I$(LIB_RAMS_PATH)/include -I${NETCDF}/include #-I${HDF5_INC}
+LIBS       = -L${NETCDF}/lib -lnetcdf -lnetcdff
+
 F_COMMAND  = $(F_COMP) -c $(F_OPTS) $(INCLUDES) 
 # NUWRF...Added CUNDERSCORE
 #C_COMMAND  = $(C_COMP) -c $(C_OPTS) -D$(CMACH) -D$(CUNDERSCORE) $(INCLUDES)

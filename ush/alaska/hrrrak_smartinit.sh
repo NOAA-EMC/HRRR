@@ -20,7 +20,6 @@ mkdir -p $DATA/smart
 cd $DATA/smart
 
 export tmmark=tm00
-#WGRIB2=$EXEChrrr/hrrr_wgrib2
 
 cp ${COMIN}/hrrr.t${cyc}z.wrfnatf${fhr}.ak.grib2 WRFNAT${fhr}.tm00
 ${GRB2INDEX} WRFNAT${fhr}.tm00 WRFNAT${fhr}i.tm00
@@ -36,11 +35,7 @@ ${WGRIB2} WRFNAT${fhr}.tm00 | grep -F -f hrrrak_smartnatparams | ${WGRIB2} -i -g
 
 ${GRB2INDEX} hrrr_natgrd.tm00 grib2file_index 
 
-#export  wgrib2def="nps:210:60 181.429:1649:2976.563 40.530101:1105:2976.563"
 export wgrib2def="nps:210.000000:60.000000 181.429000:1649:2976.563000 40.530101:1105:2976.563000"
-
-#${WGRIB2} hrrr_natgrd.tm00 -set_grib_type c3 -set_bitmap 1 -new_grid_winds grid -new_grid_interpolation bilinear -new_grid ${wgrib2def} hrrr.NDFDAKf${fhr}.grib2
-
 ${WGRIB2} hrrr_natgrd.tm00 -set_radius 1:6370000 -set_grib_type c3 -set_bitmap 1 -new_grid_winds grid \
           -new_grid_interpolation bilinear \
           -if "`cat ${PARMhrrr}/hrrrak_smart_neighbor_fields.txt`" -new_grid_interpolation neighbor -fi \
@@ -49,7 +44,7 @@ ${WGRIB2} hrrr_natgrd.tm00 -set_radius 1:6370000 -set_grib_type c3 -set_bitmap 1
 mv hrrr.NDFDAKf${fhr}.grib2 hrrr.NDFDAKf${fhr}
 ${GRB2INDEX} hrrr.NDFDAKf${fhr} hrrr.NDFDAKf${fhr}I
 
-cp /gpfs/hps/nco/ops/com/date/t${cyc}z DATE
+cp ../DATE_SMARTINIT DATE
 
 export pgm=hrrr_smartinit
 . prep_step
@@ -66,9 +61,6 @@ rm -rf smart.ksh
 varEOF=EOF
 cat > smart.ksh <<EOF
 #!/bin/ksh -l
-#/gpfs/hps3/emc/meso/save/$USER/nwprod/hrrr.v4.0.0/exec/hrrr_smartinit <<EOF >> smartinitak.out${fhr}
-#$EXEChrrr/hrrr_smartinit <<EOF >> smartinitak.out${fhr}
-#valgrind --leak-check=yes $EXEChrrr/hrrr_smartinit <<EOF >> smartinitak.out${fhr}
 $EXEChrrr/hrrr_smartinit <<EOF >> smartinitak.out${fhr}
 HRRR
 AK
@@ -78,7 +70,7 @@ $cyc
 $varEOF
 EOF
 chmod 755 smart.ksh
-aprun -n 1 smart.ksh
+mpiexec -n 1 -ppn 1 smart.ksh
 
 export err=$?; err_chk
 

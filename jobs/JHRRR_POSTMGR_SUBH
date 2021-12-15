@@ -90,7 +90,7 @@ export INPUT_DATA=${DATAROOT}/hrrr_${dom}_fcst_${envir}_${cyc}
 
 ########################################################
 # Execute the script.
-${HRRR_POSTSUBHMGRSH:-$HOMEhrrr/scripts/${dom}/exhrrr_postmgr_subh.sh.ecf}
+${HRRR_POSTSUBHMGRSH:-$HOMEhrrr/scripts/${dom}/exhrrr_postmgr_subh.sh}
 ########################################################
 
 cat $pgmout

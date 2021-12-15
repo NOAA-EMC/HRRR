@@ -9,18 +9,17 @@ TARGET   = ../../exec/hrrr_wrfpost
 FC       = ftn
 CPP      = /lib/cpp -P
 CPPFLAGS = -DLINUX 
-OPTS     = -O -fp-model strict
 FREE     = -FR
-TRAPS    = 
 DEBUG    = -g
 
+FFLAGS = -O2 -convert_big_endian -traceback -g -fp-model source -fpp -qopenmp
 CFLAGS =  -DLINUX -Dfunder -DFortranByte=char -DFortranInt=int -DFortranLlong='long long'
 #
 
-WRF_VER=v1.1.0
-WRFPATH    = /gpfs/hps/nco/ops/nwprod/wrf_shared.$(WRF_VER)-intel
-WRF_INC    = $(WRFPATH)/external/io_quilt -I$(WRFPATH)/frame
-WRF_LIB    = $(WRFPATH)/main/libwrflib.a  \
+#WRF_VER=v1.1.0
+#WRFPATH    = /gpfs/hps/nco/ops/nwprod/wrf_shared.$(WRF_VER)-intel
+#WRF_INC    = $(WRFPATH)/external/io_quilt -I$(WRFPATH)/frame
+#WRF_LIB    = $(WRFPATH)/main/libwrflib.a  \
              $(WRFPATH)/frame/pack_utils.o  \
              $(WRFPATH)/frame/module_internal_header_util.o \
              $(WRFPATH)/external/io_grib1/libio_grib1.a \
@@ -32,40 +31,36 @@ WRF_LIB    = $(WRFPATH)/main/libwrflib.a  \
 
 
 NETCDFPATH = ${NETCDF}
-NETCDF_LIB = $(NETCDFPATH)/lib/libnetcdf.a #$(NETCDFPATH)/lib/libnetcdff.a
+NETCDF_LIB = -L $(NETCDFPATH)/lib -lnetcdf -lnetcdff
 NETCDF_INC = $(NETCDFPATH)/include
 
 #
 # Assemble Options
 #
 FFLAGS   = $(OPTS) $(FREE) $(TRAPS) $(DEBUG) \
-           -I$(WRF_INC) \
-           -I$(XMLPARSE_INC) \
+           -I$(WRF_IO_INC) \
            -I$(G2_INC4) \
            -I$(G2TMPL_INC) \
            -I$(NEMSIO_INC) \
-           -I$(GFSIO_INC4) \
-           -I$(SIGIO_INC4) \
-           -I$(SFCIO_INC4) \
-           -I$(W3EMC_INC4) \
+           -I$(GFSIO_INC) \
+           -I$(SIGIO_INC) \
+           -I$(SFCIO_INC) \
            -I$(CRTM_INC) \
            -I$(NETCDF_INC)
 
-LIBS     = $(WRF_LIB) \
-           $(XMLPARSE_LIB) \
+LIBS     = $(WRF_IO_LIB) \
            $(G2TMPL_LIB) \
            $(G2_LIB4) \
            $(JASPER_LIB) \
            $(PNG_LIB) \
            $(Z_LIB) \
            $(NEMSIO_LIB) \
-           $(GFSIO_LIB4) \
-           $(SIGIO_LIB4) \
-           $(SFCIO_LIB4) \
-           $(IP_LIB) \
+           $(GFSIO_LIB) \
+           $(SIGIO_LIB) \
+           $(SFCIO_LIB) \
+           $(IP_LIB4) \
            $(SP_LIB4) \
            $(W3NCO_LIB4) \
-           $(W3EMC_LIB4) \
            $(BACIO_LIB4) \
            $(CRTM_LIB) \
            $(NETCDF_LIB)
@@ -115,7 +110,7 @@ OBJS   = $(OBJS_FT) $(OBJS_F)
 	$(CPP) $(CPPFLAGS) $< > $*.f
 
 $(TARGET): $(OBJS)
-	$(FC) -openmp -o $@ $(OBJST) $(OBJXML) $(OBJS) $(LIBS)
+	$(FC) -qopenmp -o $@ $(OBJST) $(OBJXML) $(OBJS) $(LIBS)
 
 .f.o:
 	$(FC) $(FFLAGS) -c $<

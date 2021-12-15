@@ -92,10 +92,10 @@ setpdy.sh
 export COM=${COM:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}}
 export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMINsst=${COMINsst:-${COMROOTp3}/gfs/prod}
-export PREPDIR=${PREPDIR:-${COMROOT}/rap/prod}
-export COMRAP=${COMRAP:-${COMROOT}/rap/prod}
-export COMRAP_E=${COMRAP_E:-${COMROOT}/rap/prod}
+export COMINsst=${COMINsst:-${COMROOTp3}/gfs/v16.2}
+export PREPDIR=${PREPDIR:-${COMRAP}/rap/v5.1}
+#export COMRAP=${COMRAP:-${COMROOT}/rap/prod}
+export COMRAP_E=${COMRAP_E:-${COMRAP}}
 export PREPDIR2=${PREPDIR2:-${COMIN}}
 
 export gespath=${gespath:-$GESROOT/${envir}}
@@ -110,7 +110,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_ANALSH:-$HOMEhrrr/scripts/${dom}/exhrrr_enkf.sh.ecf}
+${HRRR_ANALSH:-$HOMEhrrr/scripts/${dom}/exhrrr_enkf.sh}
 ########################################################
 
 cat $pgmout

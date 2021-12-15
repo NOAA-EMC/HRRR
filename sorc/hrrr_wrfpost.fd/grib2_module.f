@@ -973,7 +973,8 @@
 !        'max_bytes=',max_bytes,'ipdsnum=',ipdsnum,'ipdstmpllen=',ipdstmpllen,'ipdstmpl=',ipdstmpl(1:ipdstmpllen), &
 !        'coordlist=',coordlist,'numcoord=',numcoord,'idrsnum=',idrsnum,'idrstmpl=',idrstmpl,  &
 !        'idrstmplen=',idrstmplen,'im_jm=',im_jm
-
+ 
+       if(trim(pset%param(nprm)%pname)=='HGT' .and. ipdstmpl(10)==255) ipdstmpl(10)=14
        call addfield(cgrib,max_bytes,ipdsnum,ipdstmpl(1:ipdstmpllen),         &
                      ipdstmpllen,coordlist,numcoord,idrsnum,idrstmpl,         &
                      idrstmplen ,datafld1,im_jm,ibmap,bmap,ierr)

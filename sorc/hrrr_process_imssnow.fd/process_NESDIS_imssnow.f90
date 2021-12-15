@@ -195,7 +195,7 @@ SUBROUTINE map2RR(f,maskims,kgds_src,xlandRR,nlonRR,nlatRR,xlonRR,ylatRR,snowice
 !
 !_____________________________________________________________________
 
-
+  use gdswzd_mod, only : gdswzd
   implicit none
 
   INTEGER JPDS(200),JGDS(200),KPDS_SRC(200),KGDS_SRC(200)
@@ -215,7 +215,7 @@ SUBROUTINE map2RR(f,maskims,kgds_src,xlandRR,nlonRR,nlatRR,xlonRR,ylatRR,snowice
   REAL :: XPNMC8,YPNMC8,ENNMC8,ALNMC8,ORIENT8
   REAL :: XPNMCAF,YPNMCAF,ENNMCAF,ALNMCAF,ORIENTAF
 
-  real :: YYLAT,XLONG, RM, RAD, X, Y
+  real :: YYLAT(1),XLONG(1), RM, RAD, XX(1),YY(1),X, Y
   integer :: IS,IP1,JS,JP1, IPOINT, JPOINT
 !
   integer :: iland,KOUNT
@@ -233,8 +233,14 @@ SUBROUTINE map2RR(f,maskims,kgds_src,xlandRR,nlonRR,nlatRR,xlonRR,ylatRR,snowice
     nout=0
     DO j=1,nlatRR
     DO i=1,nlonRR
-         call gdswiz(kgds_src,-1,1,undefined_value,X,Y, &
-                     xlonRR(i,j),ylatRR(i,j),nret,0,dum,dum)
+!         call gdswiz(kgds_src,-1,1,undefined_value,X,Y, &
+!                     xlonRR(i,j),ylatRR(i,j),nret,0,dum,dum)
+         YYLAT(1)=ylatRR(i,j)
+         XLONG(1)=xlonRR(i,j)
+         call gdswzd(kgds_src,-1,1,undefined_value,XX,YY, &
+                     XLONG,YYLAT,nret)
+         X=XX(1)
+         Y=YY(1)
          if (nret /= 1) then
             nout=nout+1
 !            snowiceRR(i,j) = 0.

@@ -115,10 +115,11 @@ C
 C  
 
       REAL, ALLOCATABLE:: DHCNVC(:,:),DHRAIN(:,:),STADHC(:),STADHR(:),
-     &                      TCUCN0(:,:),TRAIN0(:,:),CLDFRA(:,:)
+     &                      TCUCN0(:,:),TRAIN0(:,:),CLDFRA_BL(:,:)
 
       REAL,ALLOCATABLE:: DUM(:,:,:),DUMMY(:,:),DUMMY2(:,:),
-     &  DUM3D(:,:,:),DUM3D2(:,:,:),DUM3D3(:,:,:),GDLAT(:,:),GDLON(:,:)
+     &  DUMMY3(:,:),DUM3D(:,:,:),DUM3D2(:,:,:),DUM3D3(:,:,:),
+     &  GDLAT(:,:),GDLON(:,:)
 
       REAL, ALLOCATABLE:: PRODAT(:),FPACK(:)
 
@@ -322,7 +323,7 @@ C Getting start time
 	ALLOCATE(CWM(NUMSTA,LM))
 	ALLOCATE(TRAIN(NUMSTA,LM))
 	ALLOCATE(TCUCN(NUMSTA,LM))
-        ALLOCATE(CLDFRA(NUMSTA,LM))
+        ALLOCATE(CLDFRA_BL(NUMSTA,LM))
 	ALLOCATE(RSWTT(NUMSTA,LM))
 	ALLOCATE(RLWTT(NUMSTA,LM))
 	ALLOCATE(CCR(NUMSTA,LM))
@@ -359,6 +360,8 @@ C Getting start time
      &                          allocate(DUMMY(IM,JM))
         if (ALLOCATED(DUMMY2)) deallocate(DUMMY2);
      &                          allocate(DUMMY2(IM,JM))
+        if (ALLOCATED(DUMMY3)) deallocate(DUMMY3);
+     &                          allocate(DUMMY3(IM,JM))
         if (ALLOCATED(DUM3D)) deallocate(DUM3D);
      &                          allocate(DUM3D(IM+1,JM+1,LM+1))
         if (ALLOCATED(DUM3D2)) deallocate(DUM3D2);
@@ -468,12 +471,22 @@ c
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
 
+      VarName='GLW'
+      call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY2,
+     &  IM,1,JM,1,IM,JS,JE,1)
+
+      VarName='GSW'
+      call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY3,
+     &  IM,1,JM,1,IM,JS,JE,1)
+
       DO N=1,NUMSTA
         I=IHINDX(N)
         J=JHINDX(N)
         ASWIN(N)=DUMMY(I,J)
+        ALWIN(N)=DUMMY2(I,J)
+        ASWOUT(N)=DUMMY3(I,J)-DUMMY(I,J)
       ENDDO
-
+        
       VarName='PH'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D2,
      &  IM+1,1,JM+1,LM+1,IM,JS,JE,LM+1)
@@ -593,13 +606,13 @@ c        ENDDO
         ENDDO
         ENDDO
 
-      VarName='CLDFRA'
+      VarName='CLDFRA_BL'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUM3D,
      &  IM+1,1,JM+1,LM+1,IM,JS,JE,LM)
 
         DO L = 1, LM
         DO N=1,NUMSTA
-          CLDFRA(N,L)=DUM3D(IHINDX(N),JHINDX(N),L)
+          CLDFRA_BL(N,L)=DUM3D(IHINDX(N),JHINDX(N),L)
         ENDDO
         ENDDO
 
@@ -702,7 +715,7 @@ c        ENDDO
 
 c
 c reading SMSTAV
-      VarName='SMSTAV'
+      VarName='SMOIS'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
       DO N=1,NUMSTA
@@ -1113,6 +1126,13 @@ CC RAINNC is "ACCUMULATED TOTAL GRID SCALE PRECIPITATION"
       VarName='HFX'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
+
+      DO N=1,NUMSTA
+        I=IHINDX(N)
+        J=JHINDX(N)
+        SFCSHX(N)=DUMMY(I,J)
+      ENDDO
+
       VarName='QFX'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
@@ -1125,6 +1145,8 @@ CC RAINNC is "ACCUMULATED TOTAL GRID SCALE PRECIPITATION"
         J=JHINDX(N)
         SFCLHX(N)=DUMMY(I,J)
       ENDDO
+
+      print*,'LH ',LH(100:110)
 
       VarName='SNOWC'
       call getVariable(fileName,DateStr,DataHandle,VarName,DUMMY,
@@ -1259,26 +1281,36 @@ C
       DO N=1,NUMSTA
 	Z0(N)=-9999.
         HBOT(N)=-9999.
+        CFRACL(N)=0.
+        CFRACM(N)=0.
+        CFRACH(N)=0.
 	CZEN(N)=-9999.
-      ENDDO
 
-      DO L=1,17
-         IF (CLDFRA(N,L).GT.CFRACH(N)) THEN
-           CFRACH(N)=CLDFRA(N,L)
-         ENDIF
-      ENDDO
+        DO L=1,17
+           IF (CLDFRA_BL(N,L).GT.CFRACH(N)) THEN
+             CFRACH(N)=CLDFRA_BL(N,L)
+             print*,'CFRACH ',CFRACH(N)
+           ENDIF
+        ENDDO
 
-      DO L=18,35
-         IF (CLDFRA(N,L).GT.CFRACM(N)) THEN
-           CFRACM(N)=CLDFRA(N,L)
-         ENDIF
-      ENDDO
+        DO L=18,35
+           IF (CLDFRA_BL(N,L).GT.CFRACM(N)) THEN
+             CFRACM(N)=CLDFRA_BL(N,L)
+!             print*,'CFRACM ',CFRACM(N)
+           ENDIF
+        ENDDO
 
-      DO L=36,50
-         IF (CLDFRA(N,L).GT.CFRACL(N)) THEN
-           CFRACL(N)=CLDFRA(N,L)
-         ENDIF
+        DO L=36,50
+           IF (CLDFRA_BL(N,L).GT.CFRACL(N)) THEN
+             CFRACL(N)=CLDFRA_BL(N,L)
+!             print*,'CFRACL ',CFRACL(N)
+           ENDIF
+        ENDDO
+
       ENDDO
+      print*,'CFRACH ',CFRACH(10:100)
+!      print*,'CFRACM ',CFRACM(10:100)
+!      print*,'CFRACL ',CFRACL(10:100)
 
       DO N=1,NUMSTA
        PSFC = SFCP(N)
@@ -1321,7 +1353,6 @@ c      print *,n,idstn(n),pslp(n),tvrt
       DO N=1,NUMSTA
         SNO(N)=-9999. ! many "sno" type variables...which do we need here?
 c	PSLP(N)=-9999.
-c	CFRACH(N)=-9999.
 	SMSTOT(N)=-9999.
 c	SFCEXC(N)=-9999.
 	CZMEAN(N)=-9999.
@@ -1332,7 +1363,7 @@ c	SR(N)=-9999.
       DO N=1,NUMSTA
         SSROFF(N)=-9999.
         BGROFF(N)=-9999.
-       SFCSHX(N)=-9999.
+c       SFCSHX(N)=-9999.
 c       SFCLHX(N)=-9999.
        SUBSHX(N)=-9999.
        SNOPCX(N)=-9999.
@@ -1340,9 +1371,9 @@ c       SFCLHX(N)=-9999.
 
       DO N=1,NUMSTA
 c        ASWIN(N)=-9999.
-        ASWOUT(N)=-9999.
+c        ASWOUT(N)=-9999.
         ASWTOA(N)=-9999.
-        ALWIN(N)=-9999.
+c        ALWIN(N)=-9999.
         ALWOUT(N)=-9999.
         ALWTOA(N)=-9999.
       ENDDO
@@ -1775,6 +1806,12 @@ CC RAINNC is "ACCUMULATED TOTAL GRID SCALE PRECIPITATION"
       VarName='HFX'
       call getVariable(fileName,DateStrold,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
+
+        DO N=1,NUMSTA
+          SFCSHX0(N)=DUMMY(IHINDX(N),JHINDX(N))
+!           print *, 'SENSIBLE0 ', SFCSHX(N), SFCSHX0(N)
+        ENDDO
+
       VarName='QFX'
       call getVariable(fileName,DateStrold,DataHandle,VarName,DUMMY,
      &  IM,1,JM,1,IM,JS,JE,1)
@@ -1787,14 +1824,28 @@ CC RAINNC is "ACCUMULATED TOTAL GRID SCALE PRECIPITATION"
            print *, 'LATENT0 ', SFCLHX(N), SFCLHX0(N)
         ENDDO
 
+       print*,'LH ',LH(100:110)
+
       VarName='SWDOWN'
       call getVariable(fileName,DateStrold,DataHandle,VarName,DUMMY,
+     +  IM,1,JM,1,IM,JS,JE,1)
+
+      VarName='GLW'
+      call getVariable(fileName,DateStrold,DataHandle,VarName,DUMMY2,
+     +  IM,1,JM,1,IM,JS,JE,1)
+
+      VarName='GSW'
+      call getVariable(fileName,DateStrold,DataHandle,VarName,DUMMY3,
      +  IM,1,JM,1,IM,JS,JE,1)
 
       DO N=1,NUMSTA
         I=IHINDX(N)
         J=JHINDX(N)
         ASWIN0(N)=DUMMY(I,J)
+        ALWIN0(N)=DUMMY2(I,J)
+        ASWOUT0(N)=DUMMY3(I,J)-DUMMY(I,J)
+        print *, 'ALWIN ', ALWIN(N), ALWIN0(N)
+        print *, 'ASWOUT ', ASWOUT(N), ASWOUT0(N)
       ENDDO
 
       VarName='SNOWC'
@@ -1815,12 +1866,14 @@ C
           DO N=1,NUMSTA
 c           TRAIN0(N,L)=DUM(IHINDX(N),JHINDX(N),1)
 c           TCUCN0(N,L)=DUM(IHINDX(N),JHINDX(N),2)
-	TRAIN0(N,L)=-9999.
-	TCUCN0(N,L)=-9999.
+c	TRAIN0(N,L)=-9999.
+c	TCUCN0(N,L)=-9999.
           ENDDO
 C
 c       ENDDO      
 C
+	TRAIN0=-9999.
+	TCUCN0=-9999.
 
 !!!
 !!!	THESE RUNOFF ASSIGNMENTS COULD BE *WRONG* !!!!!!
@@ -1832,7 +1885,7 @@ C
         ENDDO
 C
         DO N=1,NUMSTA
-         SFCSHX0(N)=-9999.
+c         SFCSHX0(N)=-9999.
 c         SFCLHX0(N)=-9999.
          SUBSHX0(N)=-9999.
          SNOPCX0(N)=-9999.
@@ -1840,9 +1893,9 @@ c         SFCLHX0(N)=-9999.
 C
         DO N=1,NUMSTA
 c        ASWIN0(N)=-9999.
-        ASWOUT0(N)=-9999.
+c        ASWOUT0(N)=-9999.
         ASWTOA0(N)=-9999.
-        ALWIN0(N)=-9999.
+c        ALWIN0(N)=-9999.
         ALWOUT0(N)=-9999.
         ALWTOA0(N)=-9999.
           POTFLX0(N)=-9999.
@@ -2132,12 +2185,12 @@ c           DHRAIN(L,N)=0.
 c         ENDDO
 c       ENDDO
 c     ELSE
-c       DO N=1,NUMSTA
-c         DO L=1,LM
-            DHCNVC(L,N)=TCUCN0(N,L)
-            DHRAIN(L,N)=TRAIN0(N,L)
-c         ENDDO
-c       ENDDO
+       DO N=1,NUMSTA
+         DO L=1,LM
+            DHCNVC(L,N)=TCUCN0(L,N)
+            DHRAIN(L,N)=TRAIN0(L,N)
+         ENDDO
+       ENDDO
 c     ENDIF
  
 C------------------------------------------------------------------
@@ -2397,7 +2450,7 @@ C GSM  really need to sort out cloud data in HRRR data.  set to missing for now.
         PRODAT(NWORD8+LVL) = TRAIN(N,LV)
         PRODAT(NWORD9+LVL) = RSWTT(N,LV)
         PRODAT(NWORD10+LVL)= RLWTT(N,LV)
-        PRODAT(NWORD11+LVL)= CCR(N,LV)*100.
+        PRODAT(NWORD11+LVL)= CLDFRA_BL(N,LV)*100.
 
 C
         IF(LV.EQ.1)THEN
@@ -2546,7 +2599,7 @@ C
       FPACK(9+NWORD13+8)  = STACRX
 !      FPACK(9+NWORD13+9)  = PSFCEVP * RTSPH
 !      FPACK(9+NWORD13+10) = PPOTEVP * RTSPH
-!      FPACK(9+NWORD13+11) = PSFCSHX * RTSPH
+      FPACK(9+NWORD13+11) = PSFCSHX * RTSPH
 !      FPACK(9+NWORD13+12) = PSFCSUB * RTSPH
 !      FPACK(9+NWORD13+13) = PSNOPCX * RTSPH
 !      FPACK(9+NWORD13+14) = PRSWIN  * RTSPH

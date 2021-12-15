@@ -37,7 +37,7 @@ if [ "$RUN_ENVIR" != nco ]      ### For Developers, "group_name" is passed from 
 then
   group_name=${group_name:-meso}
   package_name=${package_name:-hrrr}
-  . /${group_name}/save/${LOGNAME}/${package_name}${NWROOT}/parm/${package_name}_para_config
+#  . /${group_name}/save/${LOGNAME}/${package_name}${NWROOT}/parm/${package_name}_para_config
   export userid=${userid:-$LOGNAME}
 fi
 
@@ -110,14 +110,15 @@ setpdy.sh
 export COM=${COM:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}}
 export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMRAP=${COMRAP:-${COMROOT}/rap/${envir}}
+#export COMRAP=${COMRAP:-${COMROOT}/rap/${envir}}
+export COMRAP=${COMRAP:-}
 
 mkdir -m 775 -p $COM $COMOUT
 env
 
 ########################################################
 # Execute the script.
-${HRRR_MAKEBCSH:-$HOMEhrrr/scripts/${dom}/exhrrr_makebc.sh.ecf}
+${HRRR_MAKEBCSH:-$HOMEhrrr/scripts/${dom}/exhrrr_makebc.sh}
 ########################################################
 
 cat $pgmout

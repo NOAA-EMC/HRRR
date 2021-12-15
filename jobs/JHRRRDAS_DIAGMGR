@@ -88,7 +88,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_DIAGMGRSH:-$HOMEhrrr/scripts/${dom}/exhrrrdas_diagmgr.sh.ecf}
+${HRRR_DIAGMGRSH:-$HOMEhrrr/scripts/${dom}/exhrrrdas_diagmgr.sh}
 ########################################################
 
 cat $pgmout

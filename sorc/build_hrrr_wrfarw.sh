@@ -1,18 +1,16 @@
-#! /bin/ksh --login
-
 set -x
 
+##############################
+
 export BASE=`pwd`
+cd $BASE
 
- . /opt/modules/default/init/ksh
 module purge
-module load ncep
-module load craype-haswell
-module use -a /opt/cray/modulefiles
+module load envvar/1.0
+module use $BASE/../modulefiles
+module load HRRR/v4.0.0
 
-module load $BASE/../modulefiles/HRRR/v4.0.0
-
-module load craype-hugepages256M
+#module load craype-hugepages256M
 
 echo "modules for hrrr wrf"
 module list
@@ -23,7 +21,7 @@ cd ${BASE}/hrrr_wrfarw.fd/WRFV3.9
 ./clean -aa
 ./clean -a
 ./clean
-cp configure.wrf.wcoss_hrrr configure.wrf
+cp configure.wrf.useme configure.wrf
 
 export PNETCDF_QUILT=1
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1

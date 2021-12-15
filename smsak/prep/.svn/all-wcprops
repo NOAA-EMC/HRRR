@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/prep
+END
+jhrrr_prep_cloud_12.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/prep/jhrrr_prep_cloud_12.bsub
+END
+jhrrr_prep_radar_1230.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/prep/jhrrr_prep_radar_1230.bsub
+END
+jhrrr_prep_radar_1260.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/prep/jhrrr_prep_radar_1260.bsub
+END
+jhrrr_prep_radar_1216.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/prep/jhrrr_prep_radar_1216.bsub
+END
+jhrrr_prep_radar_1246.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/prep/jhrrr_prep_radar_1246.bsub
+END
+jhrrr_ref2tten_12.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/prep/jhrrr_ref2tten_12.bsub
+END

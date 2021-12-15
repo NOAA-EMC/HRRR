@@ -392,7 +392,8 @@ export pgm=$EXEChrrrdas/hrrr_wrfarw_real
 #. prep_step
 
 cp ${EXEChrrrdas}/hrrr_wrfarw_real .
-runline="aprun -n 144 -N 24 ./hrrr_wrfarw_real"
+#runline="aprun -n 144 -N 24 ./hrrr_wrfarw_real"
+runline="mpiexec -n 128 -ppn 128 ./hrrr_wrfarw_real"
 $runline
 export err=$?;err_chk
 

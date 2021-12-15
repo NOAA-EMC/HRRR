@@ -89,9 +89,12 @@ mkdir -m 775 -p $COMOUT
 #######################################
 # Define observation source directories
 #######################################
-export DCOM_MODIS="$DCOMROOT/prod/"
-export DCOM_VIIRS_NPP="$DCOMROOT/prod/"
-export DCOM_VIIRS_J01="$DCOMROOT/prod/"
+#export DCOM_MODIS="$DCOMROOT/prod/"
+#export DCOM_VIIRS_NPP="$DCOMROOT/prod/"
+#export DCOM_VIIRS_J01="$DCOMROOT/prod/"
+export DCOM_MODIS="$DCOMROOT/"
+export DCOM_VIIRS_NPP="$DCOMROOT/"
+export DCOM_VIIRS_J01="$DCOMROOT/"
 export VEG_TYPE_DATA="$FIXhrrr/smoke/SURFACE_DATA/2013_PREP"
 
 env
@@ -99,7 +102,7 @@ env
 ########################################################
 # Execute the script.
 set -e
-${HRRR_SMOKESH:-$HOMEhrrr/scripts/$dom/exhrrr_prep_smoke.sh.ecf}
+${HRRR_SMOKESH:-$HOMEhrrr/scripts/$dom/exhrrr_prep_smoke.sh}
 ########################################################
 
 msg="ENDED NORMALLY."

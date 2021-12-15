@@ -2,16 +2,10 @@ set -x
 
 export BASE=`pwd`
 
- . /opt/modules/default/init/ksh
-
- . /opt/modules/default/init/ksh
 module purge
-module load ncep
-module load craype-sandybridge
-module use -a /opt/cray/modulefiles
-
-module load $BASE/../modulefiles/HRRR/v4.0.0
-module unload PNetCDF-intel-sandybridge/1.5.0
+module load envvar/1.0
+module load $BASE/../modulefiles
+module load HRRR/v4.0.0
 module list
 
 ##############################

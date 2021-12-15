@@ -98,8 +98,8 @@
  starting_time_step                  = 20
  max_time_step                       = 20
  min_time_step                       = 20
- nproc_x                             = 14 ! will be replaced by script
- nproc_y                             = 72 ! will be replaced by script
+ nproc_x                             = 16 ! will be replaced by script
+ nproc_y                             = 64 ! will be replaced by script
  numtiles                            = 1 ! will be replaced by script
  /
 
@@ -275,6 +275,6 @@
 
  &namelist_quilt
  ! script will add a poll_servers line here
- nio_tasks_per_group = 72, ! will be replaced by script
- nio_groups = 4, ! will be replaced by script
+ nio_tasks_per_group = 64, ! will be replaced by script
+ nio_groups = 2, ! will be replaced by script
  /

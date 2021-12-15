@@ -7,7 +7,7 @@ proc_MODIS_FRP_RAP_v3.exe \
 proc_NPP_FRP_RAP_v3.exe
 
 # These four will be replaced by the caller:
-FC=ifort
+FC=ftn
 FFLAGS=-g -traceback
 LDFLAGS=
 LIBS=

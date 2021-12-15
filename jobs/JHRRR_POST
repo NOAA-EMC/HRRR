@@ -104,7 +104,7 @@ env
 ########################################################
 # Execute the script.
 export INPUT_DATA=${DATAROOT}/hrrr_${dom}_fcst_${envir}_${cyc}
-${HRRR_POSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_post.sh.ecf}
+${HRRR_POSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_post.sh}
 ########################################################
 
 cat $pgmout

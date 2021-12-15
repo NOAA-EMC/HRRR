@@ -94,10 +94,11 @@ setpdy.sh
 export COMINradar=${COMINradar:-$(compath.py hourly/prod)}
 
 # Hourly Lightning Data
-export COMINlight=${COMINlight:-$(compath.py rap/prod)}
+#export COMINlight=${COMINlight:-$(compath.py rap/prod)}
+export COMINlight=${COMINlight:-${COMRAP}}
 
 # NSSL Mosaic Data
-export COMINmosaic=${COMINmosaic:-${DCOMROOT}/prod/ldmdata/obs/upperair/mrms}
+export COMINmosaic=${COMINmosaic:-${DCOMROOT}/ldmdata/obs/upperair/mrms}
 
 ##############################################
 # Define COM directories
@@ -110,7 +111,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_PREPRADARSH:-$HOMEhrrr/scripts/${dom}/exhrrr_prep_radar.sh.ecf}
+${HRRR_PREPRADARSH:-$HOMEhrrr/scripts/${dom}/exhrrr_prep_radar.sh}
 ########################################################
 cat $pgmout
 

@@ -96,7 +96,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_FCSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_fcst_restart.sh.ecf}
+${HRRR_FCSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_fcst_restart.sh}
 ########################################################
 
 cat $pgmout

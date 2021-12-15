@@ -108,7 +108,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_POSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_postsubh.sh.ecf}
+${HRRR_POSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_postsubh.sh}
 ########################################################
 
 cat $pgmout

@@ -35,7 +35,7 @@ if [ "$RUN_ENVIR" != nco ]      ### For Developers, "group_name" is passed from 
 then
   group_name=${group_name:-meso}
   package_name=${package_name:-hrrr}
-  . /${group_name}/save/${LOGNAME}/${package_name}${NWROOT}/parm/${package_name}_para_config
+#  . /${group_name}/save/${LOGNAME}/${package_name}${NWROOT}/parm/${package_name}_para_config
   export userid=${userid:-$LOGNAME}
 fi
 
@@ -105,7 +105,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_PREP_ENKF:-$HOMEhrrr/scripts/${dom}/exhrrrdas_prep_enkf.sh.ecf}
+${HRRR_PREP_ENKF:-$HOMEhrrr/scripts/${dom}/exhrrrdas_prep_enkf.sh}
 ########################################################
 
 cat $pgmout

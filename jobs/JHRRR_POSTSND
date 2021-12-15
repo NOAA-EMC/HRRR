@@ -74,9 +74,12 @@ export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 export FIXgem=${FIXgem:-${HOMEhrrr}/gempak/fix}
 
-export HOMEobsproc_shared_bufr_cword=${HOMEobsproc_shared_bufr_cword:-$NWROOThps/obsproc_shared/bufr_cword.${obsproc_shared_bufr_cword_ver}}
+#export HOMEobsproc_shared_bufr_cword=${HOMEobsproc_shared_bufr_cword:-$NWROOThps/obsproc_shared/bufr_cword.${obsproc_shared_bufr_cword_ver}}
+#export USHobsproc_shared_bufr_cword=${USHobsproc_shared_bufr_cword:-$HOMEobsproc_shared_bufr_cword/ush}
+#export EXECobsproc_shared_bufr_cword=${EXECobsproc_shared_bufr_cword:-$HOMEobsproc_shared_bufr_cword/exec}
+export HOMEobsproc_shared_bufr_cword=${HOMEobsproc_shared_bufr_cword:-/apps/ops/prod/nco/intel/19.1.3.304/util_shared.v1.4.0}
 export USHobsproc_shared_bufr_cword=${USHobsproc_shared_bufr_cword:-$HOMEobsproc_shared_bufr_cword/ush}
-export EXECobsproc_shared_bufr_cword=${EXECobsproc_shared_bufr_cword:-$HOMEobsproc_shared_bufr_cword/exec}
+export EXECobsproc_shared_bufr_cword=${EXECobsproc_shared_bufr_cword:-$HOMEobsproc_shared_bufr_cword/bin}
 
 ###########################################
 # Run setpdy and initialize PDY variables
@@ -97,7 +100,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_SNDPSH:-$HOMEhrrr/scripts/${dom}/exhrrr_postsnd.sh.ecf}
+${HRRR_SNDPSH:-$HOMEhrrr/scripts/${dom}/exhrrr_postsnd.sh}
 ########################################################
 
 cat $pgmout

@@ -120,7 +120,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_FCSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_fcst.sh.ecf}
+${HRRR_FCSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_fcst.sh}
 ########################################################
 
 if [ "${dom}" = hrrrdas ]; then
@@ -132,7 +132,7 @@ if [ "${dom}" = hrrrdas ]; then
      rm -rf $DATA/mem${ensmemid}
      mkdir $DATA/mem${ensmemid}
      cd $DATA/mem${ensmemid}
-     ${HRRR_FCSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_fcst.sh.ecf}
+     ${HRRR_FCSTSH:-$HOMEhrrr/scripts/${dom}/exhrrr_fcst.sh}
      (( ensmem = $ensmem + 1 ))
   done
 fi

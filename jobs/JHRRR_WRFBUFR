@@ -101,7 +101,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_WRFBUFRSH:-$HOMEhrrr/scripts/${dom}/exhrrr_wrfbufr.sh.ecf}
+${HRRR_WRFBUFRSH:-$HOMEhrrr/scripts/${dom}/exhrrr_wrfbufr.sh}
 ########################################################
 
 cat $pgmout

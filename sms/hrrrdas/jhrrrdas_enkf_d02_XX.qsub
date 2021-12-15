@@ -1,0 +1,38 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -o /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_enkf_d02.outXXz
+#PBS -e /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_enkf_d02.outXXz
+#PBS -N hrrrdas_enkf_d02_XX
+#PBS -l walltime=00:30:00
+#PBS -q "dev"
+#PBS -A HRRR-DEV
+#PBS -l select=8:ncpus=128
+
+set -x
+
+# EXPORT list here
+export OMP_NUM_THREADS=4
+
+export envir=prod
+export RUN_ENVIR=prod
+export cyc=XX
+export job=hrrrdas_enkf_d02_XX
+export group_name=meso
+
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/driver/hrrrdaswcoss2.env
+
+module use ${NWROOT}/hrrr.${hrrr_ver}/modulefiles
+module load HRRR/v4.0.0
+
+# CALL executable job script here
+export DOMAIN=2
+${NWROOT}/hrrr.${hrrr_ver}/jobs/JHRRRDAS_ENKF
+
+echo "forecast group number = $NUM_ENSGRP"
+iensgrp=1
+while [[ $iensgrp -le $NUM_ENSGRP ]]; do
+    export ENSGRP=$iensgrp
+    qsub -v ENSGRP="$iensgrp" ${NWROOT}/hrrr.${hrrr_ver}/sms/hrrrdas/jhrrrdas_fcst_XX.qsub
+    (( iensgrp = $iensgrp + 1 ))
+done

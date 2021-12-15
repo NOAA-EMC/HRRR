@@ -28,7 +28,7 @@ else
    if ( "$first_char" == "/" ) then
 	set WRF_DIR_PRE	=
    else
-	set WRF_DIR_PRE	=	${DEV_TOP}/
+	set WRF_DIR_PRE	=
    endif
 endif
 

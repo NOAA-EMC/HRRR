@@ -1,0 +1,32 @@
+#!/bin/ksh --login
+
+set -x
+#source /u/Benjamin.Blake/.profile
+. /opt/modules/default/init/ksh
+module load xt-lsfhpc/9.1.3
+
+. /gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod/hrrr.v4.0.0/hrrr.ver
+
+# Set up some paths needed by the j-job scripts
+export NWROOTprod=/gpfs/hps/nco/ops/nwprod
+export COMROOTprod=/gpfs/hps/nco/ops/com
+export COMROOTp3=/gpfs/dell1/nco/ops/com
+export DCOMROOT=/gpfs/dell1/nco/ops/dcom
+export DATAROOT=/gpfs/hps/ptmp/Benjamin.Blake
+export DATAROOT2=/gpfs/hps3/ptmp/Benjamin.Blake
+export NWROOT=/gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod
+export COMROOT=${DATAROOT}/com
+export COMROOT2=${DATAROOT2}/com
+export GESROOT=${DATAROOT}/nwges
+
+export dom=hrrrdas
+cyc=$1
+ymd=`cut -c 7-14 /gpfs/hps/nco/ops/com/date/t${cyc}z`
+
+SMSDIR=/gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/sms
+
+rm -rf /gpfs/hps/ptmp/Benjamin.Blake/hrrr_${dom}_process_enkf_${cyc}
+
+cd /gpfs/hps3/emc/meso/save/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/sms/
+bsub < ${SMSDIR}/hrrrdas/jhrrr_process_enkf_${cyc}.bsub
+exit

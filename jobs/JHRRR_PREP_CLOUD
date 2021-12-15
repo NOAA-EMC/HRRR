@@ -83,7 +83,8 @@ else
   export RAP_RUN=rap
 fi
 
-export COMINnasalarc=${COMINnasalarc:-${COMROOT}/rap/${envir}/${RAP_RUN}.${PDY}}
+#export COMINnasalarc=${COMINnasalarc:-${COMROOT}/rap/${envir}/${RAP_RUN}.${PDY}}
+export COMINnasalarc=${COMINnasalarc:-${COMRAP}/${RAP_RUN}.${PDY}}
 
 ##############################################
 # Define COM directories
@@ -96,7 +97,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_PREPCLOUDSSH:-$HOMEhrrr/scripts/${dom}/exhrrr_prep_cloud.sh.ecf}
+${HRRR_PREPCLOUDSSH:-$HOMEhrrr/scripts/${dom}/exhrrr_prep_cloud.sh}
 ########################################################
 cat $pgmout
 

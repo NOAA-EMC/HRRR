@@ -93,7 +93,7 @@ export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 
-export FIXcrtm_anal=${FIXcrtm_anal:-${NWROOThps}/lib/crtm/${crtm_ver_analysis}/fix}
+export FIXcrtm=${FIXcrtm:-${NWROOThps}/lib/crtm/${crtm_ver_analysis}/fix}
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
@@ -107,12 +107,12 @@ export COM=${COM:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}}
 export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
 export COMINgfs=${COMINgfs:-$(compath.py gfs/prod)}
-export COMINsst=${COMINsst:-${COMROOTp3}/gfs/prod}
-export PREPDIR=${PREPDIR:-${COMROOT}/rap/prod}
-export COMRAP=${COMRAP:-${COMROOT}/rap/prod}
-export COMRAP_E=${COMRAP_E:-${COMROOT}/rap/prod}
+export COMINsst=${COMINsst:-${COMROOTp3}/gfs/v16.2}
+export PREPDIR=${PREPDIR:-${COMRAP}/rap/v5.1}
+#export COMRAP=${COMRAP:-${COMROOT}/rap/prod}
+export COMRAP_E=${COMRAP_E:-${COMRAP}}
 export PREPDIR2=${PREPDIR2:-${COMIN}}
-export DCOM=${DCOM:-/gpfs/dell1/nco/ops/dcom/prod}
+export DCOM=${DCOM:-${DCOMROOT}}
 export FVCOM=${FVCOM:-${DCOM}/${PDY}/wgrdbul/glerl}
 export FVCOMm1=${FVCOMm1:-${DCOM}/${PDYm1}/wgrdbul/glerl}
 
@@ -128,7 +128,7 @@ env
 
 ########################################################
 # Execute the script.
-${HRRR_ANALSH:-$HOMEhrrr/scripts/${dom}/exhrrr_analysis.sh.ecf}
+${HRRR_ANALSH:-$HOMEhrrr/scripts/${dom}/exhrrr_analysis.sh}
 ########################################################
 
 cat $pgmout

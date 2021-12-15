@@ -3,18 +3,16 @@
 
 # Define the fortran compiler and options
 
-WRFPATH   = /gpfs/hps/nco/ops/nwprod/wrf_shared.v1.1.0-intel
 FC       = ftn
 CPP      = /lib/cpp -P
 ARCH     =
 CPPFLAGS =  -DLINUX -Dfunder -DFortranByte=char -DFortranInt=int -DFortranLlong='long long' -D_UNDERSCORE
 NWPLIBS = ${BUFR_LIB4} ${BUFR_LIB4_DA} ${BUFR_LIBd} ${BUFR_LIBd_DA}
 
-INCLD=  -I${NETCDF}/include -I$(WRFPATH)/frame
-LIBS =  -L${NWPLIBS} \
-        $(WRFPATH)/external/io_netcdf/libwrfio_nf.a ${WRFPATH}/frame/pack_utils.o \
-        -L${NETCDF}/lib -lnetcdf
-# cio
+INCLD=  -I${NETCDF}/include -I${WRF_IO_INC}
+LIBS =  -L${NWPLIBS} ${WRF_IO_LIB} \
+        -L${NETCDF}/lib -lnetcdf -lnetcdff
+
 OBJS = kinds.o constants.o module_debug.o gridmod_gsi_map_utils.o \
        misc_definitions_module.o constants_module.o module_map_utils.o \
        write_bufr_NASALaRC.o process_NASALaRC_cloud.o \

@@ -43,18 +43,19 @@ ${WGRIB2} hrrr_natgrd.tm00 -set_radius 1:6370000 -set_grib_type c3 -set_bitmap 1
 mv hrrr.NDFDCSf${fhr}.grib2 hrrr.NDFDCSf${fhr}
 ${GRB2INDEX} hrrr.NDFDCSf${fhr} hrrr.NDFDCSf${fhr}I
 
-cp ${COMROOT}/date/t${cyc}z DATE
+#cp ${COMROOT}/date/t${cyc}z DATE
+cp ../DATE_SMARTINIT DATE
 
 export pgm=hrrr_smartinit
 . prep_step
 
-ln -sf hrrr.NDFDCSf${fhr}     fort.11
-ln -sf hrrr.NDFDCSf${fhr}I    fort.12
-ln -sf TOPONDFDCS             fort.46
-ln -sf TOPONDFDCSI            fort.47
-ln -sf LANDNDFDCS             fort.48
-ln -sf LANDNDFDCSI            fort.49
-ln -sf HRRRCS${fhr}.tm00      fort.71
+ln -sf hrrr.NDFDCSf${fhr}      fort.11
+ln -sf hrrr.NDFDCSf${fhr}I     fort.12
+ln -sf TOPONDFDCS              fort.46
+ln -sf TOPONDFDCSI             fort.47
+ln -sf LANDNDFDCS              fort.48
+ln -sf LANDNDFDCSI             fort.49
+ln -sf HRRRCS${fhr}.tm00.grib2 fort.71
 
 rm -rf smart.ksh
 varEOF=EOF
@@ -69,7 +70,7 @@ $cyc
 $varEOF
 EOF
 chmod 755 smart.ksh
-aprun -n 1 smart.ksh
+mpiexec -n 1 -ppn 1 smart.ksh
 
 export err=$?; err_chk
 

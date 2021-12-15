@@ -6,7 +6,7 @@ EXES= FRE_BBM_HRRR_AK.exe        \
       proc_NPP_FRP_HRRR-AK_v5.exe
 
 # These four will be replaced by the caller:
-FC=ifort
+FC=ftn
 FFLAGS=-traceback -g
 LDFLAGS=
 LIBS=

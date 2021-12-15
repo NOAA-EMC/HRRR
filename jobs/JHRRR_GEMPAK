@@ -78,7 +78,7 @@ export ALERT_EXT=${ALERT_EXT:-}
 
 ########################################################
 # Execute the script.
-${HRRR_GEMPAKSH:-$SCRIPTShrrr/exhrrr_nawips.sh.ecf $RUN $GRIB $DBN_ALERT_TYPE $EXT}
+${HRRR_GEMPAKSH:-$SCRIPTShrrr/exhrrr_nawips.sh $RUN $GRIB $DBN_ALERT_TYPE $EXT}
 ########################################################
 cd $DATA
 if [ ${KEEPDATA} = NO ] ; then rm -rf $DATA ; fi

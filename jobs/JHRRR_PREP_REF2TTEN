@@ -76,10 +76,10 @@ setpdy.sh
 # Define Input Data Directories
 ########################################
 # Hourly Radar Data
-export COM_RAD=${COM_RAD:-${COMROOTp3}/hourly/prod}
+export COM_RAD=${COM_RAD:-$(compath.py hourly/prod)}
 
 # VIIRS Greenness Fraction Data
-export GVF=${GVF:-${DCOMROOT}/prod/viirs}
+export GVF=${GVF:-${DCOMROOT}/viirs}
 
 # Define cycm1 since we need land-sfc fields for previous hour
 export cycm1=`expr $cyc - 1`
@@ -114,7 +114,7 @@ export DATA_RADAR=${DATA_RADAR:-${DATAROOT}/hrrr_${dom}_prep_radar_${envir}_${cy
 
 ########################################################
 # Execute the script.
-${HRRR_PREPREF2TTENSH:-$HOMEhrrr/scripts/${dom}/exhrrr_prep_ref2tten.sh.ecf}
+${HRRR_PREPREF2TTENSH:-$HOMEhrrr/scripts/${dom}/exhrrr_prep_ref2tten.sh}
 ########################################################
 cat $pgmout
 

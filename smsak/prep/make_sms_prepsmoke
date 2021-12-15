@@ -1,0 +1,18 @@
+#!/bin/sh 
+#
+
+mkdir /lfs/h2/emc/ptmp/Benjamin.Blake/work
+cd /lfs/h2/emc/ptmp/Benjamin.Blake/work
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+
+cp /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/prep/jhrrr_prep_smoke_XX.qsub .
+cycles="00 03 06 09 12 15 18 21"
+for cyc in $cycles; do
+ cp jhrrr_prep_smoke_XX.qsub jhrrr_prep_smoke_${cyc}.qsub
+ vi jhrrr_prep_smoke_${cyc}.qsub << EOF 
+   :1,\$ s/XX/${cyc}
+   :wq
+EOF
+mv jhrrr_prep_smoke_${cyc}.qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/prep/.
+done
+exit

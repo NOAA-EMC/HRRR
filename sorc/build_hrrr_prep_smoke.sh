@@ -1,17 +1,12 @@
 ##############################
-#! /bin/sh
-
-set -u -e -x
 
 export BASE=`pwd`
 cd $BASE
 
- . /opt/modules/default/init/ksh
 module purge
-module load ncep
-module load craype-sandybridge
-module use -a /opt/cray/modulefiles
-module load $BASE/../modulefiles/HRRR/v4.0.0.da
+module load envvar/1.0
+module use $BASE/../modulefiles
+module load HRRR/v4.0.0
 module list
 
 cd ${BASE}/hrrr_prep_smoke.fd/process-obs/QC
@@ -22,12 +17,12 @@ cp -fp qc_viirs.exe ${BASE}/../exec/hrrr_smoke_qc_viirs
 
 cd ${BASE}/hrrr_prep_smoke.fd/prep-chem/cycle_netcdf
 make clean
-./mk-wrf-wcoss-cray
+./mk-wrf-wcoss2
 cp -fp "cycle_netcdf.x" ${BASE}/../exec/hrrr_cycle_netcdf
 
 cd ${BASE}/hrrr_prep_smoke.fd/prep-chem/fires_ncfmake
 make clean
-./mk-wrf-wcoss-cray
+./mk-wrf-wcoss2
 cp -fp "fires_ncfmake.x" ${BASE}/../exec/hrrr_fires_ncfmake
 
 cd ${BASE}/hrrr_prep_smoke.fd/prep-chem/Prep_smoke_FRP/bin/build

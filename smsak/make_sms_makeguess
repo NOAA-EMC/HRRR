@@ -1,0 +1,18 @@
+#!/bin/sh 
+#
+
+mkdir /lfs/h2/emc/ptmp/Benjamin.Blake/work
+cd /lfs/h2/emc/ptmp/Benjamin.Blake/work
+
+cp /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.0/smsak/jhrrr_makeguess_XX.qsub .
+#cycles="00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23"
+cycles="00 03 06 09 12 15 18 21"
+for cyc in $cycles; do
+ cp jhrrr_makeguess_XX.qsub jhrrr_makeguess_${cyc}.qsub
+ vi jhrrr_makeguess_${cyc}.qsub << EOF 
+   :1,\$ s/XX/${cyc}
+   :wq
+EOF
+mv jhrrr_makeguess_${cyc}.qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.0/smsak/.
+done
+exit

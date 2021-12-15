@@ -1,0 +1,30 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -o /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_enkf_d01.outXXz
+#PBS -e /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_enkf_d01.outXXz
+#PBS -N hrrrdas_enkf_d01_XX
+#PBS -l walltime=00:30:00
+#PBS -q "dev"
+#PBS -A HRRR-DEV
+#PBS -l select=1:ncpus=120
+
+set -x
+
+# EXPORT list here
+export OMP_NUM_THREADS=2
+
+export envir=prod
+export RUN_ENVIR=prod
+export cyc=XX
+export job=hrrrdas_enkf_d01_XX
+export group_name=meso
+
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/driver/hrrrdaswcoss2.env
+
+module use ${NWROOT}/hrrr.${hrrr_ver}/modulefiles
+module load HRRR/v4.0.0
+
+# CALL executable job script here
+export DOMAIN=1
+${NWROOT}/hrrr.${hrrr_ver}/jobs/JHRRRDAS_ENKF

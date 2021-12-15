@@ -1,0 +1,32 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -o /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrak/hrrr_prepcloud.out15z
+#PBS -e /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrak/hrrr_prepcloud.out15z
+#PBS -N hrrr_prepcloud_15
+#PBS -l walltime=00:30:00
+#PBS -q "dev"
+#PBS -A HRRR-DEV
+#PBS -l select=1:ncpus=4
+
+set -x
+
+# Set MPI options
+export OMP_NUM_THREADS=1
+export MP_TASK_AFFINITY=core:1
+export KMP_AFFINITY=disabled
+export MP_MPILIB=mpich2
+
+export envir=prod
+export RUN_ENVIR=prod
+export cyc=15
+export job=hrrrak_prepcloud_15
+export group_name=meso
+
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/driver/hrrrakwcoss2.env
+
+module use ${NWROOT}/hrrr.${hrrr_ver}/modulefiles
+module load HRRR/v4.0.0
+
+# CALL executable job script here
+${NWROOT}/hrrr.${hrrr_ver}/jobs/JHRRR_PREP_CLOUD

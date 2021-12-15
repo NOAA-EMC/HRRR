@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/projects/!svn/ver/91481/hrrr/trunk/hrrr_cray/sms
+END
+jhrrr_fcst_12.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/jhrrr_fcst_12.bsub
+END
+jhrrr_makebc_11.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/jhrrr_makebc_11.bsub
+END
+jhrrr_makebc_12.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/jhrrr_makebc_12.bsub
+END
+jhrrr_analysis_12.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/projects/!svn/ver/91481/hrrr/trunk/hrrr_cray/sms/jhrrr_analysis_12.bsub
+END
+jhrrr_makeguess_12.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/jhrrr_makeguess_12.bsub
+END
+jhrrr_process_enkf_06.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/jhrrr_process_enkf_06.bsub
+END
+jhrrr_sndp_12.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/jhrrr_sndp_12.bsub
+END
+jhrrr_fcstpre_12.bsub
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/projects/!svn/ver/90701/hrrr/trunk/hrrr_cray/sms/jhrrr_fcstpre_12.bsub
+END

@@ -1,0 +1,39 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -o /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_obsdiagmean.out18z
+#PBS -e /lfs/h2/emc/ptmp/Benjamin.Blake/outputhrrrdas/hrrrdas_obsdiagmean.out18z
+#PBS -N hrrrdas_obsdiagmean_18
+#PBS -l walltime=00:30:00
+#PBS -q "dev"
+#PBS -A HRRR-DEV
+#PBS -l select=1:ncpus=96
+
+set -x
+
+# EXPORT list here
+export OMP_NUM_THREADS=2
+
+export envir=prod
+export RUN_ENVIR=prod
+export cyc=18
+export job=hrrrdas_obsdiagmean_18
+export group_name=meso
+
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
+. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/driver/hrrrdaswcoss2.env
+
+module use ${NWROOT}/hrrr.${hrrr_ver}/modulefiles
+module load HRRR/v4.0.0
+
+# CALL executable job script here
+export ensmem=0
+${NWROOT}/hrrr.${hrrr_ver}/jobs/JHRRR_ANALYSIS
+
+# CALL job script for members
+iensgrp=1
+while [[ $iensgrp -le $no_member ]]; do
+   export ENSGRP=$iensgrp
+  . ${NWROOT}/hrrr.${hrrr_ver}/hrrrdas_para_config.obsdiag
+  qsub -v ENSGRP="$ENSGRP",ENSBEG="$ENSBEG",ENSEND="$ENSEND" ${NWROOT}/hrrr.${hrrr_ver}/sms/hrrrdas/jhrrrdas_obsdiag_18.qsub
+  (( iensgrp = $iensgrp + 1 ))
+done

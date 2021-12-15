@@ -33,15 +33,12 @@ export BUILD_hrrr_wrfbufr_alaska=yes
 export BUILD_hrrr_stnmlist=yes
 export BUILD_hrrr_smartinit=yes
 
- . /opt/modules/default/init/ksh
 
 module purge
-module load ncep
-module load craype-haswell
-module use -a /opt/cray/modulefiles
+module load envvar/1.0
 
-module load $BASE/../modulefiles/HRRR/v4.0.0
-#module unload PNetCDF-intel-sandybridge/1.5.0
+module use $BASE/../modulefiles
+module load HRRR/v4.0.0
 
 module list
 
@@ -49,9 +46,6 @@ mkdir $BASE/logs
 export logs_dir=$BASE/logs
 
 sleep 1
-
-cd $BASE
-mv ../exec/hrrr_wrfpost  ../exec/hrrr_wrfpost.org
 
 cd ${BASE}/hrrr_cal_bcpert.fd
 make clean
@@ -129,6 +123,16 @@ make clean
 cd ${BASE}/hrrr_update_gvf.fd
 make clean
 
+cd ${BASE}/hrrr_wps.fd/WPSV3.9.1
+./clean -aa
+./clean -a
+./clean
+
+cd ${BASE}/hrrr_wrfarw.fd/WRFV3.9
+./clean -aa
+./clean -a
+./clean
+
 cd ${BASE}/hrrr_wrfbufr_alaska.fd
 make clean
 
@@ -141,5 +145,3 @@ make clean
 cd ${BASE}/hrrr_write_idate.fd
 make clean
 
-cd ${BASE}
-mv ../exec/hrrr_wrfpost.org ../exec/hrrr_wrfpost
