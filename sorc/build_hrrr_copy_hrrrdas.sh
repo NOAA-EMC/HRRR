@@ -8,7 +8,7 @@ cd $BASE
 module purge
 module load envvar/1.0
 module use $BASE/../modulefiles
-module load HRRR/v4.0.0.da
+source $BASE/../modulefiles/HRRR/v4.0.0
 module list
 
 #Huge pages

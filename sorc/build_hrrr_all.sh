@@ -36,12 +36,10 @@ export BUILD_hrrr_smartinit=yes
  . /opt/modules/default/init/ksh
 
 module purge
-module load ncep
-module load craype-haswell
-module use -a /opt/cray/modulefiles
+module load envvar/1.0
 
-module load $BASE/../modulefiles/HRRR/v4.0.0
-#module unload PNetCDF-intel-sandybridge/1.5.0
+module use $BASE/../modulefiles
+source $BASE/../modulefiles/HRRR/v4.0.0
 
 module list
 
