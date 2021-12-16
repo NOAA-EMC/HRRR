@@ -5,7 +5,7 @@ export BASE=`pwd`
 module purge
 module load envvar/1.0
 module load $BASE/../modulefiles
-module load HRRR/v4.0.0
+source $BASE/../modulefiles/HRRR/v4.0.0
 module list
 
 ##############################
