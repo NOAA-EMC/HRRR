@@ -28,11 +28,11 @@ if [ $FCMP = xlf_r ] ; then
  export OMPFLAGM=
  export RECURS=
 else
-#export FFLAGSM=" -O0 -i4 -r8 -xHOST -convert big_endian -traceback -override-limits -g -auto"
-#export FFLAGS2M=" -O0 -i4 -r8 -xHOST -convert big_endian -traceback -override-limits -g -FR -auto"
+#export FFLAGSM=" -O0 -i4 -r8 -convert big_endian -traceback -override-limits -g -auto"
+#export FFLAGS2M=" -O0 -i4 -r8 -convert big_endian -traceback -override-limits -g -FR -auto"
 
- export FFLAGSM=" -g -i4 -O3 -r8 -xHOST -convert big_endian -fp-model strict"
- export FFLAGS2M=" -g -i4 -O3 -r8 -xHOST -convert big_endian -fp-model strict -FR"
+ export FFLAGSM=" -g -i4 -O3 -r8 -convert big_endian -fp-model strict"
+ export FFLAGS2M=" -g -i4 -O3 -r8 -convert big_endian -fp-model strict -FR"
 
 #export RECURS="-recursive"
  export RECURS=

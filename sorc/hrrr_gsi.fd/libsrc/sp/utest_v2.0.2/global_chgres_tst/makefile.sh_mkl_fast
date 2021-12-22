@@ -7,8 +7,8 @@ export FCMP95=${2:-${FCMP}}
 
   export LIBS="-L/global/noscrub/Shrinivas.Moorthi/para/lib -lsigio_4 -L$LIBDIR -lsfcio_4 -llandsfcutil_d -lip_d -lgfsio_4 -lbacio_4 -lw3emc_d -lw3nco_d -lnemsio /gpfs/thm/u/Eugene.Mirvis/WCOSS/lib_mkl-fftmkl/libsp_d.a"
 
- export FFLAGSM="  -O3 -i4 -r8 -xHOST -convert big_endian "
- export FFLAGS2M=" -O3 -i4 -r8 -xHOST -convert big_endian -FR"
+ export FFLAGSM="  -O3 -i4 -r8 -convert big_endian "
+ export FFLAGS2M=" -O3 -i4 -r8 -convert big_endian -FR"
 
  export RECURS=
 
