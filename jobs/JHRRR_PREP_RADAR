@@ -97,7 +97,7 @@ export COMINradar=${COMINradar:-$(compath.py $envir/hourly/$radar_ver)}
 export COMINlight=${COMINlight:-$(compath.py $envir/rap/$rap_ver)}
 
 # Hourly Mosaic Data
-export DCOMROOT=${DCOMROOT:-/lfs/h1/ops/$envir/dcom}
+#export DCOMROOT=${DCOMROOT:-/lfs/h1/ops/$envir/dcom}
 export COMINmosaic=${COMINmosaic:-${DCOMROOT}/ldmdata/obs/upperair/mrms}
 
 ##############################################
