@@ -17,7 +17,7 @@ installdir = $(prefix)/$(distdir)
 
 # Compiler substitution variables
 FC      = ifort
-FCFLAGS = -O2 -g -xHOST -traceback -free -convert big_endian -assume byterecl -c
+FCFLAGS = -O2 -g -traceback -free -convert big_endian -assume byterecl -c
 AR       = ar
 ARFLAGS  = crvs
 RANLIB   = ranlib

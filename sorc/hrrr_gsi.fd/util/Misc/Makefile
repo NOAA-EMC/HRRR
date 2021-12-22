@@ -1,6 +1,6 @@
 FCP           = mpif90
 FCS           = ifort
-FFLAGS        = -O3 -xHOST -assume byterecl -warn all -implicitnone -traceback -openmp 
+FFLAGS        = -O3 -assume byterecl -warn all -implicitnone -traceback -openmp 
 FREEFLAG      = -FR
 OMPFLAG       = 
 COREINC       = /scratch1/portfolios/NCEPDEV/da/save/Michael.Lueken/nwprod/incmod

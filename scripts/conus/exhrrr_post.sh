@@ -71,59 +71,59 @@ ln -sf ${PARMhrrr}/hrrr_postxconfig-NT.txt postxconfig-NT.txt
 fi
 
 ln -sf ${PARMhrrr}/hrrr_run_ETAMPNEW_DATA eta_micro_lookup.dat
-ln -sf ${FIXcrtm_post}/imgr_g11.SpcCoeff.bin imgr_g11.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/imgr_g12.SpcCoeff.bin imgr_g12.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/imgr_g13.SpcCoeff.bin imgr_g13.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/imgr_g15.SpcCoeff.bin imgr_g15.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/imgr_mt1r.SpcCoeff.bin imgr_mt1r.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/imgr_mt2.SpcCoeff.bin imgr_mt2.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/amsre_aqua.SpcCoeff.bin amsre_aqua.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/tmi_trmm.SpcCoeff.bin tmi_trmm.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmi_f13.SpcCoeff.bin ssmi_f13.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmi_f14.SpcCoeff.bin ssmi_f14.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmi_f15.SpcCoeff.bin ssmi_f15.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmis_f16.SpcCoeff.bin ssmis_f16.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmis_f17.SpcCoeff.bin ssmis_f17.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmis_f18.SpcCoeff.bin ssmis_f18.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmis_f19.SpcCoeff.bin ssmis_f19.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmis_f20.SpcCoeff.bin ssmis_f20.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/seviri_m10.SpcCoeff.bin seviri_m10.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/v.seviri_m10.SpcCoeff.bin v.seviri_m10.SpcCoeff.bin
+ln -sf ${FIXcrtm}/imgr_g11.SpcCoeff.bin imgr_g11.SpcCoeff.bin
+ln -sf ${FIXcrtm}/imgr_g12.SpcCoeff.bin imgr_g12.SpcCoeff.bin
+ln -sf ${FIXcrtm}/imgr_g13.SpcCoeff.bin imgr_g13.SpcCoeff.bin
+ln -sf ${FIXcrtm}/imgr_g15.SpcCoeff.bin imgr_g15.SpcCoeff.bin
+ln -sf ${FIXcrtm}/imgr_mt1r.SpcCoeff.bin imgr_mt1r.SpcCoeff.bin
+ln -sf ${FIXcrtm}/imgr_mt2.SpcCoeff.bin imgr_mt2.SpcCoeff.bin
+ln -sf ${FIXcrtm}/amsre_aqua.SpcCoeff.bin amsre_aqua.SpcCoeff.bin
+ln -sf ${FIXcrtm}/tmi_trmm.SpcCoeff.bin tmi_trmm.SpcCoeff.bin
+ln -sf ${FIXcrtm}/ssmi_f13.SpcCoeff.bin ssmi_f13.SpcCoeff.bin
+ln -sf ${FIXcrtm}/ssmi_f14.SpcCoeff.bin ssmi_f14.SpcCoeff.bin
+ln -sf ${FIXcrtm}/ssmi_f15.SpcCoeff.bin ssmi_f15.SpcCoeff.bin
+ln -sf ${FIXcrtm}/ssmis_f16.SpcCoeff.bin ssmis_f16.SpcCoeff.bin
+ln -sf ${FIXcrtm}/ssmis_f17.SpcCoeff.bin ssmis_f17.SpcCoeff.bin
+ln -sf ${FIXcrtm}/ssmis_f18.SpcCoeff.bin ssmis_f18.SpcCoeff.bin
+ln -sf ${FIXcrtm}/ssmis_f19.SpcCoeff.bin ssmis_f19.SpcCoeff.bin
+ln -sf ${FIXcrtm}/ssmis_f20.SpcCoeff.bin ssmis_f20.SpcCoeff.bin
+ln -sf ${FIXcrtm}/seviri_m10.SpcCoeff.bin seviri_m10.SpcCoeff.bin
+ln -sf ${FIXcrtm}/v.seviri_m10.SpcCoeff.bin v.seviri_m10.SpcCoeff.bin
 #ln -sf ${FIXhrrr}/hrrr_imgr_insat3d.SpcCoeff.bin imgr_insat3d.SpcCoeff.bin
-ln -sf ${FIXcrtm_post}/imgr_insat3d.SpcCoeff.bin imgr_insat3d.SpcCoeff.bin
+ln -sf ${FIXcrtm}/imgr_insat3d.SpcCoeff.bin imgr_insat3d.SpcCoeff.bin
 
-ln -sf ${FIXcrtm_post}/imgr_g11.TauCoeff.bin imgr_g11.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/imgr_g12.TauCoeff.bin imgr_g12.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/imgr_g13.TauCoeff.bin imgr_g13.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/imgr_g15.TauCoeff.bin imgr_g15.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/imgr_mt1r.TauCoeff.bin imgr_mt1r.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/imgr_mt2.TauCoeff.bin imgr_mt2.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/amsre_aqua.TauCoeff.bin amsre_aqua.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/tmi_trmm.TauCoeff.bin tmi_trmm.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmi_f13.TauCoeff.bin ssmi_f13.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmi_f14.TauCoeff.bin ssmi_f14.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmi_f15.TauCoeff.bin ssmi_f15.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmis_f16.TauCoeff.bin ssmis_f16.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmis_f17.TauCoeff.bin ssmis_f17.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmis_f18.TauCoeff.bin ssmis_f18.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmis_f19.TauCoeff.bin ssmis_f19.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/ssmis_f20.TauCoeff.bin ssmis_f20.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/seviri_m10.TauCoeff.bin seviri_m10.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/seviri_m10.TauCoeff.bin v.seviri_m10.TauCoeff.bin
+ln -sf ${FIXcrtm}/imgr_g11.TauCoeff.bin imgr_g11.TauCoeff.bin
+ln -sf ${FIXcrtm}/imgr_g12.TauCoeff.bin imgr_g12.TauCoeff.bin
+ln -sf ${FIXcrtm}/imgr_g13.TauCoeff.bin imgr_g13.TauCoeff.bin
+ln -sf ${FIXcrtm}/imgr_g15.TauCoeff.bin imgr_g15.TauCoeff.bin
+ln -sf ${FIXcrtm}/imgr_mt1r.TauCoeff.bin imgr_mt1r.TauCoeff.bin
+ln -sf ${FIXcrtm}/imgr_mt2.TauCoeff.bin imgr_mt2.TauCoeff.bin
+ln -sf ${FIXcrtm}/amsre_aqua.TauCoeff.bin amsre_aqua.TauCoeff.bin
+ln -sf ${FIXcrtm}/tmi_trmm.TauCoeff.bin tmi_trmm.TauCoeff.bin
+ln -sf ${FIXcrtm}/ssmi_f13.TauCoeff.bin ssmi_f13.TauCoeff.bin
+ln -sf ${FIXcrtm}/ssmi_f14.TauCoeff.bin ssmi_f14.TauCoeff.bin
+ln -sf ${FIXcrtm}/ssmi_f15.TauCoeff.bin ssmi_f15.TauCoeff.bin
+ln -sf ${FIXcrtm}/ssmis_f16.TauCoeff.bin ssmis_f16.TauCoeff.bin
+ln -sf ${FIXcrtm}/ssmis_f17.TauCoeff.bin ssmis_f17.TauCoeff.bin
+ln -sf ${FIXcrtm}/ssmis_f18.TauCoeff.bin ssmis_f18.TauCoeff.bin
+ln -sf ${FIXcrtm}/ssmis_f19.TauCoeff.bin ssmis_f19.TauCoeff.bin
+ln -sf ${FIXcrtm}/ssmis_f20.TauCoeff.bin ssmis_f20.TauCoeff.bin
+ln -sf ${FIXcrtm}/seviri_m10.TauCoeff.bin seviri_m10.TauCoeff.bin
+ln -sf ${FIXcrtm}/seviri_m10.TauCoeff.bin v.seviri_m10.TauCoeff.bin
 #ln -sf ${FIXhrrr}/hrrr_imgr_insat3d.TauCoeff.bin imgr_insat3d.TauCoeff.bin
-ln -sf ${FIXcrtm_post}/imgr_insat3d.TauCoeff.bin imgr_insat3d.TauCoeff.bin
+ln -sf ${FIXcrtm}/imgr_insat3d.TauCoeff.bin imgr_insat3d.TauCoeff.bin
 
-ln -sf ${FIXcrtm_post}/NPOESS.IRice.EmisCoeff.bin NPOESS.IRice.EmisCoeff.bin
-ln -sf ${FIXcrtm_post}/NPOESS.IRland.EmisCoeff.bin NPOESS.IRland.EmisCoeff.bin
-ln -sf ${FIXcrtm_post}/NPOESS.IRsnow.EmisCoeff.bin NPOESS.IRsnow.EmisCoeff.bin
-ln -sf ${FIXcrtm_post}/Nalli.IRwater.EmisCoeff.bin Nalli.IRwater.EmisCoeff.bin
+ln -sf ${FIXcrtm}/NPOESS.IRice.EmisCoeff.bin NPOESS.IRice.EmisCoeff.bin
+ln -sf ${FIXcrtm}/NPOESS.IRland.EmisCoeff.bin NPOESS.IRland.EmisCoeff.bin
+ln -sf ${FIXcrtm}/NPOESS.IRsnow.EmisCoeff.bin NPOESS.IRsnow.EmisCoeff.bin
+ln -sf ${FIXcrtm}/Nalli.IRwater.EmisCoeff.bin Nalli.IRwater.EmisCoeff.bin
 
-ln -sf ${FIXcrtm_post}/FASTEM6.MWwater.EmisCoeff.bin FASTEM6.MWwater.EmisCoeff.bin
+ln -sf ${FIXcrtm}/FASTEM6.MWwater.EmisCoeff.bin FASTEM6.MWwater.EmisCoeff.bin
 
-ln -sf ${FIXcrtm_post}/CloudCoeff.bin CloudCoeff.bin
-ln -sf ${FIXcrtm_post}/AerosolCoeff.bin AerosolCoeff.bin
-#ln -sf ${FIXcrtm_post}/Nalli.EK-PDF.W_W-RefInd.EmisCoeff.bin EmisCoeff.bin
-ln -sf ${FIXcrtm_post}/Nalli.IRwater.EmisCoeff.bin EmisCoeff.bin
+ln -sf ${FIXcrtm}/CloudCoeff.bin CloudCoeff.bin
+ln -sf ${FIXcrtm}/AerosolCoeff.bin AerosolCoeff.bin
+#ln -sf ${FIXcrtm}/Nalli.EK-PDF.W_W-RefInd.EmisCoeff.bin EmisCoeff.bin
+ln -sf ${FIXcrtm}/Nalli.IRwater.EmisCoeff.bin EmisCoeff.bin
 
 # Run unipost
 startmsg

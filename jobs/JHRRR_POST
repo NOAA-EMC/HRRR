@@ -80,7 +80,8 @@ export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 export FIXgem=${FIXgem:-${HOMEhrrr}/gempak/fix}
-export FIXcrtm_post=${FIXcrtm_post:-${NWROOThps}/lib/crtm/${crtm_ver_post}/src/fix}
+
+export FIXcrtm=${FIXcrtm:-${HOMEhrrr}/fix/crtm_v${crtm_ver}_coefficients}
 
 ###########################################
 # Run setpdy and initialize PDY variables
@@ -91,12 +92,21 @@ setpdy.sh
 #############################################
 # Define COM directories
 ##############################################
-export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
+
+# for testing with canned data
+#export COMROOT=${COMROOT:-/lfs/h2/emc/ptmp/Benjamin.Blake/com}
+#export COMIN=${COMIN:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
+#export COMOUT=${COMOUT:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
+#export GESROOT=${GESROOT:-${COMROOT}/${NET}/${hrrr_ver}/nwges}
+
+# for WCOSS2 ops
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export GESROOT=${GESROOT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/nwges)}
+
 export COMNAWP=${COMNAWP:-${COMOUT}/gempak}
 export WMO=${WMO:-${COMOUT}/wmo}
-export gespath=${gespath:-$GESROOT/${envir}}
-export HRRRGES_SFC=${HRRRGES_SFC:-$gespath/${RUN}/hrrrges_sfc/${dom}}
+export HRRRGES_SFC=${HRRRGES_SFC:-$GESROOT/hrrrges_sfc/${dom}}
 mkdir -m 775 -p $COMOUT $WMO
 
 env

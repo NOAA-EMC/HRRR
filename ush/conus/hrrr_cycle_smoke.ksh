@@ -11,7 +11,7 @@ maxback="${maxback:-9}" # how many hours ago to search for wrfout in nwges
 minback="${minback:-0}" # minimum number of cycles to go back for smoke in nwges
 
 dom="${dom:-conus}"
-gesdir="${gespath}/hrrr/hrrrges_sfc/$dom"
+gesdir="${gespath}/hrrrges_sfc/$dom"
 SPAWN="mpiexec -n 1 -ppn 1"
 CYCLE_NETCDF="$EXEChrrr/hrrr_cycle_netcdf"
 

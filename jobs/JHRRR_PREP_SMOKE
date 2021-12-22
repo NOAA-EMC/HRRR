@@ -70,7 +70,6 @@ export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 
-export MPISER=${MPISER:-${NWROOThps}/mpiserial.${mpiserial_ver}/exec/mpiserial}
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
@@ -80,18 +79,25 @@ setpdy.sh
 ##############################################
 # Define COM directories
 ##############################################
-export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMINm1=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDYm1}/${dom}}
-export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
+
+# for testing with canned data
+#export COMROOT=${COMROOT:-/lfs/h2/emc/ptmp/Benjamin.Blake/com}
+#export COMIN=${COMIN:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
+#export COMINm1=${COMIN:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDYm1}/${dom}}
+#export COMOUT=${COMOUT:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
+
+# for WCOSS2 ops
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export COMINm1=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDYm1}/${dom})}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
 
 mkdir -m 775 -p $COMOUT 
 
 #######################################
 # Define observation source directories
 #######################################
-#export DCOM_MODIS="$DCOMROOT/prod/"
-#export DCOM_VIIRS_NPP="$DCOMROOT/prod/"
-#export DCOM_VIIRS_J01="$DCOMROOT/prod/"
+
+export DCOMROOT=${DCOMROOT:-/lfs/h1/ops/$envir/dcom}
 export DCOM_MODIS="$DCOMROOT/"
 export DCOM_VIIRS_NPP="$DCOMROOT/"
 export DCOM_VIIRS_J01="$DCOMROOT/"

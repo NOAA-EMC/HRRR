@@ -1,6 +1,7 @@
 #!/bin/ksh
 set -xa
 export MP_IOAGENT_CNT=all
+
 #
 # Specify whether the run is production or development
 #
@@ -75,8 +76,7 @@ setpdy.sh
 ########################################
 # Define Input Data Directories
 ########################################
-# Hourly Radar Data
-export COM_RAD=${COM_RAD:-$(compath.py hourly/prod)}
+export DCOMROOT=${DCOMROOT:-/lfs/h1/ops/$envir/dcom}
 
 # VIIRS Greenness Fraction Data
 export GVF=${GVF:-${DCOMROOT}/viirs}
@@ -89,28 +89,43 @@ else
 cycm1=$(printf "%02d" $cycm1)
 fi
 
+export DATA_RADAR=${DATA_RADAR:-${DATAROOT}/hrrr_${dom}_prep_radar_${envir}_${cyc}}
+
 #############################################
 # Define COM directories
 ##############################################
-export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
+
+# for testing with canned data
+#export COMROOT=${COMROOT:-/lfs/h2/emc/ptmp/Benjamin.Blake/com}
+#export COMIN=${COMIN:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
+#export COMOUT=${COMOUT:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
+#if [ "$cyc" = 00 ]; then
+#export COMOUTm1=${COMOUTm1:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDYm1}/${dom}}
+#fi
+#export COMOUTm1=${COMOUTm1:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
+
+# for WCOSS2 ops
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
 if [ "$cyc" = 00 ]; then
-export COMOUTm1=${COMOUTm1:-${COMROOT}/${NET}/${envir}/${RUN}.${PDYm1}/${dom}}
+export COMOUTm1=${COMOUTm1:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDYm1}/${dom})}
 fi
-export COMOUTm1=${COMOUTm1:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
+export COMOUTm1=${COMOUTm1:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
 
 mkdir -m 775 -p $COMOUT
 
 ##############################################
 # Define GES directories
 ##############################################
-export gespath=${gespath:-${GESROOT}/${envir}}
-export HRRRGES_SFC=$gespath/${RUN}/hrrrges_sfc/${dom}
+# for testing with canned data
+#export GESROOT=${GESROOT:-${COMROOT}/${NET}/${hrrr_ver}/nwges}
+# for WCOSS2 ops
+export GESROOT=${GESROOT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/nwges)}
+
+export HRRRGES_SFC=${HRRRGES_SFC:-$GESROOT/hrrrges_sfc/${dom}}
 
 mkdir -m 775 -p $HRRRGES_SFC
 env
-
-export DATA_RADAR=${DATA_RADAR:-${DATAROOT}/hrrr_${dom}_prep_radar_${envir}_${cyc}}
 
 ########################################################
 # Execute the script.

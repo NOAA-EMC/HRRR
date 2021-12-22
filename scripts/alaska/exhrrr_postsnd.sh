@@ -59,10 +59,8 @@ export err=$?; err_chk
 
 #need to manipulate the file to get it to be compatible
 #  with gempak on wcoss
-#${USHobsproc_shared_bufr_cword}/bufr_cword.sh unblk class1.bufr class1.bufr_unblock
-#${USHobsproc_shared_bufr_cword}/bufr_cword.sh block class1.bufr_unblock class1.bufr_block
-${USHobsproc_shared_bufr_cword}/cwordsh unblk class1.bufr class1.bufr_unblock
-${USHobsproc_shared_bufr_cword}/cwordsh block class1.bufr_unblock class1.bufr_block
+cwordsh unblk class1.bufr class1.bufr_unblock
+cwordsh block class1.bufr_unblock class1.bufr_block
 
 if [ $SENDCOM == "YES" ]; then
   cp class1.bufr_block ${COMOUT}/hrrr.t${cyc}z.class1.bufr.ak.${tmmark}

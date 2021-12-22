@@ -93,7 +93,8 @@ export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 
-export FIXcrtm=${FIXcrtm:-${NWROOThps}/lib/crtm/${crtm_ver_analysis}/fix}
+export FIXcrtm=${FIXcrtm:-${HOMEhrrr}/fix/crtm_v${crtm_ver}_coefficients}
+
 ###########################################
 # Run setpdy and initialize PDY variables
 ###########################################
@@ -103,24 +104,34 @@ setpdy.sh
 ##############################################
 # Define COM directories
 ##############################################
-export COM=${COM:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}}
-export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMINgfs=${COMINgfs:-$(compath.py gfs/prod)}
-export COMINsst=${COMINsst:-${COMROOTp3}/gfs/${gfs_ver}}
-export PREPDIR=${PREPDIR:-${COMRAP}/rap/${rap_ver}}
-#export COMRAP=${COMRAP:-${COMROOT}/rap/prod}
-export COMRAP_E=${COMRAP_E:-${COMRAP}}
-export PREPDIR2=${PREPDIR2:-${COMIN}}
-export DCOM=${DCOM:-${DCOMROOT}}
-export FVCOM=${FVCOM:-${DCOM}/${PDY}/wgrdbul/glerl}
-export FVCOMm1=${FVCOMm1:-${DCOM}/${PDYm1}/wgrdbul/glerl}
 
-export gespath=${gespath:-$GESROOT/${envir}}
-export HRRRGES_ENKF=${HRRRGES_ENKF:-$gespath/${NET}/hrrrges_enkf/${dom}}
-export HRRRGES_SFC=${HRRRGES_SFC:-$gespath/${NET}/hrrrges_sfc/${dom}}
-export HRRRDASGES=${HRRRDASGES:-$gespath/${NET}/hrrrdasges}
-export RAPGES_SATBIAS=${RAPGES_SATBIAS:-${GESROOT}/${envir}/rap/rapges_satbias}
+# for testing with canned data
+#export COMROOT=${COMROOT:-/lfs/h2/emc/ptmp/Benjamin.Blake/com}
+#export COM=${COM:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}}
+#export COMIN=${COMIN:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
+#export COMOUT=${COMOUT:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
+#export GESROOT=${GESROOT:-${COMROOT}/${NET}/${hrrr_ver}/nwges}
+
+# for WCOSS2 ops
+export COM=${COM:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY})}
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export GESROOT=${GESROOT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/nwges)}
+
+export COMINgfs=${COMINgfs:-$(compath.py $envir/gfs/$gfs_ver)}
+export COMINsst=${COMINsst:-$(compath.py $envir/gfs/$gfs_ver)}
+export PREPDIR=${PREPDIR:-$(compath.py $envir/rap/$rap_ver)}
+export COMRAP=${COMRAP:-$(compath.py $envir/rap/$rap_ver)}
+export COMRAP_E=${COMRAP_E:-$(compath.py $envir/rap/$rap_ver)}
+export PREPDIR2=${PREPDIR2:-${COMIN}}
+export DCOMROOT=${DCOMROOT:-/lfs/h1/ops/$envir/dcom}
+export FVCOM=${FVCOM:-${DCOMROOT}/${PDY}/wgrdbul/glerl}
+export FVCOMm1=${FVCOMm1:-${DCOMROOT}/${PDYm1}/wgrdbul/glerl}
+
+export HRRRGES_ENKF=${HRRRGES_ENKF:-$GESROOT/hrrrges_enkf/${dom}}
+export HRRRGES_SFC=${HRRRGES_SFC:-$GESROOT/hrrrges_sfc/${dom}}
+export HRRRDASGES=${HRRRDASGES:-$GESROOT/hrrrdasges}
+export RAPGES_SATBIAS=${RAPGES_SATBIAS:-$(compath.py $envir/rap/$rap_ver/nwges/rapges_satbias)}
 
 mkdir -m 775 -p $COM $COMOUT 
 
