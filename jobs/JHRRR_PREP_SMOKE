@@ -97,7 +97,7 @@ mkdir -m 775 -p $COMOUT
 # Define observation source directories
 #######################################
 
-export DCOMROOT=${DCOMROOT:-/lfs/h1/ops/$envir/dcom}
+#export DCOMROOT=${DCOMROOT:-/lfs/h1/ops/$envir/dcom}
 export DCOM_MODIS="$DCOMROOT/"
 export DCOM_VIIRS_NPP="$DCOMROOT/"
 export DCOM_VIIRS_J01="$DCOMROOT/"
