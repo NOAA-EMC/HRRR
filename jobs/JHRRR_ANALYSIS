@@ -124,7 +124,7 @@ export PREPDIR=${PREPDIR:-$(compath.py $envir/rap/$rap_ver)}
 export COMRAP=${COMRAP:-$(compath.py $envir/rap/$rap_ver)}
 export COMRAP_E=${COMRAP_E:-$(compath.py $envir/rap/$rap_ver)}
 export PREPDIR2=${PREPDIR2:-${COMIN}}
-export DCOMROOT=${DCOMROOT:-/lfs/h1/ops/$envir/dcom}
+#export DCOMROOT=${DCOMROOT:-/lfs/h1/ops/$envir/dcom}
 export FVCOM=${FVCOM:-${DCOMROOT}/${PDY}/wgrdbul/glerl}
 export FVCOMm1=${FVCOMm1:-${DCOMROOT}/${PDYm1}/wgrdbul/glerl}
 
