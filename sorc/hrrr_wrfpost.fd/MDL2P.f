@@ -2284,7 +2284,7 @@
 !$omp  parallel do private(i,j)
              DO J=JSTA,JEND
                DO I=1,IM
-                 GRID1(I,J) = (1./RD)*SMOKESL(I,J,1)*(SPL(LP)/TSL(I,J))
+                 GRID1(I,J) = (1./RD)*SMOKESL(I,J,1)*(SPL(LP)/TSL(I,J))*(1.0e-9)
                ENDDO
              ENDDO
              if(grib == 'grib1')then

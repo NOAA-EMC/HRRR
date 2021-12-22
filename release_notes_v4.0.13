@@ -1,0 +1,31 @@
+Release Notes:  HRRR v4.0.13
+
+v4.0.13 - released September 27, 2021
+* HRRRv4 post source code changes to address two issues related to smoke fields and LFC height
+   * All smoke mass density concentration fields will now output the correct units of kg/m^3
+   * The vertical coordinate for the LFC height is fixed so that it is no longer listed as “missing”
+
+
+* Repository Details
+   * Clone the hrrr.v4.0.13 branch of the HRRR GitHub repository using the following command:
+* git clone -b hrrr.v4.0.13 https://github.com/NOAA-EMC/HRRR.git
+
+
+* sorc files changed
+   * sorc/hrrr_wrfpost.fd/grib2_module.f
+   * sorc/hrrr_wrfpost.fd/MDL2P.f
+   * sorc/hrrr_wrfpost.fd/MDLFLD.f
+   * sorc/hrrr_wrfpost.fd/SURFCE.f
+
+
+* parm files changed
+   * parm/alaska/hrrrak_remove_duplicates
+   * parm/conus/hrrr_remove_duplicates
+
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the new sorc and parm files and re-compile the hrrr_wrfpost source code
