@@ -76,7 +76,7 @@ setpdy.sh
 ########################################
 # Define Input Data Directories
 ########################################
-export DCOMROOT=${DCOMROOT:-/lfs/h1/ops/$envir/dcom}
+#export DCOMROOT=${DCOMROOT:-/lfs/h1/ops/$envir/dcom}
 
 # VIIRS Greenness Fraction Data
 export GVF=${GVF:-${DCOMROOT}/viirs}
