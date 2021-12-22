@@ -7,34 +7,8 @@ cd /lfs/h2/emc/ptmp/Benjamin.Blake/work
 . /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
 
 cp /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/post/wrfbufr/jhrrr_wrfbufr_fHH_XX.qsub .
-#cycles="00 06 12 18"
-#hours="00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47"
-#for cyc in $cycles; do
-#for fhr in $hours; do
-# echo $fhr
-# cp jhrrr_wrfbufr_fHH_XX.qsub jhrrr_wrfbufr_f${fhr}_${cyc}.qsub
-# vi jhrrr_wrfbufr_f${fhr}_${cyc}.qsub << EOF 
-#   :1,\$ s/HH/${fhr}
-#   :1,\$ s/XX/${cyc}
-#   :wq
-#EOF
-#mv jhrrr_wrfbufr_f${fhr}_${cyc}.qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/post/wrfbufr/.
-#done
-#done
-
-#cp /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/post/wrfbufr/jhrrr_wrfbufr_f48_XX.qsub .
-#for cyc in $cycles; do
-# echo $cyc
-# cp jhrrr_wrfbufr_f48_XX.qsub jhrrr_wrfbufr_f48_${cyc}.qsub
-# vi jhrrr_wrfbufr_f48_${cyc}.qsub << EOF 
-#   :1,\$ s/XX/${cyc}
-#   :wq
-#EOF
-#mv jhrrr_wrfbufr_f48_${cyc}.qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/post/wrfbufr/.
-#done
-
-cycles="03 09 15 21"
-hours="00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17"
+cycles="00 06 12 18"
+hours="00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47"
 for cyc in $cycles; do
 for fhr in $hours; do
  echo $fhr
@@ -48,15 +22,41 @@ mv jhrrr_wrfbufr_f${fhr}_${cyc}.qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwpr
 done
 done
 
-cp /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/post/wrfbufr/jhrrr_wrfbufr_f18_XX.qsub .
+cp /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/post/wrfbufr/jhrrr_wrfbufr_f48_XX.qsub .
 for cyc in $cycles; do
  echo $cyc
- cp jhrrr_wrfbufr_f18_XX.qsub jhrrr_wrfbufr_f18_${cyc}.qsub
- vi jhrrr_wrfbufr_f18_${cyc}.qsub << EOF 
+ cp jhrrr_wrfbufr_f48_XX.qsub jhrrr_wrfbufr_f48_${cyc}.qsub
+ vi jhrrr_wrfbufr_f48_${cyc}.qsub << EOF 
    :1,\$ s/XX/${cyc}
    :wq
 EOF
-mv jhrrr_wrfbufr_f18_${cyc}.qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/post/wrfbufr/.
+mv jhrrr_wrfbufr_f48_${cyc}.qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/post/wrfbufr/.
 done
+
+#cycles="03 09 15 21"
+#hours="00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17"
+#for cyc in $cycles; do
+#for fhr in $hours; do
+# echo $fhr
+# cp jhrrr_wrfbufr_fHH_XX.qsub jhrrr_wrfbufr_f${fhr}_${cyc}.qsub
+# vi jhrrr_wrfbufr_f${fhr}_${cyc}.qsub << EOF 
+#   :1,\$ s/HH/${fhr}
+#   :1,\$ s/XX/${cyc}
+#   :wq
+#EOF
+#mv jhrrr_wrfbufr_f${fhr}_${cyc}.qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/post/wrfbufr/.
+#done
+#done
+
+#cp /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/post/wrfbufr/jhrrr_wrfbufr_f18_XX.qsub .
+#for cyc in $cycles; do
+# echo $cyc
+# cp jhrrr_wrfbufr_f18_XX.qsub jhrrr_wrfbufr_f18_${cyc}.qsub
+# vi jhrrr_wrfbufr_f18_${cyc}.qsub << EOF 
+#   :1,\$ s/XX/${cyc}
+#   :wq
+#EOF
+#mv jhrrr_wrfbufr_f18_${cyc}.qsub /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/smsak/post/wrfbufr/.
+#done
 
 exit

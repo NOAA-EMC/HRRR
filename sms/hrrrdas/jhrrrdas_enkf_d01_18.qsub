@@ -13,17 +13,38 @@ set -x
 # EXPORT list here
 export OMP_NUM_THREADS=2
 
-export envir=prod
+export envir=canned
+#export envir=prod
 export RUN_ENVIR=prod
 export cyc=18
 export job=hrrrdas_enkf_d01_18
 export group_name=meso
+export dom=hrrrdas
+export NUM_ENSGRP=12
+export no_member=36
 
-. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
-. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/driver/hrrrdaswcoss2.env
+# Paths needed here for testing - these will be set by prod_envir in ops
+export NWROOT=/lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod
+export DATAROOT=/lfs/h2/emc/ptmp/Benjamin.Blake
 
-module use ${NWROOT}/hrrr.${hrrr_ver}/modulefiles
-module load HRRR/v4.0.0
+. ${NWROOT}/hrrr.v4.1.0/versions/run.ver
+
+module purge
+
+module load envvar/${envvar_ver}
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load hdf5/${hdf5_ver}
+module load netcdf/${netcdf_ver}
+module load pnetcdf/${pnetcdf_ver}
+
+module load prod_util/${prod_util_ver}
+module load util_shared/${util_shared_ver}
+module load cray-pals/${cray_pals_ver}
+
+module list
 
 # CALL executable job script here
 export DOMAIN=1

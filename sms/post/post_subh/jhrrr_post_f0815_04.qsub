@@ -13,19 +13,42 @@ set -x
 #EXPORT list here
 export OMP_NUM_THREADS=1
 
-export envir=prod
+export envir=canned
+#export envir=prod
 export RUN_ENVIR=prod
 export cyc=04
 export fhr=08
 export fmin=15
 export job=hrrr_post_f0815_04
 export group_name=meso
+export dom=conus
 
-. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/versions/hrrr.ver
-. /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.${hrrr_ver}/driver/hrrrwcoss2.env
+# Paths needed here for testing - these will be set by prod_envir in ops
+export NWROOT=/lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod
+export DATAROOT=/lfs/h2/emc/ptmp/Benjamin.Blake
 
-module use ${NWROOT}/hrrr.${hrrr_ver}/modulefiles
-module load HRRR/v4.0.0
+. ${NWROOT}/hrrr.v4.1.0/versions/run.ver
+
+module purge
+
+module load envvar/${envvar_ver}
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load hdf5/${hdf5_ver}
+module load netcdf/${netcdf_ver}
+module load pnetcdf/${pnetcdf_ver}
+
+module load prod_util/${prod_util_ver}
+module load util_shared/${util_shared_ver}
+module load cray-pals/${cray_pals_ver}
+module load wgrib2/${wgrib2_ver}
+module load libjpeg/${libjpeg_ver}
+module load grib_util/${grib_util_ver}
+module load cfp/${cfp_ver}
+
+module list
 
 # CALL executable job script here
 ${NWROOT}/hrrr.${hrrr_ver}/jobs/JHRRR_POST_SUBH
