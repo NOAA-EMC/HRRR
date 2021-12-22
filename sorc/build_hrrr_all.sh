@@ -33,8 +33,6 @@ export BUILD_hrrr_wrfbufr_alaska=yes
 export BUILD_hrrr_stnmlist=yes
 export BUILD_hrrr_smartinit=yes
 
- . /opt/modules/default/init/ksh
-
 module purge
 module load envvar/1.0
 

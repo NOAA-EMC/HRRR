@@ -106,17 +106,24 @@ setpdy.sh
 ##############################################
 # Define COM directories
 ##############################################
-export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMINm1=${COMINm1:-${COMROOT}/${NET}/${envir}/${RUN}.${PDYm1}/${dom}}
-export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
+# for testing with canned data
+#export COMROOT=${COMROOT:-/lfs/h2/emc/ptmp/Benjamin.Blake/com}
+#export COMIN=${COMIN:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
+#export COMINm1=${COMINm1:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDYm1}/${dom}}
+#export COMOUT=${COMOUT:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
+#export gespath=${gespath:-${COMROOT}/${NET}/${hrrr_ver}/nwges}
+
+# for WCOSS2 ops
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export COMINm1=${COMINm1:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDYm1}/${dom})}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export gespath=${gespath:-$(compath.py ${envir}/${NET}/${hrrr_ver}/nwges}
 
 if [ "$cyc" -lt 04 ]; then
 COMIN4=${COMIN4:-${COMINm1}}
 else
 COMIN4=${COMIN4:-${COMIN}}
 fi
-
-export gespath=${gespath:-$GESROOT/${envir}}
 
 env
 

@@ -89,14 +89,21 @@ setpdy.sh
 ##############################################
 # Define COM directories
 ##############################################
-export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
-export gespath=${gespath:-${GESROOT}/${envir}}
-export HRRRGES_ENKF=${HRRRGES_ENKF:-$gespath/${RUN}/hrrrges_enkf/${dom}}
-export HRRRGES_SFC=${HRRRGES_SFC:-$gespath/${RUN}/hrrrges_sfc/${dom}}
-export COMINgfs=${COMINgfs:-$(compath.py gfs/prod)}
-export HRRRDASBC=${HRRRDASBC:-$gespath/${NET}/hrrrdasbc}
-export HRRRDASENSP=${HRRRDASENSP:-$gespath/${NET}/hrrrdasensp}
+
+# for testing with canned data
+#export COMROOT=${COMROOT:-/lfs/h2/emc/ptmp/Benjamin.Blake/com}
+#export COMIN=${COMIN:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
+#export COMOUT=${COMOUT:-${COMROOT}/${NET}/${envir}/${RUN}.${PDY}/${dom}}
+#export GESROOT=${GESROOT:-${COMROOT}/${NET}/${hrrr_ver}/nwges}
+
+# for WCOSS2 ops
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export GESROOT=${GESROOT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/nwges)}
+
+export COMINgfs=${COMINgfs:-$(compath.py $envir/gfs/$gfs_ver)}
+export HRRRDASBC=${HRRRDASBC:-$GESROOT/hrrrdasbc}
+export HRRRDASENSP=${HRRRDASENSP:-$GESROOT/hrrrdasensp}
 
 mkdir -m 775 -p $COM $COMOUT $HRRRDASENSP
 
