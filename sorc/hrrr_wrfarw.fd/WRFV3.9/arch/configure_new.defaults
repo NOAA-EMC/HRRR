@@ -402,7 +402,7 @@ RWORDSIZE       =       CONFIGURE_RWORDSIZE
 PROMOTION       =       -real-size `expr 8 \* $(RWORDSIZE)` -i4
 ARCH_LOCAL      =       -DNONSTANDARD_SYSTEM_FUNC -DCHUNK=64 -DXEON_OPTIMIZED_WSM5 -DOPTIMIZE_CFL_TEST  -DWRF_USE_CLM
 OPTNOSIMD       =
-OPTAVX          =       -xAVX
+#OPTAVX          =       -xAVX
 CFLAGS_LOCAL    =       -w -O3 $(OPTAVX)
 LDFLAGS_LOCAL   =       $(OPTAVX)
 CPLUSPLUSLIB    =       
