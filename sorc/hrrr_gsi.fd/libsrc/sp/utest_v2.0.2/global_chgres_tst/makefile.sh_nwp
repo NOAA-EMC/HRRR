@@ -15,8 +15,8 @@ if [ $FCMP = xlf_r ] ; then
  export RECURS=
 else
 
- export FFLAGSM=" -g -debug -i4 -O3 -r8 -xHOST -convert big_endian -traceback"
- export FFLAGS2M=" -g -debug -i4 -O3 -r8 -xHOST -convert big_endian -traceback -FR"
+ export FFLAGSM=" -g -debug -i4 -O3 -r8 -convert big_endian -traceback"
+ export FFLAGS2M=" -g -debug -i4 -O3 -r8 -convert big_endian -traceback -FR"
 
  export RECURS=
 

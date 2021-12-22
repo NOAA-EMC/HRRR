@@ -2,8 +2,8 @@ LIB	= ../libsfcio_v1.0.0_4.a
 INCMOD	= ../include/sfcio_v1.0.0_4
 FC	= $(FCS)
 FFLAGS  = $(FFLAGSM)
-FFLAGS  = -traceback -g -xHOST -convert big_endian -assume byterecl  -I$(INCMOD) -FR
-FFLAGB  = -O2 -traceback -g -xHOST -convert big_endian -assume byterecl 
+FFLAGS  = -traceback -g -convert big_endian -assume byterecl  -I$(INCMOD) -FR
+FFLAGB  = -O2 -traceback -g -convert big_endian -assume byterecl 
 
 
 $(LIB):	$(LIB)(sfcio_module.o)

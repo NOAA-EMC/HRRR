@@ -30,7 +30,7 @@ CORELIB  = /scratch1/portfolios/NCEPDEV/da/save/Michael.Lueken/nwprod/lib
   FFLAGS_N      = -O3 $(FFLAGS_F90) $(FFLAGS_COM_N)
 
 #--- Debug mode options
-  FFLAGS_COM_D  =  -I ./ -O0 -xHOST -traceback -assume byterecl -debug full -g
+  FFLAGS_COM_D  =  -I ./ -O0 -traceback -assume byterecl -debug full -g
   FFLAGS_D  = $(FFLAGS_F90) $(FFLAGS_COM_D)
 
 
