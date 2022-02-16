@@ -168,7 +168,7 @@ decide_dir() {
 # Find all MODIS times and make commands to process them.  These are
 # listed first in the command file because they take the longest to run.
 modis_dir=$( decide_dir "$DCOM_MODIS" "$OLD_DAY/modis_fire" )
-file="MODIS_C6_Global_MCD14DL_NRT_${OLD_JULIAN}"
+file="MODIS_C6_1_Global_MCD14DL_NRT_${OLD_JULIAN}"
 if ( ls -1 "$modis_dir/$file"*.txt ) ; then
     oldfile=`ls -Art $modis_dir/${file}_*.txt | tail -n 1`
     cp $oldfile ${file}
@@ -177,7 +177,7 @@ fi
 
 if [ ${HH} -ne ${evening_run} ]; then
     modis_dir=$( decide_dir "$DCOM_MODIS" "$YYYYMMDD/modis_fire" )
-    newfile="MODIS_C6_Global_MCD14DL_NRT_${START_JULIAN}"
+    newfile="MODIS_C6_1_Global_MCD14DL_NRT_${START_JULIAN}"
     if ( ls -1 "$modis_dir/$newfile"*.txt ) ; then
         mynewfile=`ls -Art $modis_dir/${newfile}_*.txt | tail -n 1`
         cp $mynewfile ${newfile}
