@@ -15,6 +15,7 @@
 008 255 Nominal top of the atmosphere     -                    TOPA     0
 009 255 Sea bottom                        -                    SEAB     0
 010 255 Entire Atmosphere                 -                    NONE     0
+014 255 Level of Free Convection          -                    LFCV     0
 020 255 Isothermal level                  K                    TMPL     0
 100 255 Isobaric surface                  Pa                   PRES    -2
 100 100 Layer between two isobaric sfcs   Pa                   PRES    -2
