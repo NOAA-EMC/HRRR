@@ -102,7 +102,7 @@ IMPLICIT NONE
            islash=islash-1
         enddo
         
-        julday = input_modis(29+islash:35+islash)
+        julday = input_modis(31+islash:37+islash)
 ! MAP file in binary and float point
         CALL GETARG(2,lulcmap)
 
