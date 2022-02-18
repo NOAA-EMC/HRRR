@@ -1,0 +1,23 @@
+Release Notes:  HRRR v4.0.14
+
+v4.0.14 - released February 16, 2022
+* Crisis fix to address an issue with the smoke pre-processing job.  The current HRRR smoke is missing all of the MODIS detections due to the upstream MODIS file name convention change.
+
+
+* Repository Details
+   * Clone the hrrr.v4.0.14 branch of the HRRR GitHub repository using the following command:
+* git clone -b hrrr.v4.0.14 https://github.com/NOAA-EMC/HRRR.git
+
+
+* sorc files changed    *sorc/hrrr_prep_smoke.fd/process-obs/HRRR-AK-Smoke/src/proc_MODIS_FRP_HRRR-AK.f90
+   * sorc/hrrr_prep_smoke.fd/process-obs/HRRR-Smoke/src/proc_MODIS_FRP_HRRR_v3.f90
+   * sorc/hrrr_prep_smoke.fd/process-obs/RAP-Smoke/src/proc_MODIS_FRP_RAP_v3.f90
+
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the new sorc files and re-compile the hrrr_prep_smoke source code
+
