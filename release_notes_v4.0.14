@@ -20,4 +20,12 @@ v4.0.14 - released February 16, 2022
 
 * implementation instructions
    * Retrieve the new sorc files and re-compile the hrrr_prep_smoke source code
-
+   * Retrieve the following files from the hrrr.v4.0.13 package (not stored in GitHub repository):
+      * fix/
+      * parm/alaska/hrrrak_run_freezeH2O.dat
+      * parm/conus/hrrr_run_freezeH2O.dat
+      * parm/hrrrdas/hrrrdas_QNWFA_QNIFA_Monthly_GFS
+      * parm/hrrrdas/hrrrdas_run_freezeH2O.dat
+      * sorc/hrrr_wrfpost.fd/gtg_*.f90
+      * sorc/hrrr_wrfpost.fd/map_routines.f90
+   * Testing should include running the prep_smoke job.  A full cycle test is not needed.
