@@ -134,7 +134,7 @@ program  process_NASALaRC_cloud
   Integer nf_status,nf_fid,nf_vid
 
   integer :: NCID
-  integer(i_kind) :: east_time, west_time
+  integer(8) :: east_time, west_time
   integer :: isat, maxobs,numobs
 
   integer :: status
@@ -515,11 +515,11 @@ subroutine read_NASALaRC_cloud_bufr(satfile,atime,satidgoeseast,satidgoeswest,ea
 !SATID
   integer,intent(in) :: satidgoeswest
   integer,intent(in) :: satidgoeseast  
-  integer(i_kind),intent(in) :: east_time, west_time
+  integer(8),intent(in) :: east_time, west_time
 
   INTEGER,intent(in)  ::   maxobs! dimension
   INTEGER,intent(out) ::   numobs  ! dimension
-  INTEGER(i_kind) ::  obs_time
+  INTEGER(8) ::  obs_time
   REAL*8      time_offset
   REAL*4      lat                            (  maxobs)
   REAL*4      lon                            (  maxobs)
@@ -550,7 +550,7 @@ subroutine read_NASALaRC_cloud_bufr(satfile,atime,satidgoeseast,satidgoeswest,ea
      nmsg=nmsg+1
      sb_report: do while (ireadsb(unit_in) == 0)
        call ufbint(unit_in,hdr,7,1,iret,hdstr)
-       obs_time=int((hdr(1)-2000.0)*100000000+hdr(2)*1000000+hdr(3)*10000+hdr(4)*100+hdr(5))
+       obs_time=(hdr(1)-2000.0_8)*100000000.0_8+hdr(2)*1000000.0_8+hdr(3)*10000.0_8+hdr(4)*100.0_8+hdr(5)
        satid=int(hdr(7))
        if( (obs_time == east_time .and. satid==satidgoeseast ) .or.  &
            (obs_time == west_time .and. satid==satidgoeswest ) ) then
@@ -667,15 +667,15 @@ subroutine read_NASALaRC_cloud_bufr_survey(satfile,satidgoeseast,satidgoeswest,e
 !SATID
   integer,intent(in) :: satidgoeswest
   integer,intent(in) :: satidgoeseast  
-  integer(i_kind),intent(out) :: east_time, west_time
+  integer(8),intent(out) :: east_time, west_time
   integer,intent(out) :: maxobs
 
   INTEGER ::   numobs  ! dimension
-  INTEGER(i_kind) ::  obs_time
+  INTEGER(8) ::  obs_time
   REAL*8      time_offset
 
   INTEGER(i_kind),parameter :: max_obstime=30
-  integer(i_kind) :: num_obstime_all(max_obstime)
+  integer(8) :: num_obstime_all(max_obstime)
   integer(i_kind) :: num_subset_all(max_obstime)
   integer(i_kind) :: num_obstime_hh(max_obstime)
   integer(i_kind) :: num_satid(max_obstime)
@@ -705,7 +705,7 @@ subroutine read_NASALaRC_cloud_bufr_survey(satfile,satidgoeseast,satidgoeswest,e
      nmsg=nmsg+1
      sb_report: do while (ireadsb(unit_in) == 0)
        call ufbint(unit_in,hdr,7,1,iret,hdstr)
-       obs_time=int((hdr(1)-2000.0)*100000000+hdr(2)*1000000+hdr(3)*10000+hdr(4)*100+hdr(5))
+       obs_time=(hdr(1)-2000.0_8)*100000000.0_8+hdr(2)*1000000.0_8+hdr(3)*10000.0_8+hdr(4)*100.0_8+hdr(5)
        hhh=int(hdr(5))
        ntb=ntb+1
        satid=int(hdr(7))
