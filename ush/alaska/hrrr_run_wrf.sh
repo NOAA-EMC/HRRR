@@ -103,9 +103,9 @@ startmsg
 # quilting with nio_groups = 4 and 72 tasks per group - 108 nodes
 #runline="aprun $global_options $geo_compute $wrf_compute : $geo_io $wrf_io"
 if [ $cyc -eq 00 -o $cyc -eq 06 -o $cyc -eq 12 -o $cyc -eq 18 ]; then
-  runline="mpiexec -n 2304 -ppn 64 --cpu-bind core -depth 2 ./hrrr_wrfarw_fcst"
+  runline="mpiexec -n 2304 -ppn 62 --cpu-bind core --depth 2 ./hrrr_wrfarw_fcst"
 else
-  runline="mpiexec -n 1152 -ppn 64 --cpu-bind core -depth 2 ./hrrr_wrfarw_fcst"
+  runline="mpiexec -n 1152 -ppn 62 --cpu-bind core --depth 2 ./hrrr_wrfarw_fcst"
 fi
 $runline
 export err=$?; err_chk

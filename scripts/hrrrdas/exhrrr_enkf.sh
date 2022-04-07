@@ -174,11 +174,11 @@ startmsg
 cp ${EXEChrrr}/hrrr_enkf .
 if [ $domainid -eq 01 ]; then
 #   runline="aprun -j1 -cc depth -n 60 -N 12 -d 2 ./hrrr_enkf"
-   runline="mpiexec -n 64 -ppn 64 --cpu-bind core -depth 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_enkf"
+   runline="mpiexec -n 64 -ppn 64 --cpu-bind core --depth 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_enkf"
 else
 #   runline="aprun -j1 -cc depth -n 120 -N 2 ./hrrr_enkf"
 #   runline="aprun -j1 -cc depth -n 120 -N 2 -d 2 ./hrrr_enkf"
-   runline="mpiexec -n 128 -ppn 16 --cpu-bind core -depth 4 /usr/bin/env OMP_NUM_THREADS=4 ./hrrr_enkf"
+   runline="mpiexec -n 128 -ppn 16 --cpu-bind core --depth 4 /usr/bin/env OMP_NUM_THREADS=4 ./hrrr_enkf"
 fi
 
 count=`ls ${COMOUT}/diag_conv_ges.${PDY}${cyc}.d${domainid}* | wc -l`
@@ -206,7 +206,7 @@ if [ $domainid -eq 01 ]; then
 #    /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
 #       >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
 
-   mpiexec -n 64 -ppn 64 --cpu-bind core -depth 2 \
+   mpiexec -n 64 -ppn 64 --cpu-bind core --depth 2 \
     /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
     >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
 
@@ -292,7 +292,7 @@ cp analysis.mem001 analysis.ensmean
 #    /usr/bin/env OMP_NUM_THREADS=6 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
 #      >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
 
-mpiexec -n 64 -ppn 64 --cpu-bind core -depth 2 \
+mpiexec -n 64 -ppn 64 --cpu-bind core --depth 2 \
     /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ analysis.ensmean analysis.mem 36 \
     >> $DATA/hrrr_cal_ensmean_analysis_d${domainid}.output 2>errfile_meanpost
 

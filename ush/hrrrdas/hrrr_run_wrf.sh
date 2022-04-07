@@ -101,6 +101,6 @@ mv ${WRF_NAMELIST}.new ${WRF_NAMELIST}
 # Run wrf
 startmsg
 #runline="aprun $global_options $geo_compute $wrf_compute : $geo_io $wrf_io"
-runline="mpiexec -n 384 -ppn 64 --cpu-bind core -depth 2 ./hrrrdas_wrfarw_fcst"
+runline="mpiexec -n 384 -ppn 64 --cpu-bind core --depth 2 ./hrrrdas_wrfarw_fcst"
 $runline
 export err=$?; err_chk
