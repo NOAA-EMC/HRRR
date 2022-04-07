@@ -92,7 +92,7 @@ if [ -r ${bkfile} ]; then
      cp ${EXEChrrr}/hrrr_cal_ensmean . 
      ln -sf ${HRRRDASGES}/hrrrdas_d01_${timestr1}f01_mem00?? .
 #     runline="aprun -j1 -cc depth -n 12 -N 12 -d 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d01 hrrrdas_d01_${timestr1}f01_mem0 36 : -j1 -cc depth -n 27 -N 9 -d 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d01 hrrrdas_d01_${timestr1}f01_mem0 36"
-     runline="mpiexec -n 48 -ppn 48 --cpu-bind core -depth 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d01 hrrrdas_d01_${timestr1}f01_mem0 36"
+     runline="mpiexec -n 48 -ppn 48 --cpu-bind core --depth 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d01 hrrrdas_d01_${timestr1}f01_mem0 36"
      $runline
   fi
 # No background available so abort
@@ -124,7 +124,7 @@ if [ -r ${bkfile} ]; then
 #     cp ${EXEChrrr}/hrrr_cal_ensmean . 
      ln -sf ${HRRRDASGES}/hrrrdas_d02_${timestr1}f01_mem00?? .
 #     runline="aprun -j1 -cc depth -n 24 -N 24 -d 1 /usr/bin/env OMP_NUM_THREADS=1 ./hrrr_cal_ensmean 2 ./ wrf_inout_d02 hrrrdas_d02_${timestr1}f01_mem0 36 : -j1 -cc depth -n 36 -N 12 -d 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d02 hrrrdas_d02_${timestr1}f01_mem0 36"
-     runline="mpiexec -n 48 -ppn 48 --cpu-bind core -depth 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d02 hrrrdas_d02_${timestr1}f01_mem0 36"
+     runline="mpiexec -n 48 -ppn 48 --cpu-bind core --depth 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_cal_ensmean 2 ./ wrf_inout_d02 hrrrdas_d02_${timestr1}f01_mem0 36"
      $runline
   fi
 # No background available so abort
@@ -140,10 +140,10 @@ fi
 #  need to use the "early" data at 00/12z since the regular RAP dumps
 #     occur later at these times
 if [ ${cyc} -eq 00 -o ${cyc} -eq 12 ]; then
-  PREPBUFR=${COMRAP_E}/rap_e.${PDY}
+  PREPBUFR=${COMINobsproc}/rap_e.${PDY}
   prepsuffix=rap_e
 else
-  PREPBUFR=${COMRAP}/rap.${PDY}
+  PREPBUFR=${COMINobsproc}/rap.${PDY}
   prepsuffix=rap
 fi
 
@@ -295,7 +295,7 @@ fi
 ln -sf wrf_inout_d01 wrf_inout
 cp ${EXEChrrr}/hrrr_gsi .
 #runline="aprun -j1 -cc depth -n 48 -N 12 -d 2 ./hrrr_gsi"
-runline="mpiexec -n 48 -ppn 48 --cpu-bind core -depth 2 ./hrrr_gsi"
+runline="mpiexec -n 48 -ppn 48 --cpu-bind core --depth 2 ./hrrr_gsi"
 $runline < gsiparm.anl >> $DATA/${pgmout}_d01 2>errfile
 export err=$?; err_chk
 
@@ -400,7 +400,7 @@ cp $CONVINFO convinfo
 
 cp ${EXEChrrr}/hrrr_gsi .
 #runline="aprun -j1 -cc depth -n 48 -N 12 -d 2 ./hrrr_gsi"
-runline="mpiexec -n 48 -ppn 48 --cpu-bind core -depth 2 ./hrrr_gsi"
+runline="mpiexec -n 48 -ppn 48 --cpu-bind core --depth 2 ./hrrr_gsi"
 $runline < gsiparm.anl >> $DATA/${pgmout}_d02 2>errfile
 export err=$?; err_chk
 
