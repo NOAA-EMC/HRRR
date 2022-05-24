@@ -1,17 +1,15 @@
-#BSUB -J %E%hrrr_cleanup_%DOMAIN%_%CYC%
-#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_cleanup_%DOMAIN%_%CYC%.o%J
-#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_cleanup_%DOMAIN%_%CYC%.o%J
-#BSUB -cwd /tmp
-#BSUB -q %QUEUE%_shared
-#BSUB -L /bin/sh
-#BSUB -W 00:30
-#BSUB -P %PROJ%
-#BSUB -M 2500
+#PBS -N hrrr_cleanup_%DOMAIN%_%CYC%
+#PBS -j oe
+#PBS -q %QUEUE%
+#PBS -S /bin/bash
+#PBS -l walltime=00:30:00
+#PBS -A %PROJ%-%PROJENVIR%
+#PBS -l select=1:ncpus=1:mem=500MB
+#PBS -l debug=true
 
+model=hrrr
 %include <head.h>
-%include <envir-xc40.h>
-export model=hrrr
-%include <model_ver.h>
+%include <envir-p1.h>
 
 # EXPORT list here
 
@@ -20,6 +18,14 @@ set -x
 export cyc=%CYC%
 export dom=%DOMAIN%
 
+module load envvar/${envvar_ver}
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load cray-pals/${cray_pals_ver}
+module list
+ 
 # CALL executable job script here
 $HOMEhrrr/jobs/JHRRR_CLEANUP
 

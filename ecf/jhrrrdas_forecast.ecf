@@ -1,25 +1,17 @@
-#BSUB -J %E%hrrrdas_forecast_%ENSGRP%_%CYC%
-#BSUB -o  /%COM%/output/%ENVIR%/today/hrrrdas_forecast_%ENSGRP%_%CYC%.o%J
-#BSUB -e  /%COM%/output/%ENVIR%/today/hrrrdas_forecast_%ENSGRP%_%CYC%.o%J
-#BSUB -cwd /tmp
-#BSUB -q %QUEUE%
-#BSUB -L /bin/sh
-#BSUB -W 01:50
-#BSUB -P %PROJ%
-#BSUB -M 2800
-#BSUB -extsched 'CRAYLINUX[]' -R '1*{select[craylinux && !vnode]} + %NTASKS%*{select[craylinux && vnode]span[ptile=24] cu[type=cabinet]}' rusage[mem=2800]
+#PBS -N hrrrdas_forecast_%ENSGRP%_%CYC%
+#PBS -j oe
+#PBS -q %QUEUE%
+#PBS -S /bin/bash
+#PBS -l walltime=01:50:00
+#PBS -A %PROJ%-%PROJENVIR%
+#PBS -l place=vscatter,select=6:ncpus=128:mem=500GB
+#PBS -l debug=true
 
+model=hrrr
 %include <head.h>
-%include <envir-xc40.h>
-export model=hrrr
-%include <model_ver.h>
-
-# EXPORT list here
+%include <envir-p1.h>
 
 set -x
-
-export MP_SHARED_MEMORY=YES
-export MEMORY_AFFINITY=MCM
 
 export cyc=%CYC%
 export dom=%DOMAIN%
@@ -27,14 +19,23 @@ export group_name=meso
 export ENSGRP=%ENSGRP:1%
 export ensmem=%ENSMEM%
 
-module load craype-hugepages256M
-module load perftools
-module list
-
 export OMP_STACKSIZE=500M
-export KMP_AFFINITY=disabled
 export OMP_NUM_THREADS=2
 
+module load envvar/${envvar_ver}
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load hdf5/${hdf5_ver}
+module load netcdf/${netcdf_ver}
+module load pnetcdf/${pnetcdf_ver}
+module load util_shared/${util_shared_ver}
+module load cray-pals/${cray_pals_ver}
+module load nco/${nco_ver}
+module load udunits/${udunits_ver}
+module list
+ 
 # CALL executable job script here
 $HOMEhrrr/jobs/JHRRR_FORECAST
 

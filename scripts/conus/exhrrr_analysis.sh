@@ -106,15 +106,15 @@ if [ ${cyc} -eq ${time_updateSST} ]; then
   echo "update SST "
   cp ${FIXhrrr}/hrrr_RTG_SST_landmask.dat ./RTG_SST_landmask.dat
   cp ${FIXhrrr}/hrrr_geo_em.d01.nc  ./geo_em.d01.nc
-  if [ -r "${COMINsst}/sst.${PDY}/rtgssthr_grb_0.083.grib2" ]; then
-    cp ${COMINsst}/sst.${PDY}/rtgssthr_grb_0.083.grib2 SSTRTG
+  if [ -r "${COMINsst}/nsst.${PDY}/rtgssthr_grb_0.083.grib2" ]; then
+    cp ${COMINsst}/nsst.${PDY}/rtgssthr_grb_0.083.grib2 SSTRTG
     cp ${EXEChrrr}/hrrr_process_sst .
     ln -sf SSTRTG latest.SST
     runline="mpiexec -n 1 -ppn 1 ./hrrr_process_sst"
     $runline >> process_sst.out
     export err=$?; err_chk
- elif [ -r "${COMINsst}/sst.${PDYm1}/rtgssthr_grb_0.083.grib2" ]; then
-    cp ${COMINsst}/sst.${PDYm1}/rtgssthr_grb_0.083.grib2 SSTRTG
+ elif [ -r "${COMINsst}/nsst.${PDYm1}/rtgssthr_grb_0.083.grib2" ]; then
+    cp ${COMINsst}/nsst.${PDYm1}/rtgssthr_grb_0.083.grib2 SSTRTG
     cp ${EXEChrrr}/hrrr_process_sst .
     ln -sf SSTRTG latest.SST
     runline="mpiexec -n 1 -ppn 1 ./hrrr_process_sst"
@@ -130,10 +130,10 @@ fi
 #  need to use the "early" data at 00/12z since the regular RAP dumps
 #     occur later at these times
 if [ ${cyc} -eq 00 -o ${cyc} -eq 12 ]; then
-  PREPBUFR=${COMRAP_E}/rap_e.${PDY}
+  PREPBUFR=${COMINobsproc}/rap_e.${PDY}
   prepsuffix=rap_e
 else
-  PREPBUFR=${COMRAP}/rap.${PDY}
+  PREPBUFR=${COMINobsproc}/rap.${PDY}
   prepsuffix=rap
 fi
 

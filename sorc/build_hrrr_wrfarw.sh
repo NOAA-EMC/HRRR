@@ -5,8 +5,7 @@ set -x
 export BASE=`pwd`
 cd $BASE
 
-module purge
-module load envvar/1.0
+module reset
 module use $BASE/../modulefiles
 source $BASE/../modulefiles/HRRR/v4.0.0
 

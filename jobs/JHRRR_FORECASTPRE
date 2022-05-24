@@ -38,7 +38,7 @@ if [ "$RUN_ENVIR" != nco ]      ### For Developers, "group_name" is passed from 
 then
   group_name=${group_name:-meso}
   package_name=${package_name:-hrrr}
-#  . /${group_name}/save/${LOGNAME}/${package_name}${NWROOT}/parm/${package_name}_para_config
+#  . /${group_name}/save/${LOGNAME}/${package_name}${PACKAGEROOT}/parm/${package_name}_para_config
   export userid=${userid:-$LOGNAME}
 fi
 
@@ -91,7 +91,7 @@ export SENDSDM=${SENDSDM:-NO}
 ####################################
 # Specify Execution Areas
 ####################################
-export HOMEhrrr=${HOMEhrrr:-${NWROOT}/${NET}.${hrrr_ver}}
+export HOMEhrrr=${HOMEhrrr:-${PACKAGEROOT}/${NET}.${hrrr_ver}}
 export EXEChrrr=${EXEChrrr:-${HOMEhrrr}/exec}
 export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
@@ -114,10 +114,10 @@ setpdy.sh
 #export gespath=${gespath:-${COMROOT}/${NET}/${hrrr_ver}/nwges}
 
 # for WCOSS2 ops
-export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
-export COMINm1=${COMINm1:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDYm1}/${dom})}
-export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
-export gespath=${gespath:-$(compath.py ${envir}/${NET}/${hrrr_ver}/nwges}
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
+export COMINm1=${COMINm1:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDYm1}/${dom}}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
+export gespath=${gespath:-$(compath.py ${envir}/${NET}/${hrrr_ver})/nwges}
 
 if [ "$cyc" -lt 04 ]; then
 COMIN4=${COMIN4:-${COMINm1}}

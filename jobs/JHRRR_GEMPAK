@@ -59,8 +59,8 @@ setpdy.sh
 #export COMOUT=${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}/gempak
 
 # for WCOSS2 ops
-export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
-export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}/gempak)}
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}/gempak}
 
 if [ ! -f $COMOUT ] ; then
   mkdir -p -m 775 $COMOUT
@@ -68,7 +68,7 @@ fi
 
 env
 
-export HOMEhrrr=${HOMEhrrr:-${NWROOT}/${NET}.${hrrr_ver}}
+export HOMEhrrr=${HOMEhrrr:-${PACKAGEROOT}/${NET}.${hrrr_ver}}
 export SCRIPTShrrr=${SCRIPTShrrr:-$HOMEhrrr/scripts/${dom}}
 export FIXgem=${GEMPAKhrrr:-$HOMEhrrr/gempak/fix}
 

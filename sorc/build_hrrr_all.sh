@@ -33,8 +33,7 @@ export BUILD_hrrr_wrfbufr_alaska=yes
 export BUILD_hrrr_stnmlist=yes
 export BUILD_hrrr_smartinit=yes
 
-module purge
-module load envvar/1.0
+module reset
 
 module use $BASE/../modulefiles
 source $BASE/../modulefiles/HRRR/v4.0.0

@@ -64,7 +64,7 @@ export SENDDBN=${SENDDBN:-YES}
 ####################################
 # Specify Execution Areas
 ####################################
-export HOMEhrrr=${HOMEhrrr:-${NWROOT}/${NET}.${hrrr_ver}}
+export HOMEhrrr=${HOMEhrrr:-${PACKAGEROOT}/${NET}.${hrrr_ver}}
 export EXEChrrr=${EXEChrrr:-${HOMEhrrr}/exec}
 export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
@@ -87,9 +87,9 @@ setpdy.sh
 #export COMOUT=${COMOUT:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
 
 # for WCOSS2 ops
-export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
-export COMINm1=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDYm1}/${dom})}
-export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
+export COMINm1=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDYm1}/${dom}}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
 
 mkdir -m 775 -p $COMOUT 
 

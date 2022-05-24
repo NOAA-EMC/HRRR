@@ -310,8 +310,6 @@ reorder_ranks=grid_order # grid_order or NO
 mpich_tuning=cb_nodes # cb_nodes or NO
 
 # Distribution of compute nodes in grid:
-#nnode_x=8
-#nnode_y=16
 nnode_x=8
 nnode_y=16
 

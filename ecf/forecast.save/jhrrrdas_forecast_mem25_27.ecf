@@ -1,0 +1,69 @@
+#PBS -N hrrrdas_forecast_mem25_27_%CYC%
+#PBS -j oe
+#PBS -q %QUEUE%
+#PBS -S /bin/bash
+#PBS -l walltime=01:10:00
+#PBS -A %PROJ%-%PROJENVIR%
+#PBS -l place=vscatter,select=6:ncpus=128:mem=500GB
+#PBS -l debug=true
+
+model=hrrr
+%include <head.h>
+%include <envir-p1.h>
+
+# EXPORT list here
+
+set -x
+
+export cyc=%CYC%
+export dom=%DOMAIN%
+export group_name=meso
+export ensmem=%ENSMEM%
+export ENSGRP=%ENSGRP:1%
+
+let ensbeg=($ENSGRP-1)*3+1 
+let ensend=$ensbeg+2
+export ENSBEG=${ENSBEG:-$ensbeg}
+export ENSEND=${ENSEND:-$ensend}
+export HRRRDAS_CONTINUE_FCST=%HRRRDAS_CONTINUE_FCST:NO%
+
+export OMP_STACKSIZE=500M
+export OMP_NUM_THREADS=2
+
+module load envvar/${envvar_ver}
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load hdf5/${hdf5_ver}
+module load netcdf/${netcdf_ver}
+module load pnetcdf/${pnetcdf_ver}
+module load util_shared/${util_shared_ver}
+module load cray-pals/${cray_pals_ver}
+module load gsl/${gsl_ver}
+module load udunits/${udunits_ver}
+module load nco/${nco_ver}
+module list
+ 
+# CALL executable job script here
+$HOMEhrrr/jobs/JHRRR_FORECAST
+
+if [ $? -ne 0 ]; then
+  ecflow_client --abort
+  exit
+fi
+
+%include <tail.h>
+%manual
+##########################################################################
+# Purpose: to run the free forecast for the Hi-Resolution Rapid Refresh model
+##########################################################################
+
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+
+# include manual page below
+%end

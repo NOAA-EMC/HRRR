@@ -1,32 +1,39 @@
-#BSUB -J %E%hrrr_prep_radar_16_%DOMAIN%_%CYC%
-#BSUB -o /%COM%/output/%ENVIR%/today/hrrr_prep_radar_16_%DOMAIN%_%CYC%.o%J
-#BSUB -e /%COM%/output/%ENVIR%/today/hrrr_prep_radar_16_%DOMAIN%_%CYC%.o%J
-#BSUB -cwd /tmp
-#BSUB -W 00:15
-#BSUB -P %PROJ%
-#BSUB -q %QUEUE% 
-#BSUB -L /bin/sh
-#BSUB -M 1800
-#BSUB -extsched 'CRAYLINUX[]' -R '1*{select[craylinux && !vnode]} + 36*{select[craylinux && vnode]span[ptile=24] cu[type=cabinet]}' rusage[mem=1800]
+#PBS -N hrrr_prep_radar_16_%DOMAIN%_%CYC%
+#PBS -j oe
+#PBS -l walltime=00:15:00
+#PBS -A %PROJ%-%PROJENVIR%
+#PBS -q %QUEUE% 
+#PBS -S /bin/bash
+#PBS -l select=1:ncpus=36:mem=28GB
+#PBS -l debug=true
 
+model=hrrr
 %include <head.h>
-%include <envir-xc40.h>
-export model=hrrr
-%include <model_ver.h>
+%include <envir-p1.h>
 set -x
 
 # EXPORT list here
-
-#export MP_HOSTFILE=$LSB_DJOB_HOSTFILE
-#export MP_PROCS=4
+# Set MPI options
+export OMP_NUM_THREADS=1
+export MP_TASK_AFFINITY=core:1
+export KMP_AFFINITY=disabled
+export MP_MPILIB=mpich2
 
 export cyc=%CYC%
 export dom=%DOMAIN%
 export subhtime=16
 
-export KMP_AFFINITY=disabled
-export OMP_NUM_THREADS=1
-
+module load envvar/${envvar_ver}
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load hdf5/${hdf5_ver}
+module load netcdf/${netcdf_ver}
+module load pnetcdf/${pnetcdf_ver}
+module load util_shared/${util_shared_ver}
+module load cray-pals/${cray_pals_ver}
+ 
 # CALL executable job script here
 $HOMEhrrr/jobs/JHRRR_PREP_RADAR
 

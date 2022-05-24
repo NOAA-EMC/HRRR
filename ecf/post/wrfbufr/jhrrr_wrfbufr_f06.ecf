@@ -1,18 +1,15 @@
-#BSUB -J %E%hrrr_wrfbufr_f06_%DOMAIN%_%CYC%
-#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_wrfbufr_f06_%DOMAIN%_%CYC%.o%J
-#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_wrfbufr_f06_%DOMAIN%_%CYC%.o%J
-#BSUB -cwd /tmp
-#BSUB -q %QUEUE%
-#BSUB -L /bin/sh
-#BSUB -W 00:15
-#BSUB -P %PROJ%
-#BSUB -M 1800
-#BSUB -extsched 'CRAYLINUX[]' -R '1*{select[craylinux && !vnode]} + 1*{select[craylinux && vnode]span[ptile=1] cu[type=cabinet]}' rusage[mem=1800]
+#PBS -N hrrr_wrfbufr_f06_%DOMAIN%_%CYC%
+#PBS -j oe
+#PBS -q %QUEUE%
+#PBS -S /bin/bash
+#PBS -l walltime=00:15:00
+#PBS -A %PROJ%-%PROJENVIR%
+#PBS -l select=1:ncpus=1:mem=500G
+#PBS -l debug=true
 
+model=hrrr
 %include <head.h>
-%include <envir-xc40.h>
-export model=hrrr
-%include <model_ver.h>
+%include <envir-p1.h>
 
 # EXPORT list here
 
@@ -22,14 +19,20 @@ export cyc=%CYC%
 export fhr=06
 export dom=%DOMAIN%
 
-module load grib_util/${grib_util_ver}
-module load util_shared/${util_shared_ver}
-
-export KMP_AFFINITY=disabled
 export OMP_NUM_THREADS=1
-unset MPICH_RANK_REORDER_METHOD
 
-
+module load envvar/${envvar_ver}
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load hdf5/${hdf5_ver}
+module load netcdf/${netcdf_ver}
+module load pnetcdf/${pnetcdf_ver}
+module load util_shared/${util_shared_ver}
+module load cray-pals/${cray_pals_ver}
+module list
+ 
 # CALL executable job script here
 $HOMEhrrr/jobs/JHRRR_WRFBUFR
 

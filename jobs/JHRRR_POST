@@ -38,7 +38,7 @@ if [ "$RUN_ENVIR" != nco ]      ### For Developers, "group_name" is passed from 
 then
   group_name=${group_name:-meso}
   package_name=${package_name:-hrrr}
-#  . /${group_name}/save/${LOGNAME}/${package_name}${NWROOT}/parm/${package_name}_para_config
+#  . /${group_name}/save/${LOGNAME}/${package_name}${PACKAGEROOT}/parm/${package_name}_para_config
   export userid=${userid:-$LOGNAME}
 fi
 
@@ -74,14 +74,15 @@ export ALERT_EXT=${ALERT_EXT:-}
 ####################################
 # Specify Execution Areas
 ####################################
-export HOMEhrrr=${HOMEhrrr:-${NWROOT}/${NET}.${hrrr_ver}}
+export HOMEhrrr=${HOMEhrrr:-${PACKAGEROOT}/${NET}.${hrrr_ver}}
 export EXEChrrr=${EXEChrrr:-${HOMEhrrr}/exec}
 export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
 export USHhrrr=${USHhrrr:-${HOMEhrrr}/ush/${dom}}
 export FIXgem=${FIXgem:-${HOMEhrrr}/gempak/fix}
 
-export FIXcrtm=${FIXcrtm:-${HOMEhrrr}/fix/crtm_v${crtm_ver}_coefficients}
+#export FIXcrtm=${FIXcrtm:-${HOMEhrrr}/fix/crtm_v${crtm_ver}_coefficients}
+export FIXcrtm=${FIXcrtm:-${CRTM_FIX:?}}
 
 ###########################################
 # Run setpdy and initialize PDY variables
@@ -100,9 +101,9 @@ setpdy.sh
 #export GESROOT=${GESROOT:-${COMROOT}/${NET}/${hrrr_ver}/nwges}
 
 # for WCOSS2 ops
-export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
-export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
-export GESROOT=${GESROOT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/nwges)}
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
+export GESROOT=${GESROOT:-$(compath.py ${envir}/${NET}/${hrrr_ver})/nwges}
 
 export COMNAWP=${COMNAWP:-${COMOUT}/gempak}
 export WMO=${WMO:-${COMOUT}/wmo}

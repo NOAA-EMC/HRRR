@@ -19,11 +19,11 @@ export C_COMP_MP=cc
 export C_COMP_MPI=cc
 
 export BASE=`pwd`
-source $BASE/../../versions/build.ver
+# source $BASE/../../versions/build.ver
+source $BASE/../versions/build.ver
 
-module purge
+module reset
 
-module load envvar/${envvar_ver}
 module load PrgEnv-intel/${PrgEnv_intel_ver}
 module load craype/${craype_ver}
 module load intel/${intel_ver}
@@ -31,7 +31,6 @@ module load cray-mpich/${cray_mpich_ver}
 module load hdf5/${hdf5_ver}
 module load netcdf/${netcdf_ver}
 module load pnetcdf/${pnetcdf_ver}
-module load prod_util/${prod_util_ver}
 module load cray-pals/${cray_pals_ver}
 
 module load ip/${ip_ver}

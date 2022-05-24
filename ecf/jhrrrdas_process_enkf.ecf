@@ -1,18 +1,15 @@
-#BSUB -J %E%hrrrdas_process_enkf_%CYC%
-#BSUB -o  /%COM%/output/%ENVIR%/today/hrrrdas_process_enkf_%CYC%.o%J
-#BSUB -e  /%COM%/output/%ENVIR%/today/hrrrdas_process_enkf_%CYC%.o%J
-#BSUB -cwd /tmp
-#BSUB -L /bin/sh
-#BSUB -W 00:25
-#BSUB -q %QUEUE%
-#BSUB -P %PROJ%
-#BSUB -M 1800
-#BSUB -extsched 'CRAYLINUX[]' -R '1*{select[craylinux && !vnode]} + 1728*{select[craylinux && vnode]span[ptile=24] cu[type=cabinet]}' rusage[mem=1800]
+#PBS -N hrrrdas_process_enkf_%CYC%
+#PBS -j oe
+#PBS -S /bin/bash
+#PBS -l walltime=00:25:00
+#PBS -q %QUEUE%
+#PBS -A %PROJ%-%PROJENVIR%
+#PBS -l place=exclhost:vscatter,select=5:ncpus=128
+#PBS -l debug=true
 
+model=hrrr
 %include <head.h>
-%include <envir-xc40.h>
-export model=hrrr
-%include <model_ver.h>
+%include <envir-p1.h>
 
 # EXPORT list here
 
@@ -20,9 +17,20 @@ export cyc=%CYC%
 export dom=%DOMAIN%
 export group_name=meso
 
-export KMP_AFFINITY=disabled
 export OMP_NUM_THREADS=1
 
+module load envvar/${envvar_ver}
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load hdf5/${hdf5_ver}
+module load netcdf/${netcdf_ver}
+module load pnetcdf/${pnetcdf_ver}
+module load util_shared/${util_shared_ver}
+module load cray-pals/${cray_pals_ver}
+module list
+ 
 # CALL executable job script here
 $HOMEhrrr/jobs/JHRRRDAS_PROCESS_ENKF
 

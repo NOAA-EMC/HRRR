@@ -1,24 +1,34 @@
-#BSUB -J %E%hrrr_rsync_%CYC%
-#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_rsync_%CYC%.o%J
-#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_rsync_%CYC%.o%J
-#BSUB -cwd /tmp
-#BSUB -q %QUEUE%_shared
-#BSUB -L /bin/sh
-#BSUB -P %PROJ%
-#BSUB -W 02:00
-#BSUB -M 1800
+#PBS -N hrrr_rsync_%CYC%
+#PBS -j oe
+#PBS -q %QUEUE%_shared
+#PBS -S /bin/bash
+#PBS -A %PROJ%-%PROJENVIR%
+#PBS -l walltime=02:00:00
+#PBS -l select=8:ncpus=128
+#PBS -l debug=true
 
+model=hrrr
 %include <head.h>
-%include <envir-xc40.h>
+%include <envir-p1.h>
 
 # EXPORT list here
 
 set -x
-export model=hrrr
-%include <model_ver.h>
 export cyc=%CYC%
 export dom=%DOMAIN%
 
+module load envvar/${envvar_ver}
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load hdf5/${hdf5_ver}
+module load netcdf/${netcdf_ver}
+module load pnetcdf/${pnetcdf_ver}
+module load util_shared/${util_shared_ver}
+module load cray-pals/${cray_pals_ver}
+module list
+ 
 # CALL executable job script here
 $HOMEhrrr/jobs/JHRRR_RSYNC
 

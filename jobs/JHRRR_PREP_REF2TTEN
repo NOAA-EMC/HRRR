@@ -60,7 +60,7 @@ export SENDDBN=${SENDDBN:-YES}
 ####################################
 # Specify Execution Areas
 ####################################
-export HOMEhrrr=${HOMEhrrr:-${NWROOT}/${NET}.${hrrr_ver}}
+export HOMEhrrr=${HOMEhrrr:-${PACKAGEROOT}/${NET}.${hrrr_ver}}
 export SCRIPTShrrr=${SCRIPTShrrr:-$HOMEhrrr/scripts}
 export FIXhrrr=${FIXhrrr:-$HOMEhrrr/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-$HOMEhrrr/parm/${dom}}
@@ -105,12 +105,12 @@ export DATA_RADAR=${DATA_RADAR:-${DATAROOT}/hrrr_${dom}_prep_radar_${envir}_${cy
 #export COMOUTm1=${COMOUTm1:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
 
 # for WCOSS2 ops
-export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
-export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
 if [ "$cyc" = 00 ]; then
-export COMOUTm1=${COMOUTm1:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDYm1}/${dom})}
+export COMOUTm1=${COMOUTm1:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDYm1}/${dom}}
 fi
-export COMOUTm1=${COMOUTm1:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export COMOUTm1=${COMOUTm1:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
 
 mkdir -m 775 -p $COMOUT
 
@@ -120,7 +120,7 @@ mkdir -m 775 -p $COMOUT
 # for testing with canned data
 #export GESROOT=${GESROOT:-${COMROOT}/${NET}/${hrrr_ver}/nwges}
 # for WCOSS2 ops
-export GESROOT=${GESROOT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/nwges)}
+export GESROOT=${GESROOT:-$(compath.py ${envir}/${NET}/${hrrr_ver})/nwges}
 
 export HRRRGES_SFC=${HRRRGES_SFC:-$GESROOT/hrrrges_sfc/${dom}}
 

@@ -1,17 +1,15 @@
-#BSUB -J %E%hrrr_postsnd_%DOMAIN%_%CYC%
-#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_postsnd_%DOMAIN%_%CYC%.o%J
-#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_postsnd_%DOMAIN%_%CYC%.o%J
-#BSUB -cwd /tmp
-#BSUB -q %QUEUE%_shared
-#BSUB -L /bin/sh
-#BSUB -W 00:25
-#BSUB -P %PROJ%
-#BSUB -M 1800
+#PBS -N hrrr_postsnd_%DOMAIN%_%CYC%
+#PBS -j oe
+#PBS -q %QUEUE%
+#PBS -S /bin/bash
+#PBS -l walltime=00:25:00
+#PBS -A %PROJ%-%PROJENVIR%
+#PBS -l select=1:ncpus=1:mem=10GB
+#PBS -l debug=true
 
+model=hrrr
 %include <head.h>
-%include <envir-xc40.h>
-export model=hrrr
-%include <model_ver.h>
+%include <envir-p1.h>
 
 # EXPORT list here
 
@@ -20,11 +18,22 @@ set -x
 export cyc=%CYC%
 export dom=%DOMAIN%
 
-module load gempak/${gempak_ver}
-export KMP_AFFINITY=disabled
 export OMP_NUM_THREADS=1
-unset MPICH_RANK_REDORDER_METHOD
+# JY - remove it?  export tmmark=tm00
 
+module load envvar/${envvar_ver}
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load hdf5/${hdf5_ver}
+module load netcdf/${netcdf_ver}
+module load pnetcdf/${pnetcdf_ver}
+module load util_shared/${util_shared_ver}
+module load cray-pals/${cray_pals_ver}
+module load gempak/${gempak_ver}
+module list
+ 
 # CALL executable job script here
 $HOMEhrrr/jobs/JHRRR_POSTSND
 

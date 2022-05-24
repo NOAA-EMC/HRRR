@@ -60,7 +60,7 @@ export SENDDBN=${SENDDBN:-YES}
 ####################################
 # Specify Execution Areas
 ####################################
-export HOMEhrrr=${HOMEhrrr:-${NWROOT}/${NET}.${hrrr_ver}}
+export HOMEhrrr=${HOMEhrrr:-${PACKAGEROOT}/${NET}.${hrrr_ver}}
 export SCRIPTShrrr=${SCRIPTShrrr:-$HOMEhrrr/scripts}
 export FIXhrrr=${FIXhrrr:-$HOMEhrrr/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-$HOMEhrrr/parm/${dom}}
@@ -83,7 +83,7 @@ else
   export RAP_RUN=rap
 fi
 
-export COMINnasalarc=${COMINnasalarc:-$(compath.py $envir/rap/$rap_ver/${RAP_RUN}.${PDY})}
+export COMINnasalarc=${COMINnasalarc:-$(compath.py $envir/obsproc/$obsproc_ver/${RAP_RUN}.${PDY})}
 
 ##############################################
 # Define COM directories
@@ -95,8 +95,8 @@ export COMINnasalarc=${COMINnasalarc:-$(compath.py $envir/rap/$rap_ver/${RAP_RUN
 #export COMOUT=${COMOUT:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
 
 # for WCOSS2 ops
-export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
-export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
 
 mkdir -m 775 -p $COMOUT
 env

@@ -3,6 +3,7 @@ set -xa
 export MP_IOAGENT_CNT=all
 export MP_IO_BUFFER_SIZE=8M
 
+export LC_TIME=C #XXW: Temporary added for cactus date format issue
 ########################################
 # HRRR Preliminary data setup step
 ########################################
@@ -37,7 +38,7 @@ if [ "$RUN_ENVIR" != nco ]      ### For Developers, "group_name" is passed from 
 then
   group_name=${group_name:-meso}
   package_name=${package_name:-hrrr}
-#  . /${group_name}/save/${LOGNAME}/${package_name}${NWROOT}/parm/${package_name}_para_config
+#  . /${group_name}/save/${LOGNAME}/${package_name}${PACKAGEROOT}/parm/${package_name}_para_config
   export userid=${userid:-$LOGNAME}
 fi
 
@@ -92,7 +93,7 @@ export SENDDBN=${SENDDBN:-YES}
 ####################################
 # Specify Execution Areas
 ####################################
-export HOMEhrrr=${HOMEhrrr:-${NWROOT}/${NET}.${hrrr_ver}}
+export HOMEhrrr=${HOMEhrrr:-${PACKAGEROOT}/${NET}.${hrrr_ver}}
 export EXEChrrr=${EXEChrrr:-${HOMEhrrr}/exec}
 export FIXhrrr=${FIXhrrr:-${HOMEhrrr}/fix/${dom}}
 export PARMhrrr=${PARMhrrr:-${HOMEhrrr}/parm/${dom}}
@@ -115,9 +116,9 @@ setpdy.sh
 #export COMOUT=${COMOUT:-${COMROOT}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom}}
 
 # for WCOSS2 ops
-export COM=${COM:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY})}
-export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
-export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver}/${RUN}.${PDY}/${dom})}
+export COM=${COM:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}}
+export COMIN=${COMIN:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
+export COMOUT=${COMOUT:-$(compath.py ${envir}/${NET}/${hrrr_ver})/${RUN}.${PDY}/${dom}}
 
 export COMRAP=${COMRAP:-$(compath.py $envir/rap/$rap_ver)}
 

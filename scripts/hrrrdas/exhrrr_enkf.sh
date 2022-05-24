@@ -174,11 +174,12 @@ startmsg
 cp ${EXEChrrr}/hrrr_enkf .
 if [ $domainid -eq 01 ]; then
 #   runline="aprun -j1 -cc depth -n 60 -N 12 -d 2 ./hrrr_enkf"
-   runline="mpiexec -n 64 -ppn 64 --cpu-bind core --depth 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_enkf"
+   runline="mpiexec -n 64 -ppn 64 --cpu-bind depth --depth 2 /usr/bin/env OMP_NUM_THREADS=2 ./hrrr_enkf"
 else
 #   runline="aprun -j1 -cc depth -n 120 -N 2 ./hrrr_enkf"
 #   runline="aprun -j1 -cc depth -n 120 -N 2 -d 2 ./hrrr_enkf"
-   runline="mpiexec -n 128 -ppn 16 --cpu-bind core --depth 4 /usr/bin/env OMP_NUM_THREADS=4 ./hrrr_enkf"
+#XXW   runline="mpiexec -n 128 -ppn 16 --cpu-bind core --depth 4 /usr/bin/env OMP_NUM_THREADS=4 ./hrrr_enkf"
+   runline="mpiexec -n 128 -ppn 22 --cpu-bind depth --depth 4 /usr/bin/env OMP_NUM_THREADS=4 ./hrrr_enkf"    #Suggest by GDIT to fix Cannot place all ranks on node list error
 fi
 
 count=`ls ${COMOUT}/diag_conv_ges.${PDY}${cyc}.d${domainid}* | wc -l`

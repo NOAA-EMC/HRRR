@@ -1,18 +1,15 @@
-#BSUB -J %E%hrrr_forecast_restart_%DOMAIN%_%CYC%
-#BSUB -o  /%COM%/output/%ENVIR%/today/hrrr_forecast_restart_%DOMAIN%_%CYC%.o%J
-#BSUB -e  /%COM%/output/%ENVIR%/today/hrrr_forecast_restart_%DOMAIN%_%CYC%.o%J
-#BSUB -cwd /tmp
-#BSUB -n 2232
-#BSUB -R "span[ptile=24]"
-#BSUB -q %QUEUE%
-#BSUB -L /bin/sh
-#BSUB -W 00:50
-#BSUB -P %PROJ%
-#BSUB -a poe
-#BSUB -x
+#PBS -N hrrr_forecast_restart_%DOMAIN%_%CYC%
+#PBS -j oe
+#PBS -l select=1:ncpus=120
+#PBS -q %QUEUE%
+#PBS -S /bin/bash
+#PBS -l walltime=00:50:00
+#PBS -A %PROJ%-%PROJENVIR%
+#PBS -l debug=true
 
+model=hrrr
 %include <head.h>
-%include <envir-xc40.h>
+%include <envir-p1.h>
 
 # EXPORT list here
 
@@ -33,6 +30,18 @@ else
   exit
 fi
 
+module load envvar/${envvar_ver}
+module load PrgEnv-intel/${PrgEnv_intel_ver}
+module load craype/${craype_ver}
+module load intel/${intel_ver}
+module load cray-mpich/${cray_mpich_ver}
+module load hdf5/${hdf5_ver}
+module load netcdf/${netcdf_ver}
+module load pnetcdf/${pnetcdf_ver}
+module load util_shared/${util_shared_ver}
+module load cray-pals/${cray_pals_ver}
+module list
+ 
 # CALL executable job script here
 $NWROOT/hrrr.${hrrr_ver}/jobs/JHRRR_FORECAST_RESTART
 

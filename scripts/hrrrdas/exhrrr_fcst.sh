@@ -386,7 +386,7 @@ mv ${WRF_NAMELIST}.new ${WRF_NAMELIST}
 cp ${PARMhrrr}/hrrr_update_bc_parame.in parame.in
 startmsg
 cp ${EXEChrrr}/hrrr_update_bc .
-runline="aprun -n 1 -N 1 ./hrrr_update_bc"
+runline="./hrrr_update_bc"
 $runline >> $DATA/$pgmout 2>errfile
 export err=$?; err_chk
 
@@ -409,7 +409,7 @@ reorder_ranks=grid_order # LSF, MPICH, or NO
 # Distribution of compute nodes in grid:
 #nnode_x=6
 #nnode_y=2
-nnode_x=7
+nnode_x=5
 nnode_y=2
 
 # Distribution of MPI ranks within each compute node:
