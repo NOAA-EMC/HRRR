@@ -1,0 +1,29 @@
+Release Notes: HRRR v4.1.1
+
+v4.1.1 - released May 24, 2022
+* Fix to address an issue related to the representation of the elevation of the Great Lakes
+   * The elevation is incorrectly set to 0 in the operational HRRR and HRRRDAS
+   * The fix involves changes to two fix files - one for HRRR and one for HRRRDAS   
+
+
+* Repository Details
+   * Clone the wcoss2 branch of the HRRR GitHub repository using the following command:
+* git clone -b wcoss2 https://github.com/NOAA-EMC/HRRR.git
+   * Note: Once the HRRR is implemented on WCOSS2, the wcoss2 branch will be renamed to the develop branch.
+
+
+* fix files changed
+   * fix/conus/hrrr_geo_em.d01.nc
+   * fix/hrrrdas/hrrrdas_geo_em.d02.nc
+
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * The new fix files are located here on WCOSS2 (Cactus and Dogwood - not allowed to store fix files in GitHub repositories):
+      * /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/fix_hrrr/conus/hrrr_geo_em.d01.nc
+      * /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/fix_hrrr/hrrrdas/hrrrdas_geo_em.d02.nc
+   * The HRRRDAS geogrid file in hrrr.v4.1.1/fix/hrrrdas needs to be changed before either the 09Z or 21Z makeguess task. The 09Z makeguess job runs at 0950Z, and the 21Z makeguess job runs at 2150Z. The new HGT over the Great Lakes will be used to generate the initial files for the 09/21Z ensemble forecast, and its 1-h forecast will be used by the 11/23Z HRRR pre-forecast job.  Also, all 36 members will need to be cold started at 09Z or 21Z, so please move either the 08Z or 20Z HRRRDAS 1-h forecast files away after they are generated to force the cold start.
+   * The HRRR geogrid file in hrrr.v4.1.1/fix/conus needs to be changed before either the 11Z or 23Z pre-forecast job, depending on which HRRRDAS makeguess job used the updated HRRRDAS file. This needs to happen after the 10/22Z makeguess job but before the 11/23Z makeguess job. So a good time to update this file would be around 11Z or 23Z.
