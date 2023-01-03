@@ -156,14 +156,22 @@ then
 fi
 
 # find lightning bufr file
+export empty_file="F"
 icnt=1
 while [ $icnt -lt 40 ]
 do
-  if [ -s $COMINlight/rap.${PDY}/rap.t${cyc}z.lghtng.tm00.bufr_d ]
+  if [ -f $COMINlight/rap.${PDY}/rap.t${cyc}z.lghtng.tm00.bufr_d ]
   then
-    sleep 3
-    cpreq $COMINlight/rap.${PDY}/rap.t${cyc}z.lghtng.tm00.bufr_d ./rap.t${cyc}z.lghtng.tm00.bufr_d
-    break
+
+    if [ -s $COMINlight/rap.${PDY}/rap.t${cyc}z.lghtng.tm00.bufr_d ]
+    then
+      sleep 3
+      cpreq $COMINlight/rap.${PDY}/rap.t${cyc}z.lghtng.tm00.bufr_d ./rap.t${cyc}z.lghtng.tm00.bufr_d
+      break
+    else
+      export empty_file="T" # if file is 0b, there is an outage
+    fi
+
   elif [ -s $COMINlight/rap_e.${PDY}/rap_e.t${cyc}z.lghtng.tm00.bufr_d ]
   then
     sleep 3
@@ -172,7 +180,7 @@ do
   fi
   sleep 12
   icnt=$((icnt + 1))
-  if [ $icnt -gt 36 ]
+  if [ $icnt -gt 36 ] || [ $empty_file == T ]
   then
     echo "Warning: No bufr file found for lightning processing after 6 minutes waiting. Will skip lightning processing"
     exit 0

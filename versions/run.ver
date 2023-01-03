@@ -22,9 +22,9 @@ export hrrrdas_num_ens=36
 
 #Upstream model versions
 export rap_ver=v5.1
-export gfs_ver=v16.2
+export gfs_ver=v16.3
 export radarl2_ver=v1.2
-export obsproc_ver=v1.0
+export obsproc_ver=v1.1
 export nsst_ver=v1.2
 
 export LC_TIME=C #XXW: Temporary added for cactus date format issue 

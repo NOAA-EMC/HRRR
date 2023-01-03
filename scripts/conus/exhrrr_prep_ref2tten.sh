@@ -95,8 +95,8 @@ if [[ $counter -eq 48 ]]; then
 fi  
 
 # Update GVF with real-time data
-latestGVF=`ls ${GVF}/GVF-WKL-GLB_v2r3_npp_s*_e${PDYm2}_c${PDYm1}*.grib2`
-latestGVF2=`ls ${GVF}/GVF-WKL-GLB_v2r3_npp_s*_e${PDYm3}_c${PDYm2}*.grib2`
+latestGVF=`ls ${GVF}/GVF-WKL-GLB_v3r0_npp_s*_e${PDYm2}_c${PDYm1}*.grib2`
+latestGVF2=`ls ${GVF}/GVF-WKL-GLB_v3r0_npp_s*_e${PDYm3}_c${PDYm2}*.grib2`
 if [ -r "$latestGVF" ]; then
    cp ${EXEChrrr}/hrrr_update_gvf .
    cp ${FIXhrrr}/hrrr_gvf_VIIRS_4KM.MIN.1gd4r.new gvf_VIIRS_4KM.MIN.1gd4r.new

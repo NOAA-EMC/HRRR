@@ -211,10 +211,10 @@ end_gfs_fcst_time=${FCST_LENGTH}
 # Get a list of files in the SRCPATH directory
 echo COMINgfs ${COMINgfs}
 
-if [ -r ${COMINsst}/sst.${start_ymd}/sstoi_grb.grib2 ]; then
-  gribfiles=`ls -1 ${COMINsst}/sst.${start_ymd}/sstoi_grb `
+if [ -r ${COMINsst}/nsst.${start_ymd}/sstoi_grb.grib2 ]; then
+  gribfiles=`ls -1 ${COMINsst}/nsst.${start_ymd}/sstoi_grb `
 else
-  gribfiles=`ls -1 ${COMINsst}/sst.${preday_YYYYMMHH}/sstoi_grb `
+  gribfiles=`ls -1 ${COMINsst}/nsst.${preday_YYYYMMHH}/sstoi_grb `
   start_yyyymmdd_hhmmss=${preday_year}-${preday_month}-${preday_day}_00:00:00
   end_yyyymmdd_hhmmss=${start_yyyymmdd_hhmmss}
   YYYYMMDDHH=${preday_year}-${preday_month}-${preday_day}_00

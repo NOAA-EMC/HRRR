@@ -23,7 +23,7 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-_GESROOT_/_ENVIR_/hrrr/
+_COMROOT_/hrrr/_SHORTVER_/nwges/
 + /hrrrges_sfc/
 + /hrrrges_sfc/conus/
 + /hrrrges_sfc/conus/hrrr__PDYm1_??f00[0123]

@@ -23,7 +23,7 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-_GESROOT_/_ENVIR_/hrrr/
+_COMROOT_/hrrr/_SHORTVER_/nwges/
 + /hrrrdasges/
 + /hrrrdasges/hrrrdas_d01__PDY_????f??_mem000?
 + /hrrrdasges/hrrrdas_d01__PDY_????f??_mem001[012]
@@ -34,7 +34,7 @@ B 543000
 # This directory is a good candidate for compression
 #Z
 
-_GESROOT_/_ENVIR_/hrrr/
+_COMROOT_/hrrr/_SHORTVER_/nwges/
 + /hrrrdasges/
 + /hrrrdasges/hrrrdas_d01__PDY_????f??_mem000?
 + /hrrrdasges/hrrrdas_d01__PDY_????f??_mem001[012]
