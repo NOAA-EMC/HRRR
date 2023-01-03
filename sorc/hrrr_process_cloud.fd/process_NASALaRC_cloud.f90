@@ -41,7 +41,7 @@ program  process_NASALaRC_cloud
   integer :: npe, mype,ierror
 !SATID
 !  integer, parameter :: satidgoeswest=259  ! GOES 15  Stopped after March 2nd, 2020
-  integer, parameter :: satidgoeswest=271  ! GOES 17
+  integer, parameter :: satidgoeswest=272  ! GOES 18
   integer, parameter :: satidgoeseast=270  ! GOES 16
   real     :: rad2deg = 180.0/3.1415926
   integer,parameter  :: boxMAX=10
