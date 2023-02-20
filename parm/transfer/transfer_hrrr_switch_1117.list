@@ -23,7 +23,7 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-com/hrrr/_ENVIR_/hrrr._PDY_/
+_COMROOT_/hrrr/_SHORTVER_/hrrr._PDY_/
 + /conus/
 + /conus/hrrr.t05z.wrfbdy
 + /conus/hrrr.t11z.wrfbdy
@@ -36,7 +36,7 @@ com/hrrr/_ENVIR_/hrrr._PDY_/
 
 B 1040000
 
-com/hrrr/_ENVIR_/hrrr._PDYm1_/
+_COMROOT_/hrrr/_SHORTVER_/hrrr._PDYm1_/
 + /conus/
 + /conus/hrrr.t23z.wrfbdy
 + /alaska/
@@ -45,7 +45,7 @@ com/hrrr/_ENVIR_/hrrr._PDYm1_/
 
 B 1040000
 
-_GESROOT_/_ENVIR_/hrrr/
+_COMROOT_/hrrr/_SHORTVER_/nwges/
 + /hrrrges_sfc/
 + /hrrrges_sfc/conus/
 + /hrrrges_sfc/conus/hrrr__PDY_05f00[1]

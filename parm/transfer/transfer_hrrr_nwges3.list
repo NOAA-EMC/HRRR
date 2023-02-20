@@ -23,7 +23,7 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-_GESROOT_/_ENVIR_/hrrr/
+_COMROOT_/hrrr/_SHORTVER_/nwges/
 + /hrrrdasensp
 + /hrrrdasensp/enspert_d0?__PDY_????
 + /hrrrdasensp/enspert_d0?__PDY_????/*

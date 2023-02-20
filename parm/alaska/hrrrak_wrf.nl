@@ -49,7 +49,7 @@
 /
 
  &domains
- time_step                           = 20, 
+ time_step                           = 18, 
  time_step_dfi                       = 20,
  time_step_fract_num                 = 0,
  time_step_fract_den                 = 1,
@@ -95,9 +95,9 @@
  step_to_output_time                 = .true.
  target_cfl                          = 1.2
  max_step_increase_pct               = 5
- starting_time_step                  = 20
- max_time_step                       = 20
- min_time_step                       = 20
+ starting_time_step                  = 18
+ max_time_step                       = 18
+ min_time_step                       = 18
  nproc_x                             = 14 ! will be replaced by script
  nproc_y                             = 72 ! will be replaced by script
  numtiles                            = 1 ! will be replaced by script

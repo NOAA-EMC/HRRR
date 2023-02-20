@@ -1,0 +1,30 @@
+Release Notes: HRRR v4.1.4
+
+v4.1.4 - released January 3, 2022
+* Code changes required to use the new GOES 18 and GVF-WKL-GLB data 
+
+
+* Repository Details
+   * Clone the hrrr.v4.1.4 branch of the HRRR GitHub repository using the following command (contains v4.1.4 release notes):
+* git clone -b hrrr.v4.1.4 https://github.com/NOAA-EMC/HRRR.git
+
+
+* fix files changed
+   * fix/alaska/hrrrak_nam_regional_convinfo
+   * fix/conus/hrrr_nam_regional_convinfo
+   * fix/hrrrdas/hrrrdas_regional_convinfo.15km.txt
+   * fix/hrrrdas/hrrrdas_regional_convinfo.3km.txt
+* scripts files changed
+   * scripts/alaska/exhrrr_prep_ref2tten.sh
+   * scripts/conus/exhrrr_prep_ref2tten.sh
+* sorc files changed
+   * sorc/hrrr_process_cloud.fd/process_NASALaRC_cloud.f90
+
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the hrrr.v4.1.4 branch from GitHub and recompile the hrrr_process_cloud.fd source code
+   * Retrieve the new fix files from this directory on Cactus (not allowed to store fix files in GitHub repository): /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.4/fix

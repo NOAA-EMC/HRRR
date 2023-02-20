@@ -23,7 +23,7 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transferred.
 
-com/hrrr/_ENVIR_/hrrr._PDY_/
+_COMROOT_/hrrr/_SHORTVER_/hrrr._PDY_/
 + /conus/
 + /conus/hrrr.t??z.NSSLRefInGSI.bufr
 + /conus/hrrr.t??z.NASALaRCCloudInGSI.bufr
@@ -39,7 +39,7 @@ com/hrrr/_ENVIR_/hrrr._PDY_/
 W
 B 1040000
 
-com/hrrr/_ENVIR_/hrrr._PDYm1_/
+_COMROOT_/hrrr/_SHORTVER_/hrrr._PDYm1_/
 + /conus/
 + /conus/hrrr.t??z.NSSLRefInGSI.bufr
 + /conus/hrrr.t??z.NASALaRCCloudInGSI.bufr
