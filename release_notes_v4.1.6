@@ -1,8 +1,8 @@
 Release Notes: HRRR v4.1.6
 
 v4.1.6 - released February 21, 2023
-* Script changes required to use the new VIIRS fire data
-   * The format of the VIIRS fire data remains the same, but the ex-script needs to be modified in order to read in the correct files  
+* Script changes required to use the new naming convention for the VIIRS fire data input
+   * The format and content of the VIIRS fire data remains the same, but the name of the file was changed.  Therefore, the ex-script needs to be modified in order to read in the correct file names.
 
 
 * Repository Details
@@ -21,3 +21,4 @@ v4.1.6 - released February 21, 2023
 
 * implementation instructions
    * Retrieve the hrrr.v4.1.6 branch from GitHub and update the exhrrr_prep_smoke.sh scripts
+   * Run a single prep_smoke job for CONUS and Alaska.  A full cycle test is not needed.
