@@ -345,6 +345,9 @@
               THUNDER(I,J) = .FALSE.
             ENDIF
           ENDIF
+
+          ! Limit LCL to prevent out-of-bounds accesses later
+          LCL(I,J) = max(min(LCL(I,J),LM-1),1)
         ENDDO
       ENDDO
 !-----------------------------------------------------------------------
@@ -425,6 +428,10 @@
           ENDIF
         ENDDO
       ENDDO
+!
+!Ensure later calculations do not access LM+1
+!
+      LEND=MIN(LEND,LM-1)
 !
       DO L=LBEG,LEND
 

@@ -1,0 +1,24 @@
+Release Notes: HRRR v4.1.7
+
+v4.1.7 - released May 25, 2023
+* Source code changes to fix an issue with how the HRRR handles smoke concentrations on the boundaries
+
+
+* Repository Details
+   * Clone the hrrr.v4.1.7 branch of the RAP GitHub repository using the following command (contains v4.1.7 release notes):
+* git clone -b hrrr.v4.1.7 https://github.com/NOAA-EMC/HRRR.git
+
+
+* sorc files changed
+   * sorc/hrrr_wrfarw.fd/WRFV3.9/configure.wrf.useme
+   * sorc/hrrr_wrfarw.fd/WRFV3.9/configure.wrf.wcoss_hrrrdas
+   * sorc/hrrr_wrfarw.fd/WRFV3.9/main/real_em.F
+
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the hrrr.v4.1.7 branch from GitHub
+   * Recompile the WRF source code

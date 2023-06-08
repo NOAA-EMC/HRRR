@@ -338,7 +338,7 @@ jday:            IF ( MOD(yy,4)==0 )  THEN      ! leap year
 
             cont(x,y)    = cont(x,y)     + 1            ! fire counts falling in the domain of interest
             ac_frp(x,y)  = ac_frp(x,y)   + frp_v        ! Here we add all FRP points within 15 min time window and 3x3km grid box
-            ac_parea(x,y)= ac_parea(x,y) + parea        ! We add satellite pixels
+            ac_parea(x,y)= 0. ! ac_parea(x,y) + parea   ! We add satellite pixels
             ac_fsize(x,y)= ac_fsize(x,y) + fsize_v      ! We sum up the estimated fire/burnt areas
             ac_day(x,y)  = juldaydec
 

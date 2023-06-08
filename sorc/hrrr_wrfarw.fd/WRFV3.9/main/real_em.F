@@ -953,6 +953,7 @@ real::t1,t2
                           grid%c1h, grid%c2h, grid%c1h, grid%c2h, &
                           ids, ide, jds, jde, kds, kde, ims, ime, jms, jme, kms, kme, ips, ipe, jps, jpe, kps, kpe )
          ENDIF
+         smkbdy3dtemp1=1.e+9*smkbdy3dtemp1
 #endif
 
       END IF
@@ -1205,6 +1206,7 @@ real::t1,t2
                           grid%c1h, grid%c2h, grid%c1h, grid%c2h, &
                           ids, ide, jds, jde, kds, kde, ims, ime, jms, jme, kms, kme, ips, ipe, jps, jpe, kps, kpe )
          END IF
+         smkbdy3dtemp2=1.e+9* smkbdy3dtemp2
 #endif
 
       END IF

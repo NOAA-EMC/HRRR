@@ -1,0 +1,32 @@
+Release Notes: HRRR v4.1.6
+
+v4.1.6 - released April 3, 2023
+* Script and source code changes required to use the new naming convention for the VIIRS fire data input
+   * The format and content of the VIIRS fire data remains the same, but the name of the file was changed.  Therefore, the ex-scripts and source code need to be modified in order to read in the correct file names.
+
+
+* Repository Details
+   * Clone the hrrr.v4.1.6 branch of the RAP GitHub repository using the following command (contains v4.1.6 release notes):
+* git clone -b hrrr.v4.1.6 https://github.com/NOAA-EMC/HRRR.git
+
+
+* scripts files changed
+   * scripts/alaska/exhrrr_prep_smoke.sh
+   * scripts/conus/exhrrr_prep_smoke.sh
+* sorc files changed
+   * sorc/hrrr_prep_smoke.fd/process-obs/HRRR-AK-Smoke/src/proc_J01_FRP_HRRR_AK.f90
+   * sorc/hrrr_prep_smoke.fd/process-obs/HRRR-AK-Smoke/src/proc_NPP_FRP_HRRR_AK_v5.f90
+   * sorc/hrrr_prep_smoke.fd/process-obs/HRRR-Smoke/src/proc_J01_FRP_HRRR_v3.f90
+   * sorc/hrrr_prep_smoke.fd/process-obs/HRRR-Smoke/src/proc_NPP_FRP_HRRR_v3.f90
+   * sorc/hrrr_prep_smoke.fd/process-obs/RAP-Smoke/src/proc_J01_FRP_RAP_v3.f90
+   * sorc/hrrr_prep_smoke.fd/process-obs/RAP-Smoke/src/proc_NPP_FRP_RAP_v3.f90
+
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the hrrr.v4.1.6 branch from GitHub
+   * Re-compile the hrrr_prep_smoke codes and update the exhrrr_prep_smoke.sh scripts
+   * Run a single prep_smoke job for CONUS and Alaska.  A full cycle test is not needed.

@@ -191,28 +191,28 @@ for ihour in $( seq 0 23 ) ; do
         # NPP files for this hour which are at least 120 bytes in size:
         dir=$( decide_dir "$DCOM_VIIRS_NPP" "${OLD_DAY}/af_viirs" )
         find "$dir"  -maxdepth 1 -mindepth 1 \
-            -name "AF_v1r2_npp_s${OLD_DAY}${hh}*.txt" -a -size +120c \
+            -name "AF-Iband_v1r1_npp_s${OLD_DAY}${hh}*.txt" -a -size +120c \
             -printf "./process_npp '%p' '$OLD_JULIAN' > '%f.log' 2>&1"'\n' \
             >> command_file
 
         # J01 files for this hour which are at least 120 bytes in size:
         dir=$( decide_dir "$DCOM_VIIRS_J01" "${OLD_DAY}/af_viirs/" )
         find "$dir"  -maxdepth 1 -mindepth 1 \
-            -name "AF_v1r2_j01_s${OLD_DAY}${hh}*.txt" -a -size +120c \
+            -name "AF-Iband_v1r1_j01_s${OLD_DAY}${hh}*.txt" -a -size +120c \
             -printf "./process_j01 '%p' '$OLD_JULIAN' > '%f.log' 2>&1"'\n' \
             >> command_file
     else
         # NPP files for this hour which are at least 120 bytes in size:
         dir=$( decide_dir "$DCOM_VIIRS_NPP" "${YYYYMMDD}/af_viirs/" )
         find "$dir" -maxdepth 1 -mindepth 1 \
-            -name "AF_v1r2_npp_s${YYYYMMDD}${hh}*.txt" -a -size +120c \
+            -name "AF-Iband_v1r1_npp_s${YYYYMMDD}${hh}*.txt" -a -size +120c \
             -printf "./process_npp '%p' '$START_JULIAN' > '%f.log' 2>&1"'\n' \
             >> command_file
 
         # J01 files for this hour which are at least 120 bytes in size:
         dir=$( decide_dir "$DCOM_VIIRS_J01" "${YYYYMMDD}/af_viirs" )
         find $dir -maxdepth 1 -mindepth 1 \
-            -name "AF_v1r2_j01_s${YYYYMMDD}${hh}*.txt" -a -size +120c \
+            -name "AF-Iband_v1r1_j01_s${YYYYMMDD}${hh}*.txt" -a -size +120c \
             -printf "./process_j01 '%p' '$START_JULIAN' > '%f.log' 2>&1"'\n' \
             >> command_file
     fi
@@ -225,7 +225,7 @@ if [[ -s ./command_file ]] ; then
     $CAT > process_npp <<EOF
 #! /bin/ksh
 set -xue # NOTE: set -e is necessary here
-hour=\$(basename \$1 | cut -c22-25)
+hour=\$(basename \$1 | cut -c28-31)
 outfile=\$2\${hour}_vii3km.txt
 local=\$( basename \$1 )
 cp "\$1" "\$local"
@@ -240,7 +240,7 @@ EOF
     cat > process_j01 <<EOF
 #! /bin/ksh
 set -xue # NOTE: set -e is necessary here
-hour=\$(basename \$1 | cut -c22-25)
+hour=\$(basename \$1 | cut -c28-31)
 outfile=\$2\${hour}_noa3km.txt
 local=\$( basename \$1 )
 cp "\$1" "\$local"
