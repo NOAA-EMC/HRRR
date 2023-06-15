@@ -1,0 +1,35 @@
+Release Notes: HRRR v4.1.8
+
+v4.1.8 - released June 15, 2023
+* Source code changes to fix an issue with the FVCOM processing.
+   * There is excessive land over the Great Lakes related to the addition or removal of ice cover from FVCOM data.  The land mask will now be correctly updated in the FVCOM processing and post-processing codes to reflect changes in ice concentration.
+   * Included with these changes is a fix to the serial WRF code build.
+
+
+* Repository Details
+   * Clone the hrrr.v4.1.8 branch of the HRRR GitHub repository using the following command (contains v4.1.8 release notes):
+* git clone -b hrrr.v4.1.8 https://github.com/NOAA-EMC/HRRR.git
+
+
+* sorc files changed
+   * sorc/hrrr_process_fvcom.fd/process_FVCOM.f90
+   * sorc/hrrr_wrfarw.fd/WRFV3.9/configure.wrf.serial
+   * sorc/hrrr_wrfpost.fd/CALRAD_WCLOUD_newcrtm.f
+   * sorc/hrrr_wrfpost.fd/FIXED.f
+
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the hrrr.v4.1.8 branch from GitHub
+   * Recompile the process_fvcom and wrfpost source codes.  Note that for compiling the wrfpost source code, the following GTG files are not stored in the public GitHub repository and they can be retrieved from the current operational package:
+      * sorc/hrrr_wrfpost.fd/gtg_config.f90
+      * sorc/hrrr_wrfpost.fd/gtg_convective.f90
+      * sorc/hrrr_wrfpost.fd/gtg_filter.f90
+      * sorc/hrrr_wrfpost.fd/gtg_indices.f90
+      * sorc/hrrr_wrfpost.fd/gtg_itfa.f90
+      * sorc/hrrr_wrfpost.fd/gtg_trophts.f90
+      * sorc/hrrr_wrfpost.fd/map_routines.f90
+   * Run the analysis, forecast, and post-processing jobs for a single cycle over CONUS.  A full cycle test is not needed, and these changes will not impact HRRR Alaska. 
