@@ -653,7 +653,7 @@ SUBROUTINE CALRAD_WCLOUD
                        else ! land and sea ice
 	                  tsfc = ths(i,j)*(pint(i,j,nint(lmh(i,j))+1)/p1000)**capa
                           vegcover=vegfrc(i,j)
-	                  if(sice(i,j) > 0.1)then ! sea ice
+	                  if(sice(i,j) > 0.02)then ! sea ice
 	                     if(sfcpct(4) > 0.0_r_kind)then ! sea ice and snow
 	                        sfcpct(3) = 1.0_r_kind-sfcpct(4)
 	                        sfcpct(1) = 0.0_r_kind
@@ -1222,7 +1222,7 @@ SUBROUTINE CALRAD_WCLOUD
                        else ! land and sea ice
 	                  tsfc = ths(i,j)*(pint(i,j,nint(lmh(i,j))+1)/p1000)**capa
                           vegcover=vegfrc(i,j)
-	                  if(sice(i,j) > 0.1)then ! sea ice
+	                  if(sice(i,j) > 0.02)then ! sea ice
 	                     if(sfcpct(4) > 0.0_r_kind)then ! sea ice and snow
 	                        sfcpct(3) = 1.0_r_kind-sfcpct(4)
 	                        sfcpct(1) = 0.0_r_kind
