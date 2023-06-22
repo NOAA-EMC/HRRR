@@ -1,6 +1,6 @@
 Release Notes: HRRR v4.1.8
 
-v4.1.8 - released June 15, 2023
+v4.1.8 - released June 22, 2023
 * Source code changes to fix an issue with the FVCOM processing.
    * There is excessive land over the Great Lakes related to the addition or removal of ice cover from FVCOM data.  The land mask will now be correctly updated in the FVCOM processing and post-processing codes to reflect changes in ice concentration.
    * Included with these changes is a fix to the serial WRF code build.
@@ -32,4 +32,4 @@ v4.1.8 - released June 15, 2023
       * sorc/hrrr_wrfpost.fd/gtg_itfa.f90
       * sorc/hrrr_wrfpost.fd/gtg_trophts.f90
       * sorc/hrrr_wrfpost.fd/map_routines.f90
-   * Run the analysis, forecast, and post-processing jobs for a single cycle over CONUS.  A full cycle test is not needed, and these changes will not impact HRRR Alaska. 
+   * Run the analysis, forecast, and post-processing jobs for a single cycle over CONUS and Alaska.  A full cycle test is not needed. 
