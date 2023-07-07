@@ -65,7 +65,7 @@ llr:  DO WHILE (.TRUE.)
          x= nint((lon_s - (-180.0))/delta) + 1    ! WE direction
          y= nint(( 90.0 - lat_s)/delta) + 1       ! SN direction
 
-         IF ((x > 0) .and. (y > 0)) THEN   ! falls within the domain of interest, cell with x,y indices
+         IF ((x > 0) .and. (y > 0) .and. (detc(x,y) < 20)) THEN   ! falls within the domain of interest, cell with x,y indices
             detc(x,y) = detc(x,y) + 1
             ll= detc(x,y)
 
