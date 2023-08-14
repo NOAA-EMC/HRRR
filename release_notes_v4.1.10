@@ -2,7 +2,7 @@ Release Notes: HRRR v4.1.10
 
 v4.1.10 - released August 14, 2023
 * Source code changes to address several operational crashes in the HRRR Alaska forecast job.
-   * With the recent addition of AF-Iband VIIRS data to the real-time operational runs, small fires with very low FRP are being ingested into the model.  This code fix is for the initialization of the parameters to run the fire plumerise code.  It resolves the operational crashes and does not affect the results.
+   * With the recent addition of AF-Iband VIIRS data to the real-time operational runs, small fires with very low FRP are being ingested into the model, but the plumerises for these small fires are not being properly initialized.  This code fix is for the initialization of the parameters to run the fire plumerise code.  It prevents the code from hanging but does not affect the smoke output fields.
 
 
 * Repository Details
