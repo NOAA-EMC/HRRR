@@ -1,0 +1,25 @@
+Release Notes: HRRR v4.1.10
+
+v4.1.10 - released August 14, 2023
+* Source code changes to address several operational crashes in the HRRR Alaska forecast job.
+   * With the recent addition of AF-Iband VIIRS data to the real-time operational runs, small fires with very low FRP are being ingested into the model, but the plumerises for these small fires are not being properly initialized.  This code fix is for the initialization of the parameters to run the fire plumerise code.  It prevents the code from hanging but does not affect the smoke output fields.
+
+
+* Repository Details
+   * Clone the hrrr.v4.1.10 branch of the HRRR GitHub repository using the following command (contains v4.1.10 release notes):
+      * git clone -b hrrr.v4.1.10 https://github.com/NOAA-EMC/HRRR.git
+
+
+* sorc files changed
+   * sorc/hrrr_wrfarw.fd/WRFV3.9/smoke/module_smoke_plumerise.F
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the hrrr.v4.1.10 branch from GitHub
+   * Recompile the WRF source code.
+   * Run the forecast job for a single cycle for one of the crashed cases.  A full cycle test is not needed.
+   * These changes should be implemented alongside rap.v5.1.13.
+

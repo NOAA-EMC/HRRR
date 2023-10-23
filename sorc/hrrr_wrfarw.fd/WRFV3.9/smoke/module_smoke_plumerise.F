@@ -39,7 +39,7 @@ CONTAINS
   INTEGER, INTENT (IN)  :: ktau
   INTEGER, INTENT (OUT)  ::  k1,k2
 
-!  integer :: ncall = 0
+  integer, save :: ncall = 0
   integer :: kmt
 !  real,dimension(m1,nspecies), intent(inout) :: eburn_out
 !  real,dimension(nspecies), intent(in) :: eburn_in
@@ -90,10 +90,10 @@ CONTAINS
   !24-n1 =>  sem uso
   !----------------------------------------------------------------------
 ! print *,' Plumerise_scalar 1',ncall
-  if (ktau==2) then
+  if (ncall==0) then
+    ncall=1
     call zero_plumegen_coms
  !   WRITE(*,*) 'plumegen is called'
-   ! ncall=1
   endif
 ! print *,' Plumerise_scalar 1',ncall
   
@@ -215,11 +215,11 @@ subroutine get_env_condition(k1,k2,kmt,wind_eff,ktau)
 implicit none
 integer :: k1,k2,k,kcon,klcl,kmt,nk,nkmid,i
 real :: znz,themax,tlll,plll,rlll,zlll,dzdd,dzlll,tlcl,plcl,dzlcl,dummy
-!integer :: n_setgrid = 0 
+integer, save :: n_setgrid = 0 
 integer :: wind_eff,ktau
 
-if(ktau==2) then
- ! n_setgrid = 1
+if(n_setgrid==0) then
+  n_setgrid = 1
   call set_grid ! define vertical grid of plume model
                 ! zt(k) =  thermo and water levels
                 ! zm(k) =  dynamical levels 
