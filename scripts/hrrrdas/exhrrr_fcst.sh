@@ -482,6 +482,10 @@ EOF
 chmod 755 command_file
 mpiexec -n 1 -ppn 1 command_file
 
+if [ $SENDDBN = YES ]
+ then
+   $DBNROOT/bin/dbn_alert MODEL HRRRDAS_mem${ensmemid} $job ${HRRRDASGES}/hrrrdas_small_d02_${timestr1}f01_mem${ensmemid}
+fi
 
 msg="JOB $job FOR HRRR_FORECAST HAS COMPLETED NORMALLY"
 postmsg "$jlogfile" "$msg"
