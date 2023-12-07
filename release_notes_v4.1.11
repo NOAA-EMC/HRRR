@@ -1,0 +1,33 @@
+Release Notes: HRRR v4.1.11
+
+v4.1.11 - released October 23, 2023
+* Script changes to use eFire data in the HRRR smoke pre-processing task.
+   * On November 30th, 2023, the VIIRS Active Fire (AF) I-band data that is currently used by the HRRR CONUS and Alaska will be discontinued.  It will be replaced by eFire VIIRS I-band data, which is already being produced operationally.  The format of the text files needed by the smoke pre-processing job remains the same, but the filenames will change.
+
+
+* Repository Details
+   * Clone the hrrr.v4.1.11 branch of the HRRR GitHub repository using the following command (contains v4.1.11 release notes):
+      * git clone -b hrrr.v4.1.11 https://github.com/NOAA-EMC/HRRR.git
+
+
+* script files changed
+   * scripts/alaska/exhrrr_prep_smoke.sh
+   * scripts/conus/exhrrr_prep_smoke.sh
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the hrrr.v4.1.11 branch from GitHub
+   * Retrieve the following files/directories from /lfs/h1/ops/prod/packages/hrrr.v4.1.10:
+      * exec/
+      * fix/
+      * parm/alaska/hrrrak_run_freezeH2O.dat
+      * parm/conus/hrrr_run_freezeH2O.dat
+      * parm/hrrrdas/hrrrdas_QNWFA_QNIFA_Monthly_GFS
+      * parm/hrrrdas/hrrrdas_run_freezeH2O.dat
+      * sorc/hrrr_wrfpost.fd/gtg*
+      * sorc/hrrr_wrfpost.fd/map_routines.f90
+   * Run the prep_smoke job for a single cycle for CONUS and Alaska.  A full cycle test is not needed.
+   * These changes should be implemented alongside rap.v5.1.15.
