@@ -482,9 +482,11 @@ EOF
 chmod 755 command_file
 mpiexec -n 1 -ppn 1 command_file
 
-if [ $SENDDBN = YES ]
- then
-   $DBNROOT/bin/dbn_alert MODEL HRRRDAS_mem${ensmemid}${ALERT_EXT} $job ${HRRRDASGES}/hrrrdas_small_d02_${timestr1}f01_mem${ensmemid}
+if [ $cyc -eq 00 -o $cyc -eq 03 -o $cyc -eq 06 -o $cyc -eq 09 -o $cyc -eq 12 -o $cyc -eq 15 -o $cyc -eq 18 -o $cyc -eq 21 ]; then
+  if [ $SENDDBN = YES ]
+   then
+     $DBNROOT/bin/dbn_alert MODEL HRRRDAS_mem${ensmemid}${ALERT_EXT} $job ${HRRRDASGES}/hrrrdas_small_d02_${timestr1}f01_mem${ensmemid}
+  fi
 fi
 
 msg="JOB $job FOR HRRR_FORECAST HAS COMPLETED NORMALLY"
