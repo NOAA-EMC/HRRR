@@ -241,6 +241,16 @@ then
   fi
 fi
 
+# Save 1-hr forecast file to NOMADS
+if [ $fhr -eq 01 ]; then
+  if [ $cyc -eq 02 -o $cyc -eq 05 -o $cyc -eq 08 -o $cyc -eq 11 -o $cyc -eq 14 -o $cyc -eq 17 -o $cyc -eq 20 -o $cyc -eq 23 ]; then
+    if [ $SENDDBN = YES ]
+     then
+       $DBNROOT/bin/dbn_alert MODEL HRRR_F01${ALERT_EXT} $job ${HRRRGES_SFC}/hrrr_${PDY}${cyc}f0${fhr}
+    fi
+  fi
+fi
+
 echo "HRRR fcst hour $fhr post completed at `${DATE}`"
 
 exit 0
