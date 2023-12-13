@@ -15,7 +15,7 @@ v4.1.12 - released December 11, 2023
    * scripts/hrrrdas/exhrrr_fcst.sh
 
 * resource changes
-   * These changes result in saving an additional ~245 GB of data to NOMADS for every third cycle (02, 05, 08, 11, 14, 17, 20, 23Z), and ~1.96 TB of data per day.
+   * These changes result in saving an additional ~261 GB of data to NOMADS for every third cycle (02, 05, 08, 11, 14, 17, 20, 23Z), and ~2.08 TB of data per day.
 
 
 * implementation instructions
