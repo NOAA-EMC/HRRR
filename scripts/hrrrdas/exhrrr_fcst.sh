@@ -482,7 +482,7 @@ EOF
 chmod 755 command_file
 mpiexec -n 1 -ppn 1 command_file
 
-if [ $cyc -eq 02 -o $cyc -eq 05 -o $cyc -eq 08 -o $cyc -eq 11 -o $cyc -eq 14 -o $cyc -eq 17 -o $cyc -eq 20 -o $cyc -eq 23 ]; then
+if [ $cyc -eq 02 -o $cyc -eq 08 -o $cyc -eq 14 -o $cyc -eq 20 ]; then
   if [ $SENDDBN = YES ]
    then
      $DBNROOT/bin/dbn_alert MODEL HRRRDAS_MEM${ensmemid}${ALERT_EXT} $job ${HRRRDASGES}/hrrrdas_small_d02_${timestr1}f01_mem${ensmemid}

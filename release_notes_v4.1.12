@@ -1,7 +1,7 @@
 Release Notes: HRRR v4.1.12
 
 v4.1.12 - released December 11, 2023
-* Script changes to add DBN alerts for archiving the 36-member, 1-hour HRRRDAS forecasts and 1-hr HRRR CONUS forecasts valid at 00, 03, 06, 09, 12, 15, 18, and 21Z to NOMADS.  
+* Script changes to add DBN alerts for archiving the 36-member, 1-hour HRRRDAS forecasts and 1-hr HRRR CONUS forecasts valid at 03, 09, 15, and 21Z to NOMADS.  
    * The Warn on Forecast System (WoFS) needs these files put on NOMADS to support their efforts.  A 24-hour retention period on NOMADS is sufficient.
 
 
@@ -15,11 +15,11 @@ v4.1.12 - released December 11, 2023
    * scripts/hrrrdas/exhrrr_fcst.sh
 
 * resource changes
-   * These changes result in saving an additional ~261 GB of data to NOMADS for every third cycle (02, 05, 08, 11, 14, 17, 20, 23Z), and ~2.08 TB of data per day.
+   * These changes result in saving an additional ~261 GB of data to NOMADS for each cycle (02, 08, 14, 20Z), and ~1.04 TB of data per day.
 
 
 * implementation instructions
-   * Retrieve the hrrr.v4.1.12 branch from GitHub
+   * Retrieve the hrrr.v4.1.12 branch from GitHub, the v4.1.12 tag.
    * Retrieve the following files/directories from /lfs/h1/ops/prod/packages/hrrr.v4.1.11:
       * exec/
       * fix/
@@ -29,5 +29,5 @@ v4.1.12 - released December 11, 2023
       * parm/hrrrdas/hrrrdas_run_freezeH2O.dat
       * sorc/hrrr_wrfpost.fd/gtg*
       * sorc/hrrr_wrfpost.fd/map_routines.f90
-   * Run the forecast job for a single cycle for HRRRDAS, and the f01 post job for a single cycle for HRRR CONUS.  Choose from either the 02, 05, 08, 11, 14, 17, 20, or 23Z cycles.  A full cycle test is not needed.
+   * Run the forecast job for a single cycle for HRRRDAS, and the f01 post job for a single cycle for HRRR CONUS.  Choose from either the 02, 08, 14, or 20Z cycles.  A full cycle test is not needed.
    * Note: I have never added DBN alerts to an operational package before, so please refer to lines 485-490 of scripts/hrrrdas/exhrrr_fcst.sh to see my changes for the HRRRDAS files.  I copied a DBN alert from the HRRR CONUS but was not sure what identifier to put after "MODEL".
