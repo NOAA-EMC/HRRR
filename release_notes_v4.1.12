@@ -2,7 +2,7 @@ Release Notes: HRRR v4.1.12
 
 v4.1.12 - released December 11, 2023
 * Script changes to add DBN alerts for archiving the 36-member, 1-hour HRRRDAS forecasts and 1-hr HRRR CONUS forecasts valid at 03, 09, 15, and 21Z to NOMADS.  
-   * The Warn on Forecast System (WoFS) needs these files put on NOMADS to support their efforts.  A 24-hour retention period on NOMADS is sufficient.
+   * The Warn on Forecast System (WoFS) needs these files put on NOMADS to support their efforts.  A 12-hour retention period on NOMADS is sufficient.
 
 
 * Repository Details
@@ -15,7 +15,7 @@ v4.1.12 - released December 11, 2023
    * scripts/hrrrdas/exhrrr_fcst.sh
 
 * resource changes
-   * These changes result in saving an additional ~261 GB of data to NOMADS for each cycle (02, 08, 14, 20Z), and ~1.04 TB of data per day.
+   * These changes result in saving an additional ~261 GB of data to NOMADS for each cycle (02, 08, 14, 20Z), and ~522 GB of data per day.
 
 
 * implementation instructions
