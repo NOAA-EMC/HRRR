@@ -18,7 +18,7 @@ v4.1.13 - released February 13, 2024
 
 
 * implementation instructions
-   * Retrieve the hrrr.v4.1.13 branch from GitHub
+   * Retrieve the hrrr.v4.1.13 branch from GitHub, the v4.1.13 tag
    * Retrieve the following files/directories from /lfs/h1/ops/prod/packages/hrrr.v4.1.11:
       * exec/
       * fix/
