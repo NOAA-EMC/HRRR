@@ -1,0 +1,32 @@
+Release Notes: HRRR v4.1.13
+
+v4.1.13 - released February 13, 2024
+* A GSI source code change to fix an operational RAP crash.
+   * On February 10th, 2024, the operational 11Z RAP crashed due to a GSI failure with the radar radial wind observation file (l2rwbufr).  A fix is provided to the GSI code which resolves the crash; it is the same fix that was provided for the NAM GSI in December 2021.
+
+
+* Repository Details
+   * Clone the hrrr.v4.1.13 branch of the HRRR GitHub repository using the following command (contains v4.1.13 release notes):
+* git clone -b hrrr.v4.1.13 https://github.com/NOAA-EMC/HRRR.git
+
+
+* sorc files changed
+   * sorc/hrrr_gsi.fd/src/gsi/read_l2bufr_mod.f90
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the hrrr.v4.1.13 branch from GitHub
+   * Retrieve the following files/directories from /lfs/h1/ops/prod/packages/hrrr.v4.1.11:
+      * exec/
+      * fix/
+      * parm/alaska/hrrrak_run_freezeH2O.dat
+      * parm/conus/hrrr_run_freezeH2O.dat
+      * parm/hrrrdas/hrrrdas_QNWFA_QNIFA_Monthly_GFS
+      * parm/hrrrdas/hrrrdas_run_freezeH2O.dat
+      * sorc/hrrr_wrfpost.fd/gtg*
+      * sorc/hrrr_wrfpost.fd/map_routines.f90
+   * Re-compile the GSI source code.  A full cycle test is not needed.
+   * These changes should be implemented alongside rap.v5.1.16.
