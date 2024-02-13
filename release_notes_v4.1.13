@@ -6,8 +6,8 @@ v4.1.13 - released February 13, 2024
 
 
 * Repository Details
-   * Clone the hrrr.v4.1.13 branch of the HRRR GitHub repository using the following command (contains v4.1.13 release notes):
-* git clone -b hrrr.v4.1.13 https://github.com/NOAA-EMC/HRRR.git
+   * Retrieve the v4.1.13 tag from the hrrr.v4.1.13 branch of the HRRR GitHub repository using the following command (contains v4.1.13 release notes):
+* git clone --branch v4.1.13 https://github.com/NOAA-EMC/HRRR.git
 
 
 * sorc files changed
