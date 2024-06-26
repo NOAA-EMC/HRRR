@@ -132,7 +132,7 @@ if [ ${HRRRDAS_CONTINUE_FCST} = YES ]; then
    echo "         same as d02 files" >> mailmsg
    cat mailmsg
    export subject="$PDY ${cyc}z mem${ensmemid} HRRRDAS FCST skip diag/Enkf data"
-   export maillist=${maillist:-'nco.spa@noaa.gov,geoffrey.manikin@noaa.gov,benjamin.blake@noaa.gov,ming.hu@noaa.gov'}
+   export maillist=${maillist:-'nco.spa@noaa.gov,benjamin.blake@noaa.gov,ming.hu@noaa.gov'}
    cat mailmsg |mail.py -s "$subject" $maillist -v
 fi
 
