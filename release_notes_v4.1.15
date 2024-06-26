@@ -1,0 +1,33 @@
+Release Notes: HRRR v4.1.15
+
+v4.1.15 - released June 26, 2024
+* The EFIRE VIIRS products were updated from v1.2 to v1.3.  
+   * There are no scientific changes associated with this product update, but the filenames have changed from EFIRE-VIIRSI_v1r2 to EFIRE-VIIRSI_v1r3, and the HRRR smoke processing scripts need to be updated accordingly.
+
+
+* Repository Details
+   * Retrieve the v4.1.15 branch of the HRRR GitHub repository using the following command (contains v4.1.15 release notes):
+* git clone -b v4.1.15 https://github.com/NOAA-EMC/HRRR.git
+
+
+* scripts files changed
+   * scripts/alaska/exhrrr_prep_smoke.sh
+   * scripts/conus/exhrrr_prep_smoke.sh
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the v4.1.15 branch from GitHub
+   * Retrieve the following files/directories from /lfs/h1/ops/prod/packages/hrrr.v4.1.14:
+      * exec/
+      * fix/
+      * parm/alaska/hrrrak_run_freezeH2O.dat
+      * parm/conus/hrrr_run_freezeH2O.dat
+      * parm/hrrrdas/hrrrdas_QNWFA_QNIFA_Monthly_GFS
+      * parm/hrrrdas/hrrrdas_run_freezeH2O.dat
+      * sorc/hrrr_wrfpost.fd/gtg*
+      * sorc/hrrr_wrfpost.fd/map_routines.f90
+   * Test the HRRR smoke processing task for a single cycle.  A full cycle test is not needed.
+   * These changes should be implemented alongside rap.v5.1.18.

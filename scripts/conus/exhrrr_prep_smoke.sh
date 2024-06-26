@@ -191,28 +191,28 @@ for ihour in $( seq 0 23 ) ; do
         # NPP files for this hour which are at least 120 bytes in size:
         dir=$( decide_dir "$DCOM_VIIRS_NPP" "${OLD_DAY}/af_viirs" )
         find "$dir"  -maxdepth 1 -mindepth 1 \
-            -name "EFIRE-VIIRSI_v1r2_npp_s${OLD_DAY}${hh}*.txt" -a -size +120c \
+            -name "EFIRE-VIIRSI_v1r3_npp_s${OLD_DAY}${hh}*.txt" -a -size +120c \
             -printf "./process_npp '%p' '$OLD_JULIAN' > '%f.log' 2>&1"'\n' \
             >> command_file
 
         # J01 files for this hour which are at least 120 bytes in size:
         dir=$( decide_dir "$DCOM_VIIRS_J01" "${OLD_DAY}/af_viirs/" )
         find "$dir"  -maxdepth 1 -mindepth 1 \
-            -name "EFIRE-VIIRSI_v1r2_n20_s${OLD_DAY}${hh}*.txt" -a -size +120c \
+            -name "EFIRE-VIIRSI_v1r3_n20_s${OLD_DAY}${hh}*.txt" -a -size +120c \
             -printf "./process_j01 '%p' '$OLD_JULIAN' > '%f.log' 2>&1"'\n' \
             >> command_file
     else
         # NPP files for this hour which are at least 120 bytes in size:
         dir=$( decide_dir "$DCOM_VIIRS_NPP" "${YYYYMMDD}/af_viirs/" )
         find "$dir" -maxdepth 1 -mindepth 1 \
-            -name "EFIRE-VIIRSI_v1r2_npp_s${YYYYMMDD}${hh}*.txt" -a -size +120c \
+            -name "EFIRE-VIIRSI_v1r3_npp_s${YYYYMMDD}${hh}*.txt" -a -size +120c \
             -printf "./process_npp '%p' '$START_JULIAN' > '%f.log' 2>&1"'\n' \
             >> command_file
 
         # J01 files for this hour which are at least 120 bytes in size:
         dir=$( decide_dir "$DCOM_VIIRS_J01" "${YYYYMMDD}/af_viirs" )
         find $dir -maxdepth 1 -mindepth 1 \
-            -name "EFIRE-VIIRSI_v1r2_n20_s${YYYYMMDD}${hh}*.txt" -a -size +120c \
+            -name "EFIRE-VIIRSI_v1r3_n20_s${YYYYMMDD}${hh}*.txt" -a -size +120c \
             -printf "./process_j01 '%p' '$START_JULIAN' > '%f.log' 2>&1"'\n' \
             >> command_file
     fi
