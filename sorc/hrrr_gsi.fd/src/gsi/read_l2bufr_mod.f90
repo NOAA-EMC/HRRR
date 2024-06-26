@@ -20,6 +20,8 @@ module read_l2bufr_mod
 !   2009-11-24  parrish  change time variable from regional_time (passed from gridmod) to
 !                          iadate (passed from obsmod), to prevent all radar data being tossed.
 !   2011-07-04  todling  - fixes to run either single or double precision
+!   2021-12-08  s.liu    - change max_num_radars from 150 to 250
+!   2021-12-10  s.liu    - fixes to find radar station name index
 !
 ! subroutines included:
 !   sub initialize_superob_radar - initialize superob parameters to defaults
@@ -138,7 +140,7 @@ contains
 
     integer(i_kind),intent(in):: npe,mype
 
-    integer(i_kind),parameter:: max_num_radars=150
+    integer(i_kind),parameter:: max_num_radars=250
     integer(i_kind),parameter:: n_gates_max=4000
     real(r_kind),parameter:: four_thirds = 4.0_r_kind / 3.0_r_kind
     real(r_kind),parameter:: r8     = 8.0_r_kind
@@ -278,12 +280,13 @@ contains
 !   Open bufr file with openbf to initialize bufr table, etc in bufrlib
     inbufr=10
     open(inbufr,file=infile,form='unformatted')
-    read(inbufr,iostat=iret)subset
-    if(iret/=0) then
-       if(rite) write(6,*)'RADAR_BUFR_READ_ALL:  problem opening level 2 bufr file "l2rwbufr"'
-       close(inbufr)                                       
-       return
-    end if
+!   read(inbufr,iostat=iret)subset
+!   write(6,*)'radar sliu::', iret,subset
+!   if(iret/=0) then
+!      if(rite) write(6,*)'RADAR_BUFR_READ_ALL:  problem opening level 2 bufr file "l2rwbufr"'
+!      close(inbufr)                                       
+!      return
+!   end if
     rewind inbufr
     lundx=inbufr
     call openbf(inbufr,'IN',lundx)
@@ -345,7 +348,8 @@ contains
           if(abs(t)>del_time) cycle
           nobs_in=nobs_in+n_gates
           stn_id=chdr2 
-          ibyte=index(cstn_id_table,stn_id)
+          !ibyte=index(cstn_id_table,stn_id)
+          ibyte=locindex(stn_id_table,max_num_radars,stn_id)
           if(ibyte==0) then
              num_radars=num_radars+1
              if(num_radars>max_num_radars) then
@@ -507,12 +511,14 @@ contains
 	     cycle
 	  end if
 	  stn_id=chdr 
-	  ibyte=index(cmaster_stn_table,stn_id)
+	  !ibyte=index(cmaster_stn_table,stn_id)
+	  ibyte=locindex(master_stn_table,max_num_radars,stn_id)
 	  if(ibyte==0) then
 	     write(6,*) ' index error in radar_bufr_read_all -- program stops -- ',ibyte,stn_id
 	     call stop2(99)
 	  else
-	     krad=1+(ibyte-1)/4
+	     !krad=1+(ibyte-1)/4
+	     krad=ibyte
 	  end if
 
 	  call ufbint(inbufr,rwnd,3,n_gates_max,n_gates,'DIST125M DMVR DVSW')
@@ -897,4 +903,17 @@ SUBROUTINE invtllv(ALM,APH,TLMO,CTPH0,STPH0,TLM,TPH)
   TPH=ASIN(CTPH0*SPH+STPH0*CC)
   
 END SUBROUTINE invtllv
+FUNCTION locindex(stnall,nstr,stn)
+  character(4)::stnall(nstr)
+  character(4)::stn
+  integer:: i,locindex,nstr
+  do i=1,nstr
+     locindex=index(stnall(i),stn)
+     if(locindex>0) then
+      locindex=i
+      exit
+     end if
+  end do
+  !locindex=(i-1)*4+1
+END FUNCTION locindex
 end module read_l2bufr_mod
