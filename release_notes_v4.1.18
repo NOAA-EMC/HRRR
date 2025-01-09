@@ -1,0 +1,34 @@
+Release Notes: HRRR v4.1.18
+
+v4.1.18 - released January 9, 2025
+* The regional station list for the bufr station time series output is updated to include 96 new stations over the United States.
+   * There are no model changes associated with this update, but the bufr sounding output now contains additional stations, and the HRRR CONUS profdat file needs to be updated accordingly.  The HRRR Alaska profdat file does not need to be updated because no new stations are added over Alaska.
+
+* Repository Details
+   * Retrieve the v4.1.18 branch of the HRRR GitHub repository using the following command (contains v4.1.18 release notes):
+      * git clone -b v4.1.18 https://github.com/NOAA-EMC/HRRR.git
+
+
+* fix files changed
+   * fix/conus/hrrr_profdat
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the v4.1.18 branch from GitHub
+   * Retrieve the following files/directories from /lfs/h1/ops/prod/packages/hrrr.v4.1.17:
+      * exec/
+      * fix/
+      * parm/alaska/hrrrak_run_freezeH2O.dat
+      * parm/conus/hrrr_run_freezeH2O.dat
+      * parm/hrrrdas/hrrrdas_QNWFA_QNIFA_Monthly_GFS
+      * parm/hrrrdas/hrrrdas_run_freezeH2O.dat
+      * sorc/hrrr_wrfpost.fd/gtg*
+      * sorc/hrrr_wrfpost.fd/map_routines.f90
+   * Retrieve the following fix file from Cactus or Dogwood (can't store fix files on Github):
+      * /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.18/fix/conus/hrrr_profdat
+
+   * Test the HRRR CONUS wrfbufr and postsnd tasks for a single cycle.  A full cycle test is not needed.
+   * These changes should be implemented alongside rap.v5.1.19.
