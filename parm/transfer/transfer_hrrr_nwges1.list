@@ -26,11 +26,11 @@
 _COMROOT_/hrrr/_SHORTVER_/nwges/
 + /hrrrges_sfc/
 + /hrrrges_sfc/conus/
-+ /hrrrges_sfc/conus/hrrr__PDYm1_??f00[0123]
-+ /hrrrges_sfc/conus/hrrr__PDY_??f00[0123]
++ /hrrrges_sfc/conus/hrrr__PDYm1_??f0[01][02468]
++ /hrrrges_sfc/conus/hrrr__PDY_??f0[01][02468]
 + /hrrrges_sfc/alaska/
-+ /hrrrges_sfc/alaska/hrrrak__PDYm1_??f00[0123]
-+ /hrrrges_sfc/alaska/hrrrak__PDY_??f00[0123]
++ /hrrrges_sfc/alaska/hrrrak__PDYm1_??f0[01][02468]
++ /hrrrges_sfc/alaska/hrrrak__PDY_??f0[01][02468]
 - *
 B 543000
 # This directory is a good candidate for compression

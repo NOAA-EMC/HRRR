@@ -98,9 +98,9 @@ mkdir -m 775 -p $COMOUT
 #######################################
 
 #export DCOMROOT=${DCOMROOT:-/lfs/h1/ops/$envir/dcom}
-export DCOM_MODIS="$DCOMROOT/"
-export DCOM_VIIRS_NPP="$DCOMROOT/"
-export DCOM_VIIRS_J01="$DCOMROOT/"
+export DCOM_MODIS=${DCOM_MODIS:-"$DCOMROOT/"}
+export DCOM_VIIRS_NPP=${DCOM_VIIRS_NPP:-"$DCOMROOT/"}
+export DCOM_VIIRS_J01=${DCOM_VIIRS_J01:-"$DCOMROOT/"}
 export VEG_TYPE_DATA="$FIXhrrr/smoke/SURFACE_DATA/2013_PREP"
 
 env
