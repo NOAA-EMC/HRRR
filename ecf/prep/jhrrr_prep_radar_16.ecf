@@ -23,7 +23,6 @@ export cyc=%CYC%
 export dom=%DOMAIN%
 export subhtime=16
 
-module load envvar/${envvar_ver}
 module load PrgEnv-intel/${PrgEnv_intel_ver}
 module load craype/${craype_ver}
 module load intel/${intel_ver}

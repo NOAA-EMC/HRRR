@@ -33,6 +33,4 @@ export LC_TIME=C #XXW: Temporary added for cactus date format issue
 export DBNLOG=YES
 export PATH=.:$PATH
 
-# for para testing
-#export COMPATH=/lfs/h1/ops/prod/com/gfs:/lfs/h1/ops/prod/com/rap:/lfs/h1/ops/prod/com/radarl2:/lfs/h1/ops/prod/com/nsst:/lfs/h1/ops/prod/com/obsproc
 
