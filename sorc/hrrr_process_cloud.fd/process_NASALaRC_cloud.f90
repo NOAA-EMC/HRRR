@@ -42,7 +42,8 @@ program  process_NASALaRC_cloud
 !SATID
 !  integer, parameter :: satidgoeswest=259  ! GOES 15  Stopped after March 2nd, 2020
   integer, parameter :: satidgoeswest=272  ! GOES 18
-  integer, parameter :: satidgoeseast=270  ! GOES 16
+!  integer, parameter :: satidgoeseast=270  ! GOES 16  Stopped after April 7th, 2025
+  integer, parameter :: satidgoeseast=273  ! GOES 19
   real     :: rad2deg = 180.0/3.1415926
   integer,parameter  :: boxMAX=10
 !
