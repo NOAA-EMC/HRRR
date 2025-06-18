@@ -1,0 +1,42 @@
+Release Notes: HRRR v4.1.19
+
+v4.1.19 - released April 17, 2025
+* The GSI convinfo files and cloud processing code are updated to utilize GOES-19 satellite data.
+
+* Repository Details
+   * Retrieve the v4.1.19 branch of the HRRR GitHub repository using the following command (contains v4.1.19 release notes):
+* git clone -b v4.1.19 https://github.com/NOAA-EMC/HRRR.git
+
+
+* fix files changed
+   * fix/alaska/hrrrak_nam_regional_convinfo
+   * fix/conus/hrrr_nam_regional_convinfo
+   * fix/hrrrdas/hrrrdas_regional_convinfo.15km.txt
+   * fix/hrrrdas/hrrrdas_regional_convinfo.3km.txt
+* sorc files changed
+   * sorc/hrrr_process_cloud.fd/process_NASALaRC_cloud.f90
+
+* resource changes
+   * N/A
+
+
+* implementation instructions
+   * Retrieve the v4.1.19 branch from GitHub
+   * Retrieve the following files/directories from /lfs/h1/ops/prod/packages/hrrr.v4.1.18:
+      * exec/
+      * fix/
+      * parm/alaska/hrrrak_run_freezeH2O.dat
+      * parm/conus/hrrr_run_freezeH2O.dat
+      * parm/hrrrdas/hrrrdas_QNWFA_QNIFA_Monthly_GFS
+      * parm/hrrrdas/hrrrdas_run_freezeH2O.dat
+      * sorc/hrrr_wrfpost.fd/gtg*
+      * sorc/hrrr_wrfpost.fd/map_routines.f90
+   * Retrieve the following fix files from Cactus or Dogwood (can't store fix files on Github):
+      * /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.19/fix/alaska/hrrrak_nam_regional_convinfo
+      * /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.19/fix/conus/hrrr_nam_regional_convinfo
+      * /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.19/fix/hrrrdas/hrrrdas_regional_convinfo.15km.txt
+      * /lfs/h2/emc/lam/noscrub/Benjamin.Blake/nwprod/hrrr.v4.1.19/fix/hrrrdas/hrrrdas_regional_convinfo.3km.txt
+   * Recompile the hrrr_process_cloud source code using sorc/build_hrrr_all.sh.  I've updated build_hrrr_all.sh within hrrr.v4.1.19 to only build this code instead of all the codes.
+
+   * Test the HRRR CONUS, HRRR Alaska, and HRRRDAS tasks (not including the forecast and post tasks) for a single cycle.  A full cycle test is not needed.
+   * These changes should be implemented alongside rap.v5.1.20.
