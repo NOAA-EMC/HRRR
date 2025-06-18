@@ -32,5 +32,3 @@ export nsst_ver=v1.2
 export LC_TIME=C #XXW: Temporary added for cactus date format issue 
 export DBNLOG=YES
 export PATH=.:$PATH
-
-

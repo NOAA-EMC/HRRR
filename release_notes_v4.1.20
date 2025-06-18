@@ -1,0 +1,30 @@
+Release Notes: HRRR v4.1.20
+
+v4.1.20 - released June 18, 2025
+* The post task is modified to save the first 18 forecast hours of HRRR CONUS and Alaska model output to COM.  Hourly model output to forecast hour 18 is needed for the DAFS version 1 implementation.
+
+* Repository Details
+   * Retrieve the v4.1.20 branch of the HRRR GitHub repository using the following command (contains v4.1.20 release notes):
+         * git clone -b v4.1.20 https://github.com/NOAA-EMC/HRRR.git
+
+
+* scripts files changed
+   * scripts/alaska/exhrrr_post.sh
+   * scripts/conus/exhrrr_post.sh
+
+* resource changes
+   * Adds 2.59 TB per day (2.52 TB for HRRR CONUS, 68 GB for HRRR Alaska) to the com/hrrr/v4.1/nwges/hrrrges_sfc directory
+
+
+* implementation instructions
+   * Retrieve the v4.1.20 branch from GitHub
+   * Retrieve the following files/directories from /lfs/h1/ops/prod/packages/hrrr.v4.1.19:
+      * exec/
+      * fix/
+      * parm/alaska/hrrrak_run_freezeH2O.dat
+      * parm/conus/hrrr_run_freezeH2O.dat
+      * parm/hrrrdas/hrrrdas_QNWFA_QNIFA_Monthly_GFS
+      * parm/hrrrdas/hrrrdas_run_freezeH2O.dat
+      * sorc/hrrr_wrfpost.fd/gtg*
+      * sorc/hrrr_wrfpost.fd/map_routines.f90
+   * Test the HRRR CONUS and HRRR Alaska post tasks for all forecast hours for a single cycle.  One 18-hour or 48-hour forecast for both is sufficient.

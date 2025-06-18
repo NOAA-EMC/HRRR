@@ -184,7 +184,7 @@ $USHhrrr/hrrrak_mkawp.sh $fhr
 # Save files for surface cycle
 targetsize=9096528560
 targetsize2=9109111472   ## HRRRv4 working dir on dell2
-if [ $fhr -lt 18 ]
+if [ $fhr -lt 19 ]
 then
   counter=1
   while [[ $counter -lt 48 ]]; do
