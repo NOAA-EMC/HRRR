@@ -220,7 +220,7 @@ $USHhrrr/hrrr_mkawp.sh $fhr
 targetsize=16061363612
 targetsize2=16073946524   ## HRRRv4 working dir on dell2
 targetsize3=16057259932   ## HRRRv4 on WCOSS2
-if [ $fhr -lt 12 ]
+if [ $fhr -lt 19 ]
 then
   counter=1
   while [[ $counter -lt 36 ]]; do
