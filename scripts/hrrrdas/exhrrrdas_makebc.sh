@@ -100,39 +100,39 @@ YYYYMMDDHH=${start_year}-${start_month}-${start_day}_00
 start_gfs_fcst_time=00
 end_gfs_fcst_time=${FCST_LENGTH}
 
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2.0p25.f000 gfs.t${start_hour}z.pgrb2a.0p25.f000
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2.0p25.f003 gfs.t${start_hour}z.pgrb2a.0p25.f003
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2.0p25.f006 gfs.t${start_hour}z.pgrb2a.0p25.f006
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2.0p25.f009 gfs.t${start_hour}z.pgrb2a.0p25.f009
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2.0p25.f012 gfs.t${start_hour}z.pgrb2a.0p25.f012
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2.0p25.f015 gfs.t${start_hour}z.pgrb2a.0p25.f015
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2.0p25.f018 gfs.t${start_hour}z.pgrb2a.0p25.f018
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2.0p25.f021 gfs.t${start_hour}z.pgrb2a.0p25.f021
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2.0p25.f024 gfs.t${start_hour}z.pgrb2a.0p25.f024
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_a.0p25.f000.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_a.0p25.f003.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_a.0p25.f006.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_a.0p25.f009.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_a.0p25.f012.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_a.0p25.f015.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_a.0p25.f018.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_a.0p25.f021.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_a.0p25.f024.grib2 .
 
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2b.0p25.f000 .
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2b.0p25.f003 .
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2b.0p25.f006 .
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2b.0p25.f009 .
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2b.0p25.f012 .
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2b.0p25.f015 .
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2b.0p25.f018 .
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2b.0p25.f021 .
-cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/atmos/gfs.t${start_hour}z.pgrb2b.0p25.f024 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_b.0p25.f000.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_b.0p25.f003.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_b.0p25.f006.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_b.0p25.f009.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_b.0p25.f012.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_b.0p25.f015.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_b.0p25.f018.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_b.0p25.f021.grib2 .
+cpreq ${COMINgfs}/gfs.${start_ymd}/${start_hour}/products/atmos/grib2/0p25/gfs.t${start_hour}z.pres_b.0p25.f024.grib2 .
 
-cat gfs.t${start_hour}z.pgrb2a.0p25.f000 gfs.t${start_hour}z.pgrb2b.0p25.f000 > gfs.t${start_hour}z.pgrb2.0p25.f000
-cat gfs.t${start_hour}z.pgrb2a.0p25.f003 gfs.t${start_hour}z.pgrb2b.0p25.f003 > gfs.t${start_hour}z.pgrb2.0p25.f003
-cat gfs.t${start_hour}z.pgrb2a.0p25.f006 gfs.t${start_hour}z.pgrb2b.0p25.f006 > gfs.t${start_hour}z.pgrb2.0p25.f006
-cat gfs.t${start_hour}z.pgrb2a.0p25.f009 gfs.t${start_hour}z.pgrb2b.0p25.f009 > gfs.t${start_hour}z.pgrb2.0p25.f009
-cat gfs.t${start_hour}z.pgrb2a.0p25.f012 gfs.t${start_hour}z.pgrb2b.0p25.f012 > gfs.t${start_hour}z.pgrb2.0p25.f012
-cat gfs.t${start_hour}z.pgrb2a.0p25.f015 gfs.t${start_hour}z.pgrb2b.0p25.f015 > gfs.t${start_hour}z.pgrb2.0p25.f015
-cat gfs.t${start_hour}z.pgrb2a.0p25.f018 gfs.t${start_hour}z.pgrb2b.0p25.f018 > gfs.t${start_hour}z.pgrb2.0p25.f018
-cat gfs.t${start_hour}z.pgrb2a.0p25.f021 gfs.t${start_hour}z.pgrb2b.0p25.f021 > gfs.t${start_hour}z.pgrb2.0p25.f021
-cat gfs.t${start_hour}z.pgrb2a.0p25.f024 gfs.t${start_hour}z.pgrb2b.0p25.f024 > gfs.t${start_hour}z.pgrb2.0p25.f024
+cat gfs.t${start_hour}z.pres_a.0p25.f000.grib2 gfs.t${start_hour}z.pres_b.0p25.f000.grib2 > gfs.t${start_hour}z.pres.0p25.f000.grib2
+cat gfs.t${start_hour}z.pres_a.0p25.f003.grib2 gfs.t${start_hour}z.pres_b.0p25.f003.grib2 > gfs.t${start_hour}z.pres.0p25.f003.grib2
+cat gfs.t${start_hour}z.pres_a.0p25.f006.grib2 gfs.t${start_hour}z.pres_b.0p25.f006.grib2 > gfs.t${start_hour}z.pres.0p25.f006.grib2
+cat gfs.t${start_hour}z.pres_a.0p25.f009.grib2 gfs.t${start_hour}z.pres_b.0p25.f009.grib2 > gfs.t${start_hour}z.pres.0p25.f009.grib2
+cat gfs.t${start_hour}z.pres_a.0p25.f012.grib2 gfs.t${start_hour}z.pres_b.0p25.f012.grib2 > gfs.t${start_hour}z.pres.0p25.f012.grib2
+cat gfs.t${start_hour}z.pres_a.0p25.f015.grib2 gfs.t${start_hour}z.pres_b.0p25.f015.grib2 > gfs.t${start_hour}z.pres.0p25.f015.grib2
+cat gfs.t${start_hour}z.pres_a.0p25.f018.grib2 gfs.t${start_hour}z.pres_b.0p25.f018.grib2 > gfs.t${start_hour}z.pres.0p25.f018.grib2
+cat gfs.t${start_hour}z.pres_a.0p25.f021.grib2 gfs.t${start_hour}z.pres_b.0p25.f021.grib2 > gfs.t${start_hour}z.pres.0p25.f021.grib2
+cat gfs.t${start_hour}z.pres_a.0p25.f024.grib2 gfs.t${start_hour}z.pres_b.0p25.f024.grib2 > gfs.t${start_hour}z.pres.0p25.f024.grib2
 
 
-grib_files_temp=`ls -1 gfs.t${start_hour}z.pgrb2.0p25.f0[0-5]? | sort`
-grib_files=`ls -1 gfs.t${start_hour}z.pgrb2.0p25.f0[0-5]? | sort`
+grib_files_temp=`ls -1 gfs.t${start_hour}z.pres.0p25.f0[0-5][0-9].grib2 | sort`
+grib_files=`ls -1 gfs.t${start_hour}z.pres.0p25.f0[0-5][0-9].grib2 | sort`
 ngribfiles=0
 
 for file in ${grib_files_temp}; do

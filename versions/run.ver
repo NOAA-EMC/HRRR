@@ -24,7 +24,7 @@ export hrrrdas_num_ens=36
 
 #Upstream model versions
 export rap_ver=v5.1
-export gfs_ver=v16.3
+export gfs_ver=v17.0
 export radarl2_ver=v1.2
 export obsproc_ver=v1.2
 export nsst_ver=v1.2

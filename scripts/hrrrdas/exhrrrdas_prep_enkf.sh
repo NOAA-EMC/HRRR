@@ -58,7 +58,7 @@ stampcycle=`date -d "${CYCSTART_TIME}" +%s`
 minHourDiff=100
 loops="009"
 for loop in $loops; do
-  for timelist in `ls ${COMINgfs}/enkfgdas.*/*/atmos/mem080/gdas*.atmf${loop}.nc`; do
+  for timelist in `ls ${COMINgfs}/enkfgdas.*/*/mem080/model/atmos/history/enkfgdas*.atm.f${loop}.nc`; do
 # availtime variables are path-relative
 # -f9 was used for /gpfs/hps/nco/ops/com/gfs/prod/enkf.YYYYMMDD
 # -f8 was used for /gpfs/dell3/ptmp/emc.glopara/ROTDIRS/prfv3rt1/enkf.gdas.YYYYMMDD
@@ -83,11 +83,11 @@ for loop in $loops; do
        minHourDiff=${hourDiff}
        EYYYYMMDD=$(echo ${availtime} | cut -c1-8)
        EHH=$(echo ${availtime} | cut -c9-10)
-       enkfcstname=gdas.t${EHH}z.atmf${loop}
+       enkfcstname=enkfgdas.t${EHH}z.atm.f${loop}
     fi
   done
 done
-ls ${COMINgfs}/enkfgdas.${EYYYYMMDD}/${EHH}/atmos/mem???/${enkfcstname}.nc > filelist01_80mem
+ls ${COMINgfs}/enkfgdas.${EYYYYMMDD}/${EHH}/mem???/model/atmos/history/${enkfcstname}.nc > filelist01_80mem
 sed -n 1,36p filelist01_80mem > filelist01
 
 maxback="24" # how many hours ago to search for wrfout in nwges
