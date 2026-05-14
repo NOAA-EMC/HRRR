@@ -1,0 +1,32 @@
+Release Notes: HRRR v4.1.21
+
+v4.1.21 - released May 14, 2026
+* In preparation for the upcoming GFSv17 operational implementation, the HRRR CONUS analysis, HRRR Alaska analysis, HRRRDAS makebc, and HRRRDAS prep_enkf run scripts are updated to handle the new filenames and directory paths for GFS model data.
+
+* Repository Details
+   * Retrieve the hrrr.v4.1.21 branch of the HRRR GitHub repository using the following command (contains v4.1.21 release notes):
+      * git clone –b hrrr.v4.1.21 https://github.com/NOAA-EMC/HRRR.git
+
+* scripts files changed
+   * scripts/alaska/exhrrr_analysis.sh
+   * scripts/conus/exhrrr_analysis.sh
+   * scripts/hrrrdas/exhrrrdas_makebc.sh
+   * scripts/hrrrdas/exhrrrdas_prep_enkf.sh
+* versions files changed
+   * versions/run.ver
+
+* resource changes
+   * N/A
+
+* implementation instructions
+   * Retrieve the hrrr.v4.1.21 branch from GitHub
+   * Retrieve the following files/directories from /lfs/h1/ops/prod/packages/hrrr.v4.1.20:
+      * exec/
+      * fix/
+      * parm/alaska/hrrrak_run_freezeH2O.dat
+      * parm/conus/hrrr_run_freezeH2O.dat
+      * parm/hrrrdas/hrrrdas_QNWFA_QNIFA_Monthly_GFS
+      * parm/hrrrdas/hrrrdas_run_freezeH2O.dat
+      * sorc/hrrr_wrfpost.fd/gtg*
+      * sorc/hrrr_wrfpost.fd/map_routines.f90
+   * Run a full cycle test of the HRRR Alaska, HRRR CONUS, and HRRRDAS alongside the RAP.  Based on preliminary testing, these script changes will have an overall minimal scientific impact on the HRRR system.
