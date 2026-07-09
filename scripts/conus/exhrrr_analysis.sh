@@ -528,20 +528,39 @@ cat << EOF > fvcom.namelist
    /
 EOF
 
+targetsize=14000000
 if [ -r "${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc" ]; then
   fvcomfile=${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc
+  filesize=$(stat -c%s ${fvcomfile})
+  if [ $filesize -lt $targetsize ]; then
+    echo "Filesize of FVCOM file is too small; check for older FVCOM file." 
+    fvcomfile=""
+  fi
 elif [ -r "${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc" ]; then
   fvcomfile=${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc
+  filesize=$(stat -c%s ${fvcomfile})
+  if [ $filesize -lt $targetsize ]; then
+    echo "Filesize of FVCOM file is too small; check for older FVCOM file." 
+    fvcomfile=""
+  fi
 elif [ -r "${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc" ]; then
   fvcomfile=${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc
+  filesize=$(stat -c%s ${fvcomfile})
+  if [ $filesize -lt $targetsize ]; then
+    echo "Filesize of FVCOM file is too small; check for older FVCOM file." 
+    fvcomfile=""
+  fi
 elif [ -r "${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc" ]; then
   fvcomfile=${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc
-else
-  echo "No FVCOM file in ${FVCOM}!!"
-  echo "ERROR: No FVCOM update at ${PDY}${cyc}!!!!"
+  filesize=$(stat -c%s ${fvcomfile})
+  if [ $filesize -lt $targetsize ]; then
+    echo "Filesize of FVCOM file is too small; check for older FVCOM file." 
+    fvcomfile=""
+  fi
 fi
 
 if [ -r "${fvcomfile}" ]; then
+
   echo "FVCOM update for fractional lake ice."
   cp ${fvcomfile} ./fvcom.nc
   cp ${FIXhrrr}/hrrr_geo_em.d01.nc ./geo_em.d01.nc
@@ -565,6 +584,8 @@ EOF
   $runline < fvcom.namelist
   export err=$?; err_chk
 
+else
+  echo "WARNING: No FVCOM update for ${PDY}${cyc}"
 fi
 
 
