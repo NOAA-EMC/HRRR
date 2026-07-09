@@ -4,8 +4,8 @@ v4.1.22 - released May 14, 2026
 * In preparation for the upcoming GFSv17 operational implementation, the HRRR CONUS analysis, HRRR Alaska analysis, HRRRDAS makebc, and HRRRDAS prep_enkf run scripts are updated to handle the new filenames and directory paths for GFS model data.
 
 * Repository Details
-   * Retrieve the hrrr.v4.1.22 branch of the HRRR GitHub repository using the following command (contains v4.1.22 release notes):
-      * git clone –b hrrr.v4.1.22 https://github.com/NOAA-EMC/HRRR.git
+   * Retrieve the v4.1.22 branch of the HRRR GitHub repository using the following command (contains v4.1.22 release notes):
+      * git clone –b v4.1.22 https://github.com/NOAA-EMC/HRRR.git
 
 * scripts files changed
    * scripts/alaska/exhrrr_analysis.sh
@@ -19,7 +19,7 @@ v4.1.22 - released May 14, 2026
    * N/A
 
 * implementation instructions
-   * Retrieve the hrrr.v4.1.22 branch from GitHub
+   * Retrieve the v4.1.22 branch from GitHub
    * Retrieve the following files/directories from /lfs/h1/ops/prod/packages/hrrr.v4.1.20:
       * exec/
       * fix/
