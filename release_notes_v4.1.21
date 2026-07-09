@@ -4,8 +4,8 @@ v4.1.21 - released July 9, 2026
 * The 7/5 07Z HRRR CONUS analysis job failed due to a bad FVCOM input file, which caused the FVCOM processing to crash.  A file size check is added to the ex-script to prevent this error from occurring in the future.  If the file size is too small for a given cycle, the FVCOM processing will be skipped.  FVCOM allows HRRR to obtain better surface temperatures over the Great Lakes, but it is acceptable to skip this processing for a few cycles if necessary.
 
 * Repository Details
-   * Retrieve the hrrr.v4.1.21 branch of the HRRR GitHub repository using the following command (contains v4.1.21 release notes):
-      * git clone –b hrrr.v4.1.21 https://github.com/NOAA-EMC/HRRR.git
+   * Retrieve the v4.1.21 branch of the HRRR GitHub repository using the following command (contains v4.1.21 release notes):
+      * git clone –b v4.1.21 https://github.com/NOAA-EMC/HRRR.git
 
 * scripts files changed
    * scripts/conus/exhrrr_analysis.sh
@@ -14,7 +14,7 @@ v4.1.21 - released July 9, 2026
    * N/A
 
 * implementation instructions
-   * Retrieve the hrrr.v4.1.21 branch from GitHub
+   * Retrieve the v4.1.21 branch from GitHub
    * Retrieve the following files/directories from /lfs/h1/ops/prod/packages/hrrr.v4.1.20:
       * exec/
       * fix/
