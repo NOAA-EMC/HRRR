@@ -536,21 +536,24 @@ if [ -r "${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc" ]; then
     echo "Filesize of FVCOM file is too small; check for older FVCOM file." 
     fvcomfile=""
   fi
-elif [ -r "${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc" ]; then
+fi
+if [[ ! -s ${fvcomfile} && -r "${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc" ]]; then
   fvcomfile=${FVCOM}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc
   filesize=$(stat -c%s ${fvcomfile})
   if [ $filesize -lt $targetsize ]; then
     echo "Filesize of FVCOM file is too small; check for older FVCOM file." 
     fvcomfile=""
   fi
-elif [ -r "${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc" ]; then
+fi
+if [[ ! -s ${fvcomfile} && -r "${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc" ]]; then
   fvcomfile=${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom}.nc
   filesize=$(stat -c%s ${fvcomfile})
   if [ $filesize -lt $targetsize ]; then
     echo "Filesize of FVCOM file is too small; check for older FVCOM file." 
     fvcomfile=""
   fi
-elif [ -r "${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc" ]; then
+fi
+if [[ ! -s ${fvcomfile} && -r "${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc" ]]; then
   fvcomfile=${FVCOMm1}/tsfc_hrrrgrid_${YYYYJJJHH_fvcom_m1}.nc
   filesize=$(stat -c%s ${fvcomfile})
   if [ $filesize -lt $targetsize ]; then
